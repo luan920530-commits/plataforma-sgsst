@@ -1,0 +1,11 @@
+# Node modules
+node_modules/
+
+# SQLite database
+data/sistema.sqlite
+
+# Storage
+storage/
+
+# macOS system files
+.DS_Store
