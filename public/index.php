@@ -86,6 +86,12 @@ $router->group('auth', function (Router $r) {
     $r->post('/sgsst/empresa/{id}/accesos',            'SgsstController@asignarAcceso');
     $r->post('/sgsst/accesos/{id}/revocar',            'SgsstController@revocarAcceso');
 
+    // Catálogo documental (plantillas reales)
+    $r->get('/sgsst/empresa/{id}/documentos',              'PlantillaController@catalogo');
+    $r->get('/sgsst/empresa/{id}/documentos/descargar',     'PlantillaController@descargarOriginal');
+    $r->post('/sgsst/empresa/{id}/documentos/generar',      'PlantillaController@generar');
+    $r->get('/sgsst/documentos-generados/{id}/descargar',   'PlantillaController@descargarGenerado');
+
     // Matriz IPVR — GTC 45
     $r->get('/sgsst/empresa/{id}/matriz',              'PeligroController@matriz');
     $r->post('/sgsst/empresa/{id}/matriz',             'PeligroController@crear');
