@@ -55,6 +55,42 @@ class PlantillasCatalogo
         return 'Documento';
     }
 
+    private static function normalizar(string $txt): string
+    {
+        $txt = mb_strtoupper($txt);
+        return strtr($txt, ['Á'=>'A','É'=>'E','Í'=>'I','Ó'=>'O','Ú'=>'U','Ü'=>'U','Ñ'=>'N']);
+    }
+
+    /** Busca un archivo real del paquete por su nombre (p. ej. la Política del estándar 12). */
+    public static function buscarPorNombre(string $nombre): ?array
+    {
+        $buscado = self::normalizar($nombre);
+        foreach (self::listar() as $g) {
+            foreach ($g['archivos'] as $a) {
+                if (self::normalizar($a['nombre']) === $buscado) return $a;
+            }
+        }
+        return null;
+    }
+
+    /** Equivalencias: plantilla rápida del panel -> archivo REAL del paquete SG-SST. */
+    public static function equivalencia(string $codigo): ?array
+    {
+        $mapa = [
+            'politica' => 'POLITICA DE LA SEGURIDAD Y SALUD EN EL TRABAJO.docx',
+            'objetivos' => 'OBJETIVOS DEL SG-SST.docx',
+            'plan_trabajo' => 'PLAN ANUAL DE TRABAJO.xlsx',
+            'acta_copasst' => 'ACTAS CONFORMACION DEL COPASST.docx',
+            'matriz_peligros' => 'MATRIZ IPEVR.xlsx',
+            'programa_capacitacion' => 'PROGRAMA DE CAPACITACION.docx',
+            'procedimiento_incidentes' => 'PROCEDIMIENTO DE REPORTE E INVESTIGACION DE ENFERMEDAD LABORAL.docx',
+            'acta_auditoria' => 'PROGRAMA DE AUDITORIA.docx',
+            'accion_mejora' => 'REGISTRO DE ACCIONES PREVENTIVAS Y CORRECTIVAS.xlsx',
+            'rendicion_cuentas' => 'RENDICION DE CUENTAS ANUAL.docx',
+        ];
+        return isset($mapa[$codigo]) ? self::buscarPorNombre($mapa[$codigo]) : null;
+    }
+
     /** Resuelve una ruta relativa del catálogo impidiendo salir de la carpeta (anti path-traversal). */
     public static function resolver(string $relativo): ?string
     {

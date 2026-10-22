@@ -9,8 +9,18 @@ use App\Auditoria;
 
 class EmpresaController extends BaseController
 {
+    /** El rol cliente trabaja solo desde «Mi empresa»; nunca crea ni gestiona empresas. */
+    private function bloquearCliente(): void
+    {
+        if (Auth::hasRole('cliente')) {
+            flash('warning', 'Tu cuenta es de cliente: trabaja desde «🏢 Mi empresa» en la barra superior.');
+            $this->redirect(base_url('mi-empresa'));
+        }
+    }
+
     public function index(): void
     {
+        $this->bloquearCliente();
         $empresas = Empresa::todasPorUsuario(Auth::id());
         $this->view('empresas/index', [
             'titulo'   => 'Empresas',
@@ -21,6 +31,7 @@ class EmpresaController extends BaseController
 
     public function formNueva(): void
     {
+        $this->bloquearCliente();
         $this->view('empresas/form', [
             'titulo'  => 'Nueva empresa',
             'empresa' => null,
@@ -30,6 +41,7 @@ class EmpresaController extends BaseController
 
     public function guardar(): void
     {
+        $this->bloquearCliente();
         $this->verifyCsrf();
 
         $datos = $this->datosFormulario();
@@ -45,6 +57,7 @@ class EmpresaController extends BaseController
 
     public function ver(string $id): void
     {
+        $this->bloquearCliente();
         $empresa = Empresa::buscar((int) $id);
         if (!$empresa || $empresa['usuario_id'] != Auth::id()) {
             flash('error', 'Empresa no encontrada');
@@ -66,6 +79,7 @@ class EmpresaController extends BaseController
 
     public function formEditar(string $id): void
     {
+        $this->bloquearCliente();
         $empresa = Empresa::buscar((int) $id);
         if (!$empresa || $empresa['usuario_id'] != Auth::id()) {
             flash('error', 'Empresa no encontrada');
@@ -81,6 +95,7 @@ class EmpresaController extends BaseController
 
     public function actualizar(string $id): void
     {
+        $this->bloquearCliente();
         $this->verifyCsrf();
 
         $empresa = Empresa::buscar((int) $id);

@@ -207,47 +207,57 @@ class SgsstController extends BaseController
         $this->redirect(base_url("sgsst/empresa/{$a['empresa_id']}#accesos"));
     }
 
-    /** GET /sgsst/empresa/{id}/plantilla/{codigo} — genera documento base (.doc editable) */
+    /**
+     * GET /sgsst/empresa/{id}/plantilla/{codigo}
+     * Genera el documento REAL del paquete SG-SST (conserva su formato y estructura),
+     * diligenciado con los datos de la empresa. Nada de plantillas genéricas.
+     */
     public function generarPlantilla(string $id, string $codigo): void
     {
         $empresa = $this->empresaPropia((int)$id); $eid = (int)$empresa['id'];
-        $plantillas = SgsstCatalogo::plantillas();
-        if (!isset($plantillas[$codigo])) { http_response_code(404); die('Plantilla no encontrada'); }
         if ($codigo === 'plan_emergencias') { $this->redirect(base_url("empresas/{$eid}")); }
-        $p = $plantillas[$codigo];
-        $config = require BASE_PATH . '/config/config.php';
-        $dir = $config['storage']['documentos'];
-        if (!is_dir($dir)) mkdir($dir, 0775, true);
-        $nombre = 'SGSST_' . $codigo . '_' . preg_replace('/[^0-9]/', '', (string)$empresa['nit']) . '_' . date('Ymd_His') . '.doc';
-        $ruta = $dir . $nombre;
-        $secciones = '';
-        foreach ($p['secciones'] as $i => $s) {
-            $secciones .= '<h2>' . ($i + 1) . '. ' . htmlspecialchars($s) . '</h2>'
-                . '<p>[Diligenciar: adapte este contenido a la realidad de la empresa. Registre aquí la información, responsables y evidencias correspondientes.]</p>';
+        if ($codigo === 'inspeccion') { $this->redirect(base_url("sgsst/empresa/{$eid}/formularios/inspeccion_instalaciones")); }
+        if ($codigo === 'entrega_epp') { $this->redirect(base_url("sgsst/empresa/{$eid}/formularios/entrega_epp")); }
+
+        $archivo = \App\PlantillasCatalogo::equivalencia($codigo);
+        if (!$archivo) {
+            flash('error', 'Este documento aún no tiene equivalencia en el paquete de plantillas. Ábrelo desde el Catálogo documental maestro.');
+            $this->redirect(base_url("sgsst/empresa/{$eid}/documentos"));
         }
-        $html = '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>' . htmlspecialchars($p['titulo']) . '</title>'
-            . '<style>body{font-family:Calibri,Arial,sans-serif;margin:3cm}h1{color:#1d4ed8}table{border-collapse:collapse}td{border:1px solid #999;padding:6px}</style></head><body>'
-            . '<h1>' . htmlspecialchars($p['titulo']) . '</h1>'
-            . '<table><tr><td><b>Empresa</b></td><td>' . htmlspecialchars($empresa['razon_social']) . '</td></tr>'
-            . '<tr><td><b>NIT</b></td><td>' . htmlspecialchars($empresa['nit']) . '</td></tr>'
-            . '<tr><td><b>Actividad económica</b></td><td>' . htmlspecialchars((string)($empresa['actividad_economica'] ?? '')) . ' (CIIU ' . htmlspecialchars((string)($empresa['ciiu'] ?? '')) . ')</td></tr>'
-            . '<tr><td><b>Clase de riesgo / ARL</b></td><td>' . htmlspecialchars((string)($empresa['nivel_riesgo'] ?? '')) . ' / ' . htmlspecialchars((string)($empresa['arl'] ?? '')) . '</td></tr>'
-            . '<tr><td><b>Representante legal</b></td><td>' . htmlspecialchars((string)($empresa['representante_legal'] ?? '')) . '</td></tr>'
-            . '<tr><td><b>Fecha</b></td><td>' . date('d/m/Y') . '</td></tr>'
-            . '<tr><td><b>Base legal</b></td><td>' . htmlspecialchars($p['norma']) . '</td></tr></table>'
-            . $secciones
-            . '<h2>Aprobación</h2><p>Firma: ' . htmlspecialchars($p['firma']) . '</p><p>Nombre y firma: ________________________________ &nbsp; Fecha: ____/____/________</p>'
-            . '<p style="font-size:9pt;color:#666">Documento base generado por la Plataforma SG-SST el ' . date('d/m/Y H:i') . '. Debe ser adaptado y validado por el responsable del SG-SST y firmado antes de su uso oficial. Verifique siempre la norma vigente.</p>'
-            . '</body></html>';
-        file_put_contents($ruta, $html);
-        Database::execute(
-            'INSERT INTO sgsst_documentos (empresa_id, plantilla, nombre_archivo, ruta, hash_sha256, generado_por) VALUES (?,?,?,?,?,?)',
-            [$eid, $codigo, $nombre, $ruta, hash_file('sha256', $ruta), Auth::id()]
-        );
-        Auditoria::registrar('sgsst.documento_generado', $eid, 'sgsst_documento', Database::lastId(), $p['titulo']);
-        header('Content-Type: application/msword');
-        header('Content-Disposition: attachment; filename="' . $nombre . '"');
-        readfile($ruta); exit;
+        $ruta = \App\PlantillasCatalogo::resolver($archivo['relativo']);
+        if (!$ruta) { http_response_code(404); die('Archivo de plantilla no encontrado'); }
+
+        if (!empty($archivo['generable'])) {
+            try {
+                $fresca = Database::first('SELECT * FROM empresas WHERE id = ?', [$eid]) ?: $empresa;
+                $res = \App\GeneradorPlantilla::generar($ruta, $fresca, $eid);
+            } catch (\Throwable $e) {
+                flash('error', 'No se pudo generar: ' . $e->getMessage());
+                $this->redirect(base_url("sgsst/empresa/{$eid}/documentos"));
+            }
+            Database::execute(
+                'INSERT INTO sgsst_documentos (empresa_id, plantilla, nombre_archivo, ruta, hash_sha256, generado_por) VALUES (?,?,?,?,?,?)',
+                [$eid, $codigo, $res['nombre'], $res['ruta'], hash_file('sha256', $res['ruta']), Auth::id()]
+            );
+            Auditoria::registrar('sgsst.documento_generado', $eid, 'sgsst_documento', Database::lastId(), $res['nombre']);
+            $rutaServir = $res['ruta']; $nombreServir = $res['nombre'];
+        } else {
+            // Formato antiguo (.doc/.xls): se entrega el documento real tal cual mientras se convierte
+            Auditoria::registrar('sgsst.documento_original', $eid, 'plantilla', null, $archivo['nombre']);
+            $rutaServir = $ruta; $nombreServir = $archivo['nombre'];
+        }
+
+        $ext = strtolower(pathinfo($rutaServir, PATHINFO_EXTENSION));
+        $mime = match($ext) {
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'doc' => 'application/msword', 'xls' => 'application/vnd.ms-excel',
+            default => 'application/octet-stream',
+        };
+        header('Content-Type: ' . $mime);
+        header('Content-Disposition: attachment; filename="' . str_replace('"', '', $nombreServir) . '"');
+        header('Content-Length: ' . filesize($rutaServir));
+        readfile($rutaServir); exit;
     }
 
     /** GET /sgsst/empresa/{id}/informe — informe de cumplimiento imprimible (auditoría/ARL/MinTrabajo) */

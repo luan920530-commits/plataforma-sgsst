@@ -50,6 +50,7 @@ class AnalisisController extends BaseController
  */
 public function index(): void
 {
+    if (\App\Auth::hasRole('cliente')) { $this->redirect(base_url('mi-empresa')); }
     $analisis = Database::query(
         'SELECT a.*,
                 e.razon_social, e.nit, e.num_trabajadores,

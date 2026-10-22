@@ -6,6 +6,17 @@ $item = function (string $url, string $activo, string $icono, string $color, str
 };
 ?>
 <aside class="mac-sidebar w-64 min-w-64 p-3.5 hidden md:block sticky top-[57px] h-[calc(100vh-57px)] overflow-y-auto">
+    <?php if (\App\Auth::hasRole('cliente')): ?>
+    <nav class="space-y-0.5">
+        <div class="pt-1 pb-1.5 px-2 text-[11px] font-bold uppercase tracking-wider mac-muted">Portal de mi empresa</div>
+        <?= $item(base_url('mi-empresa'), $esActivo('mi-empresa'), 'fa-building-user', 'linear-gradient(180deg,#34c759,#0f7a2e)', '🏢 Mi empresa') ?>
+        <?= $item(base_url('cambiar-password'), $esActivo('cambiar-password'), 'fa-key', 'linear-gradient(180deg,#8e8e93,#48484a)', 'Cambiar contraseña') ?>
+    </nav>
+    <div class="mt-8 mac-card p-3.5" style="border-radius:14px">
+        <div class="text-xs font-semibold">🏢 Portal del cliente</div>
+        <div class="text-[11px] mac-muted mt-1">Aquí ves el SG-SST de tu empresa: documentación según tu nivel de riesgo, cumplimiento, documentos e informes. Los módulos de gestión de empresas son del equipo consultor.</div>
+    </div>
+    <?php else: ?>
     <nav class="space-y-0.5">
         <?= $item(base_url('dashboard'), $esActivo('dashboard'), 'fa-gauge', 'linear-gradient(180deg,#0a84ff,#0040dd)', 'Dashboard') ?>
         <?php if (\App\Database::first('SELECT id FROM empresa_accesos WHERE usuario_id = ?', [\App\Auth::id()])): ?>
@@ -31,6 +42,7 @@ $item = function (string $url, string $activo, string $icono, string $color, str
 
     <div class="mt-8 mac-card p-3.5" style="border-radius:14px">
         <div class="flex items-center gap-2 text-xs font-semibold"><span class="traffic" style="background:#28c840"></span> Plataforma SG-SST</div>
-        <div class="text-[11px] mac-muted mt-1">v3.0 · Fase 2<br>Decreto 1072/2015 · Res. 0312/2019 · GTC 45</div>
+        <div class="text-[11px] mac-muted mt-1">v3.1<br>Decreto 1072/2015 · Res. 0312/2019 · GTC 45</div>
     </div>
+    <?php endif; ?>
 </aside>

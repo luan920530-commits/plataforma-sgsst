@@ -8,6 +8,7 @@ class DashboardController extends BaseController
 {
     public function index(): void
     {
+        if (Auth::hasRole('cliente')) { $this->redirect(base_url('mi-empresa')); }
         $usuarioId = Auth::id();
 
         // KPIs principales

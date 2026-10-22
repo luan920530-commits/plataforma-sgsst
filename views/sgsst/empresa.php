@@ -164,7 +164,7 @@
   <!-- PLANTILLAS -->
   <section id="plantillas" class="bg-white border rounded-xl p-5">
     <h2 class="font-bold">6. Plantillas base y documentos para presentar</h2>
-    <p class="text-xs text-slate-500 mb-4">Se generan con los datos de la empresa en formato editable (.doc), quedan registrados con hash SHA-256 y en la auditoría. Deben adaptarse, validarse y firmarse antes de presentarse como documentos oficiales.</p>
+    <p class="text-xs text-slate-500 mb-4">Son los documentos REALES del paquete SG-SST que cargaste: se genera una copia con su formato y estructura originales, diligenciada con los datos de la empresa (sin tocar la plantilla maestra), registrada con hash SHA-256 y en la auditoría. Deben revisarse y firmarse antes de presentarse como documentos oficiales.</p>
     <a class="mac-btn mb-4" href="<?= base_url("sgsst/empresa/{$eid}/documentos") ?>">📚 Abrir catálogo documental maestro (plantillas reales, 60 estándares)</a>
     <div class="grid md:grid-cols-3 gap-3"><?php foreach ($plantillas as $cod=>$pl): ?>
       <div class="border rounded-xl p-4"><h3 class="font-semibold text-sm"><?= e($pl['titulo']) ?></h3><p class="text-xs text-slate-500 mt-1"><?= e($pl['norma']) ?><br>Firma: <?= e($pl['firma']) ?></p>

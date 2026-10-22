@@ -22,7 +22,7 @@ $misEmpresas = \App\Database::query('SELECT e.id FROM empresa_accesos ea JOIN em
         <?php if (!empty($misEmpresas)): ?>
         <a href="<?= base_url('mi-empresa') ?>" class="mac-btn !py-2" title="Portal de mi empresa">🏢 Mi empresa</a>
         <?php endif; ?>
-        <a href="<?= base_url('sgsst') ?>" title="Alertas críticas de vencimiento y riesgo"
+        <a href="<?= base_url(\App\Auth::hasRole('cliente') ? 'mi-empresa' : 'sgsst') ?>" title="Alertas críticas de vencimiento y riesgo"
            class="relative w-9 h-9 rounded-full flex items-center justify-center hover:bg-black/5 transition" style="color:#3a3a3c">
             <i class="fa-regular fa-bell text-lg"></i>
             <?php if ($criticas > 0): ?>

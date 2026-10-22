@@ -21,7 +21,7 @@ class AuthController extends BaseController
 
         if (Auth::login($email, $pass)) {
             Auditoria::registrar('auth.login', null, 'usuario', Auth::id(), $email);
-            $this->redirect(base_url(Auth::mustChangePassword() ? 'cambiar-password' : 'dashboard'));
+            $this->redirect(base_url(Auth::mustChangePassword() ? 'cambiar-password' : (Auth::hasRole('cliente') ? 'mi-empresa' : 'dashboard')));
         }
 
         flash('error', 'Credenciales incorrectas');

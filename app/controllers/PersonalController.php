@@ -229,6 +229,7 @@ class PersonalController extends BaseController
  */
 public function index(): void
 {
+    if (\App\Auth::hasRole('cliente')) { $this->redirect(base_url('mi-empresa')); }
     $empresas = Database::query(
         'SELECT e.*,
                 (SELECT COUNT(*) FROM personal p
@@ -254,6 +255,7 @@ public function index(): void
  */
 public function porEmpresa(string $id): void
 {
+    if (\App\Auth::hasRole('cliente')) { $this->redirect(base_url('mi-empresa')); }
     $empresaId = (int) $id;
 
     $empresa = Database::first(

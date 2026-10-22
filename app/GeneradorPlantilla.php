@@ -51,6 +51,9 @@ class GeneradorPlantilla
             '{{ANIO}}' => date('Y'), '{{AÑO}}' => date('Y'),
         ];
 
+        // Escapar para XML: un & o < en la razón social rompería el documento
+        foreach ($datos as $k => $v) $datos[$k] = htmlspecialchars((string) $v, ENT_XML1 | ENT_COMPAT, 'UTF-8');
+
         $entradas = $ext === 'docx'
             ? ['word/document.xml', 'word/header1.xml', 'word/header2.xml', 'word/footer1.xml', 'word/footer2.xml']
             : ['xl/sharedStrings.xml'];
@@ -60,7 +63,7 @@ class GeneradorPlantilla
             $xml = $zip->getFromName($entrada);
             if ($xml === false) continue;
             $xml = strtr($xml, $datos);
-            $xml = str_replace('Coca Cola', (string)($empresa['razon_social'] ?? ''), $xml);
+            $xml = str_replace('Coca Cola', $datos['{{EMPRESA}}'], $xml);
             if (str_contains($nombreArchivo, 'POLITICA') || str_contains($nombreArchivo, 'POLÍTICA')) {
                 $xml = self::secuenciaX($xml, [
                     $datos['{{EMPRESA}}'], $datos['{{NIT}}'], $datos['{{ACTIVIDAD}}'],
