@@ -19,6 +19,7 @@
 
   <?php if ($puedeGestionar): ?>
   <form method="POST" action="<?= base_url("sgsst/empresa/{$eid}/formularios/{$codigo}" . (!empty($embed) ? "?embed=1" : "")) ?>" class="mac-card p-5 space-y-3">
+    <?php if (!empty($embed)): ?><input type="hidden" name="embed" value="1"><?php endif; ?>
     <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
     <div class="grid md:grid-cols-2 gap-3">
     <?php foreach ($formato['campos'] as [$clave, $etiqueta, $tipo, $opciones, $requerido]): ?>

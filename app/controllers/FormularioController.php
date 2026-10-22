@@ -48,7 +48,7 @@ class FormularioController extends BaseController
         if (!$formato) { http_response_code(404); die('Formulario no definido'); }
         if (!empty($formato['confidencial']) && !$this->puedeGestionar($empresa, $permiso)) {
             flash('error', 'Formulario confidencial: acceso restringido.');
-            $this->redirect(base_url("sgsst/empresa/{$eid}/formularios"));
+            $this->redirect(base_url("sgsst/empresa/{$eid}/formularios" . (isset($_POST['embed']) || isset($_GET['embed']) ? "?embed=1" : "")));
         }
         $this->view('formularios/diligenciar', [
             'titulo' => $formato['titulo'] . ' — ' . $empresa['razon_social'],
@@ -67,7 +67,7 @@ class FormularioController extends BaseController
         [$empresa, $permiso] = $this->acceso((int) $id); $eid = (int) $empresa['id'];
         if (!$this->puedeGestionar($empresa, $permiso)) {
             flash('error', 'Tu acceso no permite diligenciar formularios.');
-            $this->redirect(base_url("sgsst/empresa/{$eid}/formularios"));
+            $this->redirect(base_url("sgsst/empresa/{$eid}/formularios" . (isset($_POST['embed']) || isset($_GET['embed']) ? "?embed=1" : "")));
         }
         $formato = FormularioCatalogo::uno($codigo);
         if (!$formato) { http_response_code(404); die('Formulario no definido'); }
@@ -87,7 +87,7 @@ class FormularioController extends BaseController
         }
         if ($faltan) {
             flash('error', 'Faltan campos obligatorios: ' . implode(', ', $faltan));
-            $this->redirect(base_url("sgsst/empresa/{$eid}/formularios/{$codigo}"));
+            $this->redirect(base_url("sgsst/empresa/{$eid}/formularios/{$codigo}" . (isset($_POST['embed']) ? "?embed=1" : "")));
         }
 
         $fecha = $datos['fecha'] ?? date('Y-m-d');
@@ -113,7 +113,7 @@ class FormularioController extends BaseController
         }
 
         flash('success', 'Formulario guardado. Quedó en el historial con seguimiento' . ($vencimiento ? " y vencimiento {$vencimiento}" : '') . '.');
-        $this->redirect(base_url("sgsst/empresa/{$eid}/formularios/{$codigo}"));
+        $this->redirect(base_url("sgsst/empresa/{$eid}/formularios/{$codigo}" . (isset($_POST['embed']) ? "?embed=1" : "")));
     }
 
     /** GET /sgsst/formularios/{id} — detalle imprimible */
