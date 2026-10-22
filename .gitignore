@@ -1,11 +1,9 @@
-# Node modules
 node_modules/
-
-# SQLite database
-data/sistema.sqlite
-
-# Storage
+.env
+config/*.local.php
 storage/
-
-# macOS system files
+public/uploads/
+*.sqlite
+*.sqlite-*
+backups/
 .DS_Store

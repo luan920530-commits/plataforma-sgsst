@@ -4,7 +4,7 @@
             <div class="w-9 h-9 rounded-lg bg-brand-600 flex items-center justify-center text-white">
                 <i class="fa-solid fa-shield-halved"></i>
             </div>
-            <span>PPPRAE</span>
+            <span>SG-SST</span>
         </a>
         <span class="hidden md:inline text-xs text-slate-400 border-l border-slate-200 pl-4">
             Decreto 1072/2015
@@ -32,10 +32,16 @@
                     <?= e(ucfirst(\App\Auth::user()['rol'] ?? '')) ?>
                 </div>
             </div>
-            <a href="<?= base_url('logout') ?>"
-               class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
-                <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+            <a href="<?= base_url('cambiar-password') ?>"
+               class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition">
+                <i class="fa-solid fa-key"></i> Cambiar contraseña
             </a>
+            <form method="POST" action="<?= base_url('logout') ?>">
+                <input type="hidden" name="_csrf" value="<?= e(csrf_token()) ?>">
+                <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition text-left">
+                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+                </button>
+            </form>
         </div>
     </div>
 </nav>

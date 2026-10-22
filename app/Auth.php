@@ -9,13 +9,15 @@ class Auth
     {
         if (isset($_SESSION['user_id'])) {
             self::$user = Database::first(
-                'SELECT id, email, nombre, rol FROM usuarios WHERE id = ? AND activo = 1',
+                'SELECT id, email, nombre, rol, must_change_password FROM usuarios WHERE id = ? AND activo = 1',
                 [$_SESSION['user_id']]
             );
         }
     }
 
     public static function check(): bool  { return self::$user !== null; }
+    public static function hasRole(string ...$roles): bool { return self::$user !== null && in_array(self::$user['rol'] ?? '', $roles, true); }
+    public static function mustChangePassword(): bool { return (int)(self::$user['must_change_password'] ?? 0) === 1; }
     public static function user(): ?array { return self::$user; }
     public static function id(): ?int     { return self::$user['id'] ?? null; }
 

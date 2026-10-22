@@ -9,6 +9,10 @@
                class="px-4 py-2 border border-slate-300 rounded-lg hover:bg-slate-50">
                 <i class="fa-solid fa-pen mr-2"></i> Editar
             </a>
+            <a href="<?= base_url("sgsst/empresa/{$empresa['id']}") ?>"
+               class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium">
+                <i class="fa-solid fa-clipboard-check mr-2"></i> Gestionar SG-SST
+            </a>
             <form method="POST" action="<?= base_url('analisis') ?>" class="inline">
                 <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
                 <input type="hidden" name="empresa_id" value="<?= $empresa['id'] ?>">

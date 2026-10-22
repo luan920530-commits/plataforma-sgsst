@@ -34,6 +34,14 @@ function asset(string $path): string
     return base_url('assets/' . ltrim($path, '/'));
 }
 
+function csrf_token(): string
+{
+    if (empty($_SESSION['csrf'])) {
+        $_SESSION['csrf'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf'];
+}
+
 function redirect(string $url): void
 {
     header("Location: {$url}");

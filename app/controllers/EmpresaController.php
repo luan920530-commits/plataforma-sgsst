@@ -4,6 +4,8 @@ namespace App\Controllers;
 use App\Auth;
 use App\Database;
 use App\Models\Empresa;
+use App\Sgsst;
+use App\Auditoria;
 
 class EmpresaController extends BaseController
 {
@@ -34,8 +36,10 @@ class EmpresaController extends BaseController
         $datos['usuario_id'] = Auth::id();
 
         $id = Empresa::crear($datos);
+        Sgsst::inicializarEmpresa($id);
+        Auditoria::registrar('empresa.creada', $id, 'empresa', $id, $datos['razon_social'] ?? '');
 
-        flash('success', 'Empresa creada correctamente');
+        flash('success', 'Empresa creada. Su SG-SST quedó inicializado: evaluación de estándares, plan anual base y plantillas listas en el Centro de cumplimiento.');
         $this->redirect(base_url("empresas/{$id}"));
     }
 
@@ -86,6 +90,7 @@ class EmpresaController extends BaseController
         }
 
         Empresa::actualizar((int) $id, $this->datosFormulario());
+        Auditoria::registrar('empresa.actualizada', (int) $id, 'empresa', (int) $id);
         flash('success', 'Empresa actualizada');
         $this->redirect(base_url("empresas/{$id}"));
     }

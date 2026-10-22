@@ -3,12 +3,12 @@
         <div class="w-16 h-16 mx-auto rounded-2xl bg-brand-600 flex items-center justify-center text-white text-2xl mb-3">
             <i class="fa-solid fa-shield-halved"></i>
         </div>
-        <h1 class="text-2xl font-bold text-slate-800">Plataforma PPPRAE</h1>
-        <p class="text-slate-500 text-sm mt-1">Gestión de planes de emergencia</p>
+        <h1 class="text-2xl font-bold text-slate-800">Plataforma SG-SST</h1>
+        <p class="text-slate-500 text-sm mt-1">Administración, gestión, creación y auditoría del SG-SST</p>
     </div>
 
     <form method="POST" action="<?= base_url('login') ?>" class="space-y-4">
-        <input type="hidden" name="_csrf" value="<?= e($_SESSION['csrf'] ?? '') ?>">
+        <input type="hidden" name="_csrf" value="<?= e($csrf ?? '') ?>">
 
         <div>
             <label class="block text-sm font-medium text-slate-700 mb-1">Correo</label>
