@@ -32,9 +32,11 @@ Requisitos: PHP 8.1+ con extensiones `pdo_sqlite`, `zip`, `mbstring`; servidor A
 
 ```bash
 cp .env.example .env        # ajusta APP_URL y SETUP_TOKEN
-php setup.php               # crea la BD y el usuario administrador (contraseña mostrada una sola vez)
+php setup.php               # crea storage/, la BD y el usuario administrador (contraseña mostrada una sola vez)
 php -S localhost:8000 -t public   # desarrollo; en producción apunta el virtual host a /public
 ```
+
+> **Mac con XAMPP:** en la raíz del proyecto corre `bash instalar.sh` (busca solo el PHP de XAMPP e instala). Guía completa, incluida la instalación limpia desde cero: `docs/PRUEBA_XAMPP.md`. Ojo: si descargas el ZIP de GitHub, copia el **contenido** de la carpeta descomprimida dentro de `htdocs/ppprae/`, no la carpeta misma.
 
 En producción: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` con HTTPS, y elimina o bloquea `setup.php`. La contraseña inicial debe cambiarse en el primer ingreso (la plataforma lo exige).
 
