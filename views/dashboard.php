@@ -10,6 +10,42 @@
         </a>
     </div>
 
+<div class="mac-card p-5" style="border-radius:20px">
+  <div class="flex flex-wrap justify-between gap-3 items-center">
+    <div>
+      <p class="text-xs font-semibold" style="color:var(--mac-blue)">PANEL DE ADMINISTRACIÓN SG-SST</p>
+      <h2 class="text-lg font-bold">Cumplimiento por empresa (Res. 0312/2019)</h2>
+      <p class="text-sm mac-muted">Las empresas con menor puntaje aparecen primero: son las que necesitan atención hoy.</p>
+    </div>
+    <div class="flex gap-2 text-center">
+      <div class="px-4 py-2 rounded-2xl" style="background:#ffe5e5"><div class="text-2xl font-bold" style="color:#b42318"><?= (int)($alertasCriticas ?? 0) ?></div><div class="text-[11px]">alertas críticas</div></div>
+      <div class="px-4 py-2 rounded-2xl" style="background:#fef0c7"><div class="text-2xl font-bold" style="color:#93370d"><?= (int)($docsPendientes ?? 0) ?></div><div class="text-[11px]">documentos por revisar</div></div>
+    </div>
+  </div>
+  <div class="mt-4 space-y-2">
+    <?php if (empty($cumplimiento ?? [])): ?><p class="text-sm mac-muted">Aún no hay empresas. Crea la primera con el botón «Nueva empresa»: recibirá su SG-SST y su paquete documental automáticamente.</p><?php endif; ?>
+    <?php foreach (($cumplimiento ?? []) as $c): $ep=$c['empresa']; $pv=$c['puntaje']; ?>
+    <div class="flex flex-wrap items-center gap-3 border rounded-2xl px-3 py-2.5" style="border-color:var(--mac-stroke)">
+      <span class="w-10 h-10 rounded-xl flex items-center justify-center text-white" style="background:linear-gradient(180deg,#0a84ff,#0060c9)"><i class="fa-solid fa-building"></i></span>
+      <span class="flex-1 min-w-[180px]"><b><?= e($ep['razon_social']) ?></b><br><span class="text-xs mac-muted">NIT <?= e($ep['nit']) ?> · Riesgo <?= e((string)$ep['nivel_riesgo']) ?> · <?= (int)$ep['num_trabajadores'] ?> trabajadores</span></span>
+      <span class="flex items-center gap-2 min-w-[190px] flex-1">
+        <span class="h-2.5 rounded-full flex-1" style="background:rgba(0,0,0,.07)"><span class="block h-2.5 rounded-full" style="width:<?= $pv ?>%;background:<?= $pv<=60?'#ff3b30':($pv<=85?'#ff9500':'#34c759') ?>"></span></span>
+        <b><?= $pv ?>%</b>
+      </span>
+      <span class="mac-badge" style="<?= $pv<=60?'background:#ffe5e5;color:#b42318':($pv<=85?'background:#fef0c7;color:#93370d':'background:#dcfae5;color:#067647') ?>"><?= e($c['semaforo']) ?></span>
+      <a class="mac-btn !py-1.5" href="<?= base_url("sgsst/empresa/{$ep['id']}") ?>">Centro de cumplimiento</a>
+      <a class="mac-btn-secondary !py-1.5" href="<?= base_url("sgsst/empresa/{$ep['id']}/documentos") ?>">Documentos</a>
+    </div>
+    <?php endforeach; ?>
+  </div>
+  <div class="flex flex-wrap gap-2 mt-4">
+    <a class="mac-btn-secondary" href="<?= base_url('sgsst') ?>">📊 Centro de cumplimiento</a>
+    <a class="mac-btn-secondary" href="<?= base_url('personal') ?>">👥 Personal y roles SG-SST</a>
+    <a class="mac-btn-secondary" href="<?= base_url('usuarios') ?>">🔐 Usuarios y accesos</a>
+    <a class="mac-btn-secondary" href="<?= base_url('empresas') ?>">🏢 Todas las empresas</a>
+  </div>
+</div>
+
     <!-- KPIs -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div class="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition">

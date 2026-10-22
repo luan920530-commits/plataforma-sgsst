@@ -8,6 +8,7 @@ use App\GeneradorPlantilla;
 use App\PlantillasCatalogo;
 use App\Sgsst;
 use App\GeneradorPaquete;
+use App\DocumentoVista;
 
 /** Catálogo documental maestro por empresa (plantillas reales de los 60 estándares). */
 class PlantillaController extends BaseController
@@ -123,6 +124,48 @@ class PlantillaController extends BaseController
             $this->redirect(base_url('sgsst'));
         }
         return $d;
+    }
+
+    /** GET /sgsst/documentos/{id}/ver — página a detalle, diligenciada e imprimible */
+    public function verDocumento(string $id): void
+    {
+        $d = Database::first(
+            'SELECT doc.* FROM sgsst_documentos doc JOIN empresas e ON e.id = doc.empresa_id
+             WHERE doc.id = ? AND (e.usuario_id = ? OR EXISTS (SELECT 1 FROM empresa_accesos ea WHERE ea.empresa_id = e.id AND ea.usuario_id = ?))',
+            [(int) $id, Auth::id(), Auth::id()]
+        );
+        if (!$d) { http_response_code(404); die('Documento no encontrado'); }
+        $empresa = Database::first('SELECT * FROM empresas WHERE id = ?', [(int) $d['empresa_id']]);
+        $puedeEditar = (bool) $this->permisoGestion((int) $d['empresa_id']);
+        $personal = $puedeEditar ? Database::query('SELECT nombre_completo, cedula FROM personal WHERE empresa_id = ? AND activo = 1 ORDER BY nombre_completo', [(int) $d['empresa_id']]) : [];
+        $tituloDoc = preg_replace('/\s+—\s+.*$/', '', pathinfo($d['nombre_archivo'], PATHINFO_FILENAME)) ?? $d['nombre_archivo'];
+        $this->view('sgsst/documento_detalle', [
+            'titulo' => 'Documento — ' . $tituloDoc, 'csrf' => $this->csrfToken(),
+            'doc' => $d, 'empresa' => $empresa, 'personal' => $personal, 'puedeEditar' => $puedeEditar,
+            'tituloDoc' => mb_strtoupper(trim($tituloDoc)),
+            'parrafos' => DocumentoVista::extraer($d['ruta'], $empresa),
+            'sugiereFirma' => DocumentoVista::sugiereFirma($d['nombre_archivo']),
+        ]);
+    }
+
+    /** POST /sgsst/documentos/{id}/detalle — encabezado, firmas y notas del HSE */
+    public function guardarDetalle(string $id): void
+    {
+        $this->verifyCsrf();
+        $d = $this->documentoGestionable($id);
+        Database::execute(
+            'UPDATE sgsst_documentos SET codigo_documento = ?, fecha_elaboracion = ?, requiere_firma = ?,
+             firma_resp_nombre = ?, firma_resp_cc = ?, firma_rep_nombre = ?, firma_rep_cc = ?, notas_hse = ? WHERE id = ?',
+            [trim($_POST['codigo_documento'] ?? '') ?: null,
+             ($_POST['fecha_elaboracion'] ?? '') ?: date('Y-m-d'),
+             isset($_POST['requiere_firma']) ? 1 : 0,
+             trim($_POST['firma_resp_nombre'] ?? '') ?: null, trim($_POST['firma_resp_cc'] ?? '') ?: null,
+             trim($_POST['firma_rep_nombre'] ?? '') ?: null, trim($_POST['firma_rep_cc'] ?? '') ?: null,
+             trim($_POST['notas_hse'] ?? '') ?: null, (int) $d['id']]
+        );
+        Auditoria::registrar('documento.detalle_actualizado', (int) $d['empresa_id'], 'sgsst_documento', (int) $d['id']);
+        flash('success', 'Encabezado, firmas y notas guardados. La vista del documento ya los refleja.');
+        $this->redirect(base_url("sgsst/documentos/{$d['id']}/ver"));
     }
 
     /** POST /sgsst/empresa/{id}/documentos/paquete — generar el paquete completo (empresas ya creadas) */

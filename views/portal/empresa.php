@@ -9,6 +9,12 @@
     <span class="mac-badge" style="<?= $editable ? 'background:#dcfae5;color:#067647' : 'background:#e8f1fe;color:#0060c9' ?>"><?= $editable ? '✏️ Representante: puedes corregir y generar' : '👁 Solo lectura' ?></span>
   </div>
 
+  <nav class="flex flex-wrap gap-1.5 sticky top-2 z-20">
+    <?php foreach (['datos'=>'1. 🏢 Datos de mi empresa','cumplimiento'=>'2. ✅ Mi cumplimiento','documentos'=>'3. 📄 Mis documentos','registros'=>'4. 📋 Registros y seguimiento diario'] as $a=>$t): ?>
+    <a href="#<?= $a ?>" class="mac-btn-secondary !rounded-full shadow"><?= $t ?></a><?php endforeach; ?>
+    <button type="button" onclick="abrirModalFormularios()" class="mac-btn !rounded-full shadow">📝 Formularios (modal)</button>
+  </nav>
+
   <div class="mac-alert mac-alert-info">
     📋 <b>Documentación que requiere tu empresa:</b> <?= e($requisitos['descripcion']) ?> Abajo ves solo los estándares que te aplican, con su estado. <?php if ($editable): ?>Puedes corregirlos aquí mismo: todo se guarda en la base de datos de tu empresa y los documentos nuevos salen actualizados.<?php endif; ?>
   </div>
@@ -24,7 +30,7 @@
   <section id="datos" class="mac-card p-5">
     <h2 class="font-bold">1. Datos de mi empresa <?= $editable ? '' : '(solo lectura)' ?></h2>
     <p class="text-xs mac-muted mb-3">Estos datos alimentan automáticamente todos los documentos. Si algo cambió (representante, dirección, trabajadores, riesgo…), corrígelo aquí.</p>
-    <form method="POST" action="<?= base_url("mi-empresa/{$eid}/datos") ?>">
+    <form method="POST" enctype="multipart/form-data" action="<?= base_url("mi-empresa/{$eid}/datos") ?>">
       <fieldset <?= $editable ? '' : 'disabled' ?> class="contents">
       <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
       <div class="grid md:grid-cols-3 gap-2 text-sm">
@@ -38,7 +44,12 @@
         <label class="text-xs">Área (m²)<input type="number" step="0.01" name="area_m2" value="<?= e((string)$empresa['area_m2']) ?>" class="mac-input w-full mt-1" style="padding:.55rem"></label>
         <label class="text-xs">N.° de pisos<input type="number" name="num_pisos" value="<?= (int)$empresa['num_pisos'] ?>" class="mac-input w-full mt-1" style="padding:.55rem"></label>
         <label class="text-xs md:col-span-2">Áreas de alto riesgo<input name="areas_alto_riesgo" value="<?= e((string)($empresa['areas_alto_riesgo'] ?? '')) ?>" class="mac-input w-full mt-1" style="padding:.55rem"></label>
+        <label class="text-xs">C.C. Representante legal<input name="representante_cc" value="<?= e((string)($empresa['representante_cc'] ?? '')) ?>" class="mac-input w-full mt-1" style="padding:.55rem" placeholder="Cédula"></label>
+        <label class="text-xs">👷 Responsable del SG-SST (diseño/implementación)<input name="resp_sgsst_nombre" value="<?= e((string)($empresa['resp_sgsst_nombre'] ?? '')) ?>" class="mac-input w-full mt-1" style="padding:.55rem" placeholder="Nombre completo (firma los documentos)"></label>
+        <label class="text-xs">C.C. Responsable SG-SST<input name="resp_sgsst_cc" value="<?= e((string)($empresa['resp_sgsst_cc'] ?? '')) ?>" class="mac-input w-full mt-1" style="padding:.55rem" placeholder="Cédula"></label>
+        <label class="text-xs">🖼 Logo de la empresa (encabezado de documentos)<input type="file" name="logo" accept=".png,.jpg,.jpeg,.webp" class="mac-input w-full mt-1" style="padding:.45rem"></label>
       </div>
+      <p class="text-[11px] mac-muted mt-2">El Responsable del SG-SST y el Representante Legal aparecen automáticamente en el pie de firma de los documentos que lo requieren (políticas, asignaciones, actas…). Regístralos también en <b>Personal</b> con su cargo para elegirlos al personalizar cada documento.</p>
       <?php if ($editable): ?><button class="mac-btn mt-3">💾 Guardar correcciones</button><?php endif; ?>
       </fieldset>
     </form>
@@ -106,7 +117,8 @@
         <span>📄 <?= e($g['nombre_archivo']) ?> <span class="text-xs mac-muted"><?= e($g['created_at']) ?></span></span>
         <span class="flex flex-wrap gap-1.5 items-center">
           <?php if (!empty($g['carpeta'])): ?><span class="mac-badge" style="<?= ($g['estado'] ?? 'pendiente_revision') === 'aceptado' ? 'background:#dcfae5;color:#067647' : (($g['estado'] ?? '') === 'corregido' ? 'background:#e0e7ff;color:#3730a3' : 'background:#fef0c7;color:#93370d') ?>"><?= match($g['estado'] ?? 'pendiente_revision') {'aceptado' => '✅ Aceptado', 'corregido' => '✏️ Corregido', default => '🕘 Por revisar'} ?></span><?php endif; ?>
-          <a class="underline" style="color:var(--mac-blue)" href="<?= base_url("sgsst/documentos-generados/{$g['id']}/descargar") ?>">⬇ Descargar / imprimir</a>
+          <a class="mac-btn !py-0.5 text-xs" href="<?= base_url("sgsst/documentos/{$g['id']}/ver") ?>">👁 Ver documento</a>
+          <a class="underline" style="color:var(--mac-blue)" href="<?= base_url("sgsst/documentos-generados/{$g['id']}/descargar") ?>">⬇ Descargar</a>
           <?php if ($editable && !empty($g['carpeta'])): ?>
           <form method="POST" action="<?= base_url("sgsst/documentos/{$g['id']}/aceptar") ?>" class="inline"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="mac-btn-secondary !py-0.5 text-xs">✅ Dejar así</button></form>
           <form method="POST" action="<?= base_url("sgsst/documentos/{$g['id']}/regenerar") ?>" class="inline" onsubmit="return confirm('Se creará una nueva versión con los datos actuales de tu empresa. ¿Continuar?')"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="mac-btn-secondary !py-0.5 text-xs">↻ Regenerar</button></form>
@@ -119,7 +131,7 @@
 
   <!-- REGISTROS -->
   <section id="registros" class="mac-card p-5">
-    <h2 class="font-bold">4. Mis registros y reportes recibidos</h2>
+    <h2 class="font-bold">4. Registros, gestión y seguimiento diario</h2>
     <p class="text-xs mac-muted mb-3">Aquí llegan también los reportes que hacen los operarios desde el formulario público. <?php if ($editable): ?>Puedes crear registros (capacitaciones, inspecciones, entregas de EPP…).<?php endif; ?></p>
     <div class="mac-alert mac-alert-info mb-3">
       🦺 <b>Enlace para operarios (sin usuario ni contraseña):</b><br>
@@ -155,3 +167,19 @@
   </section>
   <?php endif; ?>
 </div>
+
+<!-- MODAL FORMULARIOS -->
+<div id="modalFormularios" class="fixed inset-0 z-50 hidden items-center justify-center p-3" style="background:rgba(20,22,28,.55);backdrop-filter:blur(3px)">
+  <div class="mac-card w-full max-w-4xl overflow-hidden" style="border-radius:18px">
+    <div class="flex items-center justify-between px-4 py-3 border-b" style="border-color:var(--mac-stroke)">
+      <b class="text-sm">📝 Formularios de mi empresa — diligencia sin salir de esta pantalla</b>
+      <button type="button" onclick="cerrarModalFormularios()" class="mac-btn-secondary !py-1">✕ Cerrar</button>
+    </div>
+    <iframe id="iframeFormularios" title="Formularios" style="width:100%;height:72vh;border:0" loading="lazy"></iframe>
+  </div>
+</div>
+<script>
+function abrirModalFormularios(){ var m=document.getElementById('modalFormularios'); document.getElementById('iframeFormularios').src='<?= base_url("sgsst/empresa/{$eid}/formularios") ?>?embed=1'; m.classList.remove('hidden'); m.classList.add('flex'); }
+function cerrarModalFormularios(){ var m=document.getElementById('modalFormularios'); m.classList.add('hidden'); m.classList.remove('flex'); location.reload(); }
+document.getElementById('modalFormularios').addEventListener('click', function(e){ if(e.target===this) cerrarModalFormularios(); });
+</script>

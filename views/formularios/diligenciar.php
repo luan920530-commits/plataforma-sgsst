@@ -8,7 +8,7 @@
       <p class="text-xs mac-muted mt-1">Basado en: <i><?= e($formato['archivo_origen']) ?></i></p>
     </div>
     <div class="flex gap-2">
-      <a class="mac-btn-secondary" href="<?= base_url("sgsst/empresa/{$eid}/formularios") ?>">← Formularios</a>
+      <a class="mac-btn-secondary" href="<?= base_url("sgsst/empresa/{$eid}/formularios" . (!empty($embed) ? "?embed=1" : "")) ?>">← Formularios</a>
       <a class="mac-btn-secondary" href="<?= base_url("sgsst/empresa/{$eid}/formularios/{$codigo}.csv") ?>">⬇ Exportar CSV</a>
     </div>
   </div>
@@ -18,7 +18,7 @@
   <?php endif; ?>
 
   <?php if ($puedeGestionar): ?>
-  <form method="POST" action="<?= base_url("sgsst/empresa/{$eid}/formularios/{$codigo}") ?>" class="mac-card p-5 space-y-3">
+  <form method="POST" action="<?= base_url("sgsst/empresa/{$eid}/formularios/{$codigo}" . (!empty($embed) ? "?embed=1" : "")) ?>" class="mac-card p-5 space-y-3">
     <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
     <div class="grid md:grid-cols-2 gap-3">
     <?php foreach ($formato['campos'] as [$clave, $etiqueta, $tipo, $opciones, $requerido]): ?>

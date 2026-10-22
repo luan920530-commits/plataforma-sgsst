@@ -11,7 +11,7 @@
 
   <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-3">
     <?php foreach ($formatos as $codigo => $f): $c = $conteos[$codigo] ?? null; ?>
-    <a href="<?= base_url("sgsst/empresa/{$eid}/formularios/{$codigo}") ?>" class="mac-card p-4 block">
+    <a href="<?= base_url("sgsst/empresa/{$eid}/formularios/{$codigo}" . (!empty($embed) ? "?embed=1" : "")) ?>" class="mac-card p-4 block">
       <div class="flex justify-between gap-2">
         <h2 class="font-bold text-[15px]">📝 <?= e($f['titulo']) ?></h2>
         <?php if (!empty($f['confidencial'])): ?><span class="mac-badge" style="background:#ffe5e5;color:#b42318">🔒 Confidencial</span><?php endif; ?>

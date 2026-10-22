@@ -101,11 +101,14 @@
     </style>
 </head>
 <body>
-    <?php if (\App\Auth::check()): ?>
+    <?php $embed = !empty($embed ?? null) || isset($_GET['embed']); ?>
+    <?php if (\App\Auth::check() && !$embed): ?>
         <?php require __DIR__ . '/partials/navbar.php'; ?>
         <div class="flex items-stretch">
             <?php require __DIR__ . '/partials/sidebar.php'; ?>
             <main class="flex-1 p-5 md:p-7 w-full max-w-[1400px] mx-auto">
+    <?php elseif ($embed): ?>
+        <main class="p-4 w-full">
     <?php else: ?>
         <main class="min-h-screen flex items-center justify-center p-4">
     <?php endif; ?>
@@ -133,7 +136,7 @@
 
         <?php require __DIR__ . '/../views/' . $template . '.php'; ?>
 
-    <?php if (\App\Auth::check()): ?>
+    <?php if (\App\Auth::check() && !$embed): ?>
             </main>
         </div>
     <?php else: ?>

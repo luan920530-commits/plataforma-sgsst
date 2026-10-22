@@ -88,13 +88,25 @@ class PortalController extends BaseController
         [$empresa, $permiso] = $this->acceso((int) $id); $this->puedeEditar([$empresa, $permiso]);
         $eid = (int) $empresa['id'];
         $campos = ['razon_social','nit','ciiu','actividad_economica','direccion','ciudad','departamento',
-                   'telefono','email','arl','representante_legal','areas_alto_riesgo','horarios'];
+                   'telefono','email','arl','representante_legal','representante_cc','resp_sgsst_nombre','resp_sgsst_cc','areas_alto_riesgo','horarios'];
         $sets = []; $vals = [];
         foreach ($campos as $c) { $sets[] = "{$c} = ?"; $vals[] = trim($_POST[$c] ?? '') ?: null; }
         foreach (['num_trabajadores','aforo_max','num_pisos'] as $c) { $sets[] = "{$c} = ?"; $vals[] = (int)($_POST[$c] ?? 0); }
         $sets[] = 'area_m2 = ?'; $vals[] = (float)($_POST['area_m2'] ?? 0);
         $riesgo = in_array($_POST['nivel_riesgo'] ?? '', ['I','II','III','IV','V'], true) ? $_POST['nivel_riesgo'] : $empresa['nivel_riesgo'];
         $sets[] = 'nivel_riesgo = ?'; $vals[] = $riesgo;
+        // Logo de la empresa (encabezado de los documentos)
+        if (!empty($_FILES['logo']['name']) && ($_FILES['logo']['error'] ?? 1) === UPLOAD_ERR_OK) {
+            $ext = strtolower(pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION));
+            if (in_array($ext, ['png', 'jpg', 'jpeg', 'webp'], true) && $_FILES['logo']['size'] <= 2 * 1024 * 1024) {
+                $dir = BASE_PATH . '/public/uploads/logos';
+                if (!is_dir($dir)) mkdir($dir, 0775, true);
+                $nombreLogo = 'empresa_' . $eid . '_' . time() . '.' . $ext;
+                if (move_uploaded_file($_FILES['logo']['tmp_name'], $dir . '/' . $nombreLogo)) {
+                    $sets[] = 'logo_url = ?'; $vals[] = 'uploads/logos/' . $nombreLogo;
+                }
+            }
+        }
         $vals[] = $eid;
         Database::execute('UPDATE empresas SET ' . implode(', ', $sets) . ' WHERE id = ?', $vals);
         Auditoria::registrar('portal.datos_actualizados', $eid, 'empresa', $eid, 'Representante actualizó los datos de la empresa');

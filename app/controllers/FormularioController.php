@@ -36,7 +36,7 @@ class FormularioController extends BaseController
             'titulo' => 'Formularios web SG-SST — ' . $empresa['razon_social'],
             'empresa' => $empresa, 'formatos' => FormularioCatalogo::todos(), 'conteos' => $conteos,
             'recientes' => Database::query('SELECT * FROM sgsst_formularios WHERE empresa_id=? ORDER BY created_at DESC LIMIT 15', [$eid]),
-            'puedeGestionar' => $this->puedeGestionar($empresa, $permiso),
+            'puedeGestionar' => $this->puedeGestionar($empresa, $permiso), 'embed' => isset($_GET['embed']),
         ]);
     }
 
@@ -53,7 +53,7 @@ class FormularioController extends BaseController
         $this->view('formularios/diligenciar', [
             'titulo' => $formato['titulo'] . ' — ' . $empresa['razon_social'],
             'empresa' => $empresa, 'codigo' => $codigo, 'formato' => $formato,
-            'historial' => Database::query('SELECT * FROM sgsst_formularios WHERE empresa_id=? AND formato=? ORDER BY created_at DESC LIMIT 30', [$eid, $codigo]),
+            'embed' => isset($_GET['embed']), 'historial' => Database::query('SELECT * FROM sgsst_formularios WHERE empresa_id=? AND formato=? ORDER BY created_at DESC LIMIT 30', [$eid, $codigo]),
             'personal' => Database::query('SELECT id, nombre_completo, cargo FROM personal WHERE empresa_id=? AND activo=1 ORDER BY nombre_completo', [$eid]),
             'puedeGestionar' => $this->puedeGestionar($empresa, $permiso),
             'csrf' => $this->csrfToken(),

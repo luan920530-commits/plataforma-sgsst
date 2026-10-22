@@ -114,6 +114,8 @@ $router->group('auth', function (Router $r) {
     $r->post('/sgsst/documentos/{id}/aceptar',              'PlantillaController@aceptarDocumento');
     $r->post('/sgsst/documentos/{id}/regenerar',            'PlantillaController@regenerarDocumento');
     $r->post('/sgsst/documentos/{id}/subir',                'PlantillaController@subirCorreccion');
+    $r->get('/sgsst/documentos/{id}/ver',                   'PlantillaController@verDocumento');
+    $r->post('/sgsst/documentos/{id}/detalle',              'PlantillaController@guardarDetalle');
 
     // Formularios web (Fase C: formatos del paquete)
     $r->get('/sgsst/empresa/{id}/formularios',                 'FormularioController@index');

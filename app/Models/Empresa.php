@@ -24,9 +24,9 @@ class Empresa
             'INSERT INTO empresas
              (usuario_id, razon_social, nit, ciiu, actividad_economica, direccion,
               ciudad, departamento, telefono, email, arl, nivel_riesgo,
-              representante_legal, num_trabajadores, aforo_max, area_m2,
+              representante_legal, representante_cc, resp_sgsst_nombre, resp_sgsst_cc, num_trabajadores, aforo_max, area_m2,
               num_pisos, horarios, areas_alto_riesgo)
-             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
             [
                 $d['usuario_id'],
                 $d['razon_social'],
@@ -41,6 +41,9 @@ class Empresa
                 $d['arl'] ?? null,
                 $d['nivel_riesgo'] ?? 'I',
                 $d['representante_legal'] ?? null,
+                $d['representante_cc'] ?? null,
+                $d['resp_sgsst_nombre'] ?? null,
+                $d['resp_sgsst_cc'] ?? null,
                 (int) ($d['num_trabajadores'] ?? 0),
                 (int) ($d['aforo_max'] ?? 0),
                 (float) ($d['area_m2'] ?? 0),
@@ -58,7 +61,7 @@ class Empresa
             'UPDATE empresas SET
              razon_social = ?, nit = ?, ciiu = ?, actividad_economica = ?,
              direccion = ?, ciudad = ?, departamento = ?, telefono = ?,
-             email = ?, arl = ?, nivel_riesgo = ?, representante_legal = ?,
+             email = ?, arl = ?, nivel_riesgo = ?, representante_legal = ?, representante_cc = ?, resp_sgsst_nombre = ?, resp_sgsst_cc = ?,
              num_trabajadores = ?, aforo_max = ?, area_m2 = ?, num_pisos = ?,
              horarios = ?, areas_alto_riesgo = ?
              WHERE id = ?',
@@ -75,6 +78,9 @@ class Empresa
                 $d['arl'] ?? null,
                 $d['nivel_riesgo'] ?? 'I',
                 $d['representante_legal'] ?? null,
+                $d['representante_cc'] ?? null,
+                $d['resp_sgsst_nombre'] ?? null,
+                $d['resp_sgsst_cc'] ?? null,
                 (int) ($d['num_trabajadores'] ?? 0),
                 (int) ($d['aforo_max'] ?? 0),
                 (float) ($d['area_m2'] ?? 0),

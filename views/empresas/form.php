@@ -93,6 +93,9 @@
 
             <div>
                 <label class="block text-sm font-medium text-slate-700 mb-1">Representante legal</label>
+                <input type="text" name="resp_sgsst_nombre" value="<?= e($empresa['resp_sgsst_nombre'] ?? '') ?>" placeholder="Responsable del SG-SST (firma documentos)" class="w-full border rounded-lg px-3 py-2 mb-3">
+                <input type="text" name="resp_sgsst_cc" value="<?= e($empresa['resp_sgsst_cc'] ?? '') ?>" placeholder="C.C. Responsable SG-SST" class="w-full border rounded-lg px-3 py-2 mb-3">
+                <input type="text" name="representante_cc" value="<?= e($empresa['representante_cc'] ?? '') ?>" placeholder="C.C. Representante legal" class="w-full border rounded-lg px-3 py-2 mb-3">
                 <input type="text" name="representante_legal"
                        value="<?= e($empresa['representante_legal'] ?? '') ?>"
                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">

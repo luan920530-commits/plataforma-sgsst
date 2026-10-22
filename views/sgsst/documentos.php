@@ -37,7 +37,8 @@
         <span class="text-sm">📄 <?= e($d['nombre_archivo']) ?> <span class="text-xs mac-muted">v<?= (int)($d['version'] ?? 1) ?> · <?= e($d['created_at']) ?></span></span>
         <span class="flex flex-wrap gap-1.5 items-center">
           <span class="mac-badge" style="<?= match($estado) {'aceptado' => 'background:#dcfae5;color:#067647', 'corregido' => 'background:#e0e7ff;color:#3730a3', default => 'background:#fef0c7;color:#93370d'} ?>"><?= match($estado) {'aceptado' => '✅ Aceptado', 'corregido' => '✏️ Corregido por el cliente', default => '🕘 Pendiente de revisión'} ?></span>
-          <a class="mac-btn-secondary !py-1" href="<?= base_url("sgsst/documentos-generados/{$d['id']}/descargar") ?>">⬇ Ver</a>
+          <a class="mac-btn !py-1" href="<?= base_url("sgsst/documentos/{$d['id']}/ver") ?>">👁 Ver a detalle</a>
+          <a class="mac-btn-secondary !py-1" href="<?= base_url("sgsst/documentos-generados/{$d['id']}/descargar") ?>">⬇ Descargar</a>
           <?php if (empty($soloLectura)): ?>
           <form method="POST" action="<?= base_url("sgsst/documentos/{$d['id']}/aceptar") ?>" class="inline"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="mac-btn-secondary !py-1">✅ Dejar así</button></form>
           <form method="POST" action="<?= base_url("sgsst/documentos/{$d['id']}/regenerar") ?>" class="inline" onsubmit="return confirm('Se creará una nueva versión con los datos actuales de la empresa. ¿Continuar?')"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="mac-btn-secondary !py-1">↻ Regenerar</button></form>
@@ -61,6 +62,7 @@
       <?php foreach ($generados as $g): ?>
       <li class="flex flex-wrap gap-2 items-center justify-between border-b pb-1.5" style="border-color:var(--mac-stroke)">
         <span>📄 <?= e($g['nombre_archivo']) ?> <span class="text-xs mac-muted"><?= e($g['created_at']) ?> · SHA-256 <?= e(substr((string)$g['hash_sha256'], 0, 10)) ?>…</span></span>
+        <a class="mac-btn !py-0.5 text-xs" href="<?= base_url("sgsst/documentos/{$g['id']}/ver") ?>">👁 Ver a detalle</a>
         <a class="underline" style="color:var(--mac-blue)" href="<?= base_url("sgsst/documentos-generados/{$g['id']}/descargar") ?>">Descargar</a>
       </li><?php endforeach; ?>
     </ul>

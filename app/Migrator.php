@@ -137,5 +137,22 @@ class Migrator
             if (!in_array('recuperacion_pin_hash', $cols, true)) $pdo->exec('ALTER TABLE usuarios ADD COLUMN recuperacion_pin_hash TEXT');
             Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_06_recuperacion_password']);
         }
+
+        if (!in_array('2026_07_documento_detalle', $done, true)) {
+            $e = array_column(Database::query('PRAGMA table_info(empresas)'), 'name');
+            foreach (['resp_sgsst_nombre' => 'TEXT', 'resp_sgsst_cc' => 'TEXT', 'representante_cc' => 'TEXT'] as $c => $t) {
+                if (!in_array($c, $e, true)) $pdo->exec("ALTER TABLE empresas ADD COLUMN {$c} {$t}");
+            }
+            $d = array_column(Database::query('PRAGMA table_info(sgsst_documentos)'), 'name');
+            $cols = [
+                'codigo_documento' => 'TEXT', 'fecha_elaboracion' => 'DATE', 'requiere_firma' => 'INTEGER DEFAULT 1',
+                'firma_resp_nombre' => 'TEXT', 'firma_resp_cc' => 'TEXT', 'firma_rep_nombre' => 'TEXT', 'firma_rep_cc' => 'TEXT',
+                'notas_hse' => 'TEXT',
+            ];
+            foreach ($cols as $c => $t) {
+                if (!in_array($c, $d, true)) $pdo->exec("ALTER TABLE sgsst_documentos ADD COLUMN {$c} {$t}");
+            }
+            Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_07_documento_detalle']);
+        }
     }
 }
