@@ -1,11 +1,18 @@
-# Node modules
+# Dependencias locales
 node_modules/
+vendor/
 
-# SQLite database
-data/sistema.sqlite
-
-# Storage
+# Base de datos y archivos generados
+database/*.db
+database/*.db-shm
+database/*.db-wal
 storage/
 
-# macOS system files
+# Entorno y registros
+.env
+*.log
 .DS_Store
+
+# Cachés de herramientas
+.phpunit.cache/
+.cache/
