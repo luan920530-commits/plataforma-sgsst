@@ -1,0 +1,10 @@
+# Plataforma SG-SST — Front controller para Apache/XAMPP
+# Envía todas las rutas a index.php, excepto archivos y carpetas reales
+# (así /public/login, /public/sgsst, etc. las resuelve el Router).
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^ index.php [L]
