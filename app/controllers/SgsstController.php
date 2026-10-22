@@ -6,20 +6,30 @@ use App\Auditoria;
 use App\Database;
 use App\Sgsst;
 use App\SgsstCatalogo;
+use App\Indicadores;
 
 class SgsstController extends BaseController
 {
     private function empresaPropia(int $id): array
     {
         $e = Database::first('SELECT * FROM empresas WHERE id = ? AND usuario_id = ?', [$id, Auth::id()]);
-        if (!$e) { flash('error', 'Empresa no encontrada'); $this->redirect(base_url('empresas')); }
+        if (!$e) { flash('error', 'Empresa no encontrada o sin permiso de edición'); $this->redirect(base_url('sgsst')); }
+        return $e;
+    }
+
+    /** Visible = propietario o cliente con acceso de lectura compartido. */
+    private function empresaVisible(int $id): array
+    {
+        $e = Database::first('SELECT * FROM empresas WHERE id = ?', [$id]);
+        if (!$e || !Sgsst::puedeVer($id, Auth::id())) { flash('error', 'Empresa no encontrada'); $this->redirect(base_url('sgsst')); }
+        $e['solo_lectura'] = (int)$e['usuario_id'] !== (int)Auth::id();
         return $e;
     }
 
     /** GET /sgsst — centro de cumplimiento: todas las empresas y su avance */
     public function index(): void
     {
-        $empresas = Database::query('SELECT * FROM empresas WHERE usuario_id = ? ORDER BY razon_social', [Auth::id()]);
+        $empresas = Sgsst::empresasVisibles(Auth::id());
         foreach ($empresas as &$e) {
             $ev = Sgsst::evaluaciones((int)$e['id']);
             $e['puntaje'] = Sgsst::puntaje($ev);
@@ -27,6 +37,7 @@ class SgsstController extends BaseController
             $e['pendientes'] = (int)(Database::first(
                 "SELECT COUNT(*) c FROM sgsst_actividades WHERE empresa_id=? AND estado IN ('pendiente','en_proceso') AND fecha_vencimiento < date('now')",
                 [(int)$e['id']])['c'] ?? 0);
+            $e['alertas'] = Sgsst::alertas((int)$e['id']);
             $e['abiertos'] = (int)(Database::first(
                 "SELECT COUNT(*) c FROM sgsst_registros WHERE empresa_id=? AND estado IN ('abierto','en_gestion')",
                 [(int)$e['id']])['c'] ?? 0);
@@ -38,7 +49,7 @@ class SgsstController extends BaseController
     /** GET /sgsst/empresa/{id} — panel integral de la empresa */
     public function empresa(string $id): void
     {
-        $empresa = $this->empresaPropia((int)$id);
+        $empresa = $this->empresaVisible((int)$id);
         $eid = (int)$empresa['id'];
         $evaluaciones = Sgsst::evaluaciones($eid);
         $puntaje = Sgsst::puntaje($evaluaciones);
@@ -52,6 +63,12 @@ class SgsstController extends BaseController
             'plantillas' => SgsstCatalogo::plantillas(), 'tiposRegistro' => SgsstCatalogo::tiposRegistro(),
             'auditoria' => Auditoria::porEmpresa($eid, 50),
             'analisis' => Database::query('SELECT * FROM analisis WHERE empresa_id=? ORDER BY created_at DESC', [$eid]),
+            'alertas' => Sgsst::alertas($eid),
+            'soloLectura' => (bool)$empresa['solo_lectura'],
+            'periodos' => Indicadores::porEmpresa($eid),
+            'resumenMatriz' => Database::query('SELECT nr_nivel, COUNT(*) c FROM sgsst_peligros WHERE empresa_id=? GROUP BY nr_nivel', [$eid]),
+            'peligrosCriticos' => (int)(Database::first("SELECT COUNT(*) c FROM sgsst_peligros WHERE empresa_id=? AND nr_nivel IN ('I','II') AND estado != 'cerrado'", [$eid])['c'] ?? 0),
+            'accesos' => Database::query('SELECT ea.id, u.nombre, u.email, u.rol FROM empresa_accesos ea JOIN usuarios u ON u.id = ea.usuario_id WHERE ea.empresa_id=? ORDER BY u.nombre', [$eid]),
             'csrf' => $this->csrfToken(),
         ]);
     }
@@ -138,6 +155,55 @@ class SgsstController extends BaseController
         $this->redirect(base_url("sgsst/empresa/{$r['empresa_id']}#registros"));
     }
 
+    /** POST /sgsst/empresa/{id}/periodos — datos de nómina para indicadores automáticos */
+    public function guardarPeriodo(string $id): void
+    {
+        $this->verifyCsrf();
+        $empresa = $this->empresaPropia((int)$id); $eid = (int)$empresa['id'];
+        $periodo = trim($_POST['periodo'] ?? '');
+        if (!preg_match('/^\d{4}-\d{2}$/', $periodo)) { flash('error', 'Periodo inválido (AAAA-MM)'); $this->redirect(base_url("sgsst/empresa/{$eid}#indicadores")); }
+        Database::execute(
+            'INSERT INTO sgsst_periodos (empresa_id,periodo,trabajadores_promedio,horas_trabajadas,dias_perdidos,dias_cargados,accidentes_mortales,dias_ausencia_medica,dias_programados)
+             VALUES (?,?,?,?,?,?,?,?,?)
+             ON CONFLICT(empresa_id, periodo) DO UPDATE SET trabajadores_promedio=excluded.trabajadores_promedio,
+               horas_trabajadas=excluded.horas_trabajadas, dias_perdidos=excluded.dias_perdidos, dias_cargados=excluded.dias_cargados,
+               accidentes_mortales=excluded.accidentes_mortales, dias_ausencia_medica=excluded.dias_ausencia_medica, dias_programados=excluded.dias_programados',
+            [$eid, $periodo, (int)($_POST['trabajadores_promedio'] ?? 0), (float)($_POST['horas_trabajadas'] ?? 0),
+             (int)($_POST['dias_perdidos'] ?? 0), (int)($_POST['dias_cargados'] ?? 0), (int)($_POST['accidentes_mortales'] ?? 0),
+             (int)($_POST['dias_ausencia_medica'] ?? 0), (int)($_POST['dias_programados'] ?? 0)]
+        );
+        Auditoria::registrar('sgsst.periodo_actualizado', $eid, 'periodo', null, $periodo);
+        flash('success', 'Periodo guardado. Los indicadores se recalcularon automáticamente con los registros del mes.');
+        $this->redirect(base_url("sgsst/empresa/{$eid}#indicadores"));
+    }
+
+    /** POST /sgsst/empresa/{id}/accesos — compartir portal de solo lectura con un cliente */
+    public function asignarAcceso(string $id): void
+    {
+        $this->verifyCsrf();
+        $empresa = $this->empresaPropia((int)$id); $eid = (int)$empresa['id'];
+        $email = trim($_POST['email'] ?? '');
+        $u = Database::first('SELECT id, rol FROM usuarios WHERE email = ? AND activo = 1', [$email]);
+        if (!$u) { flash('error', 'No existe un usuario activo con ese correo. Un superadmin debe crearlo primero (Usuarios y roles).'); $this->redirect(base_url("sgsst/empresa/{$eid}#accesos")); }
+        Database::execute('INSERT OR IGNORE INTO empresa_accesos (empresa_id, usuario_id, permiso, otorgado_por) VALUES (?,?,?,?)',
+            [$eid, (int)$u['id'], 'lectura', Auth::id()]);
+        Auditoria::registrar('sgsst.acceso_otorgado', $eid, 'usuario', (int)$u['id'], $email);
+        flash('success', "Acceso de solo lectura otorgado a {$email}. Ya puede ingresar y consultar el SG-SST de esta empresa, sin modificar nada.");
+        $this->redirect(base_url("sgsst/empresa/{$eid}#accesos"));
+    }
+
+    /** POST /sgsst/accesos/{id}/revocar */
+    public function revocarAcceso(string $id): void
+    {
+        $this->verifyCsrf();
+        $a = Database::first('SELECT ea.* FROM empresa_accesos ea JOIN empresas e ON e.id=ea.empresa_id WHERE ea.id=? AND e.usuario_id=?', [(int)$id, Auth::id()]);
+        if (!$a) { flash('error', 'Acceso no encontrado'); $this->redirect(base_url('sgsst')); }
+        Database::execute('DELETE FROM empresa_accesos WHERE id=?', [(int)$id]);
+        Auditoria::registrar('sgsst.acceso_revocado', (int)$a['empresa_id'], 'usuario', (int)$a['usuario_id']);
+        flash('success', 'Acceso revocado');
+        $this->redirect(base_url("sgsst/empresa/{$a['empresa_id']}#accesos"));
+    }
+
     /** GET /sgsst/empresa/{id}/plantilla/{codigo} — genera documento base (.doc editable) */
     public function generarPlantilla(string $id, string $codigo): void
     {
@@ -184,7 +250,7 @@ class SgsstController extends BaseController
     /** GET /sgsst/empresa/{id}/informe — informe de cumplimiento imprimible (auditoría/ARL/MinTrabajo) */
     public function informe(string $id): void
     {
-        $empresa = $this->empresaPropia((int)$id); $eid = (int)$empresa['id'];
+        $empresa = $this->empresaVisible((int)$id); $eid = (int)$empresa['id'];
         $evaluaciones = Sgsst::evaluaciones($eid); $puntaje = Sgsst::puntaje($evaluaciones);
         header('Content-Type: text/html; charset=utf-8');
         echo '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><title>Informe SG-SST</title><style>body{font-family:Arial;margin:2cm}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:5px;font-size:10pt}h1{color:#1d4ed8}@media print{button{display:none}}</style></head><body>';

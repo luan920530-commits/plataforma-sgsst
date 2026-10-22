@@ -82,6 +82,16 @@ $router->group('auth', function (Router $r) {
     $r->post('/sgsst/empresa/{id}/registros',          'SgsstController@crearRegistro');
     $r->post('/sgsst/registros/{id}/estado',           'SgsstController@estadoRegistro');
     $r->get('/sgsst/empresa/{id}/plantilla/{codigo}',  'SgsstController@generarPlantilla');
+    $r->post('/sgsst/empresa/{id}/periodos',           'SgsstController@guardarPeriodo');
+    $r->post('/sgsst/empresa/{id}/accesos',            'SgsstController@asignarAcceso');
+    $r->post('/sgsst/accesos/{id}/revocar',            'SgsstController@revocarAcceso');
+
+    // Matriz IPVR — GTC 45
+    $r->get('/sgsst/empresa/{id}/matriz',              'PeligroController@matriz');
+    $r->post('/sgsst/empresa/{id}/matriz',             'PeligroController@crear');
+    $r->get('/sgsst/empresa/{id}/matriz.csv',          'PeligroController@exportar');
+    $r->post('/sgsst/peligros/{id}/estado',            'PeligroController@estado');
+    $r->post('/sgsst/peligros/{id}/eliminar',          'PeligroController@eliminar');
     $r->get('/sgsst/empresa/{id}/informe',             'SgsstController@informe');
 
     // Usuarios y roles (el controlador exige superadmin)

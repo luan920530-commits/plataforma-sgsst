@@ -18,7 +18,10 @@
       <div><div class="flex justify-between text-xs"><span>Estándares mínimos</span><b><?= $p ?>%</b></div>
       <div class="h-2 bg-slate-100 rounded mt-1"><div class="h-2 rounded <?= $p<=60?'bg-red-500':($p<=85?'bg-yellow-500':'bg-green-500') ?>" style="width:<?= $p ?>%"></div></div></div>
       <p class="text-xs text-slate-500">Actividades vencidas: <b><?= (int)$e['pendientes'] ?></b> · Registros abiertos: <b><?= (int)$e['abiertos'] ?></b></p>
-      <a class="block text-center bg-brand-600 text-white rounded-lg py-2 font-medium" href="<?= base_url("sgsst/empresa/{$e['id']}") ?>">Gestionar SG-SST</a>
+      <?php $crit = count(array_filter($e['alertas'] ?? [], fn($a) => $a['nivel'] === 'critica')); $adv = count($e['alertas'] ?? []) - $crit; ?>
+      <?php if ($crit + $adv > 0): ?><p class="flex gap-1.5 flex-wrap"><?php if ($crit): ?><span class="mac-badge" style="background:#ffe5e5;color:#b42318">🔔 <?= $crit ?> alertas críticas</span><?php endif; ?><?php if ($adv): ?><span class="mac-badge" style="background:#fef0c7;color:#93370d">🟡 <?= $adv ?> por vencer</span><?php endif; ?></p><?php endif; ?>
+      <?php if (!empty($e['compartida'])): ?><p><span class="mac-badge" style="background:#e0e7ff;color:#3730a3">👁 Compartida contigo · solo lectura</span></p><?php endif; ?>
+      <a class="block text-center bg-brand-600 text-white rounded-lg py-2 font-medium" href="<?= base_url("sgsst/empresa/{$e['id']}") ?>">Abrir panel SG-SST</a>
     </div><?php endforeach; ?>
   </div><?php endif; ?>
 </div>

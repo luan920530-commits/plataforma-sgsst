@@ -12,6 +12,11 @@ Plataforma web (PHP + SQLite, sin framework) para **administrar, gestionar, crea
   - **Informe de cumplimiento imprimible** por empresa (para auditoría, ARL o Ministerio de Trabajo).
   - **Auditoría automática**: quién hizo qué, sobre qué empresa y cuándo.
 - **Módulo PPPRAE**: asistente de 7 pasos (empresa → inventario → amenazas → vulnerabilidad → personal/brigada → revisión → generación) que produce un ZIP con 5 documentos (lista de chequeo, análisis de vulnerabilidad, matriz consolidada, MEDEVAC y plan completo).
+- **Matriz IPVR interactiva (GTC 45)**: NP = ND × NE y NR = NP × NC automáticos, nivel de aceptabilidad, medidas de intervención, filtro por nivel, exportación CSV y alertas de peligros nivel I/II sin cerrar.
+- **Indicadores automáticos (Res. 0312/2019)**: por periodo mensual, frecuencia y severidad de accidentalidad (× 240.000 HHT), ILI, % de accidentes mortales y % de ausentismo por causa médica; los accidentes/enfermedades se cuentan solos desde los registros.
+- **Alertas de vencimientos**: actividades del plan, registros, compromisos de la evaluación y botiquines (vencidos y próximos 30 días), con contador de críticas en la campana del menú.
+- **Portal del cliente (solo lectura)**: el propietario comparte el SG-SST de una empresa con un usuario cliente, que consulta cumplimiento, matriz, indicadores e informes sin poder modificar nada.
+- **Interfaz estilo macOS**: cristal translúcido, tipografía del sistema, iconos con color, notificaciones toast animadas y campana de alertas.
 - **Usuarios y roles** (solo superadmin): `superadmin`, `consultor` y `cliente`, con aislamiento de datos por propietario y cambio forzado de contraseña temporal.
 
 > ⚠️ Las plantillas y el catálogo son **bases de partida**: la aplicabilidad de cada estándar depende del número de trabajadores y la clase de riesgo. Todo documento debe adaptarse a la empresa, ser validado por el responsable del SG-SST (con licencia cuando la norma lo exige) y firmarse. La plataforma organiza y hace trazable el cumplimiento; no reemplaza la validación profesional ni la verificación de la norma vigente.
@@ -54,5 +59,5 @@ storage/        BD SQLite y documentos generados (NO versionado)
 ## Hoja de ruta
 
 1. **Fase 1 (esta entrega):** seguridad, roles, rutas reparadas, migraciones, auditoría y núcleo SG-SST integral.
-2. **Fase 2:** matriz IPVR (GTC 45) interactiva, indicadores automáticos (frecuencia/severidad/ausentismo), vencimientos de exámenes/EPP/extintores con alertas, gestión de usuarios cliente por empresa.
+2. **Fase 2 (esta entrega):** matriz IPVR (GTC 45) interactiva, indicadores automáticos, alertas de vencimientos, portal cliente de solo lectura e interfaz macOS. Pruebas: `php tests/Gtc45Test.php` y `php tests/IndicadoresTest.php`.
 3. **Fase 3:** almacenamiento externo y respaldos automáticos, notificaciones, firma electrónica, reportes ARL/MinTrabajo, migración opcional a MariaDB/PostgreSQL para multiusuario intensivo.

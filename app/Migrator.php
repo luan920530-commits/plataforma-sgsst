@@ -52,5 +52,37 @@ class Migrator
             }
             Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_01_sgsst_core']);
         }
+        if (!in_array('2026_02_fase2', $done, true)) {
+            $pdo->exec("
+            CREATE TABLE IF NOT EXISTS sgsst_peligros (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, empresa_id INTEGER NOT NULL,
+                proceso TEXT, zona TEXT, actividad TEXT, tarea TEXT, rutinaria INTEGER DEFAULT 1,
+                descripcion TEXT NOT NULL, clasificacion TEXT, efectos TEXT,
+                control_fuente TEXT, control_medio TEXT, control_individuo TEXT,
+                nd INTEGER DEFAULT 2, ne INTEGER DEFAULT 2, nc INTEGER DEFAULT 25,
+                np INTEGER DEFAULT 0, np_nivel TEXT, nr INTEGER DEFAULT 0, nr_nivel TEXT, aceptabilidad TEXT,
+                medidas_intervencion TEXT, responsable TEXT, fecha_compromiso DATE,
+                estado TEXT CHECK(estado IN ('abierto','en_control','cerrado')) DEFAULT 'abierto',
+                creado_por INTEGER, created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (empresa_id) REFERENCES empresas(id) ON DELETE CASCADE);
+            CREATE TABLE IF NOT EXISTS sgsst_periodos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, empresa_id INTEGER NOT NULL,
+                periodo TEXT NOT NULL, trabajadores_promedio INTEGER DEFAULT 0,
+                horas_trabajadas REAL DEFAULT 0, dias_perdidos INTEGER DEFAULT 0, dias_cargados INTEGER DEFAULT 0,
+                accidentes_mortales INTEGER DEFAULT 0, dias_ausencia_medica INTEGER DEFAULT 0, dias_programados INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP, UNIQUE(empresa_id, periodo),
+                FOREIGN KEY (empresa_id) REFERENCES empresas(id) ON DELETE CASCADE);
+            CREATE TABLE IF NOT EXISTS empresa_accesos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, empresa_id INTEGER NOT NULL, usuario_id INTEGER NOT NULL,
+                permiso TEXT CHECK(permiso IN ('lectura')) DEFAULT 'lectura',
+                otorgado_por INTEGER, created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(empresa_id, usuario_id),
+                FOREIGN KEY (empresa_id) REFERENCES empresas(id) ON DELETE CASCADE,
+                FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE);
+            CREATE INDEX IF NOT EXISTS idx_peligros_empresa ON sgsst_peligros(empresa_id, nr_nivel);
+            CREATE INDEX IF NOT EXISTS idx_accesos_usuario ON empresa_accesos(usuario_id);
+            ");
+            Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_02_fase2']);
+        }
     }
 }

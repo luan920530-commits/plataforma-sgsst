@@ -1,85 +1,33 @@
 <?php
 $rutaActual = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$esActivo = function (string $prefijo) use ($rutaActual): string {
-    return str_contains($rutaActual, $prefijo)
-        ? 'bg-brand-50 text-brand-700 border-brand-600'
-        : 'text-slate-600 hover:bg-slate-100 border-transparent';
+$esActivo = fn(string $prefijo): string => str_contains($rutaActual, $prefijo) ? 'active' : '';
+$item = function (string $url, string $activo, string $icono, string $color, string $texto) {
+    return '<a href="' . $url . '" class="mac-item ' . $activo . '"><span class="mac-ico" style="background:' . $color . '"><i class="fa-solid ' . $icono . '"></i></span><span>' . $texto . '</span></a>';
 };
 ?>
+<aside class="mac-sidebar w-64 min-w-64 p-3.5 hidden md:block sticky top-[57px] h-[calc(100vh-57px)] overflow-y-auto">
+    <nav class="space-y-0.5">
+        <?= $item(base_url('dashboard'), $esActivo('dashboard'), 'fa-gauge', 'linear-gradient(180deg,#0a84ff,#0040dd)', 'Dashboard') ?>
 
-<aside class="w-64 bg-white border-r border-slate-200 min-h-[calc(100vh-64px)] p-4 hidden md:block">
-    <nav class="space-y-1">
-        <a href="<?= base_url('dashboard') ?>"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg border-l-4 transition <?= $esActivo('dashboard') ?>">
-            <i class="fa-solid fa-gauge w-5 text-center"></i>
-            <span class="font-medium text-sm">Dashboard</span>
-        </a>
-
-        <div class="pt-4 pb-2 px-3">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">SG-SST integral</span>
-        </div>
-
-        <a href="<?= base_url('sgsst') ?>"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg border-l-4 transition <?= $esActivo('sgsst') ?>">
-            <i class="fa-solid fa-clipboard-check w-5 text-center"></i>
-            <span class="font-medium text-sm">Centro de cumplimiento</span>
-        </a>
-
+        <div class="pt-4 pb-1.5 px-2 text-[11px] font-bold uppercase tracking-wider mac-muted">SG-SST integral</div>
+        <?= $item(base_url('sgsst'), $esActivo('sgsst'), 'fa-clipboard-check', 'linear-gradient(180deg,#34c759,#248a3d)', 'Centro de cumplimiento') ?>
         <?php if (\App\Auth::hasRole('superadmin')): ?>
-        <a href="<?= base_url('usuarios') ?>"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg border-l-4 transition <?= $esActivo('usuarios') ?>">
-            <i class="fa-solid fa-user-gear w-5 text-center"></i>
-            <span class="font-medium text-sm">Usuarios y roles</span>
-        </a>
+        <?= $item(base_url('usuarios'), $esActivo('usuarios'), 'fa-user-gear', 'linear-gradient(180deg,#bf5af2,#8e2de0)', 'Usuarios y roles') ?>
         <?php endif; ?>
 
-        <a href="<?= base_url('empresas') ?>"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg border-l-4 transition <?= $esActivo('empresas') ?>">
-            <i class="fa-solid fa-building w-5 text-center"></i>
-            <span class="font-medium text-sm">Empresas</span>
-        </a>
+        <div class="pt-4 pb-1.5 px-2 text-[11px] font-bold uppercase tracking-wider mac-muted">Empresas y emergencias</div>
+        <?= $item(base_url('empresas'), $esActivo('empresas'), 'fa-building', 'linear-gradient(180deg,#5e5ce6,#3634a3)', 'Empresas') ?>
+        <?= $item(base_url('analisis'), $esActivo('analisis'), 'fa-chart-line', 'linear-gradient(180deg,#ff9500,#c93400)', 'Análisis PPPRAE') ?>
+        <?= $item(base_url('documentos'), $esActivo('documentos'), 'fa-file-word', 'linear-gradient(180deg,#64d2ff,#0a84ff)', 'Documentos') ?>
 
-        <a href="<?= base_url('analisis') ?>"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg border-l-4 transition <?= $esActivo('analisis/') ?>">
-            <i class="fa-solid fa-chart-line w-5 text-center"></i>
-            <span class="font-medium text-sm">Análisis</span>
-        </a>
-
-        <div class="pt-4 pb-2 px-3">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Recursos</span>
-        </div>
-
-        <a href="<?= base_url('documentos') ?>"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg border-l-4 transition <?= $esActivo('documentos') ?>">
-            <i class="fa-solid fa-file-word w-5 text-center"></i>
-            <span class="font-medium text-sm">Documentos</span>
-        </a>
-
-        <div class="pt-4 pb-2 px-3">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Personal</span>
-        </div>
-
-        <a href="<?= base_url('personal') ?>"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg border-l-4 transition <?= $esActivo('personal') ?>">
-            <i class="fa-solid fa-users w-5 text-center"></i>
-            <span class="font-medium text-sm">Personal</span>
-        </a>
-
-        <a href="<?= base_url('medevac') ?>"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg border-l-4 transition <?= $esActivo('medevac') ?>">
-            <i class="fa-solid fa-notes-medical w-5 text-center"></i>
-            <span class="font-medium text-sm">MEDEVAC</span>
-        </a>
-
-        <a href="<?= base_url('brigadistas') ?>"
-           class="flex items-center gap-3 px-3 py-2 rounded-lg border-l-4 transition <?= $esActivo('brigadistas') ?>">
-            <i class="fa-solid fa-user-shield w-5 text-center"></i>
-            <span class="font-medium text-sm">Brigadistas</span>
-        </a>
+        <div class="pt-4 pb-1.5 px-2 text-[11px] font-bold uppercase tracking-wider mac-muted">Personal</div>
+        <?= $item(base_url('personal'), $esActivo('personal'), 'fa-users', 'linear-gradient(180deg,#ff6482,#d70015)', 'Personal') ?>
+        <?= $item(base_url('medevac'), $esActivo('medevac'), 'fa-notes-medical', 'linear-gradient(180deg,#30d158,#0f7a2e)', 'MEDEVAC') ?>
+        <?= $item(base_url('brigadistas'), $esActivo('brigadistas'), 'fa-user-shield', 'linear-gradient(180deg,#ffd60a,#b25000)', 'Brigadistas') ?>
     </nav>
 
-    <div class="mt-8 p-3 bg-slate-50 rounded-lg border border-slate-200">
-        <div class="text-xs text-slate-500 mb-1">Versión</div>
-        <div class="text-sm font-medium text-slate-700">v2.0.0 · SG-SST</div>
+    <div class="mt-8 mac-card p-3.5" style="border-radius:14px">
+        <div class="flex items-center gap-2 text-xs font-semibold"><span class="traffic" style="background:#28c840"></span> Plataforma SG-SST</div>
+        <div class="text-[11px] mac-muted mt-1">v3.0 · Fase 2<br>Decreto 1072/2015 · Res. 0312/2019 · GTC 45</div>
     </div>
 </aside>

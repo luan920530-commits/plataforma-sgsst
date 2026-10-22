@@ -6,9 +6,13 @@
 - Resolución 256/2014 y PPPRAE: módulo de emergencias, brigada (≥20 % como alerta), MEDEVAC, simulacros como registro.
 - Resolución 1401/2007 (investigación), Res. 2013/1986 (COPASST), Res. 652/2012 (convivencia), GTC 45 (matriz de peligros como plantilla y, en Fase 2, interactiva).
 
+## Implementado en Fase 2
+- Matriz IPVR interactiva con cálculo GTC 45 (NP/NR, aceptabilidad) y plan de controles.
+- Indicadores automáticos por periodo (frecuencia, severidad, ILI, mortalidad, ausentismo).
+- Alertas de vencimientos (plan anual, registros, compromisos, botiquines) + peligros I/II.
+- Portal de solo lectura para clientes (acceso por empresa, revocable, auditado).
+
 ## Pendiente por fases
-- Matriz IPVR interactiva con cálculo GTC 45 y plan de controles.
-- Indicadores automáticos y tablero por empresa/periodo.
-- Alertas de vencimientos (exámenes, EPP, extintores, documentos anuales).
-- Portal de solo lectura para clientes y cargue de evidencias con control de acceso.
+- Alertas de vencimientos de exámenes médicos, EPP y extintores con fecha de próxima recarga.
+- Cargue de archivos de evidencia con control de acceso y antivirus.
 - Respaldo programado y cifrado de datos sensibles en reposo.
