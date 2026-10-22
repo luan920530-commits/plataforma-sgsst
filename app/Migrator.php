@@ -129,5 +129,13 @@ class Migrator
             if (!in_array('version', $cols, true)) $pdo->exec('ALTER TABLE sgsst_documentos ADD COLUMN version INTEGER DEFAULT 1');
             Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_05_paquete_documental']);
         }
+
+        if (!in_array('2026_06_recuperacion_password', $done, true)) {
+            $cols = array_column(Database::query('PRAGMA table_info(usuarios)'), 'name');
+            if (!in_array('recuperacion_pregunta', $cols, true)) $pdo->exec('ALTER TABLE usuarios ADD COLUMN recuperacion_pregunta TEXT');
+            if (!in_array('recuperacion_respuesta_hash', $cols, true)) $pdo->exec('ALTER TABLE usuarios ADD COLUMN recuperacion_respuesta_hash TEXT');
+            if (!in_array('recuperacion_pin_hash', $cols, true)) $pdo->exec('ALTER TABLE usuarios ADD COLUMN recuperacion_pin_hash TEXT');
+            Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_06_recuperacion_password']);
+        }
     }
 }

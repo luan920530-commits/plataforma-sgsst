@@ -30,6 +30,13 @@
         </button>
     </form>
 
+    <p class="text-center mt-4">
+        <a href="<?= base_url('recuperar') ?>" class="text-sm font-medium" style="color:var(--mac-blue, #0071e3)">
+            <i class="fa-solid fa-key mr-1"></i> ¿Olvidaste tu contraseña?
+        </a>
+        <span class="block text-xs text-slate-400 mt-1">Recupérala con tu pregunta secreta o tu PIN único</span>
+    </p>
+
     <p class="text-center text-xs text-slate-400 mt-6">
         Decreto 1072/2015 · Resolución 0312/2019
     </p>

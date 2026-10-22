@@ -55,6 +55,12 @@ $router = new Router();
 
 // Públicas
 $router->get('/login',  'AuthController@showLogin');
+$router->get('/recuperar',              'AuthController@showRecuperar');
+$router->post('/recuperar',             'AuthController@recuperarIdentificar');
+$router->post('/recuperar/verificar',   'AuthController@recuperarVerificar');
+$router->get('/recuperar/restablecer',  'AuthController@showRestablecer');
+$router->post('/recuperar/restablecer', 'AuthController@restablecer');
+$router->post('/recuperar/cancelar',    'AuthController@recuperarCancelar');
 // Formulario público de reportes de operarios (enlace con token por empresa)
 $router->get('/reporte/{token}',  'ReporteController@formulario');
 $router->post('/reporte/{token}', 'ReporteController@enviar');
@@ -76,6 +82,7 @@ $router->group('auth', function (Router $r) {
     $r->post('/mi-empresa/{id}/documentos/generar','PortalController@generarDocumento');
     $r->post('/sgsst/empresa/{id}/reporte-token', 'ReporteController@regenerarToken');
     $r->post('/cambiar-password', 'AuthController@cambiarPassword');
+    $r->post('/mi-seguridad/recuperacion', 'AuthController@guardarRecuperacion');
 
     // Empresas
     $r->get('/empresas',              'EmpresaController@index');
