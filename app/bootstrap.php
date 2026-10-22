@@ -29,9 +29,16 @@ if ($GLOBALS['config']['debug']) {
     error_reporting(E_ALL);
     ini_set('display_errors', '0');
     ini_set('log_errors', '1');
+    $logDirectory = BASE_PATH . '/storage/logs';
+    if ((is_dir($logDirectory) || @mkdir($logDirectory, 0775, true)) && is_writable($logDirectory)) {
+        ini_set('error_log', $logDirectory . '/app.log');
+    }
 }
 
 if (PHP_SAPI !== 'cli') {
+    if (ob_get_level() === 0) {
+        ob_start();
+    }
     ini_set('session.use_strict_mode', '1');
     ini_set('session.use_only_cookies', '1');
     ini_set('session.cookie_httponly', '1');
@@ -56,6 +63,9 @@ if (PHP_SAPI !== 'cli') {
 
     set_exception_handler(static function (Throwable $exception) use ($config): void {
         error_log((string) $exception);
+        if (ob_get_level() > 0) {
+            ob_clean();
+        }
         http_response_code(500);
         $status = 500;
         $title = 'Algo no salió como esperábamos';

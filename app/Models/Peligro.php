@@ -37,6 +37,34 @@ final class Peligro
         return Database::lastId();
     }
 
+    public static function findForTenant(int $id, int $tenantId): ?array
+    {
+        return Database::first('SELECT * FROM peligros_ipevr WHERE id = ? AND tenant_id = ?', [$id, $tenantId]);
+    }
+
+    public static function update(int $id, int $tenantId, array $data): void
+    {
+        Database::execute(
+            'UPDATE peligros_ipevr SET proceso = ?, cargo = ?, peligro = ?, clasificacion = ?, efectos = ?,
+                                      controles_existentes = ?, nivel_deficiencia = ?, nivel_exposicion = ?,
+                                      nivel_probabilidad = ?, nivel_consecuencia = ?, nivel_riesgo = ?,
+                                      medidas_control = ?, updated_at = CURRENT_TIMESTAMP
+             WHERE id = ? AND tenant_id = ?',
+            [
+                trim($data['proceso']), trim($data['cargo']), trim($data['peligro']), $data['clasificacion'],
+                trim($data['efectos'] ?? ''), trim($data['controles_existentes'] ?? ''),
+                $data['nivel_deficiencia'] ?? null, $data['nivel_exposicion'] ?? null,
+                $data['nivel_probabilidad'] ?? null, $data['nivel_consecuencia'] ?? null,
+                $data['nivel_riesgo'], trim($data['medidas_control'] ?? ''), $id, $tenantId,
+            ]
+        );
+    }
+
+    public static function delete(int $id, int $tenantId): void
+    {
+        Database::execute('DELETE FROM peligros_ipevr WHERE id = ? AND tenant_id = ?', [$id, $tenantId]);
+    }
+
     public static function setStatus(int $id, int $tenantId, string $status): void
     {
         Database::execute('UPDATE peligros_ipevr SET estado = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_id = ?', [$status, $id, $tenantId]);

@@ -270,6 +270,203 @@ CREATE TABLE IF NOT EXISTS auditoria_saas (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
+-- Historial inmutable de las versiones reemplazadas de documentos y planes.
+CREATE TABLE IF NOT EXISTS documento_versiones (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tenant_id INTEGER NOT NULL,
+    documento_id INTEGER NOT NULL,
+    version INTEGER NOT NULL,
+    contenido_html TEXT NOT NULL,
+    estado TEXT NOT NULL,
+    aprobado_por INTEGER,
+    aprobado_at TEXT,
+    archivado_por INTEGER,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (documento_id) REFERENCES documentos_sgsst(id) ON DELETE CASCADE,
+    FOREIGN KEY (aprobado_por) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (archivado_por) REFERENCES users(id) ON DELETE SET NULL,
+    UNIQUE (documento_id, version)
+);
+
+-- Permisos de trabajo: cada revisión crea un registro nuevo y conserva la anterior.
+CREATE TABLE IF NOT EXISTS permisos_trabajo (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tenant_id INTEGER NOT NULL,
+    codigo TEXT NOT NULL,
+    version INTEGER NOT NULL DEFAULT 1 CHECK (version >= 1),
+    revisado_de INTEGER,
+    tipo TEXT NOT NULL CHECK (tipo IN ('General','Alturas','Espacio confinado','Electrico','Trabajo en caliente','Excavacion','Otro')),
+    tarea TEXT NOT NULL,
+    ubicacion TEXT NOT NULL,
+    descripcion TEXT NOT NULL DEFAULT '',
+    fecha_inicio TEXT NOT NULL,
+    fecha_fin TEXT NOT NULL,
+    solicitante_id INTEGER,
+    solicitante_nombre TEXT NOT NULL,
+    solicitante_documento TEXT NOT NULL DEFAULT '',
+    ejecutantes TEXT NOT NULL,
+    responsable_trabajo TEXT NOT NULL,
+    peligros TEXT NOT NULL,
+    controles TEXT NOT NULL,
+    epp TEXT NOT NULL,
+    equipos_herramientas TEXT NOT NULL DEFAULT '',
+    autorreporte_condiciones TEXT NOT NULL DEFAULT '',
+    altura_trabajo REAL,
+    coordinador_alturas TEXT NOT NULL DEFAULT '',
+    responsable_emergencias TEXT NOT NULL DEFAULT '',
+    procedimiento_rescate TEXT NOT NULL DEFAULT '',
+    vigia_espacio TEXT NOT NULL DEFAULT '',
+    mediciones_atmosfericas TEXT NOT NULL DEFAULT '',
+    formacion_personal TEXT NOT NULL DEFAULT '',
+    observaciones TEXT NOT NULL DEFAULT '',
+    estado TEXT NOT NULL DEFAULT 'Borrador' CHECK (estado IN ('Borrador','Pendiente','Aprobado','Activo','Cerrado','Cancelado','Obsoleto')),
+    aprobado_por INTEGER,
+    aprobador_nombre TEXT NOT NULL DEFAULT '',
+    aprobador_documento TEXT NOT NULL DEFAULT '',
+    aprobado_at TEXT,
+    cerrado_por INTEGER,
+    cerrado_at TEXT,
+    observaciones_cierre TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (revisado_de) REFERENCES permisos_trabajo(id) ON DELETE SET NULL,
+    FOREIGN KEY (solicitante_id) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (aprobado_por) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (cerrado_por) REFERENCES users(id) ON DELETE SET NULL,
+    UNIQUE (tenant_id, codigo)
+);
+
+-- Los planes de emergencia usan el documento asociado como fuente única de estado y versión.
+CREATE TABLE IF NOT EXISTS planes_emergencia (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tenant_id INTEGER NOT NULL,
+    documento_id INTEGER,
+    codigo TEXT NOT NULL,
+    titulo TEXT NOT NULL,
+    centro_trabajo TEXT NOT NULL,
+    direccion TEXT NOT NULL DEFAULT '',
+    alcance TEXT NOT NULL,
+    amenazas_json TEXT NOT NULL DEFAULT '[]',
+    contactos_json TEXT NOT NULL DEFAULT '[]',
+    brigada_json TEXT NOT NULL DEFAULT '[]',
+    recursos_json TEXT NOT NULL DEFAULT '[]',
+    rutas_evacuacion TEXT NOT NULL DEFAULT '',
+    puntos_encuentro TEXT NOT NULL DEFAULT '',
+    procedimientos TEXT NOT NULL,
+    plan_rescate TEXT NOT NULL DEFAULT '',
+    ayuda_mutua TEXT NOT NULL DEFAULT '',
+    responsable_plan TEXT NOT NULL,
+    telefono_alarma TEXT NOT NULL DEFAULT '',
+    proximo_simulacro TEXT,
+    fecha_revision TEXT,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (documento_id) REFERENCES documentos_sgsst(id) ON DELETE SET NULL,
+    UNIQUE (tenant_id, codigo)
+);
+
+CREATE TABLE IF NOT EXISTS simulacros_emergencia (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tenant_id INTEGER NOT NULL,
+    plan_id INTEGER NOT NULL,
+    fecha TEXT NOT NULL,
+    tipo TEXT NOT NULL,
+    participantes INTEGER NOT NULL DEFAULT 0 CHECK (participantes >= 0),
+    responsable TEXT NOT NULL,
+    resultado TEXT NOT NULL DEFAULT '',
+    acciones_mejora TEXT NOT NULL DEFAULT '',
+    estado TEXT NOT NULL DEFAULT 'Programado' CHECK (estado IN ('Programado','Realizado','Cancelado')),
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (plan_id) REFERENCES planes_emergencia(id) ON DELETE CASCADE
+);
+
+-- Programas de promoción, prevención y vigilancia, con actividades medibles.
+CREATE TABLE IF NOT EXISTS programas_prevencion (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tenant_id INTEGER NOT NULL,
+    documento_id INTEGER,
+    codigo TEXT NOT NULL,
+    categoria TEXT NOT NULL CHECK (categoria IN ('Promocion de la salud','Prevencion de accidentes','Prevencion de enfermedad laboral','Vigilancia epidemiologica')),
+    nombre TEXT NOT NULL,
+    anio INTEGER NOT NULL CHECK (anio >= 2000 AND anio <= 2200),
+    diagnostico TEXT NOT NULL,
+    objetivo_general TEXT NOT NULL,
+    objetivos_especificos TEXT NOT NULL DEFAULT '',
+    poblacion TEXT NOT NULL,
+    peligros_relacionados TEXT NOT NULL DEFAULT '',
+    metas_indicadores TEXT NOT NULL,
+    responsable TEXT NOT NULL,
+    recursos TEXT NOT NULL DEFAULT '',
+    presupuesto REAL NOT NULL DEFAULT 0 CHECK (presupuesto >= 0),
+    fecha_inicio TEXT NOT NULL,
+    fecha_fin TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (documento_id) REFERENCES documentos_sgsst(id) ON DELETE SET NULL,
+    UNIQUE (tenant_id, codigo)
+);
+
+CREATE TABLE IF NOT EXISTS programa_actividades (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tenant_id INTEGER NOT NULL,
+    programa_id INTEGER NOT NULL,
+    actividad TEXT NOT NULL,
+    responsable TEXT NOT NULL,
+    fecha_programada TEXT NOT NULL,
+    indicador TEXT NOT NULL DEFAULT '',
+    meta TEXT NOT NULL DEFAULT '',
+    recursos TEXT NOT NULL DEFAULT '',
+    estado TEXT NOT NULL DEFAULT 'Pendiente' CHECK (estado IN ('Pendiente','En Proceso','Completado','Cancelado')),
+    evidencia TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (programa_id) REFERENCES programas_prevencion(id) ON DELETE CASCADE
+);
+
+-- Seguimiento humano y evidencias del tablero documental; no representa certificación automática.
+CREATE TABLE IF NOT EXISTS requisito_seguimiento (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tenant_id INTEGER NOT NULL,
+    requisito_clave TEXT NOT NULL,
+    estado TEXT NOT NULL DEFAULT 'Pendiente' CHECK (estado IN ('Pendiente','En gestion','Verificado','No aplica')),
+    responsable TEXT NOT NULL DEFAULT '',
+    fecha_limite TEXT,
+    observaciones TEXT NOT NULL DEFAULT '',
+    verificado_por INTEGER,
+    verificado_at TEXT,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (verificado_por) REFERENCES users(id) ON DELETE SET NULL,
+    UNIQUE (tenant_id, requisito_clave)
+);
+
+CREATE TABLE IF NOT EXISTS soportes_cumplimiento (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tenant_id INTEGER NOT NULL,
+    requisito_clave TEXT NOT NULL,
+    nombre_original TEXT NOT NULL,
+    nombre_almacenado TEXT NOT NULL,
+    ruta_relativa TEXT NOT NULL,
+    mime TEXT NOT NULL,
+    extension TEXT NOT NULL,
+    tamano INTEGER NOT NULL CHECK (tamano > 0),
+    hash_sha256 TEXT NOT NULL,
+    descripcion TEXT NOT NULL DEFAULT '',
+    subido_por INTEGER,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (subido_por) REFERENCES users(id) ON DELETE SET NULL,
+    UNIQUE (tenant_id, nombre_almacenado)
+);
+
 CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email_unique ON users(lower(email));
 CREATE INDEX IF NOT EXISTS idx_users_tenant ON users(tenant_id);
 CREATE INDEX IF NOT EXISTS idx_tenants_actividad ON tenants(actividad_economica_id);
@@ -294,3 +491,15 @@ CREATE INDEX IF NOT EXISTS idx_firmas_user ON firmas_induccion(user_id);
 CREATE INDEX IF NOT EXISTS idx_auditoria_tenant_fecha ON auditoria_saas(tenant_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_auditoria_user ON auditoria_saas(user_id);
 CREATE INDEX IF NOT EXISTS idx_estandares_grupo ON estandares_minimos(grupo, orden);
+CREATE INDEX IF NOT EXISTS idx_documento_versiones_documento ON documento_versiones(documento_id, version);
+CREATE INDEX IF NOT EXISTS idx_documento_versiones_tenant ON documento_versiones(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_permisos_tenant_estado ON permisos_trabajo(tenant_id, estado);
+CREATE INDEX IF NOT EXISTS idx_permisos_fechas ON permisos_trabajo(tenant_id, fecha_inicio, fecha_fin);
+CREATE INDEX IF NOT EXISTS idx_emergencias_tenant ON planes_emergencia(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_simulacros_plan ON simulacros_emergencia(plan_id, fecha);
+CREATE INDEX IF NOT EXISTS idx_simulacros_tenant ON simulacros_emergencia(tenant_id, estado);
+CREATE INDEX IF NOT EXISTS idx_programas_tenant ON programas_prevencion(tenant_id, anio);
+CREATE INDEX IF NOT EXISTS idx_programa_actividades ON programa_actividades(programa_id, fecha_programada);
+CREATE INDEX IF NOT EXISTS idx_programa_actividades_tenant ON programa_actividades(tenant_id, estado);
+CREATE INDEX IF NOT EXISTS idx_requisito_seguimiento_tenant ON requisito_seguimiento(tenant_id, estado);
+CREATE INDEX IF NOT EXISTS idx_soportes_requisito ON soportes_cumplimiento(tenant_id, requisito_clave);

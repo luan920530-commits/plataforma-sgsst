@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Core\Database;
+use App\Support\Auth;
+use RuntimeException;
 
 final class Documento
 {
@@ -70,14 +72,64 @@ final class Documento
         );
     }
 
-    public static function saveDraft(int $id, int $tenantId, string $content): void
+    public static function createOperational(array $data): int
     {
         Database::execute(
-            "UPDATE documentos_sgsst SET contenido_html = ?, estado = 'Borrador', version = version + 1,
-                                            aprobado_por = NULL, aprobado_at = NULL, updated_at = CURRENT_TIMESTAMP
-             WHERE id = ? AND tenant_id = ?",
-            [$content, $id, $tenantId]
+            "INSERT INTO documentos_sgsst (tenant_id, codigo_estandar, nombre_documento, fase_phva, contenido_html, tipo)
+             VALUES (?, ?, ?, ?, ?, ?)",
+            [(int) $data['tenant_id'], $data['codigo'], $data['nombre'], $data['fase'] ?? 'Hacer', $data['contenido'], $data['tipo']]
         );
+        return Database::lastId();
+    }
+
+    public static function saveDraft(int $id, int $tenantId, string $content): void
+    {
+        Database::transaction(static function () use ($id, $tenantId, $content): void {
+            $current = self::findForTenant($id, $tenantId);
+            if ($current === null) {
+                throw new RuntimeException('El documento no existe en esta empresa.');
+            }
+            Database::execute(
+                'INSERT INTO documento_versiones (tenant_id, documento_id, version, contenido_html, estado, aprobado_por, aprobado_at, archivado_por)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                [$tenantId, $id, (int) $current['version'], $current['contenido_html'], $current['estado'], $current['aprobado_por'], $current['aprobado_at'], Auth::id()]
+            );
+            Database::execute(
+                "UPDATE documentos_sgsst SET contenido_html = ?, estado = 'Borrador', version = version + 1,
+                                                aprobado_por = NULL, aprobado_at = NULL, updated_at = CURRENT_TIMESTAMP
+                 WHERE id = ? AND tenant_id = ?",
+                [$content, $id, $tenantId]
+            );
+        });
+    }
+
+    public static function versions(int $documentId, int $tenantId): array
+    {
+        return Database::query(
+            'SELECT v.*, u.nombre AS archivado_por_nombre, a.nombre AS aprobado_por_nombre
+             FROM documento_versiones v
+             LEFT JOIN users u ON u.id = v.archivado_por
+             LEFT JOIN users a ON a.id = v.aprobado_por
+             WHERE v.documento_id = ? AND v.tenant_id = ? ORDER BY v.version DESC',
+            [$documentId, $tenantId]
+        );
+    }
+
+    public static function findVersionForTenant(int $versionId, int $documentId, int $tenantId): ?array
+    {
+        return Database::first(
+            'SELECT v.*, d.nombre_documento, d.codigo_estandar, d.fase_phva, d.tipo,
+                    u.nombre AS archivado_por_nombre, a.nombre AS aprobado_por_nombre
+             FROM documento_versiones v JOIN documentos_sgsst d ON d.id = v.documento_id
+             LEFT JOIN users u ON u.id = v.archivado_por LEFT JOIN users a ON a.id = v.aprobado_por
+             WHERE v.id = ? AND v.documento_id = ? AND v.tenant_id = ?',
+            [$versionId, $documentId, $tenantId]
+        );
+    }
+
+    public static function deleteForTenant(int $id, int $tenantId): void
+    {
+        Database::execute('DELETE FROM documentos_sgsst WHERE id = ? AND tenant_id = ?', [$id, $tenantId]);
     }
 
     public static function setObsolete(int $id, int $tenantId): void

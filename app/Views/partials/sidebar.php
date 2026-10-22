@@ -31,9 +31,13 @@ if ($role === 'SuperAdmin') {
         ]],
         ['label' => 'GESTIÓN', 'items' => [
             ['Documentos', '/documentos', 'documents'],
+            ['Documentación y evidencias', '/cumplimiento-documental', 'shield-plain'],
             ['Ciclo PHVA', '/phva', 'phva', true],
             ['Plan Anual de Trabajo', '/plan-anual', 'calendar'],
             ['Matriz IPEVR', '/matriz-ipevr', 'grid'],
+            ['Programas de prevención', '/programas-prevencion', 'activity'],
+            ['Permisos de trabajo', '/permisos-trabajo', 'clipboard'],
+            ['Planes de emergencia', '/emergencias', 'shield'],
             ['Capacitaciones', '/capacitaciones', 'cap'],
             ['Indicadores', '/indicadores', 'chart'],
         ]],

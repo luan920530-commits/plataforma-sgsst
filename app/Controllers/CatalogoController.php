@@ -75,10 +75,20 @@ final class CatalogoController extends BaseController
         if (!in_array($group, [7, 21, 60], true)) {
             $group = 60;
         }
+        $standards = EstandarMinimo::byGroup($group);
+        $phases = ['Planear' => [], 'Hacer' => [], 'Verificar' => [], 'Actuar' => []];
+        foreach ($standards as $standard) {
+            $phase = (string) ($standard['fase_phva'] ?? '');
+            if (isset($phases[$phase])) {
+                $phases[$phase][] = $standard;
+            }
+        }
+        $counts = EstandarMinimo::counts();
         $this->view('admin/catalogo/estandares', [
             'title' => 'Catálogo de estándares mínimos',
-            'standards' => EstandarMinimo::byGroup($group),
-            'counts' => EstandarMinimo::counts(),
+            'phases' => $phases,
+            'standardCount' => count($standards),
+            'counts' => $counts,
             'group' => $group,
         ]);
     }

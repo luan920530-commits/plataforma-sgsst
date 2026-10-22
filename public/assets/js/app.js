@@ -211,6 +211,24 @@
     if (companyInput?.value) companyInput.dispatchEvent(new Event('input'));
   }
 
+  // Filas repetibles para amenazas, contactos, brigada y recursos.
+  $$('[data-add-row]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const template = document.getElementById('repeat-template-' + button.dataset.addRow);
+      const list = button.parentElement?.querySelector('[data-repeat-list]');
+      if (!template || !list) return;
+      list.appendChild(template.content.cloneNode(true));
+      list.lastElementChild?.querySelector('input')?.focus();
+    });
+  });
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-remove-row]');
+    if (!button) return;
+    const row = button.closest('[data-repeat-row]');
+    const list = button.closest('[data-repeat-list]');
+    if (row && list) row.remove();
+  });
+
   // Valoración orientativa ND × NE × NC.
   const riskForm = $('[data-risk-form]');
   if (riskForm) {

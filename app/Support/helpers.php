@@ -149,10 +149,10 @@ function role_label(?string $role): string
 function status_class(string $status): string
 {
     return match ($status) {
-        'Activa', 'Activo', 'Aprobado', 'Completado', 'Cerrado', 'Gestionado', 'Realizada', 'Bajo' => 'badge-green',
-        'En Proceso', 'En revision', 'Programada', 'Medio' => 'badge-blue',
+        'Activa', 'Activo', 'Aprobado', 'Completado', 'Cerrado', 'Gestionado', 'Realizada', 'Realizado', 'Verificado', 'Bajo' => 'badge-green',
+        'En Proceso', 'En revision', 'En gestion', 'Programada', 'Programado', 'Medio' => 'badge-blue',
         'Pendiente', 'Recibido', 'Borrador', 'Alto' => 'badge-amber',
-        'Suspendida', 'Obsoleto', 'Cancelada', 'Critico' => 'badge-red',
+        'Suspendida', 'Obsoleto', 'Cancelada', 'Cancelado', 'Critico', 'Vencido' => 'badge-red',
         default => 'badge-gray',
     };
 }

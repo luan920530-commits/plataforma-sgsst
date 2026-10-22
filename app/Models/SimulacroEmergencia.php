@@ -1,0 +1,39 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Models;
+
+use App\Core\Database;
+
+final class SimulacroEmergencia
+{
+    public static function forPlan(int $planId, int $tenantId): array
+    {
+        return Database::query('SELECT * FROM simulacros_emergencia WHERE plan_id = ? AND tenant_id = ? ORDER BY fecha DESC, id DESC', [$planId, $tenantId]);
+    }
+
+    public static function findForTenant(int $id, int $tenantId): ?array
+    {
+        return Database::first('SELECT * FROM simulacros_emergencia WHERE id = ? AND tenant_id = ?', [$id, $tenantId]);
+    }
+
+    public static function create(array $data): int
+    {
+        Database::execute(
+            'INSERT INTO simulacros_emergencia (tenant_id, plan_id, fecha, tipo, participantes, responsable, resultado, acciones_mejora, estado)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [(int) $data['tenant_id'], (int) $data['plan_id'], $data['fecha'], trim($data['tipo']), (int) $data['participantes'], trim($data['responsable']), trim($data['resultado'] ?? ''), trim($data['acciones_mejora'] ?? ''), $data['estado']]
+        );
+        return Database::lastId();
+    }
+
+    public static function setStatus(int $id, int $tenantId, string $status, string $result = '', string $improvements = ''): void
+    {
+        Database::execute('UPDATE simulacros_emergencia SET estado = ?, resultado = ?, acciones_mejora = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_id = ?', [$status, trim($result), trim($improvements), $id, $tenantId]);
+    }
+
+    public static function delete(int $id, int $tenantId): void
+    {
+        Database::execute('DELETE FROM simulacros_emergencia WHERE id = ? AND tenant_id = ?', [$id, $tenantId]);
+    }
+}

@@ -22,6 +22,15 @@ final class Autoreporte
         return Database::query('SELECT * FROM autoreportes WHERE tenant_id = ? AND user_id = ? ORDER BY created_at DESC', [$tenantId, $userId]);
     }
 
+    public static function findDetailedForTenant(int $id, int $tenantId): ?array
+    {
+        return Database::first(
+            'SELECT r.*, u.nombre AS reportante, u.email FROM autoreportes r
+             JOIN users u ON u.id = r.user_id WHERE r.id = ? AND r.tenant_id = ?',
+            [$id, $tenantId]
+        );
+    }
+
     public static function findForTenant(int $id, int $tenantId): ?array
     {
         return Database::first('SELECT * FROM autoreportes WHERE id = ? AND tenant_id = ?', [$id, $tenantId]);

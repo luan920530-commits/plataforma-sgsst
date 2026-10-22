@@ -18,13 +18,25 @@ require BASE_PATH . '/app/bootstrap.php';
 
 use App\Core\Database;
 use App\Models\Autoreporte;
+use App\Models\Capacitacion;
 use App\Models\Documento;
 use App\Models\Induccion;
+use App\Models\Peligro;
+use App\Models\PermisoTrabajo;
+use App\Models\PlanEmergencia;
+use App\Models\ProgramaActividad;
+use App\Models\ProgramaPrevencion;
+use App\Models\RequisitoSeguimiento;
+use App\Models\SimulacroEmergencia;
+use App\Models\SoporteCumplimiento;
 use App\Models\User;
 use App\Services\ClassificationService;
+use App\Services\ComplianceService;
 use App\Services\DemoSeeder;
 use App\Services\DocumentGenerator;
+use App\Services\EvidenceStorage;
 use App\Services\Installer;
+use App\Services\OperationalDocument;
 use App\Support\Indicator;
 use App\Support\Risk;
 use App\Support\Sanitizer;
@@ -44,6 +56,44 @@ function tenantByNit(string $nit): array {
     return $tenant;
 }
 
+function permitTestData(int $tenantId): array {
+    return [
+        'tenant_id' => $tenantId, 'tipo' => 'Alturas', 'tarea' => 'Mantenimiento de prueba', 'ubicacion' => 'Cubierta',
+        'descripcion' => 'Trabajo controlado de prueba', 'fecha_inicio' => date('Y-m-d\TH:i', strtotime('-1 hour')),
+        'fecha_fin' => date('Y-m-d\TH:i', strtotime('+8 hours')), 'solicitante_id' => null,
+        'solicitante_nombre' => 'Solicitante Prueba', 'solicitante_documento' => '123',
+        'ejecutantes' => 'Trabajador autorizado', 'responsable_trabajo' => 'Responsable SST',
+        'peligros' => 'Caída de altura', 'controles' => 'Línea de vida', 'epp' => 'Arnés',
+        'equipos_herramientas' => 'Kit inspeccionado', 'autorreporte_condiciones' => 'Sin novedad',
+        'altura_trabajo' => 4.5, 'coordinador_alturas' => 'Coordinador', 'responsable_emergencias' => 'Brigadista',
+        'procedimiento_rescate' => 'Plan de rescate', 'vigia_espacio' => '', 'mediciones_atmosfericas' => '',
+        'formacion_personal' => 'Formación vigente', 'observaciones' => '',
+    ];
+}
+function emergencyTestData(int $tenantId): array {
+    return [
+        'tenant_id' => $tenantId, 'titulo' => 'Plan <script>Prueba</script>', 'centro_trabajo' => 'Sede de prueba',
+        'direccion' => 'Bogotá', 'alcance' => 'Todas las personas y turnos',
+        'amenazas_json' => json_encode([['nombre' => 'Incendio', 'probabilidad' => 'Media', 'impacto' => 'Alto', 'controles' => 'Extintores']], JSON_UNESCAPED_UNICODE),
+        'contactos_json' => json_encode([['nombre' => 'Bomberos', 'tipo' => 'Externo', 'telefono' => '119']], JSON_UNESCAPED_UNICODE),
+        'brigada_json' => json_encode([['nombre' => 'Brigadista', 'rol' => 'Evacuación', 'contacto' => '123']], JSON_UNESCAPED_UNICODE),
+        'recursos_json' => json_encode([['nombre' => 'Extintor', 'cantidad' => '1', 'ubicacion' => 'Pasillo', 'estado' => 'Disponible', 'inspeccion' => 'Vigente']], JSON_UNESCAPED_UNICODE),
+        'rutas_evacuacion' => 'Ruta norte', 'puntos_encuentro' => 'Punto azul',
+        'procedimientos' => 'Alarmar, evacuar y verificar', 'plan_rescate' => 'Primeros auxilios',
+        'ayuda_mutua' => 'Bomberos', 'responsable_plan' => 'Responsable SST', 'telefono_alarma' => '123',
+        'proximo_simulacro' => date('Y-m-d', strtotime('+6 months')), 'fecha_revision' => date('Y-m-d', strtotime('+1 year')),
+    ];
+}
+function programTestData(int $tenantId): array {
+    return [
+        'tenant_id' => $tenantId, 'categoria' => 'Prevencion de accidentes', 'nombre' => 'Programa de prueba',
+        'anio' => (int) date('Y'), 'diagnostico' => 'Riesgo priorizado', 'objetivo_general' => 'Reducir exposición',
+        'objetivos_especificos' => 'Intervenir controles', 'poblacion' => 'Trabajadores', 'peligros_relacionados' => 'Seguridad',
+        'metas_indicadores' => '100% de actividades con evidencia', 'responsable' => 'Responsable SST',
+        'recursos' => 'Horas e inspecciones', 'presupuesto' => 1000, 'fecha_inicio' => date('Y-01-01'), 'fecha_fin' => date('Y-12-31'),
+    ];
+}
+
 $tests = [];
 $test = static function (string $name, callable $callback) use (&$tests): void { $tests[$name] = $callback; };
 
@@ -57,7 +107,7 @@ try {
     $constructionId = (int) $construction['id'];
 
     $test('Esquema, claves foráneas y catálogos', static function (): void {
-        expectSame(17, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
+        expectSame(25, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
         expectSame(1, (int) Database::first('PRAGMA foreign_keys')['foreign_keys']);
         expectSame([], Database::query('PRAGMA foreign_key_check'));
         expectSame(20, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
@@ -150,6 +200,157 @@ try {
         expectSame(null, Autoreporte::findForTenant((int) $report['id'], $constructionId));
         expectSame([], Autoreporte::forUser($constructionId, (int) $report['user_id']));
         expectSame(null, User::findForTenant((int) $report['user_id'], $constructionId));
+    });
+
+    $test('CRUD y aislamiento de peligros IPEVR', static function () use ($mainId, $constructionId): void {
+        $data = [
+            'tenant_id' => $mainId, 'proceso' => 'Prueba', 'cargo' => 'Equipo', 'peligro' => 'Peligro temporal',
+            'clasificacion' => 'Seguridad', 'efectos' => 'Lesión', 'controles_existentes' => 'Señalización',
+            'nivel_deficiencia' => 10, 'nivel_exposicion' => 4, 'nivel_probabilidad' => 40,
+            'nivel_consecuencia' => 10, 'nivel_riesgo' => 'Alto', 'medidas_control' => 'Eliminación',
+        ];
+        $id = Peligro::create($data);
+        expectSame(null, Peligro::findForTenant($id, $constructionId));
+        $data['peligro'] = 'Peligro editado';
+        $data['nivel_deficiencia'] = 2; $data['nivel_exposicion'] = 2; $data['nivel_probabilidad'] = 4; $data['nivel_riesgo'] = 'Medio';
+        Peligro::update($id, $mainId, $data);
+        $updated = Peligro::findForTenant($id, $mainId);
+        expectSame('Peligro editado', $updated['peligro']);
+        expectSame(4, (int) $updated['nivel_probabilidad']);
+        expectSame('Medio', $updated['nivel_riesgo']);
+        Peligro::delete($id, $mainId);
+        expectSame(null, Peligro::findForTenant($id, $mainId));
+    });
+
+    $test('CRUD y aislamiento de capacitaciones', static function () use ($mainId, $constructionId): void {
+        $data = ['tenant_id' => $mainId, 'tema' => 'Formación temporal', 'descripcion' => 'Prueba', 'responsable' => 'SST', 'fecha_programada' => '2026-12-15', 'duracion_horas' => 2, 'modalidad' => 'Virtual'];
+        $id = Capacitacion::create($data);
+        expectSame(null, Capacitacion::findForTenant($id, $constructionId));
+        $data['tema'] = 'Formación editada'; $data['duracion_horas'] = 3;
+        Capacitacion::update($id, $mainId, $data);
+        expectSame('Formación editada', Capacitacion::findForTenant($id, $mainId)['tema']);
+        expectSame(3.0, (float) Capacitacion::findForTenant($id, $mainId)['duracion_horas']);
+        Capacitacion::setStatus($id, $mainId, 'Realizada');
+        expectSame('Realizada', Capacitacion::findForTenant($id, $mainId)['estado']);
+        Capacitacion::delete($id, $mainId);
+        expectSame(null, Capacitacion::findForTenant($id, $mainId));
+    });
+
+    $test('Detalle de autoreporte con aislamiento', static function () use ($mainId, $constructionId): void {
+        $row = Database::first('SELECT id FROM autoreportes WHERE tenant_id = ? LIMIT 1', [$mainId]);
+        $detail = Autoreporte::findDetailedForTenant((int) $row['id'], $mainId);
+        expectTrue($detail !== null && !empty($detail['reportante']) && !empty($detail['email']));
+        expectSame(null, Autoreporte::findDetailedForTenant((int) $row['id'], $constructionId));
+    });
+
+    $test('Historial inmutable de versiones documentales', static function () use ($mainId, $constructionId): void {
+        $document = Documento::forTenant($mainId)[0];
+        $original = $document['contenido_html'];
+        Documento::saveDraft((int) $document['id'], $mainId, '<p>Contenido nuevo de prueba</p>');
+        $current = Documento::findForTenant((int) $document['id'], $mainId);
+        expectSame((int) $document['version'] + 1, (int) $current['version']);
+        $versions = Documento::versions((int) $document['id'], $mainId);
+        expectTrue(count($versions) >= 1);
+        expectSame($original, $versions[0]['contenido_html']);
+        expectSame(null, Documento::findVersionForTenant((int) $versions[0]['id'], (int) $document['id'], $constructionId));
+    });
+
+    $test('Permisos de trabajo: edición, aprobación, cierre y revisión', static function () use ($mainId, $constructionId): void {
+        $data = permitTestData($mainId);
+        $id = PermisoTrabajo::create($data);
+        expectSame(null, PermisoTrabajo::findForTenant($id, $constructionId));
+        $data['tarea'] = 'Trabajo editado';
+        PermisoTrabajo::update($id, $mainId, $data);
+        expectSame('Trabajo editado', PermisoTrabajo::findForTenant($id, $mainId)['tarea']);
+        $admin = User::findForAuthentication('admin@andina.co');
+        PermisoTrabajo::approve($id, $mainId, (int) $admin['id'], 'Administrador', '123');
+        expectSame('Aprobado', PermisoTrabajo::findForTenant($id, $mainId)['estado']);
+        PermisoTrabajo::close($id, $mainId, (int) $admin['id'], 'Trabajo terminado y área despejada');
+        expectSame('Cerrado', PermisoTrabajo::findForTenant($id, $mainId)['estado']);
+        $revision = PermisoTrabajo::findForTenant($id, $mainId);
+        $revision['tenant_id'] = $mainId; $revision['version'] = 2; $revision['revisado_de'] = $id;
+        $revisionId = PermisoTrabajo::create($revision);
+        expectSame(2, (int) PermisoTrabajo::findForTenant($revisionId, $mainId)['version']);
+        expectSame(2, count(PermisoTrabajo::revisions($id, $mainId)));
+        $third = PermisoTrabajo::findForTenant($revisionId, $mainId);
+        $third['tenant_id'] = $mainId; $third['version'] = 3; $third['revisado_de'] = $revisionId;
+        $thirdId = PermisoTrabajo::create($third);
+        expectSame(3, count(PermisoTrabajo::revisions($thirdId, $mainId)));
+    });
+
+    $test('Emergencias: documento, escape, versión y simulacro', static function () use ($mainId, $constructionId): void {
+        $data = emergencyTestData($mainId);
+        [$id, $documentId] = Database::transaction(static function () use ($data, $mainId): array {
+            $id = PlanEmergencia::create($data);
+            $documentId = OperationalDocument::createEmergency($id, $mainId);
+            PlanEmergencia::linkDocument($id, $mainId, $documentId);
+            return [$id, $documentId];
+        });
+        expectSame(null, PlanEmergencia::findForTenant($id, $constructionId));
+        $data['titulo'] = 'Plan actualizado <b>seguro</b>';
+        PlanEmergencia::update($id, $mainId, $data);
+        OperationalDocument::refreshEmergency($id, $mainId);
+        $plan = PlanEmergencia::findForTenant($id, $mainId);
+        expectSame(2, (int) $plan['version']);
+        expectTrue(str_contains($plan['contenido_html'], '&lt;b&gt;seguro&lt;/b&gt;'));
+        expectTrue(!str_contains($plan['contenido_html'], '<script>'));
+        expectSame(1, count(Documento::versions($documentId, $mainId)));
+        $drillId = SimulacroEmergencia::create(['tenant_id' => $mainId, 'plan_id' => $id, 'fecha' => date('Y-m-d'), 'tipo' => 'Evacuación', 'participantes' => 20, 'responsable' => 'Brigada', 'resultado' => 'Ejecutado', 'acciones_mejora' => 'Señalización', 'estado' => 'Realizado']);
+        expectTrue($drillId > 0);
+        expectSame(1, count(SimulacroEmergencia::forPlan($id, $mainId)));
+    });
+
+    $test('Programas preventivos: actividades, evidencia y documento', static function () use ($mainId, $constructionId): void {
+        $data = programTestData($mainId);
+        [$id, $documentId] = Database::transaction(static function () use ($data, $mainId): array {
+            $id = ProgramaPrevencion::create($data);
+            $documentId = OperationalDocument::createProgram($id, $mainId);
+            ProgramaPrevencion::linkDocument($id, $mainId, $documentId);
+            return [$id, $documentId];
+        });
+        expectSame(null, ProgramaPrevencion::findForTenant($id, $constructionId));
+        $activityId = ProgramaActividad::create(['tenant_id' => $mainId, 'programa_id' => $id, 'actividad' => 'Inspección de prueba', 'responsable' => 'SST', 'fecha_programada' => date('Y-m-d'), 'indicador' => 'Ejecutadas / programadas', 'meta' => '100%', 'recursos' => 'Lista']);
+        OperationalDocument::refreshProgram($id, $mainId);
+        $program = ProgramaPrevencion::findForTenant($id, $mainId);
+        expectSame(2, (int) $program['version']);
+        expectTrue(str_contains($program['contenido_html'], 'Inspección de prueba'));
+        ProgramaActividad::setStatus($activityId, $mainId, 'Completado', 'Acta e inspección firmada');
+        expectSame('Completado', ProgramaActividad::findForTenant($activityId, $mainId)['estado']);
+        expectSame(null, ProgramaActividad::findForTenant($activityId, $constructionId));
+        OperationalDocument::refreshProgram($id, $mainId);
+        expectSame(3, (int) ProgramaPrevencion::findForTenant($id, $mainId)['version']);
+    });
+
+    $test('Tablero documental requiere verificación humana explícita', static function () use ($mainId, $constructionId): void {
+        $board = ComplianceService::board($mainId);
+        expectTrue(isset($board['items']['emergencia_planos'], $board['items']['programas_pyp'], $board['items']['permisos_trabajo']));
+        expectSame('Pendiente', $board['items']['emergencia_planos']['estado']);
+        expectSame('En gestion', $board['items']['emergencia_plan']['estado']);
+        expectSame(0, count(array_filter($board['items'], static fn($item) => $item['estado'] === 'Verificado')));
+        $admin = User::findForAuthentication('admin@andina.co');
+        RequisitoSeguimiento::save($mainId, 'emergencia_planos', ['estado' => 'Verificado', 'responsable' => 'SST', 'fecha_limite' => '', 'observaciones' => 'Plano revisado en la sede'], (int) $admin['id']);
+        $supportId = SoporteCumplimiento::create(['tenant_id' => $mainId, 'requisito_clave' => 'emergencia_planos', 'nombre_original' => 'plano.png', 'nombre_almacenado' => str_repeat('a', 32) . '.png', 'ruta_relativa' => 'tenant_' . $mainId . '/' . str_repeat('a', 32) . '.png', 'mime' => 'image/png', 'extension' => 'png', 'tamano' => 100, 'hash_sha256' => str_repeat('b', 64), 'descripcion' => 'Prueba', 'subido_por' => (int) $admin['id']]);
+        $updated = ComplianceService::board($mainId);
+        expectSame('Verificado', $updated['items']['emergencia_planos']['estado']);
+        expectSame(1, $updated['items']['emergencia_planos']['supports']);
+        expectSame(null, SoporteCumplimiento::findForTenant($supportId, $constructionId));
+        SoporteCumplimiento::delete($supportId, $mainId);
+    });
+
+    $test('Rutas privadas de evidencias y tipos permitidos', static function () use ($mainId): void {
+        expectSame('application/pdf', EvidenceStorage::mime('pdf'));
+        expectSame('image/png', EvidenceStorage::mime('png'));
+        $blocked = false;
+        try { EvidenceStorage::path($mainId, '../database/sgsst.db'); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'La ruta manipulada debía rechazarse.');
+        expectSame(10485760, EvidenceStorage::MAX_BYTES);
+    });
+
+    $test('Migración idempotente e integridad del esquema ampliado', static function (): void {
+        Database::initialize();
+        expectSame([], Database::query('PRAGMA foreign_key_check'));
+        expectSame(25, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
+        expectSame(20, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
     });
 
     $test('Firma de inducción única y acotada al tenant', static function () use ($mainId, $constructionId): void {

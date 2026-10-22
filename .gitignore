@@ -6,7 +6,9 @@ vendor/
 database/*.db
 database/*.db-shm
 database/*.db-wal
-storage/
+storage/*
+!storage/.htaccess
+!storage/index.php
 
 # Entorno y registros
 .env

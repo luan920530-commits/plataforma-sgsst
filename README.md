@@ -19,13 +19,17 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 ### Administración de empresa y responsable SG-SST
 
 - Configuración de contacto y consulta de la clasificación aplicada.
-- Biblioteca documental con filtros, edición saneada, versiones, aprobación, obsolescencia e impresión.
+- Biblioteca documental con filtros, edición saneada, historial de versiones archivadas, aprobación, obsolescencia e impresión.
 - Tablero PHVA y Plan Anual de Trabajo con responsables, fechas, presupuesto y avance.
 - Hallazgos y acciones correctivas ACPA.
-- Matriz IPEVR con cálculo orientativo `ND × NE × NC`, nivel de riesgo y controles.
-- Programa de capacitaciones e indicadores con fórmulas y datos fuente.
+- CRUD de matriz IPEVR con cálculo orientativo `ND × NE × NC`, nivel de riesgo y controles.
+- CRUD de capacitaciones, cambio de estado e indicadores con fórmulas y datos fuente.
+- Permisos de trabajo con borrador, solicitud, aprobación, activación, cierre/cancelación, revisiones e impresión; campos específicos para alturas y espacios confinados.
+- Planes de emergencia por centro de trabajo con amenazas, contactos, brigada, recursos, evacuación, rescate, ayuda mutua, simulacros y documento versionado.
+- Programas de promoción de la salud, prevención de accidentes/enfermedad laboral y vigilancia, con diagnóstico, objetivos, metas, presupuesto, actividades y evidencias.
+- Panel de documentación pendiente con referencias normativas, seguimiento humano y evidencias privadas PDF/JPG/PNG, incluidos planos y rutas de evacuación.
 - Directorio de empleados/contratistas y accesos por rol.
-- Bandeja de autoreportes y respuestas de seguimiento.
+- Bandeja y detalle de autoreportes con respuestas de seguimiento.
 
 ### Portal Trabajador / Contratista
 
@@ -129,6 +133,45 @@ El archivo `.env` se carga con PHP puro. Las variables ya definidas por el siste
 
 `public/.htaccess` contiene las reglas de reescritura. Habilita `mod_rewrite` y permite `AllowOverride All` para el directorio público, o traslada esas reglas al virtual host.
 
+### Actualizar una instalación existente
+
+Haz primero una copia de seguridad de la base y de `storage/uploads/`. Después, con la misma versión de PHP y los permisos adecuados:
+
+```bash
+php scripts/migrate.php
+```
+
+La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, conserva los registros existentes y termina con `PRAGMA foreign_key_check`. No borra la base ni crea datos demo. Debe ejecutarse una vez después de actualizar el código y antes de usar los módulos nuevos.
+
+### XAMPP en macOS
+
+Con el proyecto dentro de `/Applications/XAMPP/xamppfiles/htdocs/plataforma-sgsst`:
+
+```bash
+cd /Applications/XAMPP/xamppfiles/htdocs/plataforma-sgsst
+cp .env.example .env
+/Applications/XAMPP/xamppfiles/bin/php -v
+/Applications/XAMPP/xamppfiles/bin/php -m | grep -Ei 'pdo|sqlite|dom|libxml|session'
+/Applications/XAMPP/xamppfiles/bin/php scripts/install.php --demo
+
+# El propietario conserva acceso CLI y el grupo de Apache puede escribir.
+sudo chown -R "$(whoami)":daemon database storage
+sudo chmod -R ug+rwX database storage
+```
+
+Abre `http://localhost/plataforma-sgsst/public/`. No uses `phpMyAdmin`: la aplicación emplea SQLite, no MySQL. Para una ruta distinta, ajusta `SGSST_DB_PATH` en `.env` a una ubicación privada y escribible.
+
+Si una página presenta HTTP 500:
+
+1. Confirma que XAMPP ejecuta PHP 8.1+ y que `pdo_sqlite` está habilitado.
+2. Ejecuta `/Applications/XAMPP/xamppfiles/bin/php scripts/migrate.php` desde la raíz del proyecto.
+3. Revisa permisos de lectura/escritura sobre la base, su directorio y los archivos `-wal`/`-shm`; SQLite necesita escribir también junto al archivo `.db`.
+4. Consulta `storage/logs/app.log` cuando `APP_DEBUG=false`. En desarrollo local puedes usar temporalmente `APP_DEBUG=true` para ver la traza en la página; no lo dejes habilitado en producción.
+5. Revisa también los logs de Apache/PHP de XAMPP. Un error concreto de traza es más útil que reinstalar o cambiar permisos indiscriminadamente.
+6. Para cargas de hasta 10 MB, verifica que `upload_max_filesize` y `post_max_size` no sean inferiores; asigna a `post_max_size` un margen para los demás campos del formulario.
+
+`storage/.htaccess` y `database/.htaccess` niegan acceso directo bajo Apache, pero la configuración recomendada sigue siendo exponer únicamente `public/`.
+
 ### Nginx
 
 La regla esencial es:
@@ -161,10 +204,13 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - Clasificación, riesgo e indicadores.
 - Saneamiento HTML y rollback de transacciones.
 - Generación documental y prevención de duplicados.
-- Aislamiento de documentos, autoreportes, usuarios y firmas entre tenants.
+- Aislamiento de documentos, autoreportes, usuarios, IPEVR, capacitaciones, permisos, emergencias, programas y soportes entre tenants.
+- CRUD, historial de versiones, aprobación/cierre de permisos y simulacros.
+- Generación y escape de documentos operativos, actividades preventivas y evidencias.
+- Verificación documental exclusivamente explícita y protección de rutas de archivos.
 - Hash y verificación de contraseñas.
 
-También se validaron los recorridos HTTP de los cuatro perfiles, CSRF, autorización por rol y acceso cruzado a documentos.
+La suite actual contiene **27 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
 
 ## Estilos
 
@@ -196,6 +242,8 @@ public/
   assets/            CSS compilado y JavaScript propio
 resources/css/       Fuente Tailwind
 scripts/install.php  Instalador de producción/demo
+scripts/migrate.php  Migración no destructiva de instalaciones existentes
+storage/uploads/     Evidencias privadas, fuera del DocumentRoot público
 tests/run.php        Pruebas funcionales de dominio y persistencia
 ```
 
@@ -208,12 +256,16 @@ tests/run.php        Pruebas funcionales de dominio y persistencia
 - Tokens CSRF en formularios, cookies HttpOnly/SameSite y sesiones con expiración por inactividad.
 - Saneamiento del HTML documental y escape de datos en vistas.
 - Cabeceras CSP, anti-framing, `nosniff` y política de referrer.
+- Evidencias fuera de `public/`, nombres aleatorios, validación de firma binaria PDF/JPG/PNG, límite de 10 MB, hash SHA-256 y descarga autorizada por tenant; no se acepta la extensión ni el MIME del navegador como prueba del formato.
+- Registros de error en `storage/logs/app.log` cuando debug está desactivado y el directorio es escribible.
 - Auditoría de acciones relevantes.
 
 Los perfiles de salud y exámenes incluidos son orientaciones iniciales, no diagnósticos ni órdenes médicas. Evita registrar información clínica individual innecesaria. La firma de inducción es una evidencia de aceptación en la plataforma; no se presenta como firma digital avanzada ni reemplaza otras evidencias de formación exigibles.
 
 ## Referencia normativa principal
 
+- [Decreto 1072 de 2015 — Libro 2, Parte 2, Título 4, Capítulo 6](https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=62506), especialmente capacitación, documentación, IPEVR, controles y emergencias.
 - [Resolución 0312 de 2019 — texto informativo de la Secretaría Jurídica Distrital](https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=82666).
-- Decreto 1072 de 2015, Libro 2, Parte 2, Título 4, Capítulo 6.
-- ISO 45001:2018, como referencia de mejora y pensamiento basado en riesgos; la aplicación no otorga certificación ISO.
+- [Resolución 4272 de 2021 — trabajo en alturas](https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=120880), cuando resulte aplicable.
+- [Resolución 491 de 2020 — espacios confinados](https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=90906), cuando resulte aplicable.
+- [ISO 45001 explicada por ISO](https://www.iso.org/insights/iso-45001-explained), como referencia voluntaria de mejora y pensamiento basado en riesgos. La aplicación no evalúa conformidad certificable ni otorga certificación ISO; esta corresponde a organismos independientes.

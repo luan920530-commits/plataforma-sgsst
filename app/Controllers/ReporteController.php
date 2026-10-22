@@ -17,6 +17,18 @@ final class ReporteController extends BaseController
         ]);
     }
 
+    public function show(int $id): void
+    {
+        $report = Autoreporte::findDetailedForTenant($id, $this->tenantId());
+        if ($report === null) {
+            $this->notFound();
+        }
+        $this->view('tenant/reporte-show', [
+            'title' => 'Autoreporte #' . $id,
+            'report' => $report,
+        ]);
+    }
+
     public function update(int $id): void
     {
         $tenantId = $this->tenantId();
@@ -28,11 +40,12 @@ final class ReporteController extends BaseController
         $validator->required('estado', 'estado')->in('estado', 'estado', ['Recibido', 'En revision', 'Gestionado'])
             ->required('respuesta', 'respuesta de seguimiento')->max('respuesta', 'respuesta', 3000);
         if ($validator->fails()) {
-            fail_validation($validator->errors(), [], '/autoreportes');
+            $redirectTo = $this->input('origen') === 'detalle' ? '/autoreportes/' . $id : '/autoreportes';
+            fail_validation($validator->errors(), $data, $redirectTo);
         }
         Autoreporte::updateManagement($id, $tenantId, $data['estado'], $data['respuesta']);
         Audit::record('Autoreporte gestionado', 'Autoreporte', $id, ['estado' => $data['estado']]);
         flash('success', 'El seguimiento quedó disponible para la persona que realizó el reporte.');
-        redirect('/autoreportes');
+        redirect($this->input('origen') === 'detalle' ? '/autoreportes/' . $id : '/autoreportes');
     }
 }

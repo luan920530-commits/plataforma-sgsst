@@ -39,6 +39,7 @@ final class DocumentGeneratorController extends BaseController
         $this->view('tenant/documentos/show', [
             'title' => $document['nombre_documento'],
             'document' => $document,
+            'versions' => Documento::versions($id, $tenantId),
             'tenant' => Tenant::find($tenantId),
         ]);
     }
@@ -49,6 +50,9 @@ final class DocumentGeneratorController extends BaseController
         $document = Documento::findForTenant($id, $tenantId);
         if ($document === null) {
             $this->notFound();
+        }
+        if ($document['estado'] === 'Obsoleto') {
+            $this->abort(403, 'Un documento obsoleto se conserva solo para consulta.');
         }
         $content = (string) $this->input('contenido_html');
         $validator = new Validator(['contenido_html' => $content]);
@@ -74,6 +78,9 @@ final class DocumentGeneratorController extends BaseController
         if ($document === null) {
             $this->notFound();
         }
+        if ($document['estado'] !== 'Borrador') {
+            $this->abort(403, 'Solo un documento en borrador puede aprobarse.');
+        }
         Documento::approve($id, $tenantId, Auth::id());
         Audit::record('Documento aprobado', 'Documento', $id, ['version' => (int) $document['version']]);
         flash('success', 'Documento aprobado. La aprobación quedó registrada en la auditoría.');
@@ -90,6 +97,22 @@ final class DocumentGeneratorController extends BaseController
         Audit::record('Documento marcado como obsoleto', 'Documento', $id);
         flash('success', 'El documento fue marcado como obsoleto.');
         redirect('/documentos/' . $id);
+    }
+
+    public function version(int $id, int $versionId): void
+    {
+        $tenantId = $this->tenantId();
+        $document = Documento::findForTenant($id, $tenantId);
+        $version = Documento::findVersionForTenant($versionId, $id, $tenantId);
+        if ($document === null || $version === null) {
+            $this->notFound();
+        }
+        $this->view('tenant/documentos/version', [
+            'title' => $document['nombre_documento'] . ' · v' . $version['version'],
+            'document' => $document,
+            'version' => $version,
+            'tenant' => Tenant::find($tenantId),
+        ]);
     }
 
     public function print(int $id): void

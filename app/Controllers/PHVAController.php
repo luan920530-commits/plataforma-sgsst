@@ -149,38 +149,61 @@ final class PHVAController extends BaseController
 
     public function storeHazard(): void
     {
-        $deficiency = $this->nullableInt('nivel_deficiencia');
-        $exposure = $this->nullableInt('nivel_exposicion');
-        $consequence = $this->nullableInt('nivel_consecuencia');
-        $data = [
-            'tenant_id' => $this->tenantId(), 'proceso' => (string) $this->input('proceso'),
-            'cargo' => (string) $this->input('cargo'), 'peligro' => (string) $this->input('peligro'),
-            'clasificacion' => (string) $this->input('clasificacion'), 'efectos' => (string) $this->input('efectos'),
-            'controles_existentes' => (string) $this->input('controles_existentes'), 'medidas_control' => (string) $this->input('medidas_control'),
-            'nivel_deficiencia' => $deficiency, 'nivel_exposicion' => $exposure, 'nivel_consecuencia' => $consequence,
-            'nivel_riesgo' => (string) $this->input('nivel_riesgo', 'Medio'),
-        ];
-        $validator = new Validator($data);
-        $validator->required('proceso', 'proceso')->required('cargo', 'cargo')->required('peligro', 'peligro')
-            ->max('peligro', 'peligro', 500)->required('clasificacion', 'clasificación')->in('clasificacion', 'clasificación', $this->classifications())
-            ->required('efectos', 'efectos posibles')->required('medidas_control', 'medidas de control')
-            ->in('nivel_riesgo', 'nivel de riesgo', ['Bajo', 'Medio', 'Alto', 'Critico'])
-            ->integer('nivel_deficiencia', 'nivel de deficiencia', 0, 10)->integer('nivel_exposicion', 'nivel de exposición', 1, 4)
-            ->integer('nivel_consecuencia', 'nivel de consecuencia', 1, 100);
-        $errors = $validator->errors();
-        $provided = count(array_filter([$deficiency, $exposure, $consequence], static fn($value) => $value !== null));
-        if ($provided > 0 && $provided < 3) {
-            $errors['nivel_deficiencia'] = 'Diligencia deficiencia, exposición y consecuencia para calcular el nivel; o deja los tres campos vacíos.';
-        }
+        $data = $this->hazardInput();
+        $data['tenant_id'] = $this->tenantId();
+        $errors = $this->hazardErrors($data);
         if ($errors !== []) {
-            fail_validation($errors, $data, '/matriz-ipevr');
+            fail_validation($errors, $data, '/matriz-ipevr#nuevo-peligro');
         }
-        $risk = Risk::calculate($deficiency, $exposure, $consequence, $data['nivel_riesgo']);
-        $data['nivel_probabilidad'] = $risk['probability'];
-        $data['nivel_riesgo'] = $risk['level'];
+        $this->applyRiskCalculation($data);
         $id = Peligro::create($data);
         Audit::record('Peligro IPEVR registrado', 'Peligro', $id, ['clasificacion' => $data['clasificacion'], 'nivel_riesgo' => $data['nivel_riesgo']]);
         flash('success', 'Peligro agregado a la matriz IPEVR. Verifica la valoración con la metodología adoptada por la empresa.');
+        redirect('/matriz-ipevr');
+    }
+
+    public function editHazard(int $id): void
+    {
+        $hazard = Peligro::findForTenant($id, $this->tenantId());
+        if ($hazard === null) {
+            $this->notFound();
+        }
+        $this->view('tenant/phva/peligro-form', [
+            'title' => 'Editar peligro IPEVR',
+            'hazard' => $hazard,
+            'classifications' => $this->classifications(),
+        ]);
+    }
+
+    public function updateHazard(int $id): void
+    {
+        $tenantId = $this->tenantId();
+        $before = Peligro::findForTenant($id, $tenantId);
+        if ($before === null) {
+            $this->notFound();
+        }
+        $data = $this->hazardInput();
+        $errors = $this->hazardErrors($data);
+        if ($errors !== []) {
+            fail_validation($errors, $data, '/matriz-ipevr/' . $id . '/editar');
+        }
+        $this->applyRiskCalculation($data);
+        Peligro::update($id, $tenantId, $data);
+        Audit::record('Peligro IPEVR actualizado', 'Peligro', $id, ['antes' => $before, 'despues' => $data]);
+        flash('success', 'Peligro y valoración actualizados. Revisa si el cambio exige ajustar controles o el plan anual.');
+        redirect('/matriz-ipevr');
+    }
+
+    public function deleteHazard(int $id): void
+    {
+        $tenantId = $this->tenantId();
+        $hazard = Peligro::findForTenant($id, $tenantId);
+        if ($hazard === null) {
+            $this->notFound();
+        }
+        Peligro::delete($id, $tenantId);
+        Audit::record('Peligro IPEVR eliminado', 'Peligro', $id, ['registro' => $hazard]);
+        flash('success', 'Peligro eliminado de la matriz. La acción quedó registrada en auditoría.');
         redirect('/matriz-ipevr');
     }
 
@@ -199,6 +222,47 @@ final class PHVAController extends BaseController
         Audit::record('Estado de peligro actualizado', 'Peligro', $id, ['estado' => $status]);
         flash('success', 'La matriz IPEVR fue actualizada.');
         redirect('/matriz-ipevr');
+    }
+
+    private function hazardInput(): array
+    {
+        return [
+            'proceso' => (string) $this->input('proceso'),
+            'cargo' => (string) $this->input('cargo'), 'peligro' => (string) $this->input('peligro'),
+            'clasificacion' => (string) $this->input('clasificacion'), 'efectos' => (string) $this->input('efectos'),
+            'controles_existentes' => (string) $this->input('controles_existentes'), 'medidas_control' => (string) $this->input('medidas_control'),
+            'nivel_deficiencia' => $this->nullableInt('nivel_deficiencia'),
+            'nivel_exposicion' => $this->nullableInt('nivel_exposicion'),
+            'nivel_consecuencia' => $this->nullableInt('nivel_consecuencia'),
+            'nivel_riesgo' => (string) $this->input('nivel_riesgo', 'Medio'),
+        ];
+    }
+
+    private function hazardErrors(array $data): array
+    {
+        $validator = new Validator($data);
+        $validator->required('proceso', 'proceso')->required('cargo', 'cargo')->required('peligro', 'peligro')
+            ->max('peligro', 'peligro', 500)->required('clasificacion', 'clasificación')
+            ->in('clasificacion', 'clasificación', $this->classifications())
+            ->required('efectos', 'efectos posibles')->required('medidas_control', 'medidas de control')
+            ->in('nivel_riesgo', 'nivel de riesgo', ['Bajo', 'Medio', 'Alto', 'Critico'])
+            ->integer('nivel_deficiencia', 'nivel de deficiencia', 0, 10)
+            ->integer('nivel_exposicion', 'nivel de exposición', 1, 4)
+            ->integer('nivel_consecuencia', 'nivel de consecuencia', 1, 100);
+        $errors = $validator->errors();
+        $values = [$data['nivel_deficiencia'], $data['nivel_exposicion'], $data['nivel_consecuencia']];
+        $provided = count(array_filter($values, static fn($value) => $value !== null));
+        if ($provided > 0 && $provided < 3) {
+            $errors['nivel_deficiencia'] = 'Diligencia deficiencia, exposición y consecuencia; o deja los tres campos vacíos.';
+        }
+        return $errors;
+    }
+
+    private function applyRiskCalculation(array &$data): void
+    {
+        $risk = Risk::calculate($data['nivel_deficiencia'], $data['nivel_exposicion'], $data['nivel_consecuencia'], $data['nivel_riesgo']);
+        $data['nivel_probabilidad'] = $risk['probability'];
+        $data['nivel_riesgo'] = $risk['level'];
     }
 
     private function classifications(): array
