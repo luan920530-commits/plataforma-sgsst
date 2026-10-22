@@ -134,31 +134,29 @@ Las tarjetas de acceso rápido solo aparecen con `APP_DEMO=true`. No uses estas 
 
 ## Instalación de producción
 
-Para **GoogieHost / DirectAdmin** con el dominio `normiasst.whf.bz` y una carpeta `public_html` fija, sigue la guía específica [`docs/despliegue-googiehost.md`](docs/despliegue-googiehost.md).
+### ZIP para GoogieHost / DirectAdmin
 
-1. Configura un virtual host cuyo **DocumentRoot sea `public/`**, con HTTPS.
-2. Copia `.env.example` a `.env` y define, como mínimo:
+La forma recomendada es el paquete autocontenido `normia-sst-hosting.zip`:
 
-   ```dotenv
-   APP_ENV=production
-   APP_DEBUG=false
-   APP_DEMO=false
-   APP_TIMEZONE=America/Bogota
-   APP_URL=https://sst.tu-dominio.co/public
-   ADMIN_EMAIL=admin@tu-dominio.co
-   ADMIN_PASSWORD=una-clave-inicial-larga-y-unica
-   ADMIN_NAME=Administrador de plataforma
-   # SGSST_DB_PATH=/ruta/privada/sgsst.db
-   ```
+1. Selecciona PHP 8.1+ y habilita SQLite/DOM en DirectAdmin.
+2. Sube y extrae el ZIP en `/domains/normiasst.whf.bz/`, un nivel encima de `public_html`.
+3. Abre el dominio y crea el SuperAdmin en el instalador web.
 
-3. Otorga escritura al usuario del servidor web sobre `database/` y `storage/`. No expongas esos directorios al DocumentRoot.
-4. Ejecuta `php scripts/install.php` con un usuario que tenga los mismos permisos de la base. El comando mostrará el acceso inicial si no existe un SuperAdmin.
-5. Inicia sesión y cambia la contraseña desde **Seguridad de la cuenta**.
-6. Configura copias de seguridad de SQLite y conserva la base junto con sus archivos WAL durante el respaldo, o utiliza el mecanismo de backup de SQLite.
+El paquete incluye `public_html`, la aplicación privada `normia-sst`, configuración de producción y assets compilados. Crea SQLite automáticamente, detecta la URL y no instala datos demo. No requiere Terminal, Cron, Composer, Node.js, MySQL ni edición manual de `.env`.
 
-`APP_URL` debe ser la URL pública hasta `/public` (o la raíz del virtual host), sin barra final. Se usa para construir los enlaces y QR de autoreportes. Si se omite, la aplicación los deriva del host y protocolo de la solicitud; en producción con proxy o HTTPS se recomienda definirla explícitamente.
+Sigue la guía [`docs/despliegue-googiehost.md`](docs/despliegue-googiehost.md) para la ubicación exacta, actualizaciones y diagnóstico. Para generar una copia nueva del paquete desde el repositorio:
 
-El archivo `.env` se carga con PHP puro. Las variables ya definidas por el sistema operativo tienen prioridad. Nunca confirmes `.env` en Git.
+```bash
+python3 scripts/build_hosting_zip.py
+```
+
+El archivo se crea en `dist/normia-sst-hosting.zip` y queda excluido de Git.
+
+### Instalación manual alternativa
+
+Para un virtual host propio cuyo DocumentRoot sea `public/`, copia `.env.example` a `.env`, configura `APP_ENV=production`, `APP_DEBUG=false`, `APP_DEMO=false` y la URL pública. Otorga escritura a `database/` y `storage/` sin exponerlos al DocumentRoot y ejecuta `php scripts/install.php`. El comando mostrará el acceso inicial si no existe un SuperAdmin.
+
+`APP_URL` puede ser la raíz del dominio o terminar en `/public` cuando esa sea realmente la URL pública. Si se omite, la aplicación deriva el esquema y host de la solicitud. El archivo `.env` se carga con PHP puro y nunca debe confirmarse en Git. Configura copias de seguridad de SQLite y sus archivos WAL.
 
 ### Apache
 
@@ -172,7 +170,7 @@ Haz primero una copia de seguridad de la base y de `storage/uploads/`. Después,
 php scripts/migrate.php
 ```
 
-La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, agrega de forma idempotente las columnas nuevas de autoreportes y la relación `biblioteca_id` de documentos, crea la tabla de respuestas de biblioteca, conserva los registros y termina con `PRAGMA foreign_key_check`. No borra la base ni crea datos demo. Debe ejecutarse una vez después de actualizar el código y antes de usar los módulos nuevos. Los procedimientos no se imponen masivamente durante la migración: cada empresa decide qué kits generar desde su módulo.
+La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, agrega de forma idempotente las columnas nuevas de autoreportes y la relación `biblioteca_id` de documentos, crea la tabla de respuestas de biblioteca, conserva los registros y termina con `PRAGMA foreign_key_check`. No borra la base ni crea datos demo. El arranque web la aplica automáticamente cuando `PRAGMA user_version` es anterior a la versión del código; el comando anterior queda como alternativa administrativa. Los procedimientos no se imponen masivamente durante la migración: cada empresa decide qué kits generar desde su módulo.
 
 ### XAMPP en macOS
 

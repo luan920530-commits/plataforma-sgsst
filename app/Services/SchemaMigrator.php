@@ -1,0 +1,87 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Core\Database;
+use RuntimeException;
+
+/** Aplica migraciones aditivas sin borrar datos y marca la versión en SQLite. */
+final class SchemaMigrator
+{
+    public const VERSION = 1;
+
+    public static function migrateIfNeeded(): bool
+    {
+        if (!Database::isInstalled() || self::version() >= self::VERSION) {
+            return false;
+        }
+
+        $lock = self::acquireLock();
+        try {
+            if (self::version() >= self::VERSION) {
+                return false;
+            }
+            self::migrate();
+            return true;
+        } finally {
+            flock($lock, LOCK_UN);
+            fclose($lock);
+        }
+    }
+
+    public static function migrate(): void
+    {
+        Database::initialize();
+
+        // CREATE TABLE IF NOT EXISTS no agrega columnas a instalaciones anteriores.
+        self::ensureColumn('autoreportes', 'acceso_reporte_id', 'INTEGER REFERENCES accesos_reporte(id) ON DELETE SET NULL');
+        self::ensureColumn('autoreportes', 'origen', "TEXT NOT NULL DEFAULT 'Portal'");
+        self::ensureColumn('autoreportes', 'nombre_externo', "TEXT NOT NULL DEFAULT ''");
+        self::ensureColumn('autoreportes', 'contacto_externo', "TEXT NOT NULL DEFAULT ''");
+        self::ensureColumn('autoreportes', 'anonimo', 'INTEGER NOT NULL DEFAULT 0');
+        self::ensureColumn('documentos_sgsst', 'biblioteca_id', 'TEXT');
+
+        $violations = Database::query('PRAGMA foreign_key_check');
+        if ($violations !== []) {
+            throw new RuntimeException('La revisión de claves foráneas encontró inconsistencias. Restaura una copia antes de continuar.');
+        }
+
+        Database::connection()->exec('PRAGMA user_version = ' . self::VERSION);
+    }
+
+    private static function version(): int
+    {
+        $row = Database::first('PRAGMA user_version');
+        return (int) ($row['user_version'] ?? 0);
+    }
+
+    private static function ensureColumn(string $table, string $column, string $definition): void
+    {
+        $columns = Database::query('PRAGMA table_info(' . $table . ')');
+        foreach ($columns as $existing) {
+            if ($existing['name'] === $column) {
+                return;
+            }
+        }
+        Database::execute('ALTER TABLE ' . $table . ' ADD COLUMN ' . $column . ' ' . $definition);
+    }
+
+    /** @return resource */
+    private static function acquireLock()
+    {
+        $directory = BASE_PATH . '/storage';
+        if (!is_dir($directory) && !@mkdir($directory, 0775, true) && !is_dir($directory)) {
+            throw new RuntimeException('No fue posible crear la carpeta privada storage.');
+        }
+        $lock = @fopen($directory . '/.migration.lock', 'c+');
+        if ($lock === false) {
+            throw new RuntimeException('No fue posible crear el bloqueo de migración en storage.');
+        }
+        if (!flock($lock, LOCK_EX)) {
+            fclose($lock);
+            throw new RuntimeException('No fue posible bloquear la migración. Inténtalo nuevamente.');
+        }
+        return $lock;
+    }
+}

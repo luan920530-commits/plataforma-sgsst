@@ -18,6 +18,9 @@ storage/*
 # Fuente documental privada: usar SGSST_LIBRARY_ZIP fuera del repositorio
 /SG-SST POR ESTANDARES-V.zip
 
+# Paquetes generados para hosting
+/dist/
+
 # Cachés de herramientas
 .phpunit.cache/
 .cache/

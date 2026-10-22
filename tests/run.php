@@ -45,6 +45,7 @@ use App\Services\Installer;
 use App\Services\LibraryOriginal;
 use App\Services\OperationalDocument;
 use App\Services\SgsstLibrary;
+use App\Services\SchemaMigrator;
 use App\Services\ProcedureLibrary;
 use App\Support\Auth;
 use App\Support\Indicator;
@@ -639,6 +640,17 @@ try {
         }
         $documentColumns = array_column(Database::query('PRAGMA table_info(documentos_sgsst)'), 'name');
         expectTrue(in_array('biblioteca_id', $documentColumns, true));
+    });
+
+    $test('Instalación web segura y migración automática', static function (): void {
+        expectSame(SchemaMigrator::VERSION, (int) Database::first('PRAGMA user_version')['user_version']);
+        expectTrue(!Installer::needsInstallation(), 'Una instalación con SuperAdmin debe quedar bloqueada.');
+        expectTrue(!SchemaMigrator::migrateIfNeeded(), 'Una migración vigente no debe repetirse.');
+        $checks = Installer::requirements();
+        expectTrue(count($checks) >= 6 && Installer::canInstall(), 'El entorno de pruebas debe cumplir los requisitos del instalador web.');
+        foreach ($checks as $check) {
+            expectTrue(isset($check['label'], $check['ok'], $check['detail']));
+        }
     });
 
     $test('Firma de inducción única y acotada al tenant', static function () use ($mainId, $constructionId): void {

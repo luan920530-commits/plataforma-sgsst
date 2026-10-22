@@ -16,6 +16,7 @@ use App\Controllers\DocumentGeneratorController;
 use App\Controllers\EmergenciaController;
 use App\Controllers\EquipoController;
 use App\Controllers\IndicadorController;
+use App\Controllers\InstallController;
 use App\Controllers\PermisoController;
 use App\Controllers\PHVAController;
 use App\Controllers\PlanController;
@@ -28,13 +29,22 @@ use App\Controllers\TrabajadorController;
 use App\Core\Csrf;
 use App\Core\Database;
 use App\Core\Router;
+use App\Services\CatalogSeeder;
+use App\Services\Installer;
+use App\Services\SchemaMigrator;
 use App\Support\Auth;
 
-if (!Database::isInstalled()) {
-    http_response_code(503);
-    $title = 'Normia SST necesita instalación';
-    $contentView = BASE_PATH . '/app/Views/errors/install.php';
-    require BASE_PATH . '/app/Views/layouts/error.php';
+$installed = Database::isInstalled();
+if ($installed && SchemaMigrator::migrateIfNeeded()) {
+    CatalogSeeder::seed();
+}
+if (!$installed || !Installer::hasInitialSuperAdmin()) {
+    $installer = new InstallController();
+    if (strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+        $installer->store();
+    } else {
+        $installer->show();
+    }
     exit;
 }
 
@@ -46,6 +56,8 @@ $router->get('/login', [AuthController::class, 'showLogin'], null);
 $router->post('/login', [AuthController::class, 'login'], null);
 $router->get('/reportar', [ReportePublicoController::class, 'show'], null);
 $router->post('/reportar', [ReportePublicoController::class, 'store'], null);
+$router->get('/instalar', [InstallController::class, 'show'], null);
+$router->post('/instalar', [InstallController::class, 'store'], null);
 $router->get('/', [DashboardController::class, 'index']);
 $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->post('/logout', [AuthController::class, 'logout']);

@@ -1,0 +1,35 @@
+NORMIA SST · INSTALACIÓN EN GOOGIEHOST / DIRECTADMIN
+====================================================
+
+1. En DirectAdmin selecciona PHP 8.1 o superior y habilita:
+   pdo_sqlite, sqlite3, dom, libxml, json, session y fileinfo.
+
+2. Sube este ZIP a la carpeta del dominio:
+   /domains/normiasst.whf.bz/
+   Debe quedar un nivel ENCIMA de public_html, no dentro de public_html.
+
+3. Extrae el ZIP allí. Deben quedar estas dos carpetas:
+   /domains/normiasst.whf.bz/public_html/
+   /domains/normiasst.whf.bz/normia-sst/
+
+4. Abre inmediatamente https://normiasst.whf.bz/
+   La primera pantalla comprobará el servidor y te pedirá nombre, correo
+   y contraseña para crear el SuperAdmin. Después podrás iniciar sesión.
+
+No necesitas Terminal, Cron, Composer, Node.js, MySQL ni crear .env.
+No se instalan datos demo ni credenciales predeterminadas.
+
+ACTUALIZAR SIN PERDER DATOS
+---------------------------
+Descarga primero una copia de normia-sst/database y normia-sst/storage.
+Extrae el ZIP nuevo en la misma carpeta del dominio y acepta reemplazar
+los archivos de código. El ZIP no contiene sgsst.db, por lo que no reemplaza
+la base. Las migraciones pendientes se aplican automáticamente al arrancar.
+
+SI APARECE UN AVISO DEL SERVIDOR
+--------------------------------
+El nuevo cargador indica la extensión o el ajuste faltante en lugar de un
+error 500 genérico. Revisa también que database y storage sean escribibles.
+No uses chmod 777; en GoogieHost normalmente 755 para carpetas es suficiente.
+
+Mantén APP_DEBUG=false y activa HTTPS antes de registrar información real.

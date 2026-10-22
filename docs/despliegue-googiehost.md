@@ -1,175 +1,55 @@
-# Publicar Normia SST en GoogieHost / DirectAdmin
+# Normia SST en GoogieHost: subir un ZIP y arrancar
 
-Dominio de destino: `normiasst.whf.bz`.
+Dominio: `normiasst.whf.bz`.
 
-Esta guía evita exponer la base SQLite, `.env`, evidencias y documentos privados. No subas todo el repositorio directamente dentro de `public_html`.
+El paquete `normia-sst-hosting.zip` incluye el cargador público, la aplicación privada, el entorno de producción, las 142 plantillas y un instalador web. **No necesitas Terminal, Cron, Composer, Node.js, MySQL, phpMyAdmin ni crear manualmente `.env`.**
 
-## 1. Requisitos en el hosting
+## Instalación en cuatro pasos
 
-En DirectAdmin busca **Select PHP Version**, **PHP Manager** o la opción equivalente:
+### 1. Selecciona PHP
 
-- PHP **8.1 o superior**; preferiblemente una versión estable que ofrezca el proveedor.
-- Extensiones: `pdo_sqlite`, `sqlite3`, `dom` o `libxml`, `json`, `session` y `fileinfo`.
-- `mbstring` recomendado.
-- `zip` solo si posteriormente configuras la extracción opcional de originales de biblioteca.
-- Apache o LiteSpeed con lectura de `.htaccess` y reescritura de URL habilitada.
+En **DirectAdmin → Select PHP Version** o equivalente:
 
-Configura también HTTPS para `normiasst.whf.bz`. No uses credenciales reales por HTTP.
+- Selecciona **PHP 8.1 o superior**.
+- Habilita `pdo_sqlite`, `sqlite3`, `dom`, `libxml`, `json`, `session` y `fileinfo`.
 
-No necesitas Node.js, npm, Composer, MySQL ni phpMyAdmin. El CSS y JavaScript ya están compilados.
+El cargador comprueba estos requisitos y muestra el ajuste faltante en lugar de un error 500 genérico.
 
-## 2. Estructura que debe quedar en el servidor
+### 2. Sube el ZIP en la ubicación correcta
 
-Entra en el Administrador de archivos y sube un nivel desde `public_html`, hasta:
+En el Administrador de archivos entra en:
 
 ```text
 /domains/normiasst.whf.bz/
 ```
 
-La estructura final debe ser:
+Esta carpeta contiene `public_html`. **Sube el ZIP aquí, un nivel encima de `public_html`; no lo subas dentro de `public_html`.**
+
+### 3. Extrae el ZIP
+
+Extrae `normia-sst-hosting.zip` en esa misma carpeta. El resultado debe ser:
 
 ```text
 /domains/normiasst.whf.bz/
-├── normia-sst/                  # Aplicación privada
-│   ├── app/
-│   ├── config/
-│   ├── database/
-│   │   └── schema.sql
-│   ├── public/
-│   │   └── index.php
-│   ├── resources/
-│   │   └── sgsst-library/
-│   ├── scripts/
-│   │   ├── install.php
-│   │   └── migrate.php
-│   ├── storage/
-│   └── .env                     # Se crea manualmente; nunca se sube el local
-└── public_html/                 # Única carpeta pública
-    ├── index.php                # Cargador descrito abajo
-    ├── .htaccess
-    └── assets/
-        ├── css/
-        └── js/
+├── public_html/
+│   ├── index.php
+│   ├── .htaccess
+│   └── assets/
+└── normia-sst/
+    ├── app/
+    ├── config/
+    ├── database/
+    ├── public/index.php
+    ├── resources/
+    ├── storage/
+    └── .env
 ```
 
-Si al extraer un ZIP queda una carpeta intermedia como `plataforma-sgsst-main`, mueve su contenido hasta obtener exactamente `normia-sst/app`, `normia-sst/config`, etc.
+El `.env` incluido solo contiene configuración no secreta de producción. La URL se detecta del dominio y la base se creará automáticamente en `normia-sst/database/sgsst.db`, fuera de la carpeta pública.
 
-### Archivos que no debes subir
+Activa la visualización de archivos ocultos si no ves `.htaccess` o `.env`.
 
-- `.git/` y `.gitignore`.
-- `node_modules/`.
-- `database/sgsst.db` de demostración ni `database/testing.db`.
-- `storage/logs/` y archivos temporales locales.
-- `tests/`, `docs/` y archivos de desarrollo, salvo que desees conservarlos privadamente.
-- Tu `.env` local.
-- El ZIP documental eliminado anteriormente; no es necesario para las versiones editables.
-
-## 3. Subir la aplicación privada
-
-1. Crea `/domains/normiasst.whf.bz/normia-sst/`.
-2. Sube y extrae allí la aplicación, conservando como mínimo `app`, `config`, `database`, `resources`, `scripts`, `storage` y `public/index.php`.
-3. Verifica que `storage/` y `database/` estén fuera de `public_html`.
-4. No ejecutes todavía el instalador con `--demo`.
-
-## 4. Preparar `public_html`
-
-Si el dominio será exclusivo para Normia SST, haz una copia del archivo de portada predeterminado del hosting y retira o renombra el `index.html` de bienvenida; algunos servidores lo muestran antes que `index.php`. No borres otros archivos que necesites conservar.
-
-Copia desde el directorio `public/` del proyecto:
-
-- `.htaccess` → `public_html/.htaccess`.
-- `assets/` completo → `public_html/assets/`.
-
-Crea o reemplaza `public_html/index.php` con exactamente este contenido:
-
-```php
-<?php
-declare(strict_types=1);
-
-require '/domains/normiasst.whf.bz/normia-sst/public/index.php';
-```
-
-Este cargador hace que la aplicación funcione desde `https://normiasst.whf.bz/` sin exponer la carpeta privada. No es necesario cambiar `BASE_PATH` en la aplicación.
-
-No necesitas subir `public/router.php`: ese archivo es únicamente para el servidor local de desarrollo.
-
-## 5. Crear `.env` de producción
-
-Crea `/domains/normiasst.whf.bz/normia-sst/.env` con el siguiente contenido y reemplaza los valores de administrador. No uses las credenciales demo ni compartas este archivo.
-
-```dotenv
-APP_ENV=production
-APP_DEBUG=false
-APP_DEMO=false
-APP_TIMEZONE=America/Bogota
-APP_URL=https://normiasst.whf.bz
-SGSST_DB_PATH=/domains/normiasst.whf.bz/normia-sst/database/sgsst.db
-ADMIN_EMAIL=admin@tu-correo-real.co
-ADMIN_PASSWORD=REEMPLAZA-POR-UNA-CLAVE-LARGA-Y-UNICA
-ADMIN_NAME=Administrador Normia SST
-```
-
-`APP_URL` no lleva `/public` ni barra final porque el dominio queda publicado desde `public_html`. Esta URL también se utilizará en los enlaces y QR de autoreportes.
-
-Deja `SGSST_LIBRARY_ZIP` sin configurar, salvo que tengas una copia privada del ZIP documental y sepas que necesitas recuperar originales.
-
-## 6. Inicializar SQLite sin datos demo
-
-Elige una de las siguientes alternativas.
-
-### Alternativa A · Terminal de DirectAdmin
-
-Si tu cuenta tiene Terminal, ejecuta:
-
-```bash
-php /domains/normiasst.whf.bz/normia-sst/scripts/install.php
-```
-
-No agregues `--demo`. Si `php` no corresponde a PHP 8.1+, usa el binario de la versión seleccionada, por ejemplo `/usr/local/bin/php`, según la configuración del proveedor.
-
-### Alternativa B · Cron de un solo uso
-
-Si no hay Terminal pero sí **Cron Jobs**, crea temporalmente una tarea para ejecutar:
-
-```bash
-/usr/local/bin/php /domains/normiasst.whf.bz/normia-sst/scripts/install.php
-```
-
-Ejecuta la tarea una sola vez, revisa el resultado y elimínala inmediatamente. Si el hosting utiliza otra ruta para PHP, solicita a soporte la ruta del binario PHP 8.1+.
-
-### Alternativa C · Solo Administrador de archivos
-
-Si no dispones de Terminal ni Cron, genera una base nueva en tu instalación local:
-
-1. Usa una copia local sin base de datos previa.
-2. Define localmente `ADMIN_EMAIL`, `ADMIN_PASSWORD` y `ADMIN_NAME`; usa los mismos valores que colocarás en el servidor.
-3. No ejecutes el instalador con `--demo`.
-4. Temporalmente deja `SGSST_DB_PATH` sin definir en el entorno local para que la base se cree en `database/sgsst.db`.
-5. Con XAMPP en macOS ejecuta:
-
-   ```bash
-   /Applications/XAMPP/xamppfiles/bin/php scripts/install.php
-   ```
-
-6. Espera a que termine el comando y cierra cualquier servidor local que esté usando esa base.
-7. Sube el `database/sgsst.db` resultante a `/domains/normiasst.whf.bz/normia-sst/database/sgsst.db`.
-8. Si todavía existen `sgsst.db-wal` o `sgsst.db-shm`, no descartes datos: realiza primero un checkpoint o copia de SQLite, o sube el conjunto completo siguiendo el procedimiento de respaldo. Lo habitual tras cerrar correctamente una instalación nueva es que solo necesites el `.db`.
-
-Nunca subas una base con las cuentas `admin@andina.co`, `sst@andina.co` o la contraseña demo.
-
-## 7. Permisos
-
-PHP debe poder leer la aplicación y escribir en `database/` y `storage/`.
-
-En alojamientos donde PHP se ejecuta con tu mismo usuario suelen bastar:
-
-- Directorios: `755`.
-- Archivos: `644`.
-- `.env`: restringido según las opciones del hosting, idealmente `600` si PHP puede seguir leyéndolo.
-
-Si aparece `attempt to write a readonly database`, no cambies todo a `777`. Revisa propietario/grupo con soporte y utiliza `775` para los directorios de escritura y `664` para la base únicamente si la configuración del hosting lo requiere.
-
-## 8. Primera comprobación
+### 4. Abre el sitio y crea el acceso
 
 Abre:
 
@@ -177,39 +57,62 @@ Abre:
 https://normiasst.whf.bz/
 ```
 
-Debe aparecer la pantalla de ingreso, sin `/public` al final.
+Abre el sitio inmediatamente después de extraerlo para crear tú la cuenta principal. La primera pantalla:
 
-1. Inicia sesión con el SuperAdmin creado durante la instalación.
-2. Cambia la contraseña desde **Seguridad de la cuenta**.
-3. Crea la empresa y sus usuarios desde la consola; no uses datos demo.
-4. En **Autoreportes → Crear enlace o QR**, comprueba que la URL comience por `https://normiasst.whf.bz/reportar?token=`.
-5. Verifica que el CSS y JavaScript carguen y que no existan enlaces a `localhost`.
+1. Comprueba PHP, extensiones, archivos y permisos.
+2. Crea SQLite y los catálogos sin datos demo.
+3. Te pide nombre, correo y contraseña para el SuperAdmin.
+4. Bloquea el instalador y habilita el inicio de sesión.
 
-## 9. Errores frecuentes
+No existe una contraseña predeterminada. Después de ingresar, crea la empresa y sus usuarios desde la consola.
 
-| Síntoma | Revisión |
+## Corregir el error 500 de una publicación anterior
+
+Si ya existía una instalación:
+
+1. **Antes de reemplazar archivos**, descarga una copia de `normia-sst/database/` y `normia-sst/storage/` si contienen información que debas conservar.
+2. Sube y extrae el ZIP nuevo en `/domains/normiasst.whf.bz/`, aceptando reemplazar el código anterior.
+3. No reemplaces ni elimines manualmente `normia-sst/database/sgsst.db` con una base local o demo.
+4. Abre nuevamente el dominio. Si el esquema es anterior, la migración aditiva se ejecuta automáticamente una sola vez y conserva los registros.
+
+El ZIP **no contiene `sgsst.db`**, por lo que su extracción no incluye una base que sobrescriba la existente. Aun así, la copia previa es indispensable antes de una actualización.
+
+Si queda un `index.html` de bienvenida del hosting, el nuevo `.htaccess` da prioridad a `index.php`; no necesitas borrar otros archivos sin revisar su contenido.
+
+## Actualizaciones posteriores
+
+1. Descarga una copia de `database/` y `storage/`.
+2. Extrae el ZIP nuevo en la misma carpeta del dominio y reemplaza los archivos de código.
+3. Conserva siempre la base y las evidencias del servidor.
+4. Abre el sitio: las migraciones pendientes se aplican al arrancar.
+
+No ejecutes el instalador con `--demo` en producción. El instalador web no permite crear otra cuenta inicial cuando ya existe un SuperAdmin.
+
+## Permisos
+
+En GoogieHost, PHP suele ejecutarse con el usuario de la cuenta:
+
+- Carpetas: `755`.
+- Archivos: `644`.
+- `database/` y `storage/` deben ser escribibles por PHP.
+
+No uses `777`. Si el instalador marca un problema de escritura, revisa propietario y grupo con soporte; solo usa `775` en esas carpetas si el proveedor lo indica.
+
+## Diagnóstico rápido
+
+| Mensaje o síntoma | Acción |
 |---|---|
-| Aparece la bienvenida de GoogieHost | Retira o renombra el `index.html` predeterminado y confirma `public_html/index.php`. |
-| HTTP 503 de instalación | La base no fue inicializada o `SGSST_DB_PATH` apunta a una ruta incorrecta. |
-| `could not find driver` | Habilita `pdo_sqlite` y `sqlite3` para la versión de PHP activa. |
-| `attempt to write a readonly database` | Permisos/propietario de `database/`, la `.db` y sus archivos WAL/SHM. |
-| HTTP 500 | Consulta `normia-sst/storage/logs/app.log`; mantén `APP_DEBUG=false`. |
-| CSS o JS no carga | Verifica `public_html/assets/css/app.css` y `public_html/assets/js/app.js`. |
-| Rutas internas devuelven 404 | Verifica `public_html/.htaccess` y que el servidor permita reescritura. |
-| Los QR muestran `localhost` o `/public` | Corrige `APP_URL=https://normiasst.whf.bz` y vuelve a generar el acceso. |
-| No aparecen archivos `.env` o `.htaccess` | Activa la visualización de archivos ocultos en el Administrador de archivos. |
+| “La versión activa es PHP…” | Cambia a PHP 8.1+ y recarga. |
+| “Falta la extensión…” | Habilita la extensión indicada en Select PHP Version. |
+| “No se encontró la aplicación privada” | Extraíste en una ubicación incorrecta; `normia-sst` y `public_html` deben quedar al mismo nivel. |
+| “Carpeta privada… no escribible” | Revisa permisos/propietario de `normia-sst/database` y `normia-sst/storage`. |
+| La instalación pide retirar un archivo no válido | No lo sobrescribas: restaura una copia válida o retíralo manualmente si estás seguro de que no contiene datos. |
+| CSS o JS no carga | Comprueba `public_html/assets/css/app.css` y `public_html/assets/js/app.js`. |
+| Las rutas internas devuelven 404 | Confirma que `public_html/.htaccess` se extrajo y que el servidor permite reescritura. |
+| Error después del arranque | Revisa `normia-sst/storage/logs/app.log`; mantén `APP_DEBUG=false`. |
 
-## 10. Futuras actualizaciones
+## HTTPS y datos reales
 
-Antes de reemplazar código:
+Activa el certificado SSL para `normiasst.whf.bz` antes de registrar información real o compartir URL/QR. El instalador permite terminar la configuración inicial si el hosting todavía está por HTTP, pero muestra la advertencia correspondiente.
 
-1. Descarga una copia de `normia-sst/database/` y `normia-sst/storage/`.
-2. Conserva el `.env` del servidor; no lo reemplaces con el local.
-3. Sube los archivos de aplicación modificados sin borrar la base ni las evidencias.
-4. Ejecuta, cuando la actualización lo indique:
-
-   ```bash
-   php /domains/normiasst.whf.bz/normia-sst/scripts/migrate.php
-   ```
-
-No ejecutes `scripts/install.php --demo` en producción.
+La aplicación no publica la base SQLite, `.env`, evidencias ni documentos privados porque permanecen fuera de `public_html`.
