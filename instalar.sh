@@ -17,3 +17,9 @@ fi
 echo "📂 Proyecto: $(pwd)"
 echo "🐘 PHP: $PHP"
 "$PHP" setup.php
+
+# Evita el error "attempt to write a readonly database": la terminal crea la
+# BD con tu usuario, pero Apache (XAMPP) escribe con otro. Abrimos permisos
+# solo sobre storage/ y las subidas (entorno local de pruebas).
+chmod -R a+rwX storage public/uploads 2>/dev/null || true
+echo "✅ Permisos de storage/ ajustados para Apache."

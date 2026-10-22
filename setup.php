@@ -39,6 +39,14 @@ $password = getenv('ADMIN_PASSWORD') ?: bin2hex(random_bytes(8));
 $stmt = $pdo->prepare('INSERT INTO usuarios (email, password_hash, nombre, rol, must_change_password) VALUES (?,?,?,?,1)');
 $stmt->execute([getenv('ADMIN_EMAIL') ?: 'admin@ppprae.local', password_hash($password, PASSWORD_DEFAULT), 'Administrador', 'superadmin']);
 
+// Permisos amplios: si setup se corrió desde la terminal, la BD queda del
+// usuario local y Apache no puede escribirla ("readonly database").
+@chmod($dbPath, 0666);
+@chmod(__DIR__ . '/storage', 0777);
+@chmod(__DIR__ . '/storage/documentos', 0777);
+@chmod(__DIR__ . '/storage/logs', 0777);
+
 echo "Instalación completa.\nUsuario: " . (getenv('ADMIN_EMAIL') ?: 'admin@ppprae.local') . "\n";
 echo "Contraseña inicial (se muestra una sola vez, cámbiala al ingresar): {$password}\n";
 echo "IMPORTANTE: elimina o bloquea setup.php en el servidor de producción.\n";
+

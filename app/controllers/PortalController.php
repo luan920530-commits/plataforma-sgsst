@@ -75,6 +75,16 @@ class PortalController extends BaseController
                 $paquete = Database::query('SELECT * FROM sgsst_documentos WHERE empresa_id=? AND carpeta IS NOT NULL ORDER BY carpeta, nombre_archivo LIMIT 300', [$eid]);
                 return $paquete ?: Database::query('SELECT * FROM sgsst_documentos WHERE empresa_id=? ORDER BY created_at DESC LIMIT 30', [$eid]);
             })(),
+            'dash' => [
+                'documentos' => (int) (Database::first('SELECT COUNT(*) c FROM sgsst_documentos WHERE empresa_id=? AND carpeta IS NOT NULL', [$eid])['c'] ?? 0),
+                'docAceptados' => (int) (Database::first("SELECT COUNT(*) c FROM sgsst_documentos WHERE empresa_id=? AND estado='aceptado'", [$eid])['c'] ?? 0),
+                'docPendientes' => (int) (Database::first("SELECT COUNT(*) c FROM sgsst_documentos WHERE empresa_id=? AND estado='pendiente_revision'", [$eid])['c'] ?? 0),
+                'trabajadores' => (int) (Database::first('SELECT COUNT(*) c FROM personal WHERE empresa_id=? AND activo=1', [$eid])['c'] ?? 0),
+                'peligrosAltos' => (int) (Database::first("SELECT COUNT(*) c FROM sgsst_peligros WHERE empresa_id=? AND nr_nivel IN ('I','II') AND estado='abierto'", [$eid])['c'] ?? 0),
+                'formulariosAbiertos' => (int) (Database::first("SELECT COUNT(*) c FROM sgsst_formularios WHERE empresa_id=? AND estado!='cerrado'", [$eid])['c'] ?? 0),
+                'criticas' => Sgsst::conteoAlertasCriticas($eid),
+                'registrosMes' => (int) (Database::first("SELECT COUNT(*) c FROM sgsst_registros WHERE empresa_id=? AND fecha >= date('now','start of month')", [$eid])['c'] ?? 0),
+            ],
             'tiposRegistro' => SgsstCatalogo::tiposRegistro(),
             'reporteToken' => Sgsst::tokenReporte($eid),
             'csrf' => $this->csrfToken(),

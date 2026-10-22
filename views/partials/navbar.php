@@ -1,5 +1,6 @@
 <?php $criticas = class_exists('\\App\\Sgsst') ? \App\Sgsst::conteoAlertasCriticas((int)\App\Auth::id()) : 0;
-$misEmpresas = \App\Database::query('SELECT e.id FROM empresa_accesos ea JOIN empresas e ON e.id = ea.empresa_id WHERE ea.usuario_id = ?', [\App\Auth::id()]); ?>
+$misEmpresas = \App\Database::query('SELECT e.id FROM empresa_accesos ea JOIN empresas e ON e.id = ea.empresa_id WHERE ea.usuario_id = ?', [\App\Auth::id()]);
+$navEid = $misEmpresas ? (int) $misEmpresas[0]['id'] : 0; ?>
 <nav class="mac-glass px-4 md:px-6 py-2.5 flex justify-between items-center sticky top-0 z-40">
     <div class="flex items-center gap-3">
         <span class="hidden sm:flex gap-2 mr-1" aria-hidden="true">
@@ -16,6 +17,22 @@ $misEmpresas = \App\Database::query('SELECT e.id FROM empresa_accesos ea JOIN em
         <span class="hidden lg:inline text-xs mac-muted border-l pl-4" style="border-color:var(--mac-stroke)">
             Administración · Gestión · Creación · Auditoría
         </span>
+    </div>
+
+    <!-- Accesos principales siempre visibles -->
+    <div class="hidden xl:flex items-center gap-1 text-[13px] font-medium">
+        <?php if (\App\Auth::hasRole('cliente')): ?>
+            <a class="px-3 py-1.5 rounded-full hover:bg-black/5" href="<?= base_url('mi-empresa') ?>">📊 Mi tablero</a>
+            <a class="px-3 py-1.5 rounded-full hover:bg-black/5" href="<?= base_url($navEid ? "mi-empresa/{$navEid}#documentos" : 'mi-empresa') ?>">📄 Documentos</a>
+            <a class="px-3 py-1.5 rounded-full hover:bg-black/5" href="<?= base_url($navEid ? "mi-empresa/{$navEid}#cumplimiento" : 'mi-empresa') ?>">✅ Cumplimiento</a>
+            <a class="px-3 py-1.5 rounded-full hover:bg-black/5" href="<?= base_url($navEid ? "mi-empresa/{$navEid}#registros" : 'mi-empresa') ?>">📋 Registros</a>
+        <?php else: ?>
+            <a class="px-3 py-1.5 rounded-full hover:bg-black/5" href="<?= base_url('dashboard') ?>">📊 Dashboard</a>
+            <a class="px-3 py-1.5 rounded-full hover:bg-black/5" href="<?= base_url('sgsst') ?>">✅ Cumplimiento</a>
+            <a class="px-3 py-1.5 rounded-full hover:bg-black/5" href="<?= base_url('empresas') ?>">🏢 Empresas</a>
+            <a class="px-3 py-1.5 rounded-full hover:bg-black/5" href="<?= base_url('personal') ?>">👥 Personal</a>
+            <a class="px-3 py-1.5 rounded-full hover:bg-black/5" href="<?= base_url('empresas/nueva') ?>">➕ Nueva empresa</a>
+        <?php endif; ?>
     </div>
 
     <div class="flex items-center gap-2 md:gap-3" x-data="{ abierto: false }">
