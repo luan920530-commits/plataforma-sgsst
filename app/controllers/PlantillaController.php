@@ -7,6 +7,7 @@ use App\Database;
 use App\GeneradorPlantilla;
 use App\PlantillasCatalogo;
 use App\Sgsst;
+use App\GeneradorPaquete;
 
 /** Catálogo documental maestro por empresa (plantillas reales de los 60 estándares). */
 class PlantillaController extends BaseController
@@ -47,10 +48,12 @@ class PlantillaController extends BaseController
     {
         $empresa = $this->empresaVisible((int)$id); $eid = (int)$empresa['id'];
         $generados = Database::query('SELECT * FROM sgsst_documentos WHERE empresa_id=? ORDER BY created_at DESC LIMIT 50', [$eid]);
+        $paquete = Database::query('SELECT * FROM sgsst_documentos WHERE empresa_id=? AND carpeta IS NOT NULL ORDER BY carpeta, nombre_archivo', [$eid]);
         $this->view('sgsst/documentos', [
             'titulo' => 'Catálogo documental SG-SST — ' . $empresa['razon_social'],
             'empresa' => $empresa, 'grupos' => PlantillasCatalogo::listar(),
-            'generados' => $generados, 'soloLectura' => (bool)$empresa['solo_lectura'],
+            'generados' => $generados, 'paquete' => $paquete,
+            'soloLectura' => !in_array(Sgsst::permiso($eid, (int) Auth::id()), ['propietario', 'representante'], true),
             'csrf' => $this->csrfToken(),
         ]);
     }
@@ -103,5 +106,108 @@ class PlantillaController extends BaseController
         if (!$d || !is_file($d['ruta'])) { http_response_code(404); die('Documento no encontrado'); }
         Auditoria::registrar('plantilla.descarga_generado', (int)$d['empresa_id'], 'sgsst_documento', (int)$id, $d['nombre_archivo']);
         $this->servir($d['ruta'], $d['nombre_archivo']);
+    }
+
+
+    private function permisoGestion(int $empresaId): ?string
+    {
+        $permiso = Sgsst::permiso($empresaId, (int) Auth::id());
+        return in_array($permiso, ['propietario', 'representante'], true) ? $permiso : null;
+    }
+
+    private function documentoGestionable(string $id): array
+    {
+        $d = Database::first('SELECT * FROM sgsst_documentos WHERE id = ?', [(int) $id]);
+        if (!$d || !$this->permisoGestion((int) $d['empresa_id'])) {
+            flash('error', 'Documento no encontrado o sin permiso para gestionarlo');
+            $this->redirect(base_url('sgsst'));
+        }
+        return $d;
+    }
+
+    /** POST /sgsst/empresa/{id}/documentos/paquete — generar el paquete completo (empresas ya creadas) */
+    public function generarPaquete(string $id): void
+    {
+        $this->verifyCsrf();
+        $empresa = $this->empresaPropia((int) $id); $eid = (int) $empresa['id'];
+        $fresca = Database::first('SELECT * FROM empresas WHERE id = ?', [$eid]) ?: $empresa;
+        $res = GeneradorPaquete::generar($fresca, Auth::id());
+        if (($res['total'] ?? 0) === 0) {
+            flash('warning', 'No se generó el paquete: verifica que la carpeta plantillas/ esté completa en el servidor.');
+        } elseif (($res['generados'] + $res['copiados']) === 0) {
+            flash('success', 'Esta empresa ya tenía su paquete documental generado (' . $res['total'] . ' documentos).');
+        } else {
+            flash('success', "Paquete documental generado: {$res['generados']} diligenciados + {$res['copiados']} originales, en estado «pendiente de revisión» para el cliente.");
+        }
+        $this->redirect(base_url("sgsst/empresa/{$eid}/documentos"));
+    }
+
+    /** POST /sgsst/documentos/{id}/aceptar — el cliente decide dejarlo así */
+    public function aceptarDocumento(string $id): void
+    {
+        $this->verifyCsrf();
+        $d = $this->documentoGestionable($id);
+        Database::execute("UPDATE sgsst_documentos SET estado='aceptado' WHERE id=?", [(int) $id]);
+        Auditoria::registrar('documento.aceptado', (int) $d['empresa_id'], 'sgsst_documento', (int) $id, $d['nombre_archivo']);
+        flash('success', 'Documento aceptado: queda como versión oficial de la empresa.');
+        $this->redirect(base_url("sgsst/empresa/{$d['empresa_id']}/documentos"));
+    }
+
+    /** POST /sgsst/documentos/{id}/regenerar — nueva versión con los datos actuales de la empresa */
+    public function regenerarDocumento(string $id): void
+    {
+        $this->verifyCsrf();
+        $d = $this->documentoGestionable($id);
+        $eid = (int) $d['empresa_id'];
+        $empresa = Database::first('SELECT * FROM empresas WHERE id = ?', [$eid]);
+        $rutaOrigen = $d['plantilla'] ? PlantillasCatalogo::resolver((string) $d['plantilla']) : null;
+        if (!$empresa || !$rutaOrigen || !in_array(strtolower(pathinfo($rutaOrigen, PATHINFO_EXTENSION)), ['docx', 'xlsx'], true)) {
+            flash('error', 'Este documento no se puede regenerar automáticamente (formato antiguo): descárgalo, corrígelo y sube tu versión.');
+            $this->redirect(base_url("sgsst/empresa/{$eid}/documentos"));
+        }
+        try { $res = GeneradorPlantilla::generar($rutaOrigen, $empresa, $eid); }
+        catch (\Throwable $e) { flash('error', 'No se pudo regenerar: ' . $e->getMessage()); $this->redirect(base_url("sgsst/empresa/{$eid}/documentos")); }
+        Database::execute(
+            "UPDATE sgsst_documentos SET nombre_archivo=?, ruta=?, hash_sha256=?, estado='pendiente_revision', version=COALESCE(version,1)+1 WHERE id=?",
+            [$res['nombre'], $res['ruta'], hash_file('sha256', $res['ruta']), (int) $id]
+        );
+        Auditoria::registrar('documento.regenerado', $eid, 'sgsst_documento', (int) $id, $res['nombre']);
+        flash('success', 'Documento regenerado con los datos actuales de la empresa (nueva versión). Revísalo y acéptalo si queda bien.');
+        $this->redirect(base_url("sgsst/empresa/{$eid}/documentos"));
+    }
+
+    /** POST /sgsst/documentos/{id}/subir — el cliente sube su versión corregida del documento */
+    public function subirCorreccion(string $id): void
+    {
+        $this->verifyCsrf();
+        $d = $this->documentoGestionable($id);
+        $eid = (int) $d['empresa_id'];
+        $file = $_FILES['archivo'] ?? null;
+        if (!$file || ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || ($file['size'] ?? 0) > 15 * 1024 * 1024) {
+            flash('error', 'Archivo inválido (máximo 15 MB).');
+            $this->redirect(base_url("sgsst/empresa/{$eid}/documentos"));
+        }
+        $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['docx', 'xlsx', 'doc', 'xls', 'pdf'], true)) {
+            flash('error', 'Solo se permiten documentos DOC/DOCX, XLS/XLSX o PDF.');
+            $this->redirect(base_url("sgsst/empresa/{$eid}/documentos"));
+        }
+        $config = require BASE_PATH . '/config/config.php';
+        $dir = $config['storage']['documentos'] . 'sgsst/' . $eid . '/corregidos/';
+        if (!is_dir($dir)) mkdir($dir, 0775, true);
+        $nombre = pathinfo($d['nombre_archivo'], PATHINFO_FILENAME) . ' — corregido v' . ((int)($d['version'] ?? 1) + 1) . ' ' . date('Ymd_His') . '.' . $ext;
+        $nombre = preg_replace('/[^A-Za-z0-9áéíóúÁÉÍÓÚñÑ _.\-]/u', '', $nombre) ?? ('corregido.' . $ext);
+        $ruta = $dir . $nombre;
+        if (!move_uploaded_file($file['tmp_name'], $ruta)) {
+            flash('error', 'No se pudo guardar el archivo subido.');
+            $this->redirect(base_url("sgsst/empresa/{$eid}/documentos"));
+        }
+        Database::execute(
+            "UPDATE sgsst_documentos SET nombre_archivo=?, ruta=?, hash_sha256=?, estado='corregido', version=COALESCE(version,1)+1 WHERE id=?",
+            [$nombre, $ruta, hash_file('sha256', $ruta), (int) $id]
+        );
+        Auditoria::registrar('documento.correccion_subida', $eid, 'sgsst_documento', (int) $id, $nombre);
+        flash('success', 'Tu versión corregida quedó guardada como documento de la empresa. Gracias por revisarlo.');
+        $this->redirect(base_url("sgsst/empresa/{$eid}/documentos"));
     }
 }

@@ -6,6 +6,7 @@ use App\Database;
 use App\Models\Empresa;
 use App\Sgsst;
 use App\Auditoria;
+use App\GeneradorPaquete;
 
 class EmpresaController extends BaseController
 {
@@ -51,7 +52,8 @@ class EmpresaController extends BaseController
         Sgsst::inicializarEmpresa($id);
         Auditoria::registrar('empresa.creada', $id, 'empresa', $id, $datos['razon_social'] ?? '');
 
-        flash('success', 'Empresa creada. Su SG-SST quedó inicializado: evaluación de estándares, plan anual base y plantillas listas en el Centro de cumplimiento.');
+        $paquete = GeneradorPaquete::generar(Empresa::buscar($id) ?: $datos + ['id' => $id], Auth::id());
+        flash('success', "Empresa creada con su SG-SST inicializado y su paquete documental generado: {$paquete['generados']} documento(s) diligenciados con sus datos y {$paquete['copiados']} originales, listos para que el cliente los revise, acepte o corrija.");
         $this->redirect(base_url("empresas/{$id}"));
     }
 

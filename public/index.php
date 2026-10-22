@@ -103,6 +103,10 @@ $router->group('auth', function (Router $r) {
     $r->get('/sgsst/empresa/{id}/documentos/descargar',     'PlantillaController@descargarOriginal');
     $r->post('/sgsst/empresa/{id}/documentos/generar',      'PlantillaController@generar');
     $r->get('/sgsst/documentos-generados/{id}/descargar',   'PlantillaController@descargarGenerado');
+    $r->post('/sgsst/empresa/{id}/documentos/paquete',      'PlantillaController@generarPaquete');
+    $r->post('/sgsst/documentos/{id}/aceptar',              'PlantillaController@aceptarDocumento');
+    $r->post('/sgsst/documentos/{id}/regenerar',            'PlantillaController@regenerarDocumento');
+    $r->post('/sgsst/documentos/{id}/subir',                'PlantillaController@subirCorreccion');
 
     // Formularios web (Fase C: formatos del paquete)
     $r->get('/sgsst/empresa/{id}/formularios',                 'FormularioController@index');

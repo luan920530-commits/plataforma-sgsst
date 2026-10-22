@@ -121,5 +121,13 @@ class Migrator
             ");
             Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_04_formularios_web']);
         }
+
+        if (!in_array('2026_05_paquete_documental', $done, true)) {
+            $cols = array_column(Database::query('PRAGMA table_info(sgsst_documentos)'), 'name');
+            if (!in_array('carpeta', $cols, true)) $pdo->exec('ALTER TABLE sgsst_documentos ADD COLUMN carpeta TEXT');
+            if (!in_array('estado', $cols, true)) $pdo->exec("ALTER TABLE sgsst_documentos ADD COLUMN estado TEXT DEFAULT 'pendiente_revision'");
+            if (!in_array('version', $cols, true)) $pdo->exec('ALTER TABLE sgsst_documentos ADD COLUMN version INTEGER DEFAULT 1');
+            Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_05_paquete_documental']);
+        }
     }
 }

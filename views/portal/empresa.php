@@ -78,7 +78,7 @@
   <!-- DOCUMENTOS -->
   <section id="documentos" class="mac-card p-5">
     <h2 class="font-bold">3. Mis documentos: ver, generar actualizados e imprimir</h2>
-    <p class="text-xs mac-muted mb-3">«Ver original» descarga la plantilla maestra. «Generar actualizado» crea el documento con los datos actuales de tu empresa (si corregiste datos arriba, salen corregidos): queda en la lista de generados para descargar e imprimir cuando lo necesites.</p>
+    <p class="text-xs mac-muted mb-3">Al registrar tu empresa se generó tu paquete documental con tus datos: revísalo abajo en «Mis documentos generados», <b>déjalo así</b> si está bien ✅, <b>regenéralo</b> si corregiste datos, o descárgalo, corrígelo en Word/Excel y súbelo con «⬆ Subir mi corrección»: tu versión queda guardada como la oficial. «Generar actualizado» crea documentos nuevos desde las plantillas maestras.</p>
     <?php foreach ($grupos as $g): ?>
     <details class="border rounded-xl mb-2" style="border-color:var(--mac-stroke)">
       <summary class="px-3 py-2 cursor-pointer text-sm font-semibold">📁 Estándar <?= e($g['numero'] ?: '—') ?> — <?= e(mb_convert_case(mb_strtolower($g['estandar']), MB_CASE_TITLE, 'UTF-8')) ?> <span class="mac-muted font-normal">(<?= count($g['archivos']) ?>)</span></summary>
@@ -104,7 +104,15 @@
     <ul class="text-sm space-y-1.5"><?php foreach ($generados as $g): ?>
       <li class="flex flex-wrap gap-2 justify-between border-b pb-1.5" style="border-color:var(--mac-stroke)">
         <span>📄 <?= e($g['nombre_archivo']) ?> <span class="text-xs mac-muted"><?= e($g['created_at']) ?></span></span>
-        <a class="underline" style="color:var(--mac-blue)" href="<?= base_url("sgsst/documentos-generados/{$g['id']}/descargar") ?>">⬇ Descargar / imprimir</a>
+        <span class="flex flex-wrap gap-1.5 items-center">
+          <?php if (!empty($g['carpeta'])): ?><span class="mac-badge" style="<?= ($g['estado'] ?? 'pendiente_revision') === 'aceptado' ? 'background:#dcfae5;color:#067647' : (($g['estado'] ?? '') === 'corregido' ? 'background:#e0e7ff;color:#3730a3' : 'background:#fef0c7;color:#93370d') ?>"><?= match($g['estado'] ?? 'pendiente_revision') {'aceptado' => '✅ Aceptado', 'corregido' => '✏️ Corregido', default => '🕘 Por revisar'} ?></span><?php endif; ?>
+          <a class="underline" style="color:var(--mac-blue)" href="<?= base_url("sgsst/documentos-generados/{$g['id']}/descargar") ?>">⬇ Descargar / imprimir</a>
+          <?php if ($editable && !empty($g['carpeta'])): ?>
+          <form method="POST" action="<?= base_url("sgsst/documentos/{$g['id']}/aceptar") ?>" class="inline"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="mac-btn-secondary !py-0.5 text-xs">✅ Dejar así</button></form>
+          <form method="POST" action="<?= base_url("sgsst/documentos/{$g['id']}/regenerar") ?>" class="inline" onsubmit="return confirm('Se creará una nueva versión con los datos actuales de tu empresa. ¿Continuar?')"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="mac-btn-secondary !py-0.5 text-xs">↻ Regenerar</button></form>
+          <form method="POST" action="<?= base_url("sgsst/documentos/{$g['id']}/subir") ?>" enctype="multipart/form-data" class="inline-flex gap-1 items-center"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><input type="file" name="archivo" required accept=".doc,.docx,.xls,.xlsx,.pdf" class="text-xs max-w-[150px]"><button class="mac-btn !py-0.5 text-xs">⬆ Subir mi corrección</button></form>
+          <?php endif; ?>
+        </span>
       </li><?php endforeach; ?></ul>
     <?php endif; ?>
   </section>

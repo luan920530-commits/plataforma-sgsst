@@ -15,6 +15,45 @@
 
   <input id="buscador" type="text" placeholder="🔎 Buscar documento o estándar…" class="mac-input w-full" style="padding:.7rem 1rem" oninput="filtrar(this.value)">
 
+  <section class="mac-card p-5">
+    <div class="flex flex-wrap justify-between gap-2 items-center">
+      <div><h2 class="font-bold">📦 Documentos de esta empresa (generados al registrarla)</h2>
+      <p class="text-xs mac-muted">Se crearon automáticamente según su nivel de riesgo/tamaño, diligenciados con sus datos. El cliente decide: <b>dejarlo así</b> (aceptar), <b>regenerarlo</b> tras corregir datos, o <b>subir su versión corregida</b>.</p></div>
+      <?php if (empty($soloLectura) && \App\Auth::id() === (int)$empresa['usuario_id']): ?>
+      <form method="POST" action="<?= base_url("sgsst/empresa/{$eid}/documentos/paquete") ?>">
+        <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
+        <button class="mac-btn"><?= empty($paquete) ? '⚙️ Generar paquete documental' : '↻ Verificar paquete' ?></button>
+      </form><?php endif; ?>
+    </div>
+    <?php if (empty($paquete)): ?>
+      <p class="text-sm mac-muted mt-3">Aún no hay paquete generado para esta empresa (las empresas nuevas lo reciben automáticamente al crearlas).</p>
+    <?php else: ?>
+    <p class="text-sm mt-2"><b><?= count($paquete) ?></b> documentos · Pendientes de revisión: <b><?= count(array_filter($paquete, fn($d) => ($d['estado'] ?? 'pendiente_revision') === 'pendiente_revision')) ?></b> · Aceptados: <b><?= count(array_filter($paquete, fn($d) => ($d['estado'] ?? '') === 'aceptado')) ?></b> · Corregidos por el cliente: <b><?= count(array_filter($paquete, fn($d) => ($d['estado'] ?? '') === 'corregido')) ?></b></p>
+    <div class="mt-3 space-y-1.5 max-h-[520px] overflow-y-auto pr-1">
+      <?php $carpetaActual = null; foreach ($paquete as $d): if (($d['carpeta'] ?? '') !== $carpetaActual): $carpetaActual = $d['carpeta']; ?>
+      <p class="text-xs font-bold pt-2">📁 <?= e(mb_convert_case(mb_strtolower((string)$carpetaActual), MB_CASE_TITLE, 'UTF-8')) ?></p>
+      <?php endif; $estado = $d['estado'] ?? 'pendiente_revision'; ?>
+      <div class="flex flex-wrap gap-2 items-center justify-between border rounded-xl px-3 py-2" style="border-color:var(--mac-stroke)">
+        <span class="text-sm">📄 <?= e($d['nombre_archivo']) ?> <span class="text-xs mac-muted">v<?= (int)($d['version'] ?? 1) ?> · <?= e($d['created_at']) ?></span></span>
+        <span class="flex flex-wrap gap-1.5 items-center">
+          <span class="mac-badge" style="<?= match($estado) {'aceptado' => 'background:#dcfae5;color:#067647', 'corregido' => 'background:#e0e7ff;color:#3730a3', default => 'background:#fef0c7;color:#93370d'} ?>"><?= match($estado) {'aceptado' => '✅ Aceptado', 'corregido' => '✏️ Corregido por el cliente', default => '🕘 Pendiente de revisión'} ?></span>
+          <a class="mac-btn-secondary !py-1" href="<?= base_url("sgsst/documentos-generados/{$d['id']}/descargar") ?>">⬇ Ver</a>
+          <?php if (empty($soloLectura)): ?>
+          <form method="POST" action="<?= base_url("sgsst/documentos/{$d['id']}/aceptar") ?>" class="inline"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="mac-btn-secondary !py-1">✅ Dejar así</button></form>
+          <form method="POST" action="<?= base_url("sgsst/documentos/{$d['id']}/regenerar") ?>" class="inline" onsubmit="return confirm('Se creará una nueva versión con los datos actuales de la empresa. ¿Continuar?')"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="mac-btn-secondary !py-1">↻ Regenerar</button></form>
+          <form method="POST" action="<?= base_url("sgsst/documentos/{$d['id']}/subir") ?>" enctype="multipart/form-data" class="inline-flex gap-1 items-center">
+            <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
+            <input type="file" name="archivo" required accept=".doc,.docx,.xls,.xlsx,.pdf" class="text-xs max-w-[170px]">
+            <button class="mac-btn !py-1">⬆ Subir mi corrección</button>
+          </form>
+          <?php endif; ?>
+        </span>
+      </div>
+      <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
+  </section>
+
   <?php if ($generados): ?>
   <section class="mac-card p-5">
     <h2 class="font-bold mb-2">🗂 Documentos ya generados para esta empresa</h2>

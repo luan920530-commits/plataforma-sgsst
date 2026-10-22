@@ -135,14 +135,14 @@ class Sgsst
         $riesgo = (string)($empresa['nivel_riesgo'] ?? 'I');
         $todos = array_column(SgsstCatalogo::estandares(), 'codigo');
         if ($trab > 50 || in_array($riesgo, ['IV', 'V'], true)) {
-            return ['grupo' => 'Completo', 'descripcion' => 'Más de 50 trabajadores o riesgo IV–V: aplican los 60 estándares de la Res. 0312/2019.', 'codigos' => $todos];
+            return ['grupo' => 'Completo', 'descripcion' => 'Más de 50 trabajadores o riesgo IV–V: aplican los 60 estándares de la Res. 0312/2019.', 'codigos' => $todos, 'carpetas' => range(1, 60)];
         }
         if ($trab >= 11) {
             $codigos = ['1.1.1','1.1.2','1.1.4','1.1.6','1.1.7','1.1.8','1.2.1','1.2.2','2.1.1','2.2.1','2.3.1','2.4.1','2.5.1','2.10.1','2.11.1','3.1.1','3.2.1','3.2.2','4.1.1','4.2.1','4.2.6','5.1.1','5.1.2','6.1.4','7.1.1'];
-            return ['grupo' => 'Intermedio', 'descripcion' => 'De 11 a 50 trabajadores con riesgo I–III: aplica el grupo intermedio de estándares (21 ítems de la Res. 0312/2019, aquí ampliado con emergencias).', 'codigos' => $codigos];
+            return ['grupo' => 'Intermedio', 'descripcion' => 'De 11 a 50 trabajadores con riesgo I–III: aplica el grupo intermedio de estándares (21 ítems de la Res. 0312/2019, aquí ampliado con emergencias).', 'codigos' => $codigos, 'carpetas' => [1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,18,20,21,22,23,24,25,26,28,32,34,41,42,45,47,48,49,50,51,52,54,55,57,60]];
         }
         $codigos = ['1.1.1','1.1.4','1.2.1','1.2.2','2.1.1','2.4.1','3.2.1','4.1.1','4.2.1','4.2.6','5.1.1','5.1.2'];
-        return ['grupo' => 'Básico', 'descripcion' => 'Hasta 10 trabajadores con riesgo I–III: aplican los 7 estándares básicos de la Res. 0312/2019, aquí complementados con emergencias y EPP por su importancia preventiva.', 'codigos' => $codigos];
+        return ['grupo' => 'Básico', 'descripcion' => 'Hasta 10 trabajadores con riesgo I–III: aplican los 7 estándares básicos de la Res. 0312/2019, aquí complementados con emergencias y EPP por su importancia preventiva.', 'codigos' => $codigos, 'carpetas' => [1,4,9,10,12,14,15,42,50,51,52]];
     }
 
     /** Token del formulario público de reportes de operarios (se crea si no existe). */

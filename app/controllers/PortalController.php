@@ -71,7 +71,10 @@ class PortalController extends BaseController
             'periodos' => Indicadores::porEmpresa($eid),
             'resumenMatriz' => Database::query('SELECT nr_nivel, COUNT(*) c FROM sgsst_peligros WHERE empresa_id=? GROUP BY nr_nivel', [$eid]),
             'grupos' => PlantillasCatalogo::listar(),
-            'generados' => Database::query('SELECT * FROM sgsst_documentos WHERE empresa_id=? ORDER BY created_at DESC LIMIT 30', [$eid]),
+            'generados' => (function () use ($eid) {
+                $paquete = Database::query('SELECT * FROM sgsst_documentos WHERE empresa_id=? AND carpeta IS NOT NULL ORDER BY carpeta, nombre_archivo LIMIT 300', [$eid]);
+                return $paquete ?: Database::query('SELECT * FROM sgsst_documentos WHERE empresa_id=? ORDER BY created_at DESC LIMIT 30', [$eid]);
+            })(),
             'tiposRegistro' => SgsstCatalogo::tiposRegistro(),
             'reporteToken' => Sgsst::tokenReporte($eid),
             'csrf' => $this->csrfToken(),
