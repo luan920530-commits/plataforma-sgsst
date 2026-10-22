@@ -1,0 +1,17 @@
+<?php $value = static fn(string $key, $default = '') => old($key, $activity[$key] ?? $default); ?>
+<div class="page-heading">
+    <div><a href="<?= e(url('/plan-anual/' . $activity['id'])) ?>" class="text-link mb-3"><?= icon('arrow-left', 'h-3.5 w-3.5') ?> Volver al detalle</a><span class="eyebrow">Actividad PAT #<?= (int) $activity['id'] ?></span><h1>Editar actividad</h1><p>Corrige la programación, los recursos o el avance sin salir del Plan Anual de Trabajo.</p></div>
+    <span class="badge <?= status_class($activity['estado']) ?>"><?= e($activity['estado']) ?></span>
+</div>
+<form method="post" action="<?= e(url('/plan-anual/' . $activity['id'])) ?>" class="ios-card mt-6 grid gap-5 p-5 sm:grid-cols-2 sm:p-6">
+    <?= csrf_field() ?>
+    <div class="sm:col-span-2"><label class="label" for="actividad">Actividad *</label><textarea id="actividad" name="actividad" class="input min-h-28" maxlength="300" required><?= e($value('actividad')) ?></textarea><?= field_error('actividad') ?><p class="mt-2 text-[11px] text-slate-400">Describe un resultado concreto y verificable. Máximo 300 caracteres.</p></div>
+    <div><label class="label" for="responsable">Responsable *</label><input id="responsable" name="responsable" class="input" maxlength="250" value="<?= e($value('responsable')) ?>" required><?= field_error('responsable') ?></div>
+    <div><label class="label" for="fase_phva">Fase PHVA *</label><select id="fase_phva" name="fase_phva" class="input"><?php foreach (['Planear','Hacer','Verificar','Actuar'] as $phase): ?><option<?= selected($value('fase_phva'), $phase) ?>><?= $phase ?></option><?php endforeach; ?></select><?= field_error('fase_phva') ?></div>
+    <div><label class="label" for="fecha_programada">Fecha programada *</label><input id="fecha_programada" name="fecha_programada" type="date" class="input" value="<?= e($value('fecha_programada')) ?>" required><?= field_error('fecha_programada') ?></div>
+    <div><label class="label" for="presupuesto">Presupuesto COP</label><input id="presupuesto" name="presupuesto" type="number" min="0" step="0.01" class="input" value="<?= e($value('presupuesto')) ?>"><?= field_error('presupuesto') ?></div>
+    <div><label class="label" for="estado">Estado *</label><select id="estado" name="estado" class="input"><?php foreach (['Pendiente','En Proceso','Completado'] as $state): ?><option<?= selected($value('estado'), $state) ?>><?= $state ?></option><?php endforeach; ?></select><?= field_error('estado') ?></div>
+    <div><label class="label" for="fecha_ejecucion">Fecha real de ejecución</label><input id="fecha_ejecucion" name="fecha_ejecucion" type="date" class="input" value="<?= e($value('fecha_ejecucion')) ?>"><?= field_error('fecha_ejecucion') ?><p class="mt-2 text-[10px] leading-4 text-slate-400">Obligatoria cuando el estado sea Completado. En los demás estados se conserva vacía.</p></div>
+    <div class="sm:col-span-2 rounded-2xl bg-amber-50 p-4 text-[11px] leading-5 text-amber-800 ring-1 ring-amber-100">Verifica que el responsable, el presupuesto y las fechas reflejen el acuerdo real. El cambio de estado no reemplaza los soportes de ejecución ni la evaluación de eficacia.</div>
+    <div class="sm:col-span-2 flex flex-wrap justify-end gap-2"><a href="<?= e(url('/plan-anual/' . $activity['id'])) ?>" class="btn-secondary">Cancelar</a><button type="submit" class="btn-primary"><?= icon('check', 'h-4 w-4') ?> Guardar cambios</button></div>
+</form>

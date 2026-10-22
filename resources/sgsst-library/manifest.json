@@ -1,0 +1,5295 @@
+{
+  "name": "SG-SST por estándares",
+  "source_zip": "SG-SST POR ESTANDARES-V.zip",
+  "source_sha256": "5cff07963f698a57591424971ffc124a73e18b7aa5a4b4765871d94343b41068",
+  "source_entries": 153,
+  "unique_templates": 142,
+  "duplicate_entries": 11,
+  "ignored_entries": 156,
+  "standards_covered": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60
+  ],
+  "counts": {
+    "docx": 72,
+    "pptx": 4,
+    "xlsx": 45,
+    "pdf": 1,
+    "doc": 11,
+    "xls": 9
+  },
+  "templates": [
+    {
+      "id": "BIB-87E0D6E6BAE1",
+      "code": "BIB-01-E6BAE1",
+      "title": "ASIGNACION RESPONSABLE DE LA IMPLEMENTACION DEL SG-SST",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        1
+      ],
+      "primary_standard": 1,
+      "folder": "1-ASIGNACIÓN RESPONSABLE DEL DISEÑO SG-SST",
+      "module": "Responsabilidades SG-SST",
+      "route": "/cumplimiento-documental/gestion?requisito=responsabilidades_sst",
+      "content": "content/BIB-87E0D6E6BAE1.html",
+      "sha256": "97857fe683b733c772d3e109244d947a5636fd078b399df54ce1d09423cbce50",
+      "bytes": 20441,
+      "original_name": "ASIGNACION RESPONSABLE DE LA IMPLEMENTACION DEL SG-SST.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/1-ASIGNACIÓN RESPONSABLE DEL DISEÑO SG-SST/ASIGNACION RESPONSABLE DE LA IMPLEMENTACION DEL SG-SST.docx",
+          "zip_index": 254
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 34,
+        "tables": 1,
+        "images": 0,
+        "characters": 1444
+      },
+      "status": "revisado",
+      "number": 1,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-9524AEF05559",
+      "code": "BIB-01-F05559",
+      "title": "ASIGNACION RESPONSABLE DEL DISEÑO DEL SG-SST",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        1
+      ],
+      "primary_standard": 1,
+      "folder": "1-ASIGNACIÓN RESPONSABLE DEL DISEÑO SG-SST",
+      "module": "Responsabilidades SG-SST",
+      "route": "/cumplimiento-documental/gestion?requisito=responsabilidades_sst",
+      "content": "content/BIB-9524AEF05559.html",
+      "sha256": "3d435389ec87c8ef847e2e9172b8ecee25fa9bbbaeb891bb5ac06d3f43484c93",
+      "bytes": 17093,
+      "original_name": "ASIGNACION RESPONSABLE DEL DISEÑO DEL SG-SST.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/1-ASIGNACIÓN RESPONSABLE DEL DISEÑO SG-SST/ASIGNACION RESPONSABLE DEL DISEÑO DEL SG-SST.docx",
+          "zip_index": 252
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 28,
+        "tables": 1,
+        "images": 0,
+        "characters": 1094
+      },
+      "status": "revisado",
+      "number": 2,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-6C04043327F7",
+      "code": "BIB-10-3327F7",
+      "title": "ACTA DE TEMARIO RECIBIDO EN LA INDUCCIÓN-REINDUCCIÓN",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        10
+      ],
+      "primary_standard": 10,
+      "folder": "10-INDUCCIÓN Y RE INDUCCIÓN EN SST",
+      "module": "Inducción",
+      "route": "/portal/induccion",
+      "content": "content/BIB-6C04043327F7.html",
+      "sha256": "bb4ce0435f55d1109ecb902f66381a6b5578f395e2d44198b6c2ed24b978f8a6",
+      "bytes": 19289,
+      "original_name": "ACTA DE TEMARIO RECIBIDO EN LA  INDUCCIÓN-REINDUCCIÓN.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/10-INDUCCIÓN Y RE INDUCCIÓN EN SST/ACTA DE TEMARIO RECIBIDO EN LA  INDUCCIÓN-REINDUCCIÓN.docx",
+          "zip_index": 69
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 10,
+        "tables": 3,
+        "images": 0,
+        "characters": 2085
+      },
+      "status": "revisado",
+      "number": 3,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-8BF8F42B598F",
+      "code": "BIB-10-2B598F",
+      "title": "CAPACITACION INDUCCIÓN Y RE INDUCCIÓN",
+      "extension": "pptx",
+      "kind": "document",
+      "standards": [
+        10
+      ],
+      "primary_standard": 10,
+      "folder": "10-INDUCCIÓN Y RE INDUCCIÓN EN SST",
+      "module": "Inducción",
+      "route": "/portal/induccion",
+      "content": "content/BIB-8BF8F42B598F.html",
+      "sha256": "27253b5fb44b598d3eaf8f9fdaee594d6b537f22bf43d8b182158a16576ce823",
+      "bytes": 870833,
+      "original_name": "CAPACITACION INDUCCIÓN Y RE INDUCCIÓN.pptx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/10-INDUCCIÓN Y RE INDUCCIÓN EN SST/CAPACITACION INDUCCIÓN Y RE INDUCCIÓN.pptx",
+          "zip_index": 73
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "11 imagen(es) disponible(s) en la presentación original."
+      ],
+      "stats": {
+        "slides": 19,
+        "tables": 1,
+        "images": 11,
+        "characters": 7924
+      },
+      "status": "revisado",
+      "number": 4,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-C47D0A4E394A",
+      "code": "BIB-10-4E394A",
+      "title": "EVALUACIÓN INDUCCIÓN-REINDUCCIÓN",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        10
+      ],
+      "primary_standard": 10,
+      "folder": "10-INDUCCIÓN Y RE INDUCCIÓN EN SST",
+      "module": "Inducción",
+      "route": "/portal/induccion",
+      "content": "content/BIB-C47D0A4E394A.html",
+      "sha256": "354a33e428e27b242fd0af88cf2f9c1c89ae5ad6ee071c003c6e325c98adb714",
+      "bytes": 20712,
+      "original_name": "EVALUACIÓN INDUCCIÓN-REINDUCCIÓN.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/10-INDUCCIÓN Y RE INDUCCIÓN EN SST/EVALUACIÓN INDUCCIÓN-REINDUCCIÓN.docx",
+          "zip_index": 75
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 57,
+        "tables": 2,
+        "images": 0,
+        "characters": 3397
+      },
+      "status": "revisado",
+      "number": 5,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-3FBB36862E9E",
+      "code": "BIB-10-862E9E",
+      "title": "PROCEDIMIENTO INDUCCIÓN-REINDUCCIÓN",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        10,
+        47
+      ],
+      "primary_standard": 10,
+      "folder": "10-INDUCCIÓN Y RE INDUCCIÓN EN SST",
+      "module": "Inducción",
+      "route": "/portal/induccion",
+      "content": "content/BIB-3FBB36862E9E.html",
+      "sha256": "ab49a54d330784761aa3e10e92487c3f2ad5fb716559a71327d1a84cae7458e6",
+      "bytes": 30043,
+      "original_name": "PROCEDIMIENTO INDUCCIÓN-REINDUCCIÓN.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/10-INDUCCIÓN Y RE INDUCCIÓN EN SST/PROCEDIMIENTO INDUCCIÓN-REINDUCCIÓN.docx",
+          "zip_index": 71
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO INDUCCIÓN-REINDUCCIÓN.docx",
+          "zip_index": 284
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 72,
+        "tables": 2,
+        "images": 0,
+        "characters": 4654
+      },
+      "status": "revisado",
+      "number": 6,
+      "phase": "Planear",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-8FA11E803D9D",
+      "code": "BIB-11-803D9D",
+      "title": "CURSO VIRTUAL 50 HORAS SG-SST",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        11
+      ],
+      "primary_standard": 11,
+      "folder": "11-CURSO VIRTUAL 50 HORAS SG-SST",
+      "module": "Capacitaciones",
+      "route": "/capacitaciones",
+      "content": "content/BIB-8FA11E803D9D.html",
+      "sha256": "e0145d4fc586db8d0e80487436296ec6588d02a3edfae2d4a422ab1cd16489a1",
+      "bytes": 13653,
+      "original_name": "CURSO VIRTUAL 50 HORAS SG-SST.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/11-CURSO VIRTUAL 50 HORAS SG-SST/CURSO VIRTUAL 50 HORAS SG-SST.docx",
+          "zip_index": 189
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 7,
+        "tables": 0,
+        "images": 0,
+        "characters": 488
+      },
+      "status": "revisado",
+      "number": 7,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-1A66731FA5F4",
+      "code": "BIB-12-1FA5F4",
+      "title": "POLITICA DE LA SEGURIDAD Y SALUD EN EL TRABAJO",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        12
+      ],
+      "primary_standard": 12,
+      "folder": "12-POLITICA DE SEGURIDAD Y SALUD EN EL TRABAJO",
+      "module": "Política SST",
+      "route": "/documentos",
+      "content": "content/BIB-1A66731FA5F4.html",
+      "sha256": "4f07f462533dfca66ddfa7d6f092c6cb606ecf43531aa8eb403f84fe75c2cb28",
+      "bytes": 18353,
+      "original_name": "POLITICA DE LA SEGURIDAD Y SALUD EN EL TRABAJO.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/12-POLITICA DE SEGURIDAD Y SALUD EN EL TRABAJO/POLITICA DE LA SEGURIDAD Y SALUD EN EL TRABAJO.docx",
+          "zip_index": 63
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 16,
+        "tables": 1,
+        "images": 0,
+        "characters": 1903
+      },
+      "status": "revisado",
+      "number": 8,
+      "phase": "Planear",
+      "document_type": "Politica"
+    },
+    {
+      "id": "BIB-B6B008AF3644",
+      "code": "BIB-13-AF3644",
+      "title": "OBJETIVOS DEL SG-SST MEDIBLES",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        13
+      ],
+      "primary_standard": 13,
+      "folder": "13-OBJETIVOS SST",
+      "module": "Objetivos e indicadores",
+      "route": "/indicadores",
+      "content": "forms/BIB-B6B008AF3644.json",
+      "sha256": "2ec630ab7e8a17af62cd2ffd64acbd9e7cb589dbd763d6941fc89f74b3049d17",
+      "bytes": 13625,
+      "original_name": "OBJETIVOS DEL SG-SST MEDIBLES.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/13-OBJETIVOS SST/OBJETIVOS DEL SG-SST MEDIBLES.xlsx",
+          "zip_index": 103
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 100,
+        "formulas": 5
+      },
+      "status": "revisado",
+      "number": 9,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-F7964A772AB5",
+      "code": "BIB-13-772AB5",
+      "title": "OBJETIVOS DEL SG-SST",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        13
+      ],
+      "primary_standard": 13,
+      "folder": "13-OBJETIVOS SST",
+      "module": "Objetivos e indicadores",
+      "route": "/indicadores",
+      "content": "content/BIB-F7964A772AB5.html",
+      "sha256": "878b3544296f770555e12c0f48cb747f50d55ed67031f96712fdf731e9c0ad88",
+      "bytes": 18030,
+      "original_name": "OBJETIVOS DEL SG-SST.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/13-OBJETIVOS SST/OBJETIVOS DEL SG-SST.docx",
+          "zip_index": 105
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 19,
+        "tables": 1,
+        "images": 0,
+        "characters": 1126
+      },
+      "status": "revisado",
+      "number": 10,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-80B7525A807B",
+      "code": "BIB-14-5A807B",
+      "title": "EVALUACIÓN INICIAL O AUTOEVALUACIÓN DEL SG-SST",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        14
+      ],
+      "primary_standard": 14,
+      "folder": "14-EVALUACIÓN INICIAL SG-SST",
+      "module": "Evaluación inicial",
+      "route": "/cumplimiento-documental/gestion?requisito=evaluacion_inicial",
+      "content": "forms/BIB-80B7525A807B.json",
+      "sha256": "8198a07db76bd09356398187233a15af1d3a177edd76c37e6bb7da35852227e4",
+      "bytes": 1027665,
+      "original_name": "EVALUACIÓN INICIAL O AUTOEVALUACIÓN DEL SG-SST.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/14-EVALUACIÓN INICIAL SG-SST/EVALUACIÓN INICIAL O AUTOEVALUACIÓN DEL SG-SST.xlsx",
+          "zip_index": 258
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "EVALUACIÓN-AUTOEVALUACIÓN: 59 combinación(es) con contenido interno se muestran como celdas individuales para no ocultar datos."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 949,
+        "formulas": 61
+      },
+      "status": "revisado",
+      "number": 11,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-E4FF6313EBBF",
+      "code": "BIB-15-13EBBF",
+      "title": "PLAN ANUAL DE TRABAJO",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        15
+      ],
+      "primary_standard": 15,
+      "folder": "15-PLAN ANUAL DE TRABAJO",
+      "module": "Plan Anual de Trabajo",
+      "route": "/plan-anual",
+      "content": "forms/BIB-E4FF6313EBBF.json",
+      "sha256": "197b80e24f37e4ee72ba00f4d2b40c36c369d093d8490139c475d7e4de39b1c0",
+      "bytes": 50520,
+      "original_name": "PLAN ANUAL DE TRABAJO.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/15-PLAN ANUAL DE TRABAJO/PLAN ANUAL DE TRABAJO.xlsx",
+          "zip_index": 149
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "1: 0 imagen(es) y 1 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 862,
+        "formulas": 139
+      },
+      "status": "revisado",
+      "number": 12,
+      "phase": "Planear",
+      "document_type": "Plan"
+    },
+    {
+      "id": "BIB-A46A6B53B3DD",
+      "code": "BIB-16-53B3DD",
+      "title": "LISTADO MAESTRO DE DOCUMENTOS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        16
+      ],
+      "primary_standard": 16,
+      "folder": "16-ARCHIVO Y RETENCIÓN DOCUMENTAL",
+      "module": "Archivo documental",
+      "route": "/documentos",
+      "content": "forms/BIB-A46A6B53B3DD.json",
+      "sha256": "bb86090a63e200e3989f762395e3b6440e2a4e460fb9a6ea23990038a9da856a",
+      "bytes": 16805,
+      "original_name": "LISTADO MAESTRO DE DOCUMENTOS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/16-ARCHIVO Y RETENCIÓN DOCUMENTAL/LISTADO MAESTRO DE DOCUMENTOS.xlsx",
+          "zip_index": 85
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 177,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 13,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-4FC98200DCCA",
+      "code": "BIB-16-00DCCA",
+      "title": "PROCEDIMIENTO ELABORACIÓN Y CONTROL DE DOCUMENTOS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        16
+      ],
+      "primary_standard": 16,
+      "folder": "16-ARCHIVO Y RETENCIÓN DOCUMENTAL",
+      "module": "Archivo documental",
+      "route": "/documentos",
+      "content": "content/BIB-4FC98200DCCA.html",
+      "sha256": "f99d54538293c28662207829fbe70cd2b8a1712801858aa815de94b4e5559765",
+      "bytes": 41083,
+      "original_name": "PROCEDIMIENTO ELABORACIÓN Y CONTROL DE DOCUMENTOS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/16-ARCHIVO Y RETENCIÓN DOCUMENTAL/PROCEDIMIENTO ELABORACIÓN Y CONTROL DE DOCUMENTOS.docx",
+          "zip_index": 87
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 215,
+        "tables": 4,
+        "images": 0,
+        "characters": 10625
+      },
+      "status": "revisado",
+      "number": 14,
+      "phase": "Planear",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-5E3A7C22E010",
+      "code": "BIB-17-22E010",
+      "title": "INFORME MENSUAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        17
+      ],
+      "primary_standard": 17,
+      "folder": "17-RENDICIÓN DE CUENTAS",
+      "module": "Rendición de cuentas",
+      "route": "/phva",
+      "content": "content/BIB-5E3A7C22E010.html",
+      "sha256": "3445720ab0ef8847381c248fa36c2493ab055d28e68531f3a9b98f08a908027b",
+      "bytes": 42991,
+      "original_name": "INFORME MENSUAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/17-RENDICIÓN DE CUENTAS/INFORME MENSUAL.docx",
+          "zip_index": 236
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 118,
+        "tables": 19,
+        "images": 0,
+        "characters": 10933
+      },
+      "status": "revisado",
+      "number": 15,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-2DC97A7D5931",
+      "code": "BIB-17-7D5931",
+      "title": "INFORME MENSUAL",
+      "extension": "pdf",
+      "kind": "document",
+      "standards": [
+        17
+      ],
+      "primary_standard": 17,
+      "folder": "17-RENDICIÓN DE CUENTAS",
+      "module": "Rendición de cuentas",
+      "route": "/phva",
+      "content": "content/BIB-2DC97A7D5931.html",
+      "sha256": "90fc756a1be57aa0c1111ba5c5f4e5919fe159a9ca0b84940655aa975491f387",
+      "bytes": 318359,
+      "original_name": "INFORME MENSUAL.pdf",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/17-RENDICIÓN DE CUENTAS/INFORME MENSUAL.pdf",
+          "zip_index": 233
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "pages": 12,
+        "characters": 8158
+      },
+      "status": "revisado",
+      "number": 16,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-DAE73919BEE8",
+      "code": "BIB-17-19BEE8",
+      "title": "RENDICION DE CUENTAS ANUAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        17
+      ],
+      "primary_standard": 17,
+      "folder": "17-RENDICIÓN DE CUENTAS",
+      "module": "Rendición de cuentas",
+      "route": "/phva",
+      "content": "content/BIB-DAE73919BEE8.html",
+      "sha256": "60b30241089fc6782dc71b99b2273de1b399ce69f18aee2368ef3ab165d7abc5",
+      "bytes": 28137,
+      "original_name": "RENDICION DE CUENTAS ANUAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/17-RENDICIÓN DE CUENTAS/RENDICION DE CUENTAS ANUAL.docx",
+          "zip_index": 234
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 140,
+        "tables": 15,
+        "images": 0,
+        "characters": 7118
+      },
+      "status": "revisado",
+      "number": 17,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-FD13ED44C01C",
+      "code": "BIB-18-44C01C",
+      "title": "MATRIZ DE REQUISITOS LEGALES",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        18
+      ],
+      "primary_standard": 18,
+      "folder": "18-MATRIZ LEGAL",
+      "module": "Matriz legal",
+      "route": "/cumplimiento-documental/gestion?requisito=matriz_legal",
+      "content": "forms/BIB-FD13ED44C01C.json",
+      "sha256": "cd3f8cb5ceb1c64a2c36c431ffed10313a4c0aa94da125fc19560ac5b032b309",
+      "bytes": 96322,
+      "original_name": "MATRIZ DE REQUISITOS LEGALES.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/18-MATRIZ LEGAL/MATRIZ DE REQUISITOS LEGALES.xlsx",
+          "zip_index": 147
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 819,
+        "formulas": 1
+      },
+      "status": "revisado",
+      "number": 18,
+      "phase": "Planear",
+      "document_type": "Matriz"
+    },
+    {
+      "id": "BIB-BC6DB1D9C25C",
+      "code": "BIB-19-D9C25C",
+      "title": "MATRIZ COMUNICACIONES",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        19
+      ],
+      "primary_standard": 19,
+      "folder": "19-MECANISMOS DE COMUNICACIÓN",
+      "module": "Comunicaciones",
+      "route": "/phva",
+      "content": "forms/BIB-BC6DB1D9C25C.json",
+      "sha256": "24a6f636b8730755700574720bb85abfd30eec2d4b771ef49da5cf4183ab7916",
+      "bytes": 36556,
+      "original_name": "MATRIZ COMUNICACIONES.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/19-MECANISMOS DE COMUNICACIÓN/MATRIZ COMUNICACIONES.xlsx",
+          "zip_index": 57
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 302,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 19,
+      "phase": "Planear",
+      "document_type": "Matriz"
+    },
+    {
+      "id": "BIB-8BFDDBEE70B5",
+      "code": "BIB-19-EE70B5",
+      "title": "PROCEDIMIENTO DE COMUNICACIÓN INTERNA Y EXTERNA",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        19,
+        47
+      ],
+      "primary_standard": 19,
+      "folder": "19-MECANISMOS DE COMUNICACIÓN",
+      "module": "Comunicaciones",
+      "route": "/phva",
+      "content": "content/BIB-8BFDDBEE70B5.html",
+      "sha256": "5a6153c971695872aef212658920269daa5dd323ed13fd4333da7cf211ee2198",
+      "bytes": 74799,
+      "original_name": "PROCEDIMIENTO DE COMUNICACIÓN INTERNA Y EXTERNA.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/19-MECANISMOS DE COMUNICACIÓN/PROCEDIMIENTO DE COMUNICACIÓN INTERNA Y EXTERNA.docx",
+          "zip_index": 55
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO DE COMUNICACIÓN INTERNA Y EXTERNA.docx",
+          "zip_index": 308
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 62,
+        "tables": 2,
+        "images": 0,
+        "characters": 3825
+      },
+      "status": "revisado",
+      "number": 20,
+      "phase": "Planear",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-E4CE31CA372E",
+      "code": "BIB-02-CA372E",
+      "title": "ASIGNACION DE RESPONSABILIDADES EN SST A LOS TRABAJADORES GENERAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        2
+      ],
+      "primary_standard": 2,
+      "folder": "2-ASIGNACIÓN DE RESPONSABILIDADES EN SST  A LOS TRABAJADORES EN GENERAL",
+      "module": "Responsabilidades SG-SST",
+      "route": "/cumplimiento-documental/gestion?requisito=responsabilidades_sst",
+      "content": "content/BIB-E4CE31CA372E.html",
+      "sha256": "a8d1b9859e52bca660da9720d02b8971ddfc8cfe8d40e1f2afcc4889e7f12c03",
+      "bytes": 19028,
+      "original_name": "ASIGNACION DE RESPONSABILIDADES EN SST A LOS TRABAJADORES GENERAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/2-ASIGNACIÓN DE RESPONSABILIDADES EN SST  A LOS TRABAJADORES EN GENERAL/ASIGNACION DE RESPONSABILIDADES EN SST A LOS TRABAJADORES GENERAL.docx",
+          "zip_index": 199
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 42,
+        "tables": 1,
+        "images": 0,
+        "characters": 3198
+      },
+      "status": "revisado",
+      "number": 21,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-4694FCF37DD2",
+      "code": "BIB-20-F37DD2",
+      "title": "MATRIZ DE REQUISITOS PARA ADQUIRIR BIENES Y SERVICIOS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        20
+      ],
+      "primary_standard": 20,
+      "folder": "20-IDENTIFICACIÓN Y EVALUACIÓN PARA LA ADQIUSICIÓN DE BIENES Y SERVICIOS",
+      "module": "Contratistas y adquisiciones",
+      "route": "/cumplimiento-documental/gestion?requisito=contratistas_adquisiciones",
+      "content": "forms/BIB-4694FCF37DD2.json",
+      "sha256": "576260317d2650ddccf9b6e1bdf054cb8a67d317ddcc470f202e5fe2bbc4bd3b",
+      "bytes": 12954,
+      "original_name": "MATRIZ DE REQUISITOS PARA ADQUIRIR BIENES Y SERVICIOS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/20-IDENTIFICACIÓN Y EVALUACIÓN PARA LA ADQIUSICIÓN DE BIENES Y SERVICIOS/MATRIZ DE REQUISITOS PARA ADQUIRIR BIENES Y SERVICIOS.xlsx",
+          "zip_index": 207
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 280,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 22,
+      "phase": "Planear",
+      "document_type": "Matriz"
+    },
+    {
+      "id": "BIB-F1F7B0EC2726",
+      "code": "BIB-20-EC2726",
+      "title": "PROCEDIMIENTO ADQUISICIÓN DE BIENES",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        20,
+        47
+      ],
+      "primary_standard": 20,
+      "folder": "20-IDENTIFICACIÓN Y EVALUACIÓN PARA LA ADQIUSICIÓN DE BIENES Y SERVICIOS",
+      "module": "Contratistas y adquisiciones",
+      "route": "/cumplimiento-documental/gestion?requisito=contratistas_adquisiciones",
+      "content": "content/BIB-F1F7B0EC2726.html",
+      "sha256": "0ec04b66e15491ed30e7aec693ab77da7212b491fec1542008b5324db8e0531c",
+      "bytes": 29202,
+      "original_name": "PROCEDIMIENTO ADQUISICIÓN DE BIENES.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/20-IDENTIFICACIÓN Y EVALUACIÓN PARA LA ADQIUSICIÓN DE BIENES Y SERVICIOS/PROCEDIMIENTO ADQUISICIÓN DE BIENES.docx",
+          "zip_index": 205
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO ADQUISICIÓN DE BIENES.docx",
+          "zip_index": 278
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 38,
+        "tables": 2,
+        "images": 0,
+        "characters": 5305
+      },
+      "status": "revisado",
+      "number": 23,
+      "phase": "Planear",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-884859696633",
+      "code": "BIB-20-696633",
+      "title": "PROCEDIMIENTO ADQUISICIÓN DE SERVICIOS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        20
+      ],
+      "primary_standard": 20,
+      "folder": "20-IDENTIFICACIÓN Y EVALUACIÓN PARA LA ADQIUSICIÓN DE BIENES Y SERVICIOS",
+      "module": "Contratistas y adquisiciones",
+      "route": "/cumplimiento-documental/gestion?requisito=contratistas_adquisiciones",
+      "content": "content/BIB-884859696633.html",
+      "sha256": "4bed622339148bdece97b56c15be70266dda75dd53ccc26917bb7c863bfc6a3f",
+      "bytes": 27433,
+      "original_name": "PROCEDIMIENTO ADQUISICIÓN DE SERVICIOS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/20-IDENTIFICACIÓN Y EVALUACIÓN PARA LA ADQIUSICIÓN DE BIENES Y SERVICIOS/PROCEDIMIENTO ADQUISICIÓN DE SERVICIOS.docx",
+          "zip_index": 209
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 37,
+        "tables": 2,
+        "images": 0,
+        "characters": 4291
+      },
+      "status": "revisado",
+      "number": 24,
+      "phase": "Planear",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-8F8BDBA00A5C",
+      "code": "BIB-21-A00A5C",
+      "title": "BASE DE DATOS DE PROVEEDORES Y CONTRATISTAS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        21
+      ],
+      "primary_standard": 21,
+      "folder": "21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS",
+      "module": "Contratistas y adquisiciones",
+      "route": "/cumplimiento-documental/gestion?requisito=contratistas_adquisiciones",
+      "content": "forms/BIB-8F8BDBA00A5C.json",
+      "sha256": "bd3789812633230f9ae2a32b4c36b13c25ed964c1a9c0fe986f2c6a118b5e8bd",
+      "bytes": 11856,
+      "original_name": "BASE DE DATOS DE PROVEEDORES Y CONTRATISTAS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS/BASE DE DATOS DE PROVEEDORES Y CONTRATISTAS.xlsx",
+          "zip_index": 248
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 43,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 25,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-FDDE160E0F0E",
+      "code": "BIB-21-0E0F0E",
+      "title": "EVALUACION FINAL O PERIODICA CONTRATISTAS Y PROVEEDORES",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        21
+      ],
+      "primary_standard": 21,
+      "folder": "21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS",
+      "module": "Contratistas y adquisiciones",
+      "route": "/cumplimiento-documental/gestion?requisito=contratistas_adquisiciones",
+      "content": "forms/BIB-FDDE160E0F0E.json",
+      "sha256": "6422961acd317d2f55a2d6c15191348c94418900cdf2e3c477eae14a48d6cec1",
+      "bytes": 19041,
+      "original_name": "EVALUACION FINAL O PERIODICA CONTRATISTAS Y PROVEEDORES.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS/EVALUACION FINAL O PERIODICA CONTRATISTAS Y PROVEEDORES.xlsx",
+          "zip_index": 238
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 94,
+        "formulas": 1
+      },
+      "status": "revisado",
+      "number": 26,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-5D7597D555F9",
+      "code": "BIB-21-D555F9",
+      "title": "EVALUACION SELECCION CONTRATISTA INDEPENDIENTE",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        21
+      ],
+      "primary_standard": 21,
+      "folder": "21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS",
+      "module": "Contratistas y adquisiciones",
+      "route": "/cumplimiento-documental/gestion?requisito=contratistas_adquisiciones",
+      "content": "forms/BIB-5D7597D555F9.json",
+      "sha256": "9774b0e0f8348e529d88a97f744b83feec03c19e276b415a4b6ad35ad9bd7e33",
+      "bytes": 11829,
+      "original_name": "EVALUACION SELECCION CONTRATISTA INDEPENDIENTE.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS/EVALUACION SELECCION CONTRATISTA INDEPENDIENTE.xlsx",
+          "zip_index": 244
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 53,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 27,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-F3097135B275",
+      "code": "BIB-21-35B275",
+      "title": "EVALUACIÓN INICIAL PARA LA SELECCION DE PROVEEDORES Y CONTRATISTAS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        21
+      ],
+      "primary_standard": 21,
+      "folder": "21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS",
+      "module": "Contratistas y adquisiciones",
+      "route": "/cumplimiento-documental/gestion?requisito=contratistas_adquisiciones",
+      "content": "forms/BIB-F3097135B275.json",
+      "sha256": "499789ecd8fbf89d89657dd7461547dc7a563ba7f837815e817ef1d7593db80f",
+      "bytes": 16452,
+      "original_name": "EVALUACIÓN INICIAL PARA LA SELECCION DE PROVEEDORES Y CONTRATISTAS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS/EVALUACIÓN INICIAL PARA LA SELECCION DE PROVEEDORES Y CONTRATISTAS.xlsx",
+          "zip_index": 250
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 125,
+        "formulas": 1
+      },
+      "status": "revisado",
+      "number": 28,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-2D6598D57065",
+      "code": "BIB-21-D57065",
+      "title": "INSCRIPCIÓN DE PROVEEDOR O CONTRATISTA",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        21
+      ],
+      "primary_standard": 21,
+      "folder": "21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS",
+      "module": "Contratistas y adquisiciones",
+      "route": "/cumplimiento-documental/gestion?requisito=contratistas_adquisiciones",
+      "content": "content/BIB-2D6598D57065.html",
+      "sha256": "772c1ee696f00a083ccc200f4b513287ca7e83cc4b03b131ea1330d54e0e37a6",
+      "bytes": 207360,
+      "original_name": "INSCRIPCIÓN DE PROVEEDOR O CONTRATISTA.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS/INSCRIPCIÓN DE PROVEEDOR O CONTRATISTA.doc",
+          "zip_index": 242
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 2769
+      },
+      "status": "revisado",
+      "number": 29,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-F4B28B074551",
+      "code": "BIB-21-074551",
+      "title": "INSPECCIÓN PERIÓDICA CONTRATISTA EN OBRA",
+      "extension": "xls",
+      "kind": "form",
+      "standards": [
+        21
+      ],
+      "primary_standard": 21,
+      "folder": "21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS",
+      "module": "Contratistas y adquisiciones",
+      "route": "/cumplimiento-documental/gestion?requisito=contratistas_adquisiciones",
+      "content": "forms/BIB-F4B28B074551.json",
+      "sha256": "b8cec4c1ae660a89625e7b08cedf967eebec5d9f81693e71cda82b0f10bc6c99",
+      "bytes": 38400,
+      "original_name": "INSPECCIÓN PERIÓDICA CONTRATISTA EN OBRA.xls",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS/INSPECCIÓN PERIÓDICA CONTRATISTA EN OBRA.xls",
+          "zip_index": 246
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Los archivos XLS heredados conservan valores y estructura; sus fórmulas originales se consultan en el archivo fuente."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 40,
+        "formulas": null
+      },
+      "status": "revisado",
+      "number": 30,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-9856BFD40FFD",
+      "code": "BIB-21-D40FFD",
+      "title": "PROCEDIMIENTO PARA LA CONTRATACIÓN Y EVALUACIÓN DE PROVEEDORES Y CONTRATISTAS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        21,
+        47
+      ],
+      "primary_standard": 21,
+      "folder": "21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS",
+      "module": "Contratistas y adquisiciones",
+      "route": "/cumplimiento-documental/gestion?requisito=contratistas_adquisiciones",
+      "content": "content/BIB-9856BFD40FFD.html",
+      "sha256": "54393189600a50902e0ed0870cd06b7f7d5c6a834847756c7118e4a1ef4b934f",
+      "bytes": 151322,
+      "original_name": "PROCEDIMIENTO PARA LA  CONTRATACIÓN Y EVALUACIÓN DE PROVEEDORES Y CONTRATISTAS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/21-EVALUACIÓN Y SELECCIÓN DE PROVEEDORES Y CONTRATISTAS/PROCEDIMIENTO PARA LA  CONTRATACIÓN Y EVALUACIÓN DE PROVEEDORES Y CONTRATISTAS.docx",
+          "zip_index": 240
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO PARA LA  CONTRATACIÓN Y EVALUACIÓN DE PROVEEDORES Y CONTRATISTAS.docx",
+          "zip_index": 288
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 75,
+        "tables": 2,
+        "images": 0,
+        "characters": 6919
+      },
+      "status": "revisado",
+      "number": 31,
+      "phase": "Planear",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-E22C5C3017CB",
+      "code": "BIB-22-3017CB",
+      "title": "FORMATO GESTIÓN DEL CAMBIO",
+      "extension": "xls",
+      "kind": "form",
+      "standards": [
+        22
+      ],
+      "primary_standard": 22,
+      "folder": "22-GESTIÓN DEL CAMBIO",
+      "module": "Gestión del cambio",
+      "route": "/cumplimiento-documental/gestion?requisito=gestion_cambio",
+      "content": "forms/BIB-E22C5C3017CB.json",
+      "sha256": "3107c6c37a6701d1414552123c3802d25abe85f933b44bbb97f6187bde10bb21",
+      "bytes": 41472,
+      "original_name": "FORMATO GESTIÓN DEL CAMBIO.xls",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/22-GESTIÓN DEL CAMBIO/FORMATO GESTIÓN DEL CAMBIO.xls",
+          "zip_index": 185
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Los archivos XLS heredados conservan valores y estructura; sus fórmulas originales se consultan en el archivo fuente."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 66,
+        "formulas": null
+      },
+      "status": "revisado",
+      "number": 32,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-83C705A0583A",
+      "code": "BIB-22-A0583A",
+      "title": "PROCEDIMIENTO GESTIÓN DEL CAMBIO",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        22,
+        47
+      ],
+      "primary_standard": 22,
+      "folder": "22-GESTIÓN DEL CAMBIO",
+      "module": "Gestión del cambio",
+      "route": "/cumplimiento-documental/gestion?requisito=gestion_cambio",
+      "content": "content/BIB-83C705A0583A.html",
+      "sha256": "0109cd83d7680701a29193a26e33ebadc91dbf8d2c145b6ec8aff3e3ac399539",
+      "bytes": 30359,
+      "original_name": "PROCEDIMIENTO GESTIÓN DEL CAMBIO.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/22-GESTIÓN DEL CAMBIO/PROCEDIMIENTO GESTIÓN DEL CAMBIO.docx",
+          "zip_index": 183
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO GESTIÓN DEL CAMBIO.docx",
+          "zip_index": 316
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 35,
+        "tables": 3,
+        "images": 0,
+        "characters": 5571
+      },
+      "status": "revisado",
+      "number": 33,
+      "phase": "Planear",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-CE7DFD93EB16",
+      "code": "BIB-23-93EB16",
+      "title": "ENCUESTA PERFIL SOCIODEMOGRAFICO Y MORBILIDAD SENTIDA",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        23
+      ],
+      "primary_standard": 23,
+      "folder": "23-DESCRIPCIÓN SOCIODEMOGRÁFICA Y DIAGNÓSTICO DE CONDICIONES DE SALUD DE LOS TRABAJADORES",
+      "module": "Condiciones de salud",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-CE7DFD93EB16.html",
+      "sha256": "f99c4a412b0f40b0fdf3c10a76466ed4ab72d3333858971f5ad69104baeba544",
+      "bytes": 28236,
+      "original_name": "ENCUESTA PERFIL SOCIODEMOGRAFICO Y MORBILIDAD SENTIDA.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/23-DESCRIPCIÓN SOCIODEMOGRÁFICA Y DIAGNÓSTICO DE CONDICIONES DE SALUD DE LOS TRABAJADORES/ENCUESTA PERFIL SOCIODEMOGRAFICO Y MORBILIDAD SENTIDA.docx",
+          "zip_index": 348
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 9,
+        "tables": 4,
+        "images": 0,
+        "characters": 9196
+      },
+      "status": "revisado",
+      "number": 34,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-C399180834EB",
+      "code": "BIB-23-0834EB",
+      "title": "TABULACIÓN ENCUESTA P.S",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        23
+      ],
+      "primary_standard": 23,
+      "folder": "23-DESCRIPCIÓN SOCIODEMOGRÁFICA Y DIAGNÓSTICO DE CONDICIONES DE SALUD DE LOS TRABAJADORES",
+      "module": "Condiciones de salud",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-C399180834EB.json",
+      "sha256": "d08704e726b7112898663f5d49915e2a9526df517e0dccfe618c03edc853b3af",
+      "bytes": 254628,
+      "original_name": "TABULACIÓN ENCUESTA P.S.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/23-DESCRIPCIÓN SOCIODEMOGRÁFICA Y DIAGNÓSTICO DE CONDICIONES DE SALUD DE LOS TRABAJADORES/TABULACIÓN ENCUESTA P.S.xlsx",
+          "zip_index": 350
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "TABULACION 2: 0 imagen(es) y 35 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 3,
+        "cells": 468,
+        "formulas": 64
+      },
+      "status": "revisado",
+      "number": 35,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-B9CF24140944",
+      "code": "BIB-24-140944",
+      "title": "PROGRAMA MEDICINA PREVENTIVA DEL TRABAJO",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        24,
+        47
+      ],
+      "primary_standard": 24,
+      "folder": "24-ACTIVIDADES DE MEDICINA DEL TRABAJO Y DE PREVENCIÓN Y PROMOCIÓN DE LA SALUD",
+      "module": "Programas preventivos",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-B9CF24140944.html",
+      "sha256": "b39e8ee80108e8060eec3b7f381b942a8029cdbbb46c97b75dfc15458a85e1a2",
+      "bytes": 29991,
+      "original_name": "PROGRAMA MEDICINA PREVENTIVA DEL TRABAJO.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/24-ACTIVIDADES DE MEDICINA DEL TRABAJO Y DE PREVENCIÓN Y PROMOCIÓN DE LA SALUD/PROGRAMA MEDICINA PREVENTIVA DEL TRABAJO.docx",
+          "zip_index": 191
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROGRAMA MEDICINA PREVENTIVA DEL TRABAJO.docx",
+          "zip_index": 286
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 86,
+        "tables": 1,
+        "images": 0,
+        "characters": 7059
+      },
+      "status": "revisado",
+      "number": 36,
+      "phase": "Hacer",
+      "document_type": "Programa"
+    },
+    {
+      "id": "BIB-7C86C60364A7",
+      "code": "BIB-25-0364A7",
+      "title": "MANUAL DE FUNCIONES Y PERFILES DE CARGOS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        25
+      ],
+      "primary_standard": 25,
+      "folder": "25-PERFILES DE CARGOS",
+      "module": "Perfiles de cargo",
+      "route": "/equipo",
+      "content": "content/BIB-7C86C60364A7.html",
+      "sha256": "5a5494c073a0db01ae7df99978352d03a39f75ca54a95db914919ba032255ac0",
+      "bytes": 39309,
+      "original_name": "MANUAL DE FUNCIONES Y PERFILES DE CARGOS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/25-PERFILES DE CARGOS/MANUAL DE FUNCIONES Y PERFILES DE CARGOS.docx",
+          "zip_index": 53
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 33,
+        "tables": 6,
+        "images": 0,
+        "characters": 11795
+      },
+      "status": "revisado",
+      "number": 37,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-5C1EBA0A3EAF",
+      "code": "BIB-26-0A3EAF",
+      "title": "PROCEDIMIENTO EXAMENES MEDICO OCUPACIONALES",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        26
+      ],
+      "primary_standard": 26,
+      "folder": "26-EVALUACIONES MEDICO OCUPACIONALES",
+      "module": "Evaluaciones médicas",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-5C1EBA0A3EAF.html",
+      "sha256": "ef57b25f9ec3897adcd0d5bd9e186d847e50564b049f05ca7d52f0d386c4dd4d",
+      "bytes": 31712,
+      "original_name": "PROCEDIMIENTO EXAMENES MEDICO OCUPACIONALES.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/26-EVALUACIONES MEDICO OCUPACIONALES/PROCEDIMIENTO EXAMENES MEDICO OCUPACIONALES.docx",
+          "zip_index": 59
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 176,
+        "tables": 1,
+        "images": 0,
+        "characters": 16050
+      },
+      "status": "revisado",
+      "number": 38,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-B3E463103814",
+      "code": "BIB-26-103814",
+      "title": "REMISION EXAMEN MEDICO OCUPACIONAL",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        26
+      ],
+      "primary_standard": 26,
+      "folder": "26-EVALUACIONES MEDICO OCUPACIONALES",
+      "module": "Evaluaciones médicas",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-B3E463103814.json",
+      "sha256": "6ac8fc07c367e2d3d86cb2b9e7f258424f52b8620dea3f84acd81e92eca7a3b1",
+      "bytes": 13834,
+      "original_name": "REMISION EXAMEN MEDICO OCUPACIONAL.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/26-EVALUACIONES MEDICO OCUPACIONALES/REMISION EXAMEN MEDICO OCUPACIONAL.xlsx",
+          "zip_index": 61
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 48,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 39,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-248F4647ACFB",
+      "code": "BIB-27-47ACFB",
+      "title": "Custodia de las historias clínicas",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        27
+      ],
+      "primary_standard": 27,
+      "folder": "27-CUSTODIA DE LAS HISTORIAS CLINICAS",
+      "module": "Custodia documental",
+      "route": "/cumplimiento-documental/gestion?requisito=archivo_retencion",
+      "content": "content/BIB-248F4647ACFB.html",
+      "sha256": "d6169c562a58ce79ab20f36f0c01183aae182e25dbb829c9e09977f741414625",
+      "bytes": 12093,
+      "original_name": "Custodia de las historias clínicas.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/27-CUSTODIA DE LAS HISTORIAS CLINICAS/Custodia de las historias clínicas.docx",
+          "zip_index": 352
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 1,
+        "tables": 0,
+        "images": 0,
+        "characters": 219
+      },
+      "status": "revisado",
+      "number": 40,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-2DF9FA9B4C15",
+      "code": "BIB-28-9B4C15",
+      "title": "ENTREGA RECOMENDACIONES O RESTRICCIONES MEDICAS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        28
+      ],
+      "primary_standard": 28,
+      "folder": "28-RESTRICCIONES Y RECOMENDACIONES MEDICO LABORALES",
+      "module": "Condiciones de salud",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-2DF9FA9B4C15.html",
+      "sha256": "cb371688ad87c57c7fd2e105106101b7df47bb621bfe84e485098c900cbd8672",
+      "bytes": 21857,
+      "original_name": "ENTREGA RECOMENDACIONES O RESTRICCIONES MEDICAS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/28-RESTRICCIONES Y RECOMENDACIONES MEDICO LABORALES/ENTREGA RECOMENDACIONES O RESTRICCIONES MEDICAS.docx",
+          "zip_index": 153
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 69,
+        "tables": 2,
+        "images": 0,
+        "characters": 2280
+      },
+      "status": "revisado",
+      "number": 41,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-0B3601D883C5",
+      "code": "BIB-28-D883C5",
+      "title": "SEGUIMIENTO A LAS RECOMENDACIONES O RESTRICCIONES MEDICO LABORALES",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        28
+      ],
+      "primary_standard": 28,
+      "folder": "28-RESTRICCIONES Y RECOMENDACIONES MEDICO LABORALES",
+      "module": "Condiciones de salud",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-0B3601D883C5.html",
+      "sha256": "daf3a165f69c820e2ad2412e6836e2244dd84f8bd7e44d3d26269fe35803816b",
+      "bytes": 19622,
+      "original_name": "SEGUIMIENTO A LAS RECOMENDACIONES O RESTRICCIONES  MEDICO LABORALES.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/28-RESTRICCIONES Y RECOMENDACIONES MEDICO LABORALES/SEGUIMIENTO A LAS RECOMENDACIONES O RESTRICCIONES  MEDICO LABORALES.docx",
+          "zip_index": 151
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 38,
+        "tables": 3,
+        "images": 0,
+        "characters": 1647
+      },
+      "status": "revisado",
+      "number": 42,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-C1AD51ED0AAF",
+      "code": "BIB-29-ED0AAF",
+      "title": "PROGRAMA ESTILO DE VIDA Y ENTORNO SALUDABLE",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        29
+      ],
+      "primary_standard": 29,
+      "folder": "29-ESTILO DE VIDA Y ENTORNO SALUDABLE",
+      "module": "Programas preventivos",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-C1AD51ED0AAF.html",
+      "sha256": "4d5d9a907a4c830850a0f37a8e449ce4568a669e3cf12ebd281ca6c785df0c5a",
+      "bytes": 2343346,
+      "original_name": "PROGRAMA ESTILO DE VIDA Y ENTORNO SALUDABLE.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/29-ESTILO DE VIDA Y ENTORNO SALUDABLE/PROGRAMA ESTILO DE VIDA Y ENTORNO SALUDABLE.docx",
+          "zip_index": 67
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "7 elemento(s) gráfico(s) se conservan en el original; la versión editable reproduce texto y tablas."
+      ],
+      "stats": {
+        "paragraphs": 458,
+        "tables": 1,
+        "images": 7,
+        "characters": 36615
+      },
+      "status": "revisado",
+      "number": 43,
+      "phase": "Hacer",
+      "document_type": "Programa"
+    },
+    {
+      "id": "BIB-276390634998",
+      "code": "BIB-03-634998",
+      "title": "ASIGNACION DE RECURSOS PARA EL SG-SST",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        3
+      ],
+      "primary_standard": 3,
+      "folder": "3-ASIGNACIÓN DE RECURSOS PARA EL SG-SST",
+      "module": "Recursos SG-SST",
+      "route": "/cumplimiento-documental/gestion?requisito=responsabilidades_sst",
+      "content": "content/BIB-276390634998.html",
+      "sha256": "e56dcad3e0ae36375ac3fc696dc95735ee41a05f45711164e14a0d35ca973d3e",
+      "bytes": 20396,
+      "original_name": "ASIGNACION DE RECURSOS PARA EL SG-SST.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/3-ASIGNACIÓN DE RECURSOS PARA EL SG-SST/ASIGNACION DE RECURSOS PARA EL SG-SST.docx",
+          "zip_index": 354
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 71,
+        "tables": 1,
+        "images": 0,
+        "characters": 3774
+      },
+      "status": "revisado",
+      "number": 44,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-DDBB290FF14C",
+      "code": "BIB-03-0FF14C",
+      "title": "PRESUPUESTO",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        3
+      ],
+      "primary_standard": 3,
+      "folder": "3-ASIGNACIÓN DE RECURSOS PARA EL SG-SST",
+      "module": "Recursos SG-SST",
+      "route": "/cumplimiento-documental/gestion?requisito=responsabilidades_sst",
+      "content": "forms/BIB-DDBB290FF14C.json",
+      "sha256": "55280b158ed1476cea0e138f37d1340fa55e7e8185efb87c4311320a7f754520",
+      "bytes": 21135,
+      "original_name": "PRESUPUESTO.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/3-ASIGNACIÓN DE RECURSOS PARA EL SG-SST/PRESUPUESTO.xlsx",
+          "zip_index": 356
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 268,
+        "formulas": 65
+      },
+      "status": "revisado",
+      "number": 45,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-640FDD85C1B6",
+      "code": "BIB-30-85C1B6",
+      "title": "SERVICIOS DE HIGIENE",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        30
+      ],
+      "primary_standard": 30,
+      "folder": "30-SERVICIOS DE HIGIENE",
+      "module": "Programas preventivos",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-640FDD85C1B6.html",
+      "sha256": "58e40f0da1c267beecab0bde2c567e8e6ac724ec7019264f7966d26d99285fcb",
+      "bytes": 12013,
+      "original_name": "SERVICIOS DE HIGIENE.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/30-SERVICIOS DE HIGIENE/SERVICIOS DE HIGIENE.docx",
+          "zip_index": 65
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 1,
+        "tables": 0,
+        "images": 0,
+        "characters": 133
+      },
+      "status": "revisado",
+      "number": 46,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-0AA1AC66DF75",
+      "code": "BIB-31-66DF75",
+      "title": "CONTROL DE RESIDUOS NO PELIGROSOS",
+      "extension": "xls",
+      "kind": "form",
+      "standards": [
+        31
+      ],
+      "primary_standard": 31,
+      "folder": "31-MANEJO DE RESIDUOS",
+      "module": "Programas preventivos",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-0AA1AC66DF75.json",
+      "sha256": "76f029678b289d5249a4583d4204af0f6df94d0a8570c9c2e1c585b0b7d5af72",
+      "bytes": 32768,
+      "original_name": "CONTROL DE RESIDUOS NO PELIGROSOS.xls",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/31-MANEJO DE RESIDUOS/CONTROL DE RESIDUOS NO PELIGROSOS.xls",
+          "zip_index": 115
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Los archivos XLS heredados conservan valores y estructura; sus fórmulas originales se consultan en el archivo fuente."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 17,
+        "formulas": null
+      },
+      "status": "revisado",
+      "number": 47,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-F22E6FD6C62D",
+      "code": "BIB-31-D6C62D",
+      "title": "CONTROL DE RESIDUOS PELIGROSOS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        31
+      ],
+      "primary_standard": 31,
+      "folder": "31-MANEJO DE RESIDUOS",
+      "module": "Programas preventivos",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-F22E6FD6C62D.json",
+      "sha256": "0b1ec20b97f9a9305e20186e8d97d9125a54fbd86c228321370e517b30d7e733",
+      "bytes": 12197,
+      "original_name": "CONTROL DE RESIDUOS PELIGROSOS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/31-MANEJO DE RESIDUOS/CONTROL DE RESIDUOS PELIGROSOS.xlsx",
+          "zip_index": 109
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 17,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 48,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-3EB7EFD3EDB6",
+      "code": "BIB-31-D3EDB6",
+      "title": "DIAPOSITIVA RESIDUOS",
+      "extension": "pptx",
+      "kind": "document",
+      "standards": [
+        31
+      ],
+      "primary_standard": 31,
+      "folder": "31-MANEJO DE RESIDUOS",
+      "module": "Programas preventivos",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-3EB7EFD3EDB6.html",
+      "sha256": "b26bb1c0311beef8aba8233c52501ec902e8d1097a5e6e9db0d429c9116b1248",
+      "bytes": 1139133,
+      "original_name": "DIAPOSITIVA RESIDUOS.pptx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/31-MANEJO DE RESIDUOS/DIAPOSITIVA RESIDUOS.pptx",
+          "zip_index": 117
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "8 imagen(es) disponible(s) en la presentación original."
+      ],
+      "stats": {
+        "slides": 13,
+        "tables": 2,
+        "images": 8,
+        "characters": 3567
+      },
+      "status": "revisado",
+      "number": 49,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-60B987828CA2",
+      "code": "BIB-31-828CA2",
+      "title": "EVALUACIÓN CAPACITACIÓN MANEJO DE RESIDUOS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        31
+      ],
+      "primary_standard": 31,
+      "folder": "31-MANEJO DE RESIDUOS",
+      "module": "Programas preventivos",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-60B987828CA2.html",
+      "sha256": "0bf8bbc5daf9eae2444e9c18b4d50c059e7b6c81ff96d79ba41aa8aab668fe5d",
+      "bytes": 20315,
+      "original_name": "EVALUACIÓN CAPACITACIÓN MANEJO DE RESIDUOS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/31-MANEJO DE RESIDUOS/EVALUACIÓN CAPACITACIÓN MANEJO DE RESIDUOS.docx",
+          "zip_index": 107
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 21,
+        "tables": 1,
+        "images": 0,
+        "characters": 1047
+      },
+      "status": "revisado",
+      "number": 50,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-3FF343448CA6",
+      "code": "BIB-31-448CA6",
+      "title": "INSPECCIÓN ÁREA DE ALMACENAMIENTO DE RESIDUOS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        31
+      ],
+      "primary_standard": 31,
+      "folder": "31-MANEJO DE RESIDUOS",
+      "module": "Programas preventivos",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-3FF343448CA6.json",
+      "sha256": "ec3c48d2d8583fa6cffec79889a0731d3ce6f9fc156c914bcbdad6cc62ba54f8",
+      "bytes": 15102,
+      "original_name": "INSPECCIÓN ÁREA DE ALMACENAMIENTO DE RESIDUOS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/31-MANEJO DE RESIDUOS/INSPECCIÓN ÁREA DE ALMACENAMIENTO DE RESIDUOS.xlsx",
+          "zip_index": 111
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 3,
+        "cells": 49,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 51,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-B28E9DB86BD2",
+      "code": "BIB-31-B86BD2",
+      "title": "PLAN ANUAL DE RESIDUOS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        31
+      ],
+      "primary_standard": 31,
+      "folder": "31-MANEJO DE RESIDUOS",
+      "module": "Programas preventivos",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-B28E9DB86BD2.json",
+      "sha256": "e8a949a3134580d6fa7871c32fa3255f059ca04e394b3d228d079a6bd32622d3",
+      "bytes": 27716,
+      "original_name": "PLAN ANUAL DE RESIDUOS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/31-MANEJO DE RESIDUOS/PLAN ANUAL DE RESIDUOS.xlsx",
+          "zip_index": 113
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 2,
+        "cells": 178,
+        "formulas": 59
+      },
+      "status": "revisado",
+      "number": 52,
+      "phase": "Hacer",
+      "document_type": "Plan"
+    },
+    {
+      "id": "BIB-114D3AC9B3F6",
+      "code": "BIB-31-C9B3F6",
+      "title": "PLAN MANEJO DE RESIDUOS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        31,
+        47
+      ],
+      "primary_standard": 31,
+      "folder": "31-MANEJO DE RESIDUOS",
+      "module": "Programas preventivos",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-114D3AC9B3F6.html",
+      "sha256": "fbec997d0cbb753ea9f856050cbd0842448b51e6d5e30e57f925453f3efe521b",
+      "bytes": 509398,
+      "original_name": "PLAN MANEJO DE RESIDUOS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/31-MANEJO DE RESIDUOS/PLAN MANEJO DE RESIDUOS.docx",
+          "zip_index": 119
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PLAN MANEJO DE RESIDUOS.docx",
+          "zip_index": 324
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 72,
+        "tables": 1,
+        "images": 0,
+        "characters": 6340
+      },
+      "status": "revisado",
+      "number": 53,
+      "phase": "Hacer",
+      "document_type": "Plan"
+    },
+    {
+      "id": "BIB-C183F58E98DA",
+      "code": "BIB-32-8E98DA",
+      "title": "ACTA REUNIÓN EQUIPO INVESTIGADOR",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        32,
+        33,
+        59
+      ],
+      "primary_standard": 32,
+      "folder": "32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL",
+      "module": "Investigación de eventos",
+      "route": "/hallazgos",
+      "content": "content/BIB-C183F58E98DA.html",
+      "sha256": "32ea3680ea6f31c9a4cdf1efb0cdb7de2c4f81f5bb24f4340e6f1b7553595778",
+      "bytes": 24873,
+      "original_name": "ACTA REUNIÓN EQUIPO INVESTIGADOR.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL/ACTA REUNIÓN EQUIPO INVESTIGADOR.docx",
+          "zip_index": 139
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 250,
+        "tables": 11,
+        "images": 0,
+        "characters": 3163
+      },
+      "status": "revisado",
+      "number": 54,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-8366DD7B4967",
+      "code": "BIB-32-7B4967",
+      "title": "INVESTIGACIÓN DE A.T.",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        32,
+        33,
+        59
+      ],
+      "primary_standard": 32,
+      "folder": "32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL",
+      "module": "Investigación de eventos",
+      "route": "/hallazgos",
+      "content": "forms/BIB-8366DD7B4967.json",
+      "sha256": "23545dcae891922c6ea16e28023fcca4e60ac001a011dfbac4ba5583f6b60edb",
+      "bytes": 569478,
+      "original_name": "INVESTIGACIÓN DE A.T..xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL/INVESTIGACIÓN DE A.T..xlsx",
+          "zip_index": 135
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Combinación extensa C37:BI37 en 2 PARTE; revise el original.",
+        "Combinación extensa C54:BI54 en 2 PARTE; revise el original.",
+        "Combinación extensa C35:BI36 en 2 PARTE; revise el original.",
+        "Combinación extensa C34:BI34 en 2 PARTE; revise el original.",
+        "Combinación extensa C49:BI53 en 2 PARTE; revise el original.",
+        "Combinación extensa C48:BI48 en 2 PARTE; revise el original.",
+        "Combinación extensa C16:BI16 en 2 PARTE; revise el original.",
+        "Combinación extensa C3:BI15 en 2 PARTE; revise el original.",
+        "Combinación extensa C2:BI2 en 2 PARTE; revise el original."
+      ],
+      "stats": {
+        "sheets": 2,
+        "cells": 359,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 55,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-A7D711000D11",
+      "code": "BIB-32-000D11",
+      "title": "INVESTIGACIÓN DE E.L",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        32,
+        33,
+        59
+      ],
+      "primary_standard": 32,
+      "folder": "32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL",
+      "module": "Investigación de eventos",
+      "route": "/hallazgos",
+      "content": "forms/BIB-A7D711000D11.json",
+      "sha256": "086453482b692b5cc6106bc4f94b81427dd04eb81dbe28e57a90f6d95d181b79",
+      "bytes": 368898,
+      "original_name": "INVESTIGACIÓN DE E.L.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL/INVESTIGACIÓN DE E.L.xlsx",
+          "zip_index": 143
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Combinación extensa C3:BH10 en 2 PARTE; revise el original.",
+        "Combinación extensa C11:BH11 en 2 PARTE; revise el original.",
+        "Combinación extensa C12:BH27 en 2 PARTE; revise el original.",
+        "Combinación extensa C63:BH63 en 2 PARTE; revise el original.",
+        "Combinación extensa C2:BH2 en 2 PARTE; revise el original.",
+        "Combinación extensa C28:BH28 en 2 PARTE; revise el original.",
+        "Combinación extensa C57:BH57 en 2 PARTE; revise el original.",
+        "Combinación extensa C45:BH45 en 2 PARTE; revise el original.",
+        "Combinación extensa C58:BH62 en 2 PARTE; revise el original."
+      ],
+      "stats": {
+        "sheets": 2,
+        "cells": 240,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 56,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-929C3AF88F3F",
+      "code": "BIB-32-F88F3F",
+      "title": "INVESTIGACIÓN DE I.T.",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        32,
+        33,
+        59
+      ],
+      "primary_standard": 32,
+      "folder": "32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL",
+      "module": "Investigación de eventos",
+      "route": "/hallazgos",
+      "content": "forms/BIB-929C3AF88F3F.json",
+      "sha256": "b516463bec4b0c1a6b3e36bab8f669550a6e61647c1fe800a9b42b442c3a7546",
+      "bytes": 455628,
+      "original_name": "INVESTIGACIÓN DE I.T..xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL/INVESTIGACIÓN DE I.T..xlsx",
+          "zip_index": 133
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Combinación extensa C12:BI27 en 2 PARTE; revise el original.",
+        "Combinación extensa C63:BI63 en 2 PARTE; revise el original.",
+        "Combinación extensa C28:BI28 en 2 PARTE; revise el original.",
+        "Combinación extensa C45:BI45 en 2 PARTE; revise el original.",
+        "Combinación extensa C58:BI62 en 2 PARTE; revise el original.",
+        "Combinación extensa C3:BI10 en 2 PARTE; revise el original.",
+        "Combinación extensa C57:BI57 en 2 PARTE; revise el original.",
+        "Combinación extensa C2:BI2 en 2 PARTE; revise el original.",
+        "Combinación extensa C11:BI11 en 2 PARTE; revise el original."
+      ],
+      "stats": {
+        "sheets": 2,
+        "cells": 293,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 57,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-D0F89E0ECC65",
+      "code": "BIB-32-0ECC65",
+      "title": "PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE ENFERMEDAD LABORAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        32,
+        33,
+        59
+      ],
+      "primary_standard": 32,
+      "folder": "32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL",
+      "module": "Investigación de eventos",
+      "route": "/hallazgos",
+      "content": "content/BIB-D0F89E0ECC65.html",
+      "sha256": "f051ae8e6138292978565c397c0c0fb7867c710c9ae8e9d9c768e1efddfda558",
+      "bytes": 51936,
+      "original_name": "PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE ENFERMEDAD LABORAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL/PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE ENFERMEDAD LABORAL.docx",
+          "zip_index": 145
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 84,
+        "tables": 2,
+        "images": 0,
+        "characters": 15434
+      },
+      "status": "revisado",
+      "number": 58,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-50DD4B274F25",
+      "code": "BIB-32-274F25",
+      "title": "PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE INCIDENTE Y ACCIDENTE LABORAL",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        32,
+        33,
+        59
+      ],
+      "primary_standard": 32,
+      "folder": "32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL",
+      "module": "Investigación de eventos",
+      "route": "/hallazgos",
+      "content": "content/BIB-50DD4B274F25.html",
+      "sha256": "75d2af0240c2579158cfb9b03e74434c922d11c80b9f34aaaf6bdaf3921a0748",
+      "bytes": 77824,
+      "original_name": "PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE INCIDENTE Y ACCIDENTE LABORAL.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL/PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE INCIDENTE Y ACCIDENTE LABORAL.doc",
+          "zip_index": 141
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 11273
+      },
+      "status": "revisado",
+      "number": 59,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-C1F9D71DB780",
+      "code": "BIB-32-1DB780",
+      "title": "RECOLECCIÓN DE EVIDENCIAS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        32,
+        33,
+        59
+      ],
+      "primary_standard": 32,
+      "folder": "32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL",
+      "module": "Investigación de eventos",
+      "route": "/hallazgos",
+      "content": "content/BIB-C1F9D71DB780.html",
+      "sha256": "54cf3af710ce484f2815b63f1bc29d6b8ec0180de9879b1f6558bbcf4482bd9c",
+      "bytes": 27430,
+      "original_name": "RECOLECCIÓN DE EVIDENCIAS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/32, 33 Y 59-REPORTE E INVESTIGACIÓN DE INCIDENTE, ACCIDENTE Y ENFERMEDAD LABORAL/RECOLECCIÓN DE EVIDENCIAS.docx",
+          "zip_index": 137
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 64,
+        "tables": 3,
+        "images": 0,
+        "characters": 4907
+      },
+      "status": "revisado",
+      "number": 60,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-8A4832B347C8",
+      "code": "BIB-34-B347C8",
+      "title": "FICHA DE INDICADORES",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        53
+      ],
+      "primary_standard": 34,
+      "folder": "34 AL 40 Y 53-INDICADORES",
+      "module": "Indicadores",
+      "route": "/indicadores",
+      "content": "forms/BIB-8A4832B347C8.json",
+      "sha256": "21548d6a3265eafc697ce0765a88377f53878c8ded417d559a512774e5350099",
+      "bytes": 101308,
+      "original_name": "FICHA DE INDICADORES.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/34 AL 40 Y 53-INDICADORES/FICHA DE INDICADORES.xlsx",
+          "zip_index": 256
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Combinación extensa I116:BO117 en RESOLUCIÓN 0312-2019; revise el original.",
+        "Combinación extensa I59:BO60 en RESOLUCIÓN 0312-2019; revise el original.",
+        "Combinación extensa I181:BP182 en RESOLUCIÓN 0312-2019; revise el original.",
+        "Combinación extensa I153:BO154 en RESOLUCIÓN 0312-2019; revise el original.",
+        "Combinación extensa I30:BO31 en RESOLUCIÓN 0312-2019; revise el original.",
+        "Combinación extensa I2:BO3 en RESOLUCIÓN 0312-2019; revise el original.",
+        "Combinación extensa I87:BP88 en RESOLUCIÓN 0312-2019; revise el original.",
+        "Combinación extensa I214:BP215 en RESOLUCIÓN 0312-2019; revise el original.",
+        "RESOLUCIÓN 0312-2019: 0 imagen(es) y 8 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 2,
+        "cells": 1896,
+        "formulas": 216
+      },
+      "status": "revisado",
+      "number": 61,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-1F80F65A5F49",
+      "code": "BIB-04-5A5F49",
+      "title": "AFILIACION AL SISTEMA DE SEGURIDAD SOCIAL INTEGRAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        4
+      ],
+      "primary_standard": 4,
+      "folder": "4-AFILIACIÓN AL SISTEMA DE SEGURIDAD SOCIAL INTEGRAL",
+      "module": "Equipo y afiliaciones",
+      "route": "/equipo",
+      "content": "content/BIB-1F80F65A5F49.html",
+      "sha256": "f098a0fff68d0a62603e0709025140f29718ea16d24aa9616063f532b60d3613",
+      "bytes": 13813,
+      "original_name": "AFILIACION AL SISTEMA DE SEGURIDAD SOCIAL INTEGRAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/4-AFILIACIÓN AL SISTEMA DE SEGURIDAD SOCIAL INTEGRAL/AFILIACION AL SISTEMA DE SEGURIDAD SOCIAL INTEGRAL.docx",
+          "zip_index": 89
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 6,
+        "tables": 0,
+        "images": 0,
+        "characters": 311
+      },
+      "status": "revisado",
+      "number": 62,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-5DA1F619B9E2",
+      "code": "BIB-41-19B9E2",
+      "title": "PROCEDIMIENTO PARA LA IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE RIESGOS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        41,
+        47
+      ],
+      "primary_standard": 41,
+      "folder": "41-METODOLOGÍA PARA IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE LOS RIESGOS",
+      "module": "Matriz IPEVR",
+      "route": "/matriz-ipevr",
+      "content": "content/BIB-5DA1F619B9E2.html",
+      "sha256": "f8aec18f0b212534f6f78d8353223d8c896cd9a81b0d05361c382f7b3e0ba1ef",
+      "bytes": 59515,
+      "original_name": "PROCEDIMIENTO PARA LA IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE RIESGOS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/41-METODOLOGÍA PARA IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE LOS RIESGOS/PROCEDIMIENTO PARA LA IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE RIESGOS.docx",
+          "zip_index": 197
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO PARA LA IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE RIESGOS.docx",
+          "zip_index": 318
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [
+        "3 elemento(s) gráfico(s) se conservan en el original; la versión editable reproduce texto y tablas."
+      ],
+      "stats": {
+        "paragraphs": 215,
+        "tables": 11,
+        "images": 3,
+        "characters": 21683
+      },
+      "status": "revisado",
+      "number": 63,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-871FBA8CCD66",
+      "code": "BIB-42-8CCD66",
+      "title": "EJEMPLOS DE MEDIDAS DE INTERVENCIÓN Y CONTROLES EXISTENTES",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        42
+      ],
+      "primary_standard": 42,
+      "folder": "42-IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE LOS RIESGOS",
+      "module": "Matriz IPEVR",
+      "route": "/matriz-ipevr",
+      "content": "forms/BIB-871FBA8CCD66.json",
+      "sha256": "7153e9fdb6585eb8c3a9f23a56b20a1aa15ede1884e0a1f81bc785341abfc13e",
+      "bytes": 21101,
+      "original_name": "EJEMPLOS DE MEDIDAS DE INTERVENCIÓN Y CONTROLES EXISTENTES.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/42-IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE LOS RIESGOS/EJEMPLOS DE MEDIDAS DE INTERVENCIÓN Y CONTROLES EXISTENTES.xlsx",
+          "zip_index": 79
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "CONTROLES EXISTENTES: 1 imagen(es) y 0 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 2,
+        "cells": 58,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 64,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-FDC61B131CCE",
+      "code": "BIB-42-131CCE",
+      "title": "ENCUESTA DE PELIGROS REALIZADA A TRABAJADORES",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        42
+      ],
+      "primary_standard": 42,
+      "folder": "42-IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE LOS RIESGOS",
+      "module": "Matriz IPEVR",
+      "route": "/matriz-ipevr",
+      "content": "forms/BIB-FDC61B131CCE.json",
+      "sha256": "c50f861cbff86f26a30bb6d3b70baa9d961673a22e3c9f9694bf2500231c0866",
+      "bytes": 11323,
+      "original_name": "ENCUESTA DE PELIGROS REALIZADA A TRABAJADORES.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/42-IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE LOS RIESGOS/ENCUESTA DE PELIGROS REALIZADA A TRABAJADORES.xlsx",
+          "zip_index": 81
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 10,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 65,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-38377A8FDBC5",
+      "code": "BIB-42-8FDBC5",
+      "title": "FORMATO RECOLECCIÓN DE DATOS PARA ELABORAR LA MATRIZ",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        42
+      ],
+      "primary_standard": 42,
+      "folder": "42-IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE LOS RIESGOS",
+      "module": "Matriz IPEVR",
+      "route": "/matriz-ipevr",
+      "content": "forms/BIB-38377A8FDBC5.json",
+      "sha256": "1370be7b3e49a48ff6f8571743e4c0cae8f2e9b93dba2644cbb319a299d30d07",
+      "bytes": 12397,
+      "original_name": "FORMATO RECOLECCIÓN DE DATOS PARA ELABORAR LA MATRIZ.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/42-IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE LOS RIESGOS/FORMATO RECOLECCIÓN DE DATOS PARA ELABORAR LA MATRIZ.xlsx",
+          "zip_index": 77
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 148,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 66,
+      "phase": "Hacer",
+      "document_type": "Matriz"
+    },
+    {
+      "id": "BIB-3E43561BB189",
+      "code": "BIB-42-1BB189",
+      "title": "MATRIZ IPEVR",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        42
+      ],
+      "primary_standard": 42,
+      "folder": "42-IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE LOS RIESGOS",
+      "module": "Matriz IPEVR",
+      "route": "/matriz-ipevr",
+      "content": "forms/BIB-3E43561BB189.json",
+      "sha256": "64225ba2c1a7dd28c3274dec06ba6637c79a68d7083161baadf3413a7b76c87f",
+      "bytes": 296864,
+      "original_name": "MATRIZ IPEVR.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/42-IDENTIFICACIÓN DE PELIGROS, EVALUACIÓN Y VALORACIÓN DE LOS RIESGOS/MATRIZ IPEVR.xlsx",
+          "zip_index": 83
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 4,
+        "cells": 1279,
+        "formulas": 292
+      },
+      "status": "revisado",
+      "number": 67,
+      "phase": "Hacer",
+      "document_type": "Matriz"
+    },
+    {
+      "id": "BIB-83482A3DE19E",
+      "code": "BIB-43-3DE19E",
+      "title": "MATRIZ DE COMPATIBILIDAD DE SUSTANCIAS QUÍMICAS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        43
+      ],
+      "primary_standard": 43,
+      "folder": "43-IDENTI DE SUSTANCIAS CATALOGADAS COMO CARCINÓGENAS O CON TOXICIDAD AGUDA",
+      "module": "Matriz IPEVR",
+      "route": "/matriz-ipevr",
+      "content": "forms/BIB-83482A3DE19E.json",
+      "sha256": "ef0b679fb34a28c50759e0751fb57cf7a9b4fe1bda61eb5ce426e77903fee84c",
+      "bytes": 75293,
+      "original_name": "MATRIZ DE COMPATIBILIDAD DE SUSTANCIAS QUÍMICAS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/43-IDENTI DE SUSTANCIAS CATALOGADAS COMO CARCINÓGENAS O CON TOXICIDAD AGUDA/MATRIZ DE COMPATIBILIDAD DE SUSTANCIAS QUÍMICAS.xlsx",
+          "zip_index": 51
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "MATRIZ DE COMPATIBILIDAD: 26 imagen(es) y 0 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 49,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 68,
+      "phase": "Hacer",
+      "document_type": "Matriz"
+    },
+    {
+      "id": "BIB-E46464CE0F01",
+      "code": "BIB-43-CE0F01",
+      "title": "SUSTANCIAS CARCINÓGENAS O CON TOXICIDAD AGUDA",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        43
+      ],
+      "primary_standard": 43,
+      "folder": "43-IDENTI DE SUSTANCIAS CATALOGADAS COMO CARCINÓGENAS O CON TOXICIDAD AGUDA",
+      "module": "Matriz IPEVR",
+      "route": "/matriz-ipevr",
+      "content": "forms/BIB-E46464CE0F01.json",
+      "sha256": "585d5e3650f7d0b2d59936729bb78292f16b0462b55ec015cd27378742714bf7",
+      "bytes": 15001,
+      "original_name": "SUSTANCIAS CARCINÓGENAS O CON TOXICIDAD AGUDA.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/43-IDENTI DE SUSTANCIAS CATALOGADAS COMO CARCINÓGENAS O CON TOXICIDAD AGUDA/SUSTANCIAS CARCINÓGENAS O CON TOXICIDAD AGUDA.xlsx",
+          "zip_index": 49
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 34,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 69,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-0295A1478D0F",
+      "code": "BIB-44-478D0F",
+      "title": "MEDICIONES AMBIENTALES",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        44
+      ],
+      "primary_standard": 44,
+      "folder": "44-MEDICIONES AMBIENTALES",
+      "module": "Matriz IPEVR",
+      "route": "/matriz-ipevr",
+      "content": "content/BIB-0295A1478D0F.html",
+      "sha256": "1c72377fb432fa1e062507c1f77c583f3d586c5cb7038cabd35db4482da923d3",
+      "bytes": 12062,
+      "original_name": "MEDICIONES AMBIENTALES.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/44-MEDICIONES AMBIENTALES/MEDICIONES AMBIENTALES.docx",
+          "zip_index": 193
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 1,
+        "tables": 0,
+        "images": 0,
+        "characters": 207
+      },
+      "status": "revisado",
+      "number": 70,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-256B8F8FDFE9",
+      "code": "BIB-45-8FDFE9",
+      "title": "MEDIDAS DE PREV Y CONTROL FRENTE A PELIGROS Y RIESGOS IDENT",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        45,
+        46
+      ],
+      "primary_standard": 45,
+      "folder": "45 Y 46-MEDIDAS DE PREVENCIÓN Y CONTROL FRENTE A PELIGROS Y RIESGOS IDENTIFICADOS Y VERIFICACIÓN DE APLICACIÓN",
+      "module": "Controles operacionales",
+      "route": "/procedimientos",
+      "content": "forms/BIB-256B8F8FDFE9.json",
+      "sha256": "74e00aa963ab79357ed0847cad433ea817fbe18c73a2baac076640451aa39bf4",
+      "bytes": 15384,
+      "original_name": "MEDIDAS DE PREV Y CONTROL FRENTE A PELIGROS Y RIESGOS IDENT.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/45 Y 46-MEDIDAS DE PREVENCIÓN Y CONTROL FRENTE A PELIGROS Y RIESGOS IDENTIFICADOS Y VERIFICACIÓN DE APLICACIÓN/MEDIDAS DE PREV Y CONTROL FRENTE A PELIGROS Y RIESGOS IDENT.xlsx",
+          "zip_index": 203
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 50,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 71,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-4A772E8F400E",
+      "code": "BIB-47-8F400E",
+      "title": "MANUAL DEL SG-SST",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-4A772E8F400E.html",
+      "sha256": "50d98f6a6523f2fb39f3bcaf10152435223c81b55f950edd95c3a9ef240c6717",
+      "bytes": 417280,
+      "original_name": "MANUAL DEL SG-SST.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/MANUAL DEL SG-SST.doc",
+          "zip_index": 322
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 53544
+      },
+      "status": "revisado",
+      "number": 72,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-DCE300CEB67A",
+      "code": "BIB-47-CEB67A",
+      "title": "PROCEDIMIENTO ADQUISICIÓN DE SERVICIOS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-DCE300CEB67A.html",
+      "sha256": "8f1d7245e165f59ffdee97c724cd938474924c5758956c4e745f49cd8859b240",
+      "bytes": 28382,
+      "original_name": "PROCEDIMIENTO ADQUISICIÓN DE SERVICIOS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO ADQUISICIÓN DE SERVICIOS.docx",
+          "zip_index": 306
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 37,
+        "tables": 2,
+        "images": 0,
+        "characters": 4289
+      },
+      "status": "revisado",
+      "number": 73,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-531AC973C412",
+      "code": "BIB-47-73C412",
+      "title": "PROCEDIMIENTO DE AUDITORIA INTERNA-EXTERNA",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-531AC973C412.html",
+      "sha256": "8fe073b877d31d2f85210bf66fcd35ec9d0bec9a384f1623ae9617deaa772258",
+      "bytes": 81408,
+      "original_name": "PROCEDIMIENTO DE AUDITORIA INTERNA-EXTERNA.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO DE AUDITORIA INTERNA-EXTERNA.doc",
+          "zip_index": 282
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 6915
+      },
+      "status": "revisado",
+      "number": 74,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-9EC5CF8003FB",
+      "code": "BIB-47-8003FB",
+      "title": "PROCEDIMIENTO DE INSPECCIONES",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47,
+        48
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-9EC5CF8003FB.html",
+      "sha256": "55f88e3554487c35585434db7a7cfdb7ae94d02f36a1e26e20fb4eb5367e8d2f",
+      "bytes": 25896,
+      "original_name": "PROCEDIMIENTO DE INSPECCIONES.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO DE INSPECCIONES.docx",
+          "zip_index": 296
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS/PROCEDIMIENTO DE INSPECCIONES.docx",
+          "zip_index": 173
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 76,
+        "tables": 2,
+        "images": 0,
+        "characters": 7446
+      },
+      "status": "revisado",
+      "number": 75,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-FBD2F5E7FC28",
+      "code": "BIB-47-E7FC28",
+      "title": "PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE ENFERMEDAD LABORAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-FBD2F5E7FC28.html",
+      "sha256": "0e686e14e94a8c048690f47fbae08fc841656da2be1df3da574e07364b60330d",
+      "bytes": 51830,
+      "original_name": "PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE ENFERMEDAD LABORAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE ENFERMEDAD LABORAL.docx",
+          "zip_index": 314
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 84,
+        "tables": 2,
+        "images": 0,
+        "characters": 15404
+      },
+      "status": "revisado",
+      "number": 76,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-DDBF0B0E8671",
+      "code": "BIB-47-0E8671",
+      "title": "PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE INCIDENTE Y ACCIDENTE LABORAL",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-DDBF0B0E8671.html",
+      "sha256": "a13c94652de1b511a60678d4714dcb311b313bc19e54d5f22f8576c98e83ceaf",
+      "bytes": 77312,
+      "original_name": "PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE INCIDENTE Y ACCIDENTE LABORAL.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO DE REPORTE E INVESTIGACIÓN DE INCIDENTE Y ACCIDENTE LABORAL.doc",
+          "zip_index": 280
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 10823
+      },
+      "status": "revisado",
+      "number": 77,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-82D5DD295C57",
+      "code": "BIB-47-295C57",
+      "title": "PROCEDIMIENTO DE REVISIÓN POR LA ALTA DIRECCIÓN",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-82D5DD295C57.html",
+      "sha256": "057539c321768d9a623d4d54fbcd2fc0ad4c5d3615f3766460c4bc528e6ceb72",
+      "bytes": 22663,
+      "original_name": "PROCEDIMIENTO DE REVISIÓN POR LA ALTA DIRECCIÓN.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO DE REVISIÓN POR LA ALTA DIRECCIÓN.docx",
+          "zip_index": 320
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 63,
+        "tables": 1,
+        "images": 0,
+        "characters": 6090
+      },
+      "status": "revisado",
+      "number": 78,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-8CECFDBA5A28",
+      "code": "BIB-47-BA5A28",
+      "title": "PROCEDIMIENTO ELABORACIÓN Y CONTROL DE DOCUMENTOS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-8CECFDBA5A28.html",
+      "sha256": "0ab8636ce2e0a50ce3227766906ae8cc0dcbfd3e10c4777cf5adf8326c4f366c",
+      "bytes": 37831,
+      "original_name": "PROCEDIMIENTO ELABORACIÓN Y CONTROL DE DOCUMENTOS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO ELABORACIÓN Y CONTROL DE DOCUMENTOS.docx",
+          "zip_index": 312
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 182,
+        "tables": 4,
+        "images": 0,
+        "characters": 7601
+      },
+      "status": "revisado",
+      "number": 79,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-1364C3547054",
+      "code": "BIB-47-547054",
+      "title": "PROCEDIMIENTO EXAMENES MEDICO OCUPACIONALES",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-1364C3547054.html",
+      "sha256": "0cb39f8db57d4e9ede982cfacbcd6030674cd71555697f30d5e4cf82b30dd3d8",
+      "bytes": 31551,
+      "original_name": "PROCEDIMIENTO EXAMENES MEDICO OCUPACIONALES.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO EXAMENES MEDICO OCUPACIONALES.docx",
+          "zip_index": 290
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 176,
+        "tables": 1,
+        "images": 0,
+        "characters": 16053
+      },
+      "status": "revisado",
+      "number": 80,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-0EAFED100BFF",
+      "code": "BIB-47-100BFF",
+      "title": "PROCEDIMIENTO MANIPULACIÓN MANUAL DE CARGAS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-0EAFED100BFF.html",
+      "sha256": "3ef20420b890cca3df0e0f2ec730b430d39d11af77dbfe98f3e8060ccb0bf354",
+      "bytes": 196490,
+      "original_name": "PROCEDIMIENTO MANIPULACIÓN MANUAL DE CARGAS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO MANIPULACIÓN MANUAL DE CARGAS.docx",
+          "zip_index": 298
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 104,
+        "tables": 1,
+        "images": 0,
+        "characters": 6028
+      },
+      "status": "revisado",
+      "number": 81,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-9926FB3C2B46",
+      "code": "BIB-47-3C2B46",
+      "title": "PROCEDIMIENTO MEDIDAS PREVENTIVAS Y CORRECTIVAS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47,
+        57
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-9926FB3C2B46.html",
+      "sha256": "65903789eea3fb094bde306d3ccba83a30dfda0d04c4af2065121586e75885ca",
+      "bytes": 42804,
+      "original_name": "PROCEDIMIENTO MEDIDAS PREVENTIVAS Y CORRECTIVAS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROCEDIMIENTO MEDIDAS PREVENTIVAS Y CORRECTIVAS.docx",
+          "zip_index": 276
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/57-ACCIONES PREVENTIVAS O CORRECTIVAS/PROCEDIMIENTO MEDIDAS PREVENTIVAS Y CORRECTIVAS.docx",
+          "zip_index": 127
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 33,
+        "tables": 2,
+        "images": 0,
+        "characters": 3889
+      },
+      "status": "revisado",
+      "number": 82,
+      "phase": "Hacer",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-52CE9E675F4C",
+      "code": "BIB-47-675F4C",
+      "title": "PROGRAMA DE AUDITORIA",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-52CE9E675F4C.html",
+      "sha256": "5614f87674adfd1c3d483ae8c96408c44e0260c23856dc700df9900753b6f9d4",
+      "bytes": 25494,
+      "original_name": "PROGRAMA DE AUDITORIA.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROGRAMA DE AUDITORIA.docx",
+          "zip_index": 310
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 141,
+        "tables": 1,
+        "images": 0,
+        "characters": 8695
+      },
+      "status": "revisado",
+      "number": 83,
+      "phase": "Hacer",
+      "document_type": "Programa"
+    },
+    {
+      "id": "BIB-68DBE76C4F5D",
+      "code": "BIB-47-6C4F5D",
+      "title": "PROGRAMA DE CAPACITACION",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-68DBE76C4F5D.html",
+      "sha256": "95c7e3c6dbccb7e690714321a6235964f6f644543ec36deecc5c1089004f7153",
+      "bytes": 23296,
+      "original_name": "PROGRAMA DE CAPACITACION.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROGRAMA DE CAPACITACION.docx",
+          "zip_index": 294
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 67,
+        "tables": 1,
+        "images": 0,
+        "characters": 5969
+      },
+      "status": "revisado",
+      "number": 84,
+      "phase": "Hacer",
+      "document_type": "Programa"
+    },
+    {
+      "id": "BIB-AC831F752888",
+      "code": "BIB-47-752888",
+      "title": "PROGRAMA DE INSPECCIONES",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-AC831F752888.html",
+      "sha256": "3716599ab8fa1e7dcc9a0a5534b0df2601ffea2eebd63ab4018102d3e42b6b08",
+      "bytes": 25353,
+      "original_name": "PROGRAMA DE INSPECCIONES.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROGRAMA DE INSPECCIONES.docx",
+          "zip_index": 304
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 75,
+        "tables": 2,
+        "images": 0,
+        "characters": 6611
+      },
+      "status": "revisado",
+      "number": 85,
+      "phase": "Hacer",
+      "document_type": "Programa"
+    },
+    {
+      "id": "BIB-E4C72F00025F",
+      "code": "BIB-47-00025F",
+      "title": "PROGRAMA ESTILO DE VIDA Y ENTORNO SALUDABLE",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-E4C72F00025F.html",
+      "sha256": "955465ad4dc4f7383995976afa583f62880e729dc4f99a86887ecceb4c2dd815",
+      "bytes": 31745,
+      "original_name": "PROGRAMA ESTILO DE VIDA Y ENTORNO SALUDABLE.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROGRAMA ESTILO DE VIDA Y ENTORNO SALUDABLE.docx",
+          "zip_index": 300
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 104,
+        "tables": 1,
+        "images": 0,
+        "characters": 8583
+      },
+      "status": "revisado",
+      "number": 86,
+      "phase": "Hacer",
+      "document_type": "Programa"
+    },
+    {
+      "id": "BIB-01E888F8EBA7",
+      "code": "BIB-47-F8EBA7",
+      "title": "PROGRAMA MANTENIMIENTO DE INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47,
+        49
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-01E888F8EBA7.html",
+      "sha256": "4ad2be5587f0de584613a02ee774aa5ecbb5ae53349db4034926ab9f356d83b7",
+      "bytes": 24996,
+      "original_name": "PROGRAMA MANTENIMIENTO DE INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/PROGRAMA MANTENIMIENTO DE INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS.docx",
+          "zip_index": 292
+        },
+        {
+          "path": "SG-SST POR ESTANDARES-V/49-MANTE PERIODICO DE LAS INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS/PROGRAMA MANTENIMIENTO DE INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS.docx",
+          "zip_index": 157
+        }
+      ],
+      "duplicate_entries": 1,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 68,
+        "tables": 1,
+        "images": 0,
+        "characters": 7848
+      },
+      "status": "revisado",
+      "number": 87,
+      "phase": "Hacer",
+      "document_type": "Programa"
+    },
+    {
+      "id": "BIB-77A2ED52DFCD",
+      "code": "BIB-47-52DFCD",
+      "title": "REGLAMENTO DE HIGIENE Y SEGURIDAD INDUSTRIAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        47
+      ],
+      "primary_standard": 47,
+      "folder": "47-PROCEDIMIENTOS INTERNOS EN SST",
+      "module": "Procedimientos",
+      "route": "/procedimientos",
+      "content": "content/BIB-77A2ED52DFCD.html",
+      "sha256": "0841df8159657c44cecf15cd3b3a409a17d6b408c4e378e98613d0630d2b0a00",
+      "bytes": 25428,
+      "original_name": "REGLAMENTO DE HIGIENE Y SEGURIDAD INDUSTRIAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/47-PROCEDIMIENTOS INTERNOS EN SST/REGLAMENTO DE HIGIENE Y SEGURIDAD INDUSTRIAL.docx",
+          "zip_index": 302
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 102,
+        "tables": 3,
+        "images": 0,
+        "characters": 7988
+      },
+      "status": "revisado",
+      "number": 88,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-FFB13A2879F1",
+      "code": "BIB-48-2879F1",
+      "title": "HALLAZGOS Y RECOMENDACIONES INSPECCION INSTALACIONES, ORDEN Y ASEO",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        48
+      ],
+      "primary_standard": 48,
+      "folder": "48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS",
+      "module": "Inspecciones",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-FFB13A2879F1.html",
+      "sha256": "e8d2144ea22b979e544f5ca5d8e78f54edad347fb1b57c5496eb530ec057a5bd",
+      "bytes": 18601,
+      "original_name": "HALLAZGOS Y RECOMENDACIONES INSPECCION INSTALACIONES, ORDEN Y ASEO.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS/HALLAZGOS Y RECOMENDACIONES INSPECCION INSTALACIONES, ORDEN Y ASEO.docx",
+          "zip_index": 177
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 11,
+        "tables": 2,
+        "images": 0,
+        "characters": 1250
+      },
+      "status": "revisado",
+      "number": 89,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-4D3936297438",
+      "code": "BIB-48-297438",
+      "title": "INSPECCION BIOMECÁNICA",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        48
+      ],
+      "primary_standard": 48,
+      "folder": "48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS",
+      "module": "Inspecciones",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-4D3936297438.json",
+      "sha256": "2cb467dd123f5270d4d42f978f2aebb6038c2fd9d7e572153425592607a58864",
+      "bytes": 18690,
+      "original_name": "INSPECCION BIOMECÁNICA.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS/INSPECCION BIOMECÁNICA.xlsx",
+          "zip_index": 171
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 172,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 90,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-A9F4E8FDFB1D",
+      "code": "BIB-48-FDFB1D",
+      "title": "INSPECCION DE EXTINTORES",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        48
+      ],
+      "primary_standard": 48,
+      "folder": "48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS",
+      "module": "Inspecciones",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-A9F4E8FDFB1D.json",
+      "sha256": "f9152ca62432d113d48bd94bb9ff41b2b139e152146ab2c6a7b6c4e62528c607",
+      "bytes": 12258,
+      "original_name": "INSPECCION DE EXTINTORES.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS/INSPECCION DE EXTINTORES.xlsx",
+          "zip_index": 167
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 34,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 91,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-6BF9DF9296C6",
+      "code": "BIB-48-9296C6",
+      "title": "INSPECCION DE INSTALACIONES ORDEN Y ASEO",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        48
+      ],
+      "primary_standard": 48,
+      "folder": "48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS",
+      "module": "Inspecciones",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-6BF9DF9296C6.json",
+      "sha256": "f1ff480cc0e6bcc527cd2f8cdc6bd61523ceb98dcd102f5dcfd7807102d29f7b",
+      "bytes": 27308,
+      "original_name": "INSPECCION DE INSTALACIONES ORDEN Y ASEO.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS/INSPECCION DE INSTALACIONES ORDEN Y ASEO.xlsx",
+          "zip_index": 165
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 467,
+        "formulas": 1
+      },
+      "status": "revisado",
+      "number": 92,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-4FAA805D12FA",
+      "code": "BIB-48-5D12FA",
+      "title": "INSPECCION PREOPERACIONAL Y LIMPIEZA DE MAQUINAS, EQUIPOS Y HERRAMIENTAS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        48
+      ],
+      "primary_standard": 48,
+      "folder": "48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS",
+      "module": "Inspecciones",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-4FAA805D12FA.json",
+      "sha256": "eead96af611a32c68a6995f320515b8487ed88bbe7912dc36d9e3716eab18181",
+      "bytes": 17111,
+      "original_name": "INSPECCION PREOPERACIONAL Y LIMPIEZA DE MAQUINAS, EQUIPOS Y HERRAMIENTAS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS/INSPECCION PREOPERACIONAL Y LIMPIEZA DE MAQUINAS, EQUIPOS Y HERRAMIENTAS.xlsx",
+          "zip_index": 181
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 124,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 93,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-B77FD8940F84",
+      "code": "BIB-48-940F84",
+      "title": "INSPECCIÓN BOTIQUIN DE EMERGENCIAS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        48
+      ],
+      "primary_standard": 48,
+      "folder": "48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS",
+      "module": "Inspecciones",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-B77FD8940F84.json",
+      "sha256": "c188989d4195ed4e414fe1f46b3de72dd80922d847a2f3111e2c6e5de32f8a45",
+      "bytes": 11246,
+      "original_name": "INSPECCIÓN BOTIQUIN DE EMERGENCIAS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS/INSPECCIÓN BOTIQUIN DE EMERGENCIAS.xlsx",
+          "zip_index": 179
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 57,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 94,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-87455638235E",
+      "code": "BIB-48-38235E",
+      "title": "INSPECCIÓN DE CAMILLAS DE EMERGENCIA",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        48
+      ],
+      "primary_standard": 48,
+      "folder": "48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS",
+      "module": "Inspecciones",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-87455638235E.json",
+      "sha256": "b57b6dbcb5d6eb5f948f92eae1b485d33434560d5be6d60c2e9b7222b14ed8ea",
+      "bytes": 218709,
+      "original_name": "INSPECCIÓN DE CAMILLAS DE EMERGENCIA.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS/INSPECCIÓN DE CAMILLAS DE EMERGENCIA.xlsx",
+          "zip_index": 169
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Hoja1: 1 imagen(es) y 0 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 40,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 95,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-82A9F4528503",
+      "code": "BIB-48-528503",
+      "title": "PLAN ANUAL DE INSPECCIONES",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        48
+      ],
+      "primary_standard": 48,
+      "folder": "48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS",
+      "module": "Inspecciones",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-82A9F4528503.json",
+      "sha256": "bd7fcb1192ee62037f35495efb8bf618f749ac399b0d9b925b34a6646c233bf4",
+      "bytes": 25739,
+      "original_name": "PLAN ANUAL DE INSPECCIONES.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS/PLAN ANUAL DE INSPECCIONES.xlsx",
+          "zip_index": 163
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 238,
+        "formulas": 92
+      },
+      "status": "revisado",
+      "number": 96,
+      "phase": "Hacer",
+      "document_type": "Plan"
+    },
+    {
+      "id": "BIB-3F31833638A2",
+      "code": "BIB-48-3638A2",
+      "title": "PROGRAMA DE INSPECCIONES",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        48
+      ],
+      "primary_standard": 48,
+      "folder": "48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS",
+      "module": "Inspecciones",
+      "route": "/programas-prevencion",
+      "content": "content/BIB-3F31833638A2.html",
+      "sha256": "fa63eb3b8577e4dd73e002dc7318a950486fb2d787d56fbd37545647f624c542",
+      "bytes": 24322,
+      "original_name": "PROGRAMA DE INSPECCIONES.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/48-INSPECCION A INSTALACIONES, MÁQUINAS Y EQUIPOS/PROGRAMA DE INSPECCIONES.docx",
+          "zip_index": 175
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 75,
+        "tables": 2,
+        "images": 0,
+        "characters": 6617
+      },
+      "status": "revisado",
+      "number": 97,
+      "phase": "Hacer",
+      "document_type": "Programa"
+    },
+    {
+      "id": "BIB-E4ABA4717B4D",
+      "code": "BIB-49-717B4D",
+      "title": "HOJA DE VIDA DE MAQUINAS, EQUIPOS Y HERRAMIENTAS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        49
+      ],
+      "primary_standard": 49,
+      "folder": "49-MANTE PERIODICO DE LAS INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS",
+      "module": "Mantenimiento",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-E4ABA4717B4D.json",
+      "sha256": "3c7fc189c8118eac49e1c65501afea4776a64a0a02f64fd34a3e98cd9b73e28b",
+      "bytes": 61416,
+      "original_name": "HOJA DE VIDA DE  MAQUINAS, EQUIPOS Y HERRAMIENTAS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/49-MANTE PERIODICO DE LAS INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS/HOJA DE VIDA DE  MAQUINAS, EQUIPOS Y HERRAMIENTAS.xlsx",
+          "zip_index": 155
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 12,
+        "cells": 301,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 98,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-601BFB2491AF",
+      "code": "BIB-49-2491AF",
+      "title": "PLAN ANUAL DE MANTENIMIENTO PREVENTIVO",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        49
+      ],
+      "primary_standard": 49,
+      "folder": "49-MANTE PERIODICO DE LAS INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS",
+      "module": "Mantenimiento",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-601BFB2491AF.json",
+      "sha256": "6bf7f6583e3ceef8f49cf3cebe653e95dbef2b856760af5f5c6e4b59089e7aa2",
+      "bytes": 182345,
+      "original_name": "PLAN ANUAL DE MANTENIMIENTO PREVENTIVO.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/49-MANTE PERIODICO DE LAS INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS/PLAN ANUAL DE MANTENIMIENTO PREVENTIVO.xlsx",
+          "zip_index": 159
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 12,
+        "cells": 2092,
+        "formulas": 1104
+      },
+      "status": "revisado",
+      "number": 99,
+      "phase": "Hacer",
+      "document_type": "Plan"
+    },
+    {
+      "id": "BIB-1D893CC3198F",
+      "code": "BIB-49-C3198F",
+      "title": "REPORTE DE NOVEDADES DE INSTAL, MAQ, EQUI Y HERRA",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        49
+      ],
+      "primary_standard": 49,
+      "folder": "49-MANTE PERIODICO DE LAS INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS",
+      "module": "Mantenimiento",
+      "route": "/programas-prevencion",
+      "content": "forms/BIB-1D893CC3198F.json",
+      "sha256": "f51267bbababad2362e3a9a41d7f78729d1b1e4bf542d0ee471a1b70701b0035",
+      "bytes": 12416,
+      "original_name": "REPORTE DE NOVEDADES DE INSTAL, MAQ, EQUI Y HERRA.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/49-MANTE PERIODICO DE LAS INSTALACIONES, MAQUINAS, EQUIPOS Y HERRAMIENTAS/REPORTE DE NOVEDADES DE INSTAL, MAQ, EQUI Y HERRA.xlsx",
+          "zip_index": 161
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 19,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 100,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-A2C9469DDA88",
+      "code": "BIB-05-9DDA88",
+      "title": "COTIZACION PENSION ESPECIAL TRABAJADORES DE ALTO RIESGO",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        5
+      ],
+      "primary_standard": 5,
+      "folder": "5-COTIZACION DE PENSIÓN ESPECIAL A TRABAJADORES QUE REALICEN ACTIVIDADES DE ALTO RIESGO",
+      "module": "Equipo y afiliaciones",
+      "route": "/equipo",
+      "content": "content/BIB-A2C9469DDA88.html",
+      "sha256": "03da29b39956ff037aae09f6c1d4943244d59dd5fe9872efe0d3c165cf862b65",
+      "bytes": 12685,
+      "original_name": "COTIZACION PENSION ESPECIAL TRABAJADORES DE ALTO RIESGO.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/5-COTIZACION DE PENSIÓN ESPECIAL A TRABAJADORES QUE REALICEN ACTIVIDADES DE ALTO RIESGO/COTIZACION PENSION ESPECIAL TRABAJADORES DE ALTO RIESGO.docx",
+          "zip_index": 187
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 7,
+        "tables": 0,
+        "images": 0,
+        "characters": 940
+      },
+      "status": "revisado",
+      "number": 101,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-3DF88B4F3370",
+      "code": "BIB-50-4F3370",
+      "title": "DIAPOSITIVA EPP",
+      "extension": "pptx",
+      "kind": "document",
+      "standards": [
+        50
+      ],
+      "primary_standard": 50,
+      "folder": "50-ENTREGA DE ELEMENTOS DE PROTECCIÓN PERSONAL Y CAPACITACIÓN EN USO ADECUADO",
+      "module": "Elementos de protección",
+      "route": "/matriz-ipevr",
+      "content": "content/BIB-3DF88B4F3370.html",
+      "sha256": "e5125abe62c3ff4ff1f0b6a807b7b025ab6ce8fc9f42e5e76594594d667c19dc",
+      "bytes": 4877514,
+      "original_name": "DIAPOSITIVA EPP.pptx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/50-ENTREGA DE ELEMENTOS DE PROTECCIÓN PERSONAL Y CAPACITACIÓN EN USO ADECUADO/DIAPOSITIVA EPP.pptx",
+          "zip_index": 268
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "42 imagen(es) disponible(s) en la presentación original."
+      ],
+      "stats": {
+        "slides": 49,
+        "tables": 0,
+        "images": 42,
+        "characters": 13772
+      },
+      "status": "revisado",
+      "number": 102,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-164220BAD12A",
+      "code": "BIB-50-BAD12A",
+      "title": "ENTREGA DE DOTACIÓN Y EPP",
+      "extension": "xls",
+      "kind": "form",
+      "standards": [
+        50
+      ],
+      "primary_standard": 50,
+      "folder": "50-ENTREGA DE ELEMENTOS DE PROTECCIÓN PERSONAL Y CAPACITACIÓN EN USO ADECUADO",
+      "module": "Elementos de protección",
+      "route": "/matriz-ipevr",
+      "content": "forms/BIB-164220BAD12A.json",
+      "sha256": "5452742c0e26989f4d6c7d253f6cd04a81645607da1d64788d51d7315324ce31",
+      "bytes": 153088,
+      "original_name": "ENTREGA DE DOTACIÓN Y EPP.xls",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/50-ENTREGA DE ELEMENTOS DE PROTECCIÓN PERSONAL Y CAPACITACIÓN EN USO ADECUADO/ENTREGA DE DOTACIÓN Y EPP.xls",
+          "zip_index": 264
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Los archivos XLS heredados conservan valores y estructura; sus fórmulas originales se consultan en el archivo fuente."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 17,
+        "formulas": null
+      },
+      "status": "revisado",
+      "number": 103,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-F1F84B8BAFDF",
+      "code": "BIB-50-8BAFDF",
+      "title": "INSPECCIÓN EPP PREOPERACIONAL",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        50
+      ],
+      "primary_standard": 50,
+      "folder": "50-ENTREGA DE ELEMENTOS DE PROTECCIÓN PERSONAL Y CAPACITACIÓN EN USO ADECUADO",
+      "module": "Elementos de protección",
+      "route": "/matriz-ipevr",
+      "content": "forms/BIB-F1F84B8BAFDF.json",
+      "sha256": "3d65fbe12b1267cab3eb4f86c11e9fdcdb0f64cd1870595c0b3f90b1174bc8cf",
+      "bytes": 177694,
+      "original_name": "INSPECCIÓN EPP PREOPERACIONAL.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/50-ENTREGA DE ELEMENTOS DE PROTECCIÓN PERSONAL Y CAPACITACIÓN EN USO ADECUADO/INSPECCIÓN EPP PREOPERACIONAL.xlsx",
+          "zip_index": 262
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Hoja1: 31 imagen(es) y 0 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 46,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 104,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-72C8459B6F5D",
+      "code": "BIB-50-9B6F5D",
+      "title": "INSPECCIÓN EPP",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        50
+      ],
+      "primary_standard": 50,
+      "folder": "50-ENTREGA DE ELEMENTOS DE PROTECCIÓN PERSONAL Y CAPACITACIÓN EN USO ADECUADO",
+      "module": "Elementos de protección",
+      "route": "/matriz-ipevr",
+      "content": "forms/BIB-72C8459B6F5D.json",
+      "sha256": "4d837c8df3442628c00f5353256b2b5b449baa666836c9266f73bf8dd4a65310",
+      "bytes": 178231,
+      "original_name": "INSPECCIÓN EPP.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/50-ENTREGA DE ELEMENTOS DE PROTECCIÓN PERSONAL Y CAPACITACIÓN EN USO ADECUADO/INSPECCIÓN EPP.xlsx",
+          "zip_index": 260
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Hoja1: 31 imagen(es) y 0 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 42,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 105,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-FCCFF9A40AEC",
+      "code": "BIB-50-A40AEC",
+      "title": "MATRIZ EPP",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        50
+      ],
+      "primary_standard": 50,
+      "folder": "50-ENTREGA DE ELEMENTOS DE PROTECCIÓN PERSONAL Y CAPACITACIÓN EN USO ADECUADO",
+      "module": "Elementos de protección",
+      "route": "/matriz-ipevr",
+      "content": "forms/BIB-FCCFF9A40AEC.json",
+      "sha256": "0a72fdc41bc85dba9d4fb69315cc4d59d5edb0c04a57c6eb2b815d599dc2c364",
+      "bytes": 197289,
+      "original_name": "MATRIZ EPP.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/50-ENTREGA DE ELEMENTOS DE PROTECCIÓN PERSONAL Y CAPACITACIÓN EN USO ADECUADO/MATRIZ EPP.xlsx",
+          "zip_index": 266
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Hoja1: 31 imagen(es) y 0 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 168,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 106,
+      "phase": "Hacer",
+      "document_type": "Matriz"
+    },
+    {
+      "id": "BIB-49BC33154F62",
+      "code": "BIB-51-154F62",
+      "title": "ANÁLISIS DE VULNERABILIDAD",
+      "extension": "xls",
+      "kind": "form",
+      "standards": [
+        51
+      ],
+      "primary_standard": 51,
+      "folder": "51-PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "forms/BIB-49BC33154F62.json",
+      "sha256": "f8e4c20bef769ed7dc8a8dc8f004c5aba6957c93e4c84e7b37bb57c1b1cca2b3",
+      "bytes": 121856,
+      "original_name": "ANÁLISIS DE VULNERABILIDAD.xls",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/51-PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS/ANÁLISIS DE VULNERABILIDAD.xls",
+          "zip_index": 338
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Los archivos XLS heredados conservan valores y estructura; sus fórmulas originales se consultan en el archivo fuente."
+      ],
+      "stats": {
+        "sheets": 6,
+        "cells": 1097,
+        "formulas": null
+      },
+      "status": "revisado",
+      "number": 107,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-F8B76C17232F",
+      "code": "BIB-51-17232F",
+      "title": "LISTA DE CHEQUEO PARA ELABORAR PPPRAE",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        51
+      ],
+      "primary_standard": 51,
+      "folder": "51-PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "content/BIB-F8B76C17232F.html",
+      "sha256": "ee720a384ec03209220ba97f7b3bd148c0b333b446701e35305aa77ef63aeaed",
+      "bytes": 20847,
+      "original_name": "LISTA DE CHEQUEO PARA ELABORAR PPPRAE.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/51-PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS/LISTA DE CHEQUEO PARA ELABORAR PPPRAE.docx",
+          "zip_index": 342
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 83,
+        "tables": 4,
+        "images": 0,
+        "characters": 2729
+      },
+      "status": "revisado",
+      "number": 108,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-59E2C39B18F0",
+      "code": "BIB-51-9B18F0",
+      "title": "MATRIZ CONSOLIDADO DE AMENAZAS",
+      "extension": "xls",
+      "kind": "form",
+      "standards": [
+        51
+      ],
+      "primary_standard": 51,
+      "folder": "51-PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "forms/BIB-59E2C39B18F0.json",
+      "sha256": "bbb8433a0bbd5afa685b13c37011c25f218532962ddda6d4091f2d3e8f7326c4",
+      "bytes": 237568,
+      "original_name": "MATRIZ CONSOLIDADO DE AMENAZAS.xls",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/51-PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS/MATRIZ CONSOLIDADO DE AMENAZAS.xls",
+          "zip_index": 346
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Los archivos XLS heredados conservan valores y estructura; sus fórmulas originales se consultan en el archivo fuente."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 111,
+        "formulas": null
+      },
+      "status": "revisado",
+      "number": 109,
+      "phase": "Hacer",
+      "document_type": "Matriz"
+    },
+    {
+      "id": "BIB-A901F596E1C1",
+      "code": "BIB-51-96E1C1",
+      "title": "MEDEVAC",
+      "extension": "xls",
+      "kind": "form",
+      "standards": [
+        51
+      ],
+      "primary_standard": 51,
+      "folder": "51-PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "forms/BIB-A901F596E1C1.json",
+      "sha256": "2b74cc69a326ffda16fa6f099fbb1e9c0489ee8f068eeab4d1fe2c4c54cff2fe",
+      "bytes": 44032,
+      "original_name": "MEDEVAC.xls",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/51-PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS/MEDEVAC.xls",
+          "zip_index": 340
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Los archivos XLS heredados conservan valores y estructura; sus fórmulas originales se consultan en el archivo fuente."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 21,
+        "formulas": null
+      },
+      "status": "revisado",
+      "number": 110,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-34AD9DD9D030",
+      "code": "BIB-51-D9D030",
+      "title": "PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        51
+      ],
+      "primary_standard": 51,
+      "folder": "51-PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "content/BIB-34AD9DD9D030.html",
+      "sha256": "f272432f9a5335ca0f1c0b6a609136442dc68696503c9349de497b21f4f1f4f2",
+      "bytes": 1148999,
+      "original_name": "PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/51-PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS/PLAN DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIAS.docx",
+          "zip_index": 344
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "31 elemento(s) gráfico(s) se conservan en el original; la versión editable reproduce texto y tablas."
+      ],
+      "stats": {
+        "paragraphs": 933,
+        "tables": 18,
+        "images": 31,
+        "characters": 77258
+      },
+      "status": "revisado",
+      "number": 111,
+      "phase": "Hacer",
+      "document_type": "Plan"
+    },
+    {
+      "id": "BIB-1331EE814586",
+      "code": "BIB-52-814586",
+      "title": "ACTA CONFORMACIÓN BRIGADA Y COMITÉ DE EMERGENCIAS",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        52
+      ],
+      "primary_standard": 52,
+      "folder": "52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "content/BIB-1331EE814586.html",
+      "sha256": "f536790873f8d8892785ac10b5d777394afb91de639b131253e5f3628c9fae73",
+      "bytes": 45568,
+      "original_name": "ACTA CONFORMACIÓN BRIGADA Y COMITÉ DE EMERGENCIAS.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA/ACTA CONFORMACIÓN BRIGADA Y COMITÉ DE EMERGENCIAS.doc",
+          "zip_index": 221
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 1591
+      },
+      "status": "revisado",
+      "number": 112,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-46D84805A3EB",
+      "code": "BIB-52-05A3EB",
+      "title": "EVALUACIÓN SIMULACRO POR PARTE DEL OBSERVADOR",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        52
+      ],
+      "primary_standard": 52,
+      "folder": "52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "content/BIB-46D84805A3EB.html",
+      "sha256": "11d4d637041325375c91c6d7aeb7358c45743460dd8a097e43bd344bc6dc5921",
+      "bytes": 27860,
+      "original_name": "EVALUACIÓN SIMULACRO POR PARTE DEL OBSERVADOR.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA/EVALUACIÓN SIMULACRO POR PARTE DEL OBSERVADOR.docx",
+          "zip_index": 223
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 57,
+        "tables": 11,
+        "images": 0,
+        "characters": 5543
+      },
+      "status": "revisado",
+      "number": 113,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-D824D6823B77",
+      "code": "BIB-52-823B77",
+      "title": "INFORME SIMULACRO REALIZADO O EMERGENCIA REAL PRESENTADA POR PARTE BRIGADISTAS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        52
+      ],
+      "primary_standard": 52,
+      "folder": "52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "content/BIB-D824D6823B77.html",
+      "sha256": "531abd4f152b176e9469c860fb3053e8a4060b3099f80dc474349a3f6265b0bf",
+      "bytes": 27379,
+      "original_name": "INFORME  SIMULACRO REALIZADO O EMERGENCIA REAL PRESENTADA POR PARTE BRIGADISTAS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA/INFORME  SIMULACRO REALIZADO O EMERGENCIA REAL PRESENTADA POR PARTE BRIGADISTAS.docx",
+          "zip_index": 219
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 70,
+        "tables": 2,
+        "images": 0,
+        "characters": 1235
+      },
+      "status": "revisado",
+      "number": 114,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-FF9060D7A797",
+      "code": "BIB-52-D7A797",
+      "title": "INFORME SIMULACRO POR PARTE DEL OBSERVADOR",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        52
+      ],
+      "primary_standard": 52,
+      "folder": "52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "content/BIB-FF9060D7A797.html",
+      "sha256": "333918c0798b17cb240a3b06d38e62f78cbb4ed80daea258f6c01233ed331b52",
+      "bytes": 37658,
+      "original_name": "INFORME SIMULACRO POR PARTE DEL OBSERVADOR.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA/INFORME SIMULACRO POR PARTE DEL OBSERVADOR.docx",
+          "zip_index": 229
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 203,
+        "tables": 16,
+        "images": 0,
+        "characters": 6808
+      },
+      "status": "revisado",
+      "number": 115,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-34D12B9DD0A7",
+      "code": "BIB-52-9DD0A7",
+      "title": "INSCRIPCIÓN BRIGADISTA Y COMITÉ DE EMERGENCIAS",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        52
+      ],
+      "primary_standard": 52,
+      "folder": "52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "content/BIB-34D12B9DD0A7.html",
+      "sha256": "bee70bb5c239aed4cb8f6b5498d87a262b59ba2aeb12f1b6ab2bc96b02a7bd21",
+      "bytes": 47104,
+      "original_name": "INSCRIPCIÓN BRIGADISTA Y COMITÉ DE EMERGENCIAS.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA/INSCRIPCIÓN BRIGADISTA Y COMITÉ DE EMERGENCIAS.doc",
+          "zip_index": 225
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 2742
+      },
+      "status": "revisado",
+      "number": 116,
+      "phase": "Hacer",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-FBF754F823CF",
+      "code": "BIB-52-F823CF",
+      "title": "MANUAL DE FUNCIONES BRIGADA Y COMITÉ DE EMERGENCIAS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        52
+      ],
+      "primary_standard": 52,
+      "folder": "52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "content/BIB-FBF754F823CF.html",
+      "sha256": "73fd6edd37409cf6a1b5418e6328f6171cd9e23506405cf732f197ba282c6b9a",
+      "bytes": 32345,
+      "original_name": "MANUAL DE FUNCIONES BRIGADA Y COMITÉ DE EMERGENCIAS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA/MANUAL DE FUNCIONES BRIGADA Y COMITÉ DE EMERGENCIAS.docx",
+          "zip_index": 227
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 163,
+        "tables": 1,
+        "images": 0,
+        "characters": 12942
+      },
+      "status": "revisado",
+      "number": 117,
+      "phase": "Hacer",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-AACEF40C8BC4",
+      "code": "BIB-52-0C8BC4",
+      "title": "PLANEACIÓN SIMULACRO",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        52
+      ],
+      "primary_standard": 52,
+      "folder": "52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA",
+      "module": "Emergencias",
+      "route": "/emergencias",
+      "content": "content/BIB-AACEF40C8BC4.html",
+      "sha256": "6de80bb69cb05cf37c7ccfdd85afad89a06c706cf33cd757ade38ac9908e26bc",
+      "bytes": 31036,
+      "original_name": "PLANEACIÓN SIMULACRO.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/52-BRIGADA DE PREVENCIÓN, PREPARACIÓN Y RESPUESTA ANTE EMERGENCIA/PLANEACIÓN SIMULACRO.docx",
+          "zip_index": 231
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "5 elemento(s) gráfico(s) se conservan en el original; la versión editable reproduce texto y tablas."
+      ],
+      "stats": {
+        "paragraphs": 13,
+        "tables": 8,
+        "images": 5,
+        "characters": 4090
+      },
+      "status": "revisado",
+      "number": 118,
+      "phase": "Hacer",
+      "document_type": "Plan"
+    },
+    {
+      "id": "BIB-1B7E7C8235B0",
+      "code": "BIB-54-8235B0",
+      "title": "ACTA APERTURA Y CIERRE AUDITORIA",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        54,
+        56
+      ],
+      "primary_standard": 54,
+      "folder": "54 y 56-AUDITORIA ANUAL",
+      "module": "Auditoría anual",
+      "route": "/cumplimiento-documental/gestion?requisito=auditoria_anual",
+      "content": "content/BIB-1B7E7C8235B0.html",
+      "sha256": "b25bcc71545373387f0524472ab8cf7c17fb098b6837bf38ed6eb1e99dc8cd28",
+      "bytes": 44032,
+      "original_name": "ACTA APERTURA Y CIERRE AUDITORIA.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/54 y 56-AUDITORIA ANUAL/ACTA APERTURA Y CIERRE AUDITORIA.doc",
+          "zip_index": 326
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 549
+      },
+      "status": "revisado",
+      "number": 119,
+      "phase": "Verificar",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-1DA2C48916CA",
+      "code": "BIB-54-8916CA",
+      "title": "INFORME DE AUDITORIA",
+      "extension": "xls",
+      "kind": "form",
+      "standards": [
+        54,
+        56
+      ],
+      "primary_standard": 54,
+      "folder": "54 y 56-AUDITORIA ANUAL",
+      "module": "Auditoría anual",
+      "route": "/cumplimiento-documental/gestion?requisito=auditoria_anual",
+      "content": "forms/BIB-1DA2C48916CA.json",
+      "sha256": "614cbe5b2853dbe854fbdac0a143cbcd263418e382f3084142e1e0bec894e218",
+      "bytes": 41984,
+      "original_name": "INFORME DE AUDITORIA.xls",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/54 y 56-AUDITORIA ANUAL/INFORME DE AUDITORIA.xls",
+          "zip_index": 328
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Los archivos XLS heredados conservan valores y estructura; sus fórmulas originales se consultan en el archivo fuente."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 33,
+        "formulas": null
+      },
+      "status": "revisado",
+      "number": 120,
+      "phase": "Verificar",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-1B2430B21000",
+      "code": "BIB-54-B21000",
+      "title": "LISTA DE CHEQUEO DE AUDITORIA",
+      "extension": "xls",
+      "kind": "form",
+      "standards": [
+        54,
+        56
+      ],
+      "primary_standard": 54,
+      "folder": "54 y 56-AUDITORIA ANUAL",
+      "module": "Auditoría anual",
+      "route": "/cumplimiento-documental/gestion?requisito=auditoria_anual",
+      "content": "forms/BIB-1B2430B21000.json",
+      "sha256": "5ba88e0910ba060d8ebb335021a1b78dba335601e6b12a840fed0755d823784b",
+      "bytes": 62976,
+      "original_name": "LISTA DE CHEQUEO DE AUDITORIA.xls",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/54 y 56-AUDITORIA ANUAL/LISTA DE CHEQUEO DE AUDITORIA.xls",
+          "zip_index": 332
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Los archivos XLS heredados conservan valores y estructura; sus fórmulas originales se consultan en el archivo fuente."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 173,
+        "formulas": null
+      },
+      "status": "revisado",
+      "number": 121,
+      "phase": "Verificar",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-A3535F6371CE",
+      "code": "BIB-54-6371CE",
+      "title": "PLAN DE AUDITORIAS",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        54,
+        56
+      ],
+      "primary_standard": 54,
+      "folder": "54 y 56-AUDITORIA ANUAL",
+      "module": "Auditoría anual",
+      "route": "/cumplimiento-documental/gestion?requisito=auditoria_anual",
+      "content": "content/BIB-A3535F6371CE.html",
+      "sha256": "23261d2421e27c9b552d99414c58b457e4f74aa9f851a6db24461709776be8fa",
+      "bytes": 73216,
+      "original_name": "PLAN DE AUDITORIAS.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/54 y 56-AUDITORIA ANUAL/PLAN DE AUDITORIAS.doc",
+          "zip_index": 334
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 883
+      },
+      "status": "revisado",
+      "number": 122,
+      "phase": "Verificar",
+      "document_type": "Plan"
+    },
+    {
+      "id": "BIB-5B3AC61F5ABD",
+      "code": "BIB-54-1F5ABD",
+      "title": "PROCEDIMIENTO DE AUDITORIA INTERNA-EXTERNA",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        54,
+        56
+      ],
+      "primary_standard": 54,
+      "folder": "54 y 56-AUDITORIA ANUAL",
+      "module": "Auditoría anual",
+      "route": "/cumplimiento-documental/gestion?requisito=auditoria_anual",
+      "content": "content/BIB-5B3AC61F5ABD.html",
+      "sha256": "20eee337d45d72ac3bb0f7a6f226f607150ed237227bba5c2815351c5cc038a7",
+      "bytes": 82432,
+      "original_name": "PROCEDIMIENTO DE AUDITORIA INTERNA-EXTERNA.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/54 y 56-AUDITORIA ANUAL/PROCEDIMIENTO DE AUDITORIA INTERNA-EXTERNA.doc",
+          "zip_index": 330
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 6992
+      },
+      "status": "revisado",
+      "number": 123,
+      "phase": "Verificar",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-61CF40C96A7C",
+      "code": "BIB-54-C96A7C",
+      "title": "PROGRAMA DE AUDITORIA",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        54,
+        56
+      ],
+      "primary_standard": 54,
+      "folder": "54 y 56-AUDITORIA ANUAL",
+      "module": "Auditoría anual",
+      "route": "/cumplimiento-documental/gestion?requisito=auditoria_anual",
+      "content": "content/BIB-61CF40C96A7C.html",
+      "sha256": "eb9d54d0b1adc9e74f8cf5475594040ac29eb5f50a945f8c569cd47ffb34d18d",
+      "bytes": 24984,
+      "original_name": "PROGRAMA DE AUDITORIA.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/54 y 56-AUDITORIA ANUAL/PROGRAMA DE AUDITORIA.docx",
+          "zip_index": 336
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 146,
+        "tables": 1,
+        "images": 0,
+        "characters": 8933
+      },
+      "status": "revisado",
+      "number": 124,
+      "phase": "Verificar",
+      "document_type": "Programa"
+    },
+    {
+      "id": "BIB-0F00DBE6FEDD",
+      "code": "BIB-55-E6FEDD",
+      "title": "PROCEDIMIENTO DE REVISIÓN POR LA ALTA DIRECCIÓN",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        55,
+        58
+      ],
+      "primary_standard": 55,
+      "folder": "55 y 58-REVISIÓN POR LA ALTA DIRECCIÓN Y ACCIONES DE MEJORA",
+      "module": "Revisión por la dirección",
+      "route": "/cumplimiento-documental/gestion?requisito=revision_direccion",
+      "content": "content/BIB-0F00DBE6FEDD.html",
+      "sha256": "aeaf903655894b1784c627588c71787f5b1067b56d1dcc73243476fbd768e2e0",
+      "bytes": 21596,
+      "original_name": "PROCEDIMIENTO DE REVISIÓN POR LA ALTA DIRECCIÓN.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/55 y 58-REVISIÓN POR LA ALTA DIRECCIÓN Y ACCIONES DE MEJORA/PROCEDIMIENTO DE REVISIÓN POR LA ALTA DIRECCIÓN.docx",
+          "zip_index": 272
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 59,
+        "tables": 1,
+        "images": 0,
+        "characters": 5789
+      },
+      "status": "revisado",
+      "number": 125,
+      "phase": "Actuar",
+      "document_type": "Procedimiento"
+    },
+    {
+      "id": "BIB-1DBD99DCC3AA",
+      "code": "BIB-55-DCC3AA",
+      "title": "REVISIÓN POR LA ALTA DIRECCIÓN",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        55,
+        58
+      ],
+      "primary_standard": 55,
+      "folder": "55 y 58-REVISIÓN POR LA ALTA DIRECCIÓN Y ACCIONES DE MEJORA",
+      "module": "Revisión por la dirección",
+      "route": "/cumplimiento-documental/gestion?requisito=revision_direccion",
+      "content": "forms/BIB-1DBD99DCC3AA.json",
+      "sha256": "cbe585d0c54f79d4d0f927d94bd8cb98a09b5401cb1e5e9a6b77521bc5c358cb",
+      "bytes": 19261,
+      "original_name": "REVISIÓN POR LA ALTA DIRECCIÓN.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/55 y 58-REVISIÓN POR LA ALTA DIRECCIÓN Y ACCIONES DE MEJORA/REVISIÓN POR LA ALTA DIRECCIÓN.xlsx",
+          "zip_index": 270
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 173,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 126,
+      "phase": "Actuar",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-64D61E663DB2",
+      "code": "BIB-57-663DB2",
+      "title": "REGISTRO DE ACCIONES PREVENTIVAS Y CORRECTIVAS",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        57
+      ],
+      "primary_standard": 57,
+      "folder": "57-ACCIONES PREVENTIVAS O CORRECTIVAS",
+      "module": "Acciones correctivas",
+      "route": "/hallazgos",
+      "content": "forms/BIB-64D61E663DB2.json",
+      "sha256": "6fffc5ca039715cb7ab3b615b62ecb4c0b343368b98803fe61de13ea147060c6",
+      "bytes": 11414,
+      "original_name": "REGISTRO DE ACCIONES PREVENTIVAS Y CORRECTIVAS.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/57-ACCIONES PREVENTIVAS O CORRECTIVAS/REGISTRO DE ACCIONES PREVENTIVAS Y CORRECTIVAS.xlsx",
+          "zip_index": 131
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "sheets": 1,
+        "cells": 24,
+        "formulas": 0
+      },
+      "status": "revisado",
+      "number": 127,
+      "phase": "Actuar",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-80F69611BC72",
+      "code": "BIB-57-11BC72",
+      "title": "REPORTE ACTOS Y CONDICIONES INSEGURAS",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        57
+      ],
+      "primary_standard": 57,
+      "folder": "57-ACCIONES PREVENTIVAS O CORRECTIVAS",
+      "module": "Acciones correctivas",
+      "route": "/hallazgos",
+      "content": "content/BIB-80F69611BC72.html",
+      "sha256": "170d953e556073207ae69f69532c34a7bacfd4103b191d28fe6bbf309ef06074",
+      "bytes": 21707,
+      "original_name": "REPORTE ACTOS Y CONDICIONES INSEGURAS.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/57-ACCIONES PREVENTIVAS O CORRECTIVAS/REPORTE ACTOS Y CONDICIONES INSEGURAS.docx",
+          "zip_index": 129
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "2 elemento(s) gráfico(s) se conservan en el original; la versión editable reproduce texto y tablas."
+      ],
+      "stats": {
+        "paragraphs": 7,
+        "tables": 22,
+        "images": 2,
+        "characters": 2691
+      },
+      "status": "revisado",
+      "number": 128,
+      "phase": "Actuar",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-499F812E15AF",
+      "code": "BIB-06-2E15AF",
+      "title": "ACTA ASIGNACIÓN DE VIGÍA",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        6
+      ],
+      "primary_standard": 6,
+      "folder": "6-CONFORMACIÓN DEL COPASST O ASIGNACIÓN VIGÍA",
+      "module": "COPASST / Vigía",
+      "route": "/cumplimiento-documental/gestion?requisito=copasst_vigia",
+      "content": "content/BIB-499F812E15AF.html",
+      "sha256": "9a092d34680392b7bd2a86a2980edbe20e9dd1f4464eaa95d3cc650cdd54489d",
+      "bytes": 15765,
+      "original_name": "ACTA ASIGNACIÓN DE VIGÍA.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/6-CONFORMACIÓN DEL COPASST O ASIGNACIÓN VIGÍA/ACTA ASIGNACIÓN DE VIGÍA.docx",
+          "zip_index": 211
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 17,
+        "tables": 1,
+        "images": 0,
+        "characters": 1418
+      },
+      "status": "revisado",
+      "number": 129,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-8B22FBA5518C",
+      "code": "BIB-06-A5518C",
+      "title": "ACTA DE REUNION",
+      "extension": "doc",
+      "kind": "document",
+      "standards": [
+        6
+      ],
+      "primary_standard": 6,
+      "folder": "6-CONFORMACIÓN DEL COPASST O ASIGNACIÓN VIGÍA",
+      "module": "COPASST / Vigía",
+      "route": "/cumplimiento-documental/gestion?requisito=copasst_vigia",
+      "content": "content/BIB-8B22FBA5518C.html",
+      "sha256": "a6f49f3536e6b1a58902c2210982ed749355e1a0b0fbff8b907ac95adab208e6",
+      "bytes": 66048,
+      "original_name": "ACTA DE REUNION.doc",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/6-CONFORMACIÓN DEL COPASST O ASIGNACIÓN VIGÍA/ACTA DE REUNION.doc",
+          "zip_index": 217
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "characters": 2125
+      },
+      "status": "revisado",
+      "number": 130,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-1ED62265EFB4",
+      "code": "BIB-06-65EFB4",
+      "title": "ACTAS CONFORMACIÓN DEL COPASST",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        6
+      ],
+      "primary_standard": 6,
+      "folder": "6-CONFORMACIÓN DEL COPASST O ASIGNACIÓN VIGÍA",
+      "module": "COPASST / Vigía",
+      "route": "/cumplimiento-documental/gestion?requisito=copasst_vigia",
+      "content": "content/BIB-1ED62265EFB4.html",
+      "sha256": "1f81bbf1278aa033c4b21290c03eeb7129d5f7583f721e79990eb38458751f6e",
+      "bytes": 35341,
+      "original_name": "ACTAS CONFORMACIÓN DEL COPASST.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/6-CONFORMACIÓN DEL COPASST O ASIGNACIÓN VIGÍA/ACTAS CONFORMACIÓN DEL COPASST.docx",
+          "zip_index": 213
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "4 elemento(s) gráfico(s) se conservan en el original; la versión editable reproduce texto y tablas."
+      ],
+      "stats": {
+        "paragraphs": 327,
+        "tables": 4,
+        "images": 4,
+        "characters": 7381
+      },
+      "status": "revisado",
+      "number": 131,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-F2E945B615B6",
+      "code": "BIB-06-B615B6",
+      "title": "MANUAL DE FUNCIONES DEL COPASST O VIGÍA",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        6
+      ],
+      "primary_standard": 6,
+      "folder": "6-CONFORMACIÓN DEL COPASST O ASIGNACIÓN VIGÍA",
+      "module": "COPASST / Vigía",
+      "route": "/cumplimiento-documental/gestion?requisito=copasst_vigia",
+      "content": "content/BIB-F2E945B615B6.html",
+      "sha256": "ef54d5ad415d8b5aa61a06a13c7b57bb4c96be0de9fcb39d12b901275f55a5a7",
+      "bytes": 163217,
+      "original_name": "MANUAL DE FUNCIONES DEL COPASST O VIGÍA.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/6-CONFORMACIÓN DEL COPASST O ASIGNACIÓN VIGÍA/MANUAL DE FUNCIONES DEL COPASST O VIGÍA.docx",
+          "zip_index": 215
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "1 elemento(s) gráfico(s) se conservan en el original; la versión editable reproduce texto y tablas."
+      ],
+      "stats": {
+        "paragraphs": 84,
+        "tables": 2,
+        "images": 1,
+        "characters": 8146
+      },
+      "status": "revisado",
+      "number": 132,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-0551F5019120",
+      "code": "BIB-60-019120",
+      "title": "PLAN DE MEJORAMIENTTO",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        60
+      ],
+      "primary_standard": 60,
+      "folder": "60-PLAN DE MEJORAMIENTO",
+      "module": "Plan de mejoramiento",
+      "route": "/plan-anual",
+      "content": "forms/BIB-0551F5019120.json",
+      "sha256": "40355a6849c94d71e0b997c5a584490aa4fd0b752add828fae2705830ceb2142",
+      "bytes": 32663,
+      "original_name": "PLAN DE MEJORAMIENTTO.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/60-PLAN DE MEJORAMIENTO/PLAN DE MEJORAMIENTTO.xlsx",
+          "zip_index": 274
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "Plan de Mejora SST: 0 imagen(es) y 1 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 241,
+        "formulas": 97
+      },
+      "status": "revisado",
+      "number": 133,
+      "phase": "Actuar",
+      "document_type": "Plan"
+    },
+    {
+      "id": "BIB-44FC97F3D359",
+      "code": "BIB-07-F3D359",
+      "title": "DIAPOSITIVAS COPASST",
+      "extension": "pptx",
+      "kind": "document",
+      "standards": [
+        7
+      ],
+      "primary_standard": 7,
+      "folder": "7-CAPACITACIÓN DEL COPASST",
+      "module": "Capacitaciones",
+      "route": "/capacitaciones",
+      "content": "content/BIB-44FC97F3D359.html",
+      "sha256": "75256c97204f240618586104fffcce2aa8b0632998cf86ddedf1b8e9d9546cdb",
+      "bytes": 301181,
+      "original_name": "DIAPOSITIVAS COPASST.pptx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/7-CAPACITACIÓN DEL COPASST/DIAPOSITIVAS COPASST.pptx",
+          "zip_index": 201
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "10 imagen(es) disponible(s) en la presentación original."
+      ],
+      "stats": {
+        "slides": 13,
+        "tables": 1,
+        "images": 10,
+        "characters": 6387
+      },
+      "status": "revisado",
+      "number": 134,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-A46B6C78AC29",
+      "code": "BIB-08-78AC29",
+      "title": "ACTAS CONFORMACION COMITE CONVIVENCIA LABORAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        8
+      ],
+      "primary_standard": 8,
+      "folder": "8-CONFORMACION Y FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL",
+      "module": "Convivencia laboral",
+      "route": "/cumplimiento-documental/gestion?requisito=convivencia_laboral",
+      "content": "content/BIB-A46B6C78AC29.html",
+      "sha256": "28a9f59a3550a9b11b8a863aedbe24c327c95e585a91f2234f7638f5a5203cca",
+      "bytes": 34034,
+      "original_name": "ACTAS CONFORMACION COMITE CONVIVENCIA LABORAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/8-CONFORMACION Y FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL/ACTAS CONFORMACION COMITE CONVIVENCIA LABORAL.docx",
+          "zip_index": 91
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "4 elemento(s) gráfico(s) se conservan en el original; la versión editable reproduce texto y tablas."
+      ],
+      "stats": {
+        "paragraphs": 353,
+        "tables": 5,
+        "images": 4,
+        "characters": 6934
+      },
+      "status": "revisado",
+      "number": 135,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-F20FE2ECE85F",
+      "code": "BIB-08-ECE85F",
+      "title": "FORMATO PARA INTERPONER QUEJA POR ACOSO LABORAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        8
+      ],
+      "primary_standard": 8,
+      "folder": "8-CONFORMACION Y FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL",
+      "module": "Convivencia laboral",
+      "route": "/cumplimiento-documental/gestion?requisito=convivencia_laboral",
+      "content": "content/BIB-F20FE2ECE85F.html",
+      "sha256": "dadb7f6894967bede02c7574e5cb1fbe68d2fff68366f2f65f8281d99fb9f0d7",
+      "bytes": 18429,
+      "original_name": "FORMATO PARA INTERPONER QUEJA POR ACOSO LABORAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/8-CONFORMACION Y FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL/FORMATO PARA INTERPONER QUEJA POR ACOSO LABORAL.docx",
+          "zip_index": 93
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 14,
+        "tables": 3,
+        "images": 0,
+        "characters": 1503
+      },
+      "status": "revisado",
+      "number": 136,
+      "phase": "Planear",
+      "document_type": "Registro"
+    },
+    {
+      "id": "BIB-80E41D8BEE6E",
+      "code": "BIB-08-8BEE6E",
+      "title": "MANUAL DE CONVIVENCIA LABORAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        8
+      ],
+      "primary_standard": 8,
+      "folder": "8-CONFORMACION Y FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL",
+      "module": "Convivencia laboral",
+      "route": "/cumplimiento-documental/gestion?requisito=convivencia_laboral",
+      "content": "content/BIB-80E41D8BEE6E.html",
+      "sha256": "6c486459fbe2c2a5d996e6015f4a6f0c0772786b7604bd6f508f27e26662f1b0",
+      "bytes": 35731,
+      "original_name": "MANUAL DE CONVIVENCIA LABORAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/8-CONFORMACION Y FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL/MANUAL DE CONVIVENCIA LABORAL.docx",
+          "zip_index": 99
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 201,
+        "tables": 2,
+        "images": 0,
+        "characters": 12940
+      },
+      "status": "revisado",
+      "number": 137,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-AA566ABA4935",
+      "code": "BIB-08-BA4935",
+      "title": "MANUAL DE FUNCIONES DEL COMITE CONVIVENCIA LABORAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        8
+      ],
+      "primary_standard": 8,
+      "folder": "8-CONFORMACION Y FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL",
+      "module": "Convivencia laboral",
+      "route": "/cumplimiento-documental/gestion?requisito=convivencia_laboral",
+      "content": "content/BIB-AA566ABA4935.html",
+      "sha256": "83d96f245bd95afc108eab93505d24c350c4c5e47f5077d601189fb2372f3915",
+      "bytes": 27269,
+      "original_name": "MANUAL DE FUNCIONES DEL COMITE CONVIVENCIA LABORAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/8-CONFORMACION Y FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL/MANUAL DE FUNCIONES DEL COMITE CONVIVENCIA LABORAL.docx",
+          "zip_index": 95
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 62,
+        "tables": 2,
+        "images": 0,
+        "characters": 5480
+      },
+      "status": "revisado",
+      "number": 138,
+      "phase": "Planear",
+      "document_type": "Estandar"
+    },
+    {
+      "id": "BIB-A4068DC3A3D9",
+      "code": "BIB-08-C3A3D9",
+      "title": "POLITICA DE CONVIVENCIA LABORAL",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        8
+      ],
+      "primary_standard": 8,
+      "folder": "8-CONFORMACION Y FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL",
+      "module": "Convivencia laboral",
+      "route": "/cumplimiento-documental/gestion?requisito=convivencia_laboral",
+      "content": "content/BIB-A4068DC3A3D9.html",
+      "sha256": "1f9b57c89c25e8f8eb11ccc9b25f7daa49cda5f615b600277643e22bbbf92393",
+      "bytes": 18150,
+      "original_name": "POLITICA DE CONVIVENCIA LABORAL.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/8-CONFORMACION Y FUNCIONAMIENTO DEL COMITÉ DE CONVIVENCIA LABORAL/POLITICA DE CONVIVENCIA LABORAL.docx",
+          "zip_index": 97
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 14,
+        "tables": 1,
+        "images": 0,
+        "characters": 1455
+      },
+      "status": "revisado",
+      "number": 139,
+      "phase": "Planear",
+      "document_type": "Politica"
+    },
+    {
+      "id": "BIB-1321846CC4A8",
+      "code": "BIB-09-6CC4A8",
+      "title": "PLAN DE CAPACITACIÓN ANUAL",
+      "extension": "xlsx",
+      "kind": "form",
+      "standards": [
+        9
+      ],
+      "primary_standard": 9,
+      "folder": "9-PROGRAMA DE CAPACITACION ANUAL",
+      "module": "Capacitaciones",
+      "route": "/capacitaciones",
+      "content": "forms/BIB-1321846CC4A8.json",
+      "sha256": "a349467bbfa3ad18dbe56d41639affc9609f355c8811d2a4354bed3f3c33cffc",
+      "bytes": 46307,
+      "original_name": "PLAN DE CAPACITACIÓN ANUAL.xlsx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/9-PROGRAMA DE CAPACITACION ANUAL/PLAN DE CAPACITACIÓN ANUAL.xlsx",
+          "zip_index": 121
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "1: 0 imagen(es) y 1 gráfico(s) se conservan solo en el archivo original."
+      ],
+      "stats": {
+        "sheets": 1,
+        "cells": 857,
+        "formulas": 139
+      },
+      "status": "revisado",
+      "number": 140,
+      "phase": "Planear",
+      "document_type": "Plan"
+    },
+    {
+      "id": "BIB-2D9178D3A7EE",
+      "code": "BIB-09-D3A7EE",
+      "title": "PROGRAMA DE CAPACITACION",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        9
+      ],
+      "primary_standard": 9,
+      "folder": "9-PROGRAMA DE CAPACITACION ANUAL",
+      "module": "Capacitaciones",
+      "route": "/capacitaciones",
+      "content": "content/BIB-2D9178D3A7EE.html",
+      "sha256": "efb28e3ed26f85f7c4509709b1a99b4718f4bef66f20f3de8f2ded6c3473513f",
+      "bytes": 22097,
+      "original_name": "PROGRAMA DE CAPACITACION.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/9-PROGRAMA DE CAPACITACION ANUAL/PROGRAMA DE CAPACITACION.docx",
+          "zip_index": 125
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [],
+      "stats": {
+        "paragraphs": 67,
+        "tables": 1,
+        "images": 0,
+        "characters": 5945
+      },
+      "status": "revisado",
+      "number": 141,
+      "phase": "Planear",
+      "document_type": "Programa"
+    },
+    {
+      "id": "BIB-46BAAF8B3AF6",
+      "code": "BIB-09-8B3AF6",
+      "title": "REGISTRO DE ASISTENCIA",
+      "extension": "docx",
+      "kind": "document",
+      "standards": [
+        9
+      ],
+      "primary_standard": 9,
+      "folder": "9-PROGRAMA DE CAPACITACION ANUAL",
+      "module": "Capacitaciones",
+      "route": "/capacitaciones",
+      "content": "content/BIB-46BAAF8B3AF6.html",
+      "sha256": "e978dd15adba3e633fac13d05f5d0dfaf387451f54e170c5f2bbcecfdb9bee68",
+      "bytes": 23935,
+      "original_name": "REGISTRO DE ASISTENCIA.docx",
+      "sources": [
+        {
+          "path": "SG-SST POR ESTANDARES-V/9-PROGRAMA DE CAPACITACION ANUAL/REGISTRO DE ASISTENCIA.docx",
+          "zip_index": 123
+        }
+      ],
+      "duplicate_entries": 0,
+      "warnings": [
+        "2 elemento(s) gráfico(s) se conservan en el original; la versión editable reproduce texto y tablas."
+      ],
+      "stats": {
+        "paragraphs": 1,
+        "tables": 1,
+        "images": 2,
+        "characters": 1213
+      },
+      "status": "revisado",
+      "number": 142,
+      "phase": "Planear",
+      "document_type": "Registro"
+    }
+  ]
+}

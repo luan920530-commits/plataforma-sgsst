@@ -1,11 +1,23 @@
-# Node modules
+# Dependencias locales
 node_modules/
+vendor/
 
-# SQLite database
-data/sistema.sqlite
+# Base de datos y archivos generados
+database/*.db
+database/*.db-shm
+database/*.db-wal
+storage/*
+!storage/.htaccess
+!storage/index.php
 
-# Storage
-storage/
-
-# macOS system files
+# Entorno y registros
+.env
+*.log
 .DS_Store
+
+# Fuente documental privada: usar SGSST_LIBRARY_ZIP fuera del repositorio
+/SG-SST POR ESTANDARES-V.zip
+
+# Cachés de herramientas
+.phpunit.cache/
+.cache/
