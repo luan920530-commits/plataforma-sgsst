@@ -70,6 +70,7 @@
     </form>
     <a class="mac-btn-secondary mt-3" target="_blank" href="<?= base_url("sgsst/empresa/{$eid}/informe") ?>">🖨 Imprimir informe de cumplimiento actualizado</a>
     <a class="mac-btn-secondary mt-3" href="<?= base_url("sgsst/empresa/{$eid}/matriz") ?>">⚠️ Ver matriz de peligros (GTC 45)</a>
+    <a class="mac-btn-secondary mt-3" href="<?= base_url("sgsst/empresa/{$eid}/formularios") ?>">📝 Diligenciar formularios (inspecciones, EPP, actas…)</a>
     <?php $resumenM=[]; foreach($resumenMatriz as $r) $resumenM[$r['nr_nivel']]=$r['c']; ?>
     <span class="text-xs mac-muted ml-2">Peligros: I: <?= (int)($resumenM['I']??0) ?> · II: <?= (int)($resumenM['II']??0) ?> · III: <?= (int)($resumenM['III']??0) ?> · IV: <?= (int)($resumenM['IV']??0) ?></span>
   </section>

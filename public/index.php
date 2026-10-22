@@ -104,6 +104,14 @@ $router->group('auth', function (Router $r) {
     $r->post('/sgsst/empresa/{id}/documentos/generar',      'PlantillaController@generar');
     $r->get('/sgsst/documentos-generados/{id}/descargar',   'PlantillaController@descargarGenerado');
 
+    // Formularios web (Fase C: formatos del paquete)
+    $r->get('/sgsst/empresa/{id}/formularios',                 'FormularioController@index');
+    $r->get('/sgsst/empresa/{id}/formularios/{codigo}.csv',    'FormularioController@exportar');
+    $r->get('/sgsst/empresa/{id}/formularios/{codigo}',        'FormularioController@diligenciar');
+    $r->post('/sgsst/empresa/{id}/formularios/{codigo}',       'FormularioController@guardar');
+    $r->get('/sgsst/formularios/{id}',                         'FormularioController@ver');
+    $r->post('/sgsst/formularios/{id}/estado',                 'FormularioController@estado');
+
     // Matriz IPVR — GTC 45
     $r->get('/sgsst/empresa/{id}/matriz',              'PeligroController@matriz');
     $r->post('/sgsst/empresa/{id}/matriz',             'PeligroController@crear');

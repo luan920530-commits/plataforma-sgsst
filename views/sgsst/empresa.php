@@ -152,6 +152,15 @@
     </tbody></table>
   </section>
 
+  <!-- FORMULARIOS WEB -->
+  <section id="formularios" class="mac-card p-5">
+    <div class="flex flex-wrap justify-between gap-2 items-center">
+      <div><h2 class="font-bold">Formularios web (formatos del SG-SST)</h2>
+      <p class="text-xs mac-muted">Inspecciones, entrega de EPP, capacitaciones, investigaciones, actas y más: diligéncialos aquí con historial, vencimientos y exportación.</p></div>
+      <a class="mac-btn" href="<?= base_url("sgsst/empresa/{$eid}/formularios") ?>">📝 Abrir formularios</a>
+    </div>
+  </section>
+
   <!-- PLANTILLAS -->
   <section id="plantillas" class="bg-white border rounded-xl p-5">
     <h2 class="font-bold">6. Plantillas base y documentos para presentar</h2>

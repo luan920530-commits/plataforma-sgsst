@@ -98,6 +98,9 @@ class Sgsst
         foreach (Database::query("SELECT titulo, fecha_vencimiento FROM sgsst_registros WHERE empresa_id=? AND estado IN ('abierto','en_gestion') AND fecha_vencimiento IS NOT NULL AND fecha_vencimiento <= ?", [$empresaId, $limite]) as $r) {
             $push($r['fecha_vencimiento'] < $hoy ? 'critica' : 'advertencia', 'Registro por cerrar: ' . $r['titulo'], $r['fecha_vencimiento'], 'registros');
         }
+        foreach (Database::query("SELECT formato, fecha_vencimiento FROM sgsst_formularios WHERE empresa_id=? AND estado IN ('abierto','en_gestion') AND fecha_vencimiento IS NOT NULL AND fecha_vencimiento <= ?", [$empresaId, $limite]) as $r) {
+            $push($r['fecha_vencimiento'] < $hoy ? 'critica' : 'advertencia', 'Formulario por cerrar: ' . $r['formato'], $r['fecha_vencimiento'], 'formularios');
+        }
         foreach (Database::query("SELECT codigo, fecha_compromiso FROM sgsst_evaluaciones WHERE empresa_id=? AND estado IN ('no_cumple','parcial') AND fecha_compromiso IS NOT NULL AND fecha_compromiso <= ?", [$empresaId, $limite]) as $r) {
             $push($r['fecha_compromiso'] < $hoy ? 'critica' : 'advertencia', 'Compromiso estándar ' . $r['codigo'] . ' sin cumplir', $r['fecha_compromiso'], 'evaluacion');
         }

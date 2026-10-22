@@ -107,5 +107,19 @@ class Migrator
             }
             Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_03_portal_cliente']);
         }
+
+        if (!in_array('2026_04_formularios_web', $done, true)) {
+            $pdo->exec("
+            CREATE TABLE IF NOT EXISTS sgsst_formularios (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, empresa_id INTEGER NOT NULL, formato TEXT NOT NULL,
+                datos TEXT NOT NULL, fecha DATE NOT NULL, fecha_vencimiento DATE,
+                estado TEXT CHECK(estado IN ('abierto','en_gestion','cerrado')) DEFAULT 'abierto',
+                diligenciado_por INTEGER, creado_por_nombre TEXT,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (empresa_id) REFERENCES empresas(id) ON DELETE CASCADE);
+            CREATE INDEX IF NOT EXISTS idx_formularios_empresa ON sgsst_formularios(empresa_id, formato);
+            ");
+            Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_04_formularios_web']);
+        }
     }
 }
