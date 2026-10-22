@@ -9,6 +9,15 @@
     <span class="mac-badge" style="<?= $editable ? 'background:#dcfae5;color:#067647' : 'background:#e8f1fe;color:#0060c9' ?>"><?= $editable ? '✏️ Representante: puedes corregir y generar' : '👁 Solo lectura' ?></span>
   </div>
 
+
+  <!-- TABLERO DEL CLIENTE -->
+  <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+    <div class="mac-card p-4"><div class="text-[11px] font-bold uppercase mac-muted">✅ Cumplimiento SG-SST</div><div class="text-3xl font-bold mt-1"><?= $p ?>%</div><div class="h-2 rounded mt-2" style="background:rgba(0,0,0,.06)"><div class="h-2 rounded" style="width:<?= $p ?>%;background:<?= $p<=60?'#ff3b30':($p<=85?'#ff9500':'#34c759') ?>"></div></div><span class="mac-badge mt-2" style="<?= $p<=60?'background:#ffe5e5;color:#b42318':($p<=85?'background:#fef0c7;color:#93370d':'background:#dcfae5;color:#067647') ?>"><?= e($semaforo) ?></span></div>
+    <div class="mac-card p-4"><div class="text-[11px] font-bold uppercase mac-muted">📄 Mis documentos</div><div class="text-3xl font-bold mt-1"><?= (int)($dash['documentos'] ?? 0) ?></div><p class="text-xs mac-muted mt-1">✅ <?= (int)($dash['docAceptados'] ?? 0) ?> aceptados · 🕘 <?= (int)($dash['docPendientes'] ?? 0) ?> por revisar</p><a href="#documentos" class="text-xs font-semibold" style="color:var(--mac-blue)">Revisarlos ahora →</a></div>
+    <div class="mac-card p-4"><div class="text-[11px] font-bold uppercase" style="color:#b42318">🔔 Alertas y vencimientos</div><div class="text-3xl font-bold mt-1"><?= (int)($dash['criticas'] ?? 0) ?></div><p class="text-xs mac-muted mt-1">críticas hoy · ⚠️ <?= (int)($dash['peligrosAltos'] ?? 0) ?> peligros NR I/II abiertos</p><a href="#cumplimiento" class="text-xs font-semibold" style="color:var(--mac-blue)">Ver pendientes →</a></div>
+    <div class="mac-card p-4"><div class="text-[11px] font-bold uppercase mac-muted">👥 Mi operación</div><div class="text-3xl font-bold mt-1"><?= (int)($dash['trabajadores'] ?? 0) ?></div><p class="text-xs mac-muted mt-1">trabajadores · 📋 <?= (int)($dash['registrosMes'] ?? 0) ?> registros este mes · 📝 <?= (int)($dash['formulariosAbiertos'] ?? 0) ?> formularios abiertos</p><a href="#registros" class="text-xs font-semibold" style="color:var(--mac-blue)">Seguimiento diario →</a></div>
+  </section>
+
   <nav class="flex flex-wrap gap-1.5 sticky top-2 z-20">
     <?php foreach (['datos'=>'1. 🏢 Datos de mi empresa','cumplimiento'=>'2. ✅ Mi cumplimiento','documentos'=>'3. 📄 Mis documentos','registros'=>'4. 📋 Registros y seguimiento diario'] as $a=>$t): ?>
     <a href="#<?= $a ?>" class="mac-btn-secondary !rounded-full shadow"><?= $t ?></a><?php endforeach; ?>
