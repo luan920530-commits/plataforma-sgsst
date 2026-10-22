@@ -111,6 +111,49 @@ class Sgsst
         return $a;
     }
 
+    /** Rol efectivo del usuario sobre la empresa: propietario | representante | lectura | null */
+    public static function permiso(int $empresaId, int $usuarioId): ?string
+    {
+        $e = Database::first('SELECT usuario_id FROM empresas WHERE id = ?', [$empresaId]);
+        if (!$e) return null;
+        if ((int)$e['usuario_id'] === $usuarioId) return 'propietario';
+        $a = Database::first('SELECT permiso FROM empresa_accesos WHERE empresa_id = ? AND usuario_id = ?', [$empresaId, $usuarioId]);
+        return $a ? (string)$a['permiso'] : null;
+    }
+
+    /**
+     * Documentación requerida según N.° de trabajadores y clase de riesgo (Res. 0312/2019).
+     * Orientativo: la aplicabilidad final la confirma el responsable del SG-SST.
+     * Devuelve el grupo y los códigos de estándares del catálogo interno aplicables.
+     */
+    public static function requisitos(array $empresa): array
+    {
+        $trab = (int)($empresa['num_trabajadores'] ?? 0);
+        $riesgo = (string)($empresa['nivel_riesgo'] ?? 'I');
+        $todos = array_column(SgsstCatalogo::estandares(), 'codigo');
+        if ($trab > 50 || in_array($riesgo, ['IV', 'V'], true)) {
+            return ['grupo' => 'Completo', 'descripcion' => 'Más de 50 trabajadores o riesgo IV–V: aplican los 60 estándares de la Res. 0312/2019.', 'codigos' => $todos];
+        }
+        if ($trab >= 11) {
+            $codigos = ['1.1.1','1.1.2','1.1.4','1.1.6','1.1.7','1.1.8','1.2.1','1.2.2','2.1.1','2.2.1','2.3.1','2.4.1','2.5.1','2.10.1','2.11.1','3.1.1','3.2.1','3.2.2','4.1.1','4.2.1','4.2.6','5.1.1','5.1.2','6.1.4','7.1.1'];
+            return ['grupo' => 'Intermedio', 'descripcion' => 'De 11 a 50 trabajadores con riesgo I–III: aplica el grupo intermedio de estándares (21 ítems de la Res. 0312/2019, aquí ampliado con emergencias).', 'codigos' => $codigos];
+        }
+        $codigos = ['1.1.1','1.1.4','1.2.1','1.2.2','2.1.1','2.4.1','3.2.1','4.1.1','4.2.1','4.2.6','5.1.1','5.1.2'];
+        return ['grupo' => 'Básico', 'descripcion' => 'Hasta 10 trabajadores con riesgo I–III: aplican los 7 estándares básicos de la Res. 0312/2019, aquí complementados con emergencias y EPP por su importancia preventiva.', 'codigos' => $codigos];
+    }
+
+    /** Token del formulario público de reportes de operarios (se crea si no existe). */
+    public static function tokenReporte(int $empresaId): string
+    {
+        $e = Database::first('SELECT reporte_token FROM empresas WHERE id = ?', [$empresaId]);
+        $token = (string)($e['reporte_token'] ?? '');
+        if ($token === '') {
+            $token = bin2hex(random_bytes(16));
+            Database::execute('UPDATE empresas SET reporte_token = ? WHERE id = ?', [$token, $empresaId]);
+        }
+        return $token;
+    }
+
     /** Conteo de alertas críticas de todas las empresas visibles (campana del menú). */
     public static function conteoAlertasCriticas(int $usuarioId): int
     {

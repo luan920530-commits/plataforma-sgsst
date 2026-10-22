@@ -8,6 +8,9 @@ $item = function (string $url, string $activo, string $icono, string $color, str
 <aside class="mac-sidebar w-64 min-w-64 p-3.5 hidden md:block sticky top-[57px] h-[calc(100vh-57px)] overflow-y-auto">
     <nav class="space-y-0.5">
         <?= $item(base_url('dashboard'), $esActivo('dashboard'), 'fa-gauge', 'linear-gradient(180deg,#0a84ff,#0040dd)', 'Dashboard') ?>
+        <?php if (\App\Database::first('SELECT id FROM empresa_accesos WHERE usuario_id = ?', [\App\Auth::id()])): ?>
+        <?= $item(base_url('mi-empresa'), $esActivo('mi-empresa'), 'fa-building-user', 'linear-gradient(180deg,#34c759,#0f7a2e)', '🏢 Mi empresa') ?>
+        <?php endif; ?>
 
         <div class="pt-4 pb-1.5 px-2 text-[11px] font-bold uppercase tracking-wider mac-muted">SG-SST integral</div>
         <?= $item(base_url('sgsst'), $esActivo('sgsst'), 'fa-clipboard-check', 'linear-gradient(180deg,#34c759,#248a3d)', 'Centro de cumplimiento') ?>

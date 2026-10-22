@@ -172,10 +172,24 @@
     <form method="POST" action="<?= base_url("sgsst/empresa/{$eid}/accesos") ?>" class="flex flex-wrap gap-2">
       <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
       <input type="email" name="email" required placeholder="correo@empresa-cliente.com" class="border rounded-lg px-3 py-2 flex-1 min-w-[240px]">
-      <button class="bg-brand-600 text-white rounded-lg px-4 py-2">Otorgar acceso de lectura</button>
+      <select name="permiso" class="border rounded-lg px-3 py-2">
+        <option value="lectura">👁 Solo lectura</option>
+        <option value="representante" selected>✏️ Representante (ve, corrige, genera e imprime)</option>
+      </select>
+      <button class="bg-brand-600 text-white rounded-lg px-4 py-2">Otorgar acceso</button>
     </form>
+    <p class="text-xs text-slate-500 mt-2">El <b>representante</b> verá en su menú «🏢 Mi empresa» únicamente la documentación que exige el nivel de riesgo/tamaño de esta empresa, podrá corregirla en línea (queda en la base de datos de la empresa), generar documentos actualizados e imprimirlos.</p>
+    <div class="mt-4 p-3 rounded-lg bg-slate-50 border text-sm">
+      🦺 <b>Formulario público para operarios</b> (reportes sin usuario):<br>
+      <code class="text-xs break-all"><?= e(base_url("reporte/{$reporteToken}")) ?></code>
+      <form method="POST" action="<?= base_url("sgsst/empresa/{$eid}/reporte-token") ?>" class="inline ml-2" onsubmit="return confirm('El enlace anterior dejará de funcionar. ¿Regenerar?')">
+        <input type="hidden" name="_csrf" value="<?= e($csrf) ?>">
+        <button class="text-red-600 text-xs underline">Regenerar enlace</button>
+      </form>
+      <p class="text-xs text-slate-500 mt-1">Los reportes llegan como registros del SG-SST de esta empresa (sección Registros y portal del representante).</p>
+    </div>
     <?php if (!empty($accesos)): ?><ul class="mt-3 space-y-2 text-sm"><?php foreach ($accesos as $ac): ?>
-      <li class="flex justify-between items-center border rounded-lg px-3 py-2"><span>👤 <b><?= e($ac['nombre']) ?></b> · <?= e($ac['email']) ?> <span class="text-xs text-slate-400">(<?= e($ac['rol']) ?> · solo lectura)</span></span>
+      <li class="flex justify-between items-center border rounded-lg px-3 py-2"><span>👤 <b><?= e($ac['nombre']) ?></b> · <?= e($ac['email']) ?> <span class="text-xs text-slate-400">(<?= e($ac['rol']) ?> · <?= ($ac['permiso'] ?? 'lectura') === 'representante' ? '✏️ representante' : '👁 solo lectura' ?>)</span></span>
       <form method="POST" action="<?= base_url("sgsst/accesos/{$ac['id']}/revocar") ?>" onsubmit="return confirm('¿Revocar el acceso de este usuario?')"><input type="hidden" name="_csrf" value="<?= e($csrf) ?>"><button class="text-red-600 text-sm">Revocar</button></form></li>
     <?php endforeach; ?></ul><?php endif; ?>
   </section>

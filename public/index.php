@@ -55,6 +55,9 @@ $router = new Router();
 
 // Públicas
 $router->get('/login',  'AuthController@showLogin');
+// Formulario público de reportes de operarios (enlace con token por empresa)
+$router->get('/reporte/{token}',  'ReporteController@formulario');
+$router->post('/reporte/{token}', 'ReporteController@enviar');
 $router->post('/login', 'AuthController@login');
 $router->post('/logout', 'AuthController@logout');
 
@@ -63,6 +66,15 @@ $router->group('auth', function (Router $r) {
     $r->get('/',          'DashboardController@index');
     $r->get('/dashboard', 'DashboardController@index');
     $r->get('/cambiar-password',  'AuthController@showCambiarPassword');
+
+    // Portal de la empresa cliente (representante / solo lectura)
+    $r->get('/mi-empresa',                        'PortalController@index');
+    $r->get('/mi-empresa/{id}',                   'PortalController@empresa');
+    $r->post('/mi-empresa/{id}/datos',            'PortalController@guardarDatos');
+    $r->post('/mi-empresa/{id}/evaluacion',       'PortalController@guardarEvaluacion');
+    $r->post('/mi-empresa/{id}/registros',        'PortalController@crearRegistro');
+    $r->post('/mi-empresa/{id}/documentos/generar','PortalController@generarDocumento');
+    $r->post('/sgsst/empresa/{id}/reporte-token', 'ReporteController@regenerarToken');
     $r->post('/cambiar-password', 'AuthController@cambiarPassword');
 
     // Empresas

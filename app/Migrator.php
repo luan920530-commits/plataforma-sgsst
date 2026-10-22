@@ -84,5 +84,28 @@ class Migrator
             ");
             Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_02_fase2']);
         }
+
+        if (!in_array('2026_03_portal_cliente', $done, true)) {
+            // Ampliar permisos de acceso: lectura | representante (reconstruye la tabla por el CHECK de SQLite)
+            $pdo->exec("
+            CREATE TABLE IF NOT EXISTS empresa_accesos_nueva (
+                id INTEGER PRIMARY KEY AUTOINCREMENT, empresa_id INTEGER NOT NULL, usuario_id INTEGER NOT NULL,
+                permiso TEXT CHECK(permiso IN ('lectura','representante')) DEFAULT 'lectura',
+                otorgado_por INTEGER, created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(empresa_id, usuario_id),
+                FOREIGN KEY (empresa_id) REFERENCES empresas(id) ON DELETE CASCADE,
+                FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE);
+            INSERT OR IGNORE INTO empresa_accesos_nueva (id, empresa_id, usuario_id, permiso, otorgado_por, created_at)
+                SELECT id, empresa_id, usuario_id, permiso, otorgado_por, created_at FROM empresa_accesos;
+            DROP TABLE empresa_accesos;
+            ALTER TABLE empresa_accesos_nueva RENAME TO empresa_accesos;
+            CREATE INDEX IF NOT EXISTS idx_accesos_usuario ON empresa_accesos(usuario_id);
+            ");
+            $cols = array_column(Database::query('PRAGMA table_info(empresas)'), 'name');
+            if (!in_array('reporte_token', $cols, true)) {
+                $pdo->exec('ALTER TABLE empresas ADD COLUMN reporte_token TEXT');
+            }
+            Database::execute('INSERT INTO schema_migrations (version) VALUES (?)', ['2026_03_portal_cliente']);
+        }
     }
 }

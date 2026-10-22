@@ -1,4 +1,5 @@
-<?php $criticas = class_exists('\\App\\Sgsst') ? \App\Sgsst::conteoAlertasCriticas((int)\App\Auth::id()) : 0; ?>
+<?php $criticas = class_exists('\\App\\Sgsst') ? \App\Sgsst::conteoAlertasCriticas((int)\App\Auth::id()) : 0;
+$misEmpresas = \App\Database::query('SELECT e.id FROM empresa_accesos ea JOIN empresas e ON e.id = ea.empresa_id WHERE ea.usuario_id = ?', [\App\Auth::id()]); ?>
 <nav class="mac-glass px-4 md:px-6 py-2.5 flex justify-between items-center sticky top-0 z-40">
     <div class="flex items-center gap-3">
         <span class="hidden sm:flex gap-2 mr-1" aria-hidden="true">
@@ -18,6 +19,9 @@
     </div>
 
     <div class="flex items-center gap-2 md:gap-3" x-data="{ abierto: false }">
+        <?php if (!empty($misEmpresas)): ?>
+        <a href="<?= base_url('mi-empresa') ?>" class="mac-btn !py-2" title="Portal de mi empresa">🏢 Mi empresa</a>
+        <?php endif; ?>
         <a href="<?= base_url('sgsst') ?>" title="Alertas críticas de vencimiento y riesgo"
            class="relative w-9 h-9 rounded-full flex items-center justify-center hover:bg-black/5 transition" style="color:#3a3a3c">
             <i class="fa-regular fa-bell text-lg"></i>

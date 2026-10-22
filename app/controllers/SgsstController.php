@@ -68,7 +68,8 @@ class SgsstController extends BaseController
             'periodos' => Indicadores::porEmpresa($eid),
             'resumenMatriz' => Database::query('SELECT nr_nivel, COUNT(*) c FROM sgsst_peligros WHERE empresa_id=? GROUP BY nr_nivel', [$eid]),
             'peligrosCriticos' => (int)(Database::first("SELECT COUNT(*) c FROM sgsst_peligros WHERE empresa_id=? AND nr_nivel IN ('I','II') AND estado != 'cerrado'", [$eid])['c'] ?? 0),
-            'accesos' => Database::query('SELECT ea.id, u.nombre, u.email, u.rol FROM empresa_accesos ea JOIN usuarios u ON u.id = ea.usuario_id WHERE ea.empresa_id=? ORDER BY u.nombre', [$eid]),
+            'accesos' => Database::query('SELECT ea.id, ea.permiso, u.nombre, u.email, u.rol FROM empresa_accesos ea JOIN usuarios u ON u.id = ea.usuario_id WHERE ea.empresa_id=? ORDER BY u.nombre', [$eid]),
+            'reporteToken' => Sgsst::tokenReporte($eid),
             'csrf' => $this->csrfToken(),
         ]);
     }
@@ -185,10 +186,12 @@ class SgsstController extends BaseController
         $email = trim($_POST['email'] ?? '');
         $u = Database::first('SELECT id, rol FROM usuarios WHERE email = ? AND activo = 1', [$email]);
         if (!$u) { flash('error', 'No existe un usuario activo con ese correo. Un superadmin debe crearlo primero (Usuarios y roles).'); $this->redirect(base_url("sgsst/empresa/{$eid}#accesos")); }
-        Database::execute('INSERT OR IGNORE INTO empresa_accesos (empresa_id, usuario_id, permiso, otorgado_por) VALUES (?,?,?,?)',
-            [$eid, (int)$u['id'], 'lectura', Auth::id()]);
+        $permiso = ($_POST['permiso'] ?? 'lectura') === 'representante' ? 'representante' : 'lectura';
+        Database::execute('INSERT INTO empresa_accesos (empresa_id, usuario_id, permiso, otorgado_por) VALUES (?,?,?,?)
+            ON CONFLICT(empresa_id, usuario_id) DO UPDATE SET permiso = excluded.permiso, otorgado_por = excluded.otorgado_por',
+            [$eid, (int)$u['id'], $permiso, Auth::id()]);
         Auditoria::registrar('sgsst.acceso_otorgado', $eid, 'usuario', (int)$u['id'], $email);
-        flash('success', "Acceso de solo lectura otorgado a {$email}. Ya puede ingresar y consultar el SG-SST de esta empresa, sin modificar nada.");
+        flash('success', "Acceso «{$permiso}» otorgado a {$email}: ya aparece en su menú «Mi empresa»." );
         $this->redirect(base_url("sgsst/empresa/{$eid}#accesos"));
     }
 
