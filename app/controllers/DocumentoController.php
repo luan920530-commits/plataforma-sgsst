@@ -4,6 +4,7 @@ namespace App\Controllers;
 use App\Auth;
 use App\Database;
 use App\GeneradorPlan;
+use App\Auditoria;
 
 class DocumentoController extends BaseController
 {
@@ -37,7 +38,7 @@ class DocumentoController extends BaseController
     {
         $this->verifyCsrf();
         $analisisId = (int) $id;
-        $this->obtenerAnalisis($analisisId);
+        $analisis = $this->obtenerAnalisis($analisisId);
 
         try {
             $generador = new GeneradorPlan($analisisId);
@@ -49,6 +50,7 @@ class DocumentoController extends BaseController
                 ['generado', $analisisId]
             );
 
+            Auditoria::registrar('pppRAE.documentos_generados', (int)($analisis['empresa_id'] ?? 0) ?: null, 'analisis', $analisisId, $resultado['nombre']);
             flash('success', 'Documentos generados: ' . $resultado['nombre']);
             $this->redirect(base_url("analisis/{$analisisId}/descargar/{$resultado['nombre']}"));
 
@@ -164,6 +166,7 @@ public function eliminar(string $id): void
         $this->redirect(base_url('documentos'));
     }
 
+    Auditoria::registrar('documento.eliminado', null, 'documento', (int) $id, (string)($doc['nombre_archivo'] ?? ''));
     if (file_exists($doc['ruta'])) @unlink($doc['ruta']);
     Database::execute('DELETE FROM documentos WHERE id = ?', [(int) $id]);
 

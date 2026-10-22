@@ -4,11 +4,24 @@ namespace App\Controllers;
 use App\Auth;
 use App\Database;
 use App\Models\Empresa;
+use App\Sgsst;
+use App\Auditoria;
+use App\GeneradorPaquete;
 
 class EmpresaController extends BaseController
 {
+    /** El rol cliente trabaja solo desde «Mi empresa»; nunca crea ni gestiona empresas. */
+    private function bloquearCliente(): void
+    {
+        if (Auth::hasRole('cliente')) {
+            flash('warning', 'Tu cuenta es de cliente: trabaja desde «🏢 Mi empresa» en la barra superior.');
+            $this->redirect(base_url('mi-empresa'));
+        }
+    }
+
     public function index(): void
     {
+        $this->bloquearCliente();
         $empresas = Empresa::todasPorUsuario(Auth::id());
         $this->view('empresas/index', [
             'titulo'   => 'Empresas',
@@ -19,6 +32,7 @@ class EmpresaController extends BaseController
 
     public function formNueva(): void
     {
+        $this->bloquearCliente();
         $this->view('empresas/form', [
             'titulo'  => 'Nueva empresa',
             'empresa' => null,
@@ -28,19 +42,24 @@ class EmpresaController extends BaseController
 
     public function guardar(): void
     {
+        $this->bloquearCliente();
         $this->verifyCsrf();
 
         $datos = $this->datosFormulario();
         $datos['usuario_id'] = Auth::id();
 
         $id = Empresa::crear($datos);
+        Sgsst::inicializarEmpresa($id);
+        Auditoria::registrar('empresa.creada', $id, 'empresa', $id, $datos['razon_social'] ?? '');
 
-        flash('success', 'Empresa creada correctamente');
+        $paquete = GeneradorPaquete::generar(Empresa::buscar($id) ?: $datos + ['id' => $id], Auth::id());
+        flash('success', "Empresa creada con su SG-SST inicializado y su paquete documental generado: {$paquete['generados']} documento(s) diligenciados con sus datos y {$paquete['copiados']} originales, listos para que el cliente los revise, acepte o corrija.");
         $this->redirect(base_url("empresas/{$id}"));
     }
 
     public function ver(string $id): void
     {
+        $this->bloquearCliente();
         $empresa = Empresa::buscar((int) $id);
         if (!$empresa || $empresa['usuario_id'] != Auth::id()) {
             flash('error', 'Empresa no encontrada');
@@ -62,6 +81,7 @@ class EmpresaController extends BaseController
 
     public function formEditar(string $id): void
     {
+        $this->bloquearCliente();
         $empresa = Empresa::buscar((int) $id);
         if (!$empresa || $empresa['usuario_id'] != Auth::id()) {
             flash('error', 'Empresa no encontrada');
@@ -77,6 +97,7 @@ class EmpresaController extends BaseController
 
     public function actualizar(string $id): void
     {
+        $this->bloquearCliente();
         $this->verifyCsrf();
 
         $empresa = Empresa::buscar((int) $id);
@@ -86,6 +107,7 @@ class EmpresaController extends BaseController
         }
 
         Empresa::actualizar((int) $id, $this->datosFormulario());
+        Auditoria::registrar('empresa.actualizada', (int) $id, 'empresa', (int) $id);
         flash('success', 'Empresa actualizada');
         $this->redirect(base_url("empresas/{$id}"));
     }
@@ -105,6 +127,9 @@ class EmpresaController extends BaseController
             'arl'                  => trim($_POST['arl'] ?? ''),
             'nivel_riesgo'         => $_POST['nivel_riesgo'] ?? 'I',
             'representante_legal'  => trim($_POST['representante_legal'] ?? ''),
+            'representante_cc'     => trim($_POST['representante_cc'] ?? ''),
+            'resp_sgsst_nombre'    => trim($_POST['resp_sgsst_nombre'] ?? ''),
+            'resp_sgsst_cc'        => trim($_POST['resp_sgsst_cc'] ?? ''),
             'num_trabajadores'     => (int) ($_POST['num_trabajadores'] ?? 0),
             'aforo_max'            => (int) ($_POST['aforo_max'] ?? 0),
             'area_m2'              => (float) ($_POST['area_m2'] ?? 0),

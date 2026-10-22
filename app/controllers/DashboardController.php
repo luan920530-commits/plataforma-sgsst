@@ -8,6 +8,7 @@ class DashboardController extends BaseController
 {
     public function index(): void
     {
+        if (Auth::hasRole('cliente')) { $this->redirect(base_url('mi-empresa')); }
         $usuarioId = Auth::id();
 
         // KPIs principales
@@ -60,6 +61,21 @@ class DashboardController extends BaseController
             [$usuarioId]
         );
 
+        // Cumplimiento SG-SST por empresa + alertas para el nuevo panel
+        $cumplimiento = [];
+        foreach ($empresas as $e) {
+            $pt = \App\Sgsst::puntaje(\App\Sgsst::evaluaciones((int) $e['id']));
+            $cumplimiento[] = ['empresa' => $e, 'puntaje' => $pt['total'], 'semaforo' => \App\Sgsst::semaforo($pt['total'])];
+        }
+        usort($cumplimiento, fn($a, $b) => $a['puntaje'] <=> $b['puntaje']);
+        $ids = array_map(fn($e) => (int) $e['id'], $empresas);
+        $docsPendientes = 0; $alertasCriticas = 0;
+        if ($ids) {
+            $in = implode(',', $ids);
+            $docsPendientes = (int) (Database::first("SELECT COUNT(*) c FROM sgsst_documentos WHERE empresa_id IN ({$in}) AND estado = 'pendiente_revision'")['c'] ?? 0);
+            foreach ($ids as $eid2) $alertasCriticas += \App\Sgsst::conteoAlertasCriticas($eid2);
+        }
+
         $this->view('dashboard', [
             'titulo'            => 'Dashboard',
             'totalEmpresas'     => $totalEmpresas,
@@ -68,6 +84,7 @@ class DashboardController extends BaseController
             'totalBrigadistas'  => $totalBrigadistas,
             'analisisRecientes' => $analisisRecientes,
             'empresas'          => $empresas,
+            'cumplimiento' => $cumplimiento, 'docsPendientes' => $docsPendientes, 'alertasCriticas' => $alertasCriticas,
         ]);
     }
 

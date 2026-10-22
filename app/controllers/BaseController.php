@@ -32,6 +32,14 @@ abstract class BaseController
         return $_SESSION['csrf'];
     }
 
+    protected function requireRole(string ...$roles): void
+    {
+        if (!\App\Auth::hasRole(...$roles)) {
+            http_response_code(403);
+            die('No tienes permisos para esta acción (rol insuficiente).');
+        }
+    }
+
     protected function verifyCsrf(): void
     {
         $token = $_POST['_csrf'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';

@@ -1,0 +1,175 @@
+<?php
+namespace App;
+
+/** Lógica del módulo SG-SST: inicialización, puntaje y alertas por empresa. */
+class Sgsst
+{
+    public static function inicializarEmpresa(int $empresaId): void
+    {
+        $existe = Database::first('SELECT COUNT(*) c FROM sgsst_evaluaciones WHERE empresa_id = ?', [$empresaId]);
+        if ((int)($existe['c'] ?? 0) === 0) {
+            foreach (SgsstCatalogo::estandares() as $e) {
+                Database::execute(
+                    'INSERT OR IGNORE INTO sgsst_evaluaciones (empresa_id, codigo, estado) VALUES (?, ?, ?)',
+                    [$empresaId, $e['codigo'], 'no_cumple']
+                );
+            }
+        }
+        $acts = Database::first('SELECT COUNT(*) c FROM sgsst_actividades WHERE empresa_id = ?', [$empresaId]);
+        if ((int)($acts['c'] ?? 0) === 0) {
+            foreach (SgsstCatalogo::actividadesBase() as [$titulo, $ciclo, $meses]) {
+                Database::execute(
+                    'INSERT INTO sgsst_actividades (empresa_id, titulo, ciclo, fecha_inicio, fecha_vencimiento, origen) VALUES (?,?,?,?,?,?)',
+                    [$empresaId, $titulo, $ciclo, date('Y-m-d'), date('Y-m-d', strtotime("+{$meses} months")), 'plantilla_base']
+                );
+            }
+        }
+    }
+
+    public static function evaluaciones(int $empresaId): array
+    {
+        self::inicializarEmpresa($empresaId);
+        $guardadas = [];
+        foreach (Database::query('SELECT * FROM sgsst_evaluaciones WHERE empresa_id = ?', [$empresaId]) as $g) {
+            $guardadas[$g['codigo']] = $g;
+        }
+        $out = [];
+        foreach (SgsstCatalogo::estandares() as $e) {
+            $out[] = array_merge($e, $guardadas[$e['codigo']] ?? [
+                'estado'=>'no_cumple','evidencia'=>null,'observacion'=>null,'responsable'=>null,'fecha_compromiso'=>null,
+            ]);
+        }
+        return $out;
+    }
+
+    /** Puntaje 0–100: cumple=1, parcial=0.5; no_aplica se excluye. */
+    public static function puntaje(array $evaluaciones): array
+    {
+        $aplican = array_filter($evaluaciones, fn($e) => ($e['estado'] ?? '') !== 'no_aplica');
+        if (!$aplican) return ['total'=>0.0,'por_ciclo'=>[]];
+        $suma = 0.0; $ciclos = [];
+        foreach ($aplican as $e) {
+            $v = match($e['estado']) {'cumple'=>1.0,'parcial'=>0.5,default=>0.0};
+            $suma += $v;
+            $ciclos[$e['ciclo']]['suma'] = ($ciclos[$e['ciclo']]['suma'] ?? 0) + $v;
+            $ciclos[$e['ciclo']]['n'] = ($ciclos[$e['ciclo']]['n'] ?? 0) + 1;
+        }
+        foreach ($ciclos as $c => $d) $ciclos[$c] = round($d['suma'] / $d['n'] * 100, 1);
+        return ['total'=>round($suma / count($aplican) * 100, 1), 'por_ciclo'=>$ciclos];
+    }
+
+    /** Empresas visibles para un usuario: propias + compartidas en modo lectura (portal cliente). */
+    public static function empresasVisibles(int $usuarioId): array
+    {
+        return Database::query(
+            'SELECT e.*, CASE WHEN e.usuario_id = ? THEN 0 ELSE 1 END AS compartida
+             FROM empresas e LEFT JOIN empresa_accesos ea ON ea.empresa_id = e.id AND ea.usuario_id = ?
+             WHERE e.usuario_id = ? OR ea.id IS NOT NULL
+             GROUP BY e.id ORDER BY e.razon_social',
+            [$usuarioId, $usuarioId, $usuarioId]
+        );
+    }
+
+    public static function puedeVer(int $empresaId, int $usuarioId): bool
+    {
+        return (bool) Database::first(
+            'SELECT e.id FROM empresas e LEFT JOIN empresa_accesos ea ON ea.empresa_id = e.id AND ea.usuario_id = ?
+             WHERE e.id = ? AND (e.usuario_id = ? OR ea.id IS NOT NULL)',
+            [$usuarioId, $empresaId, $usuarioId]
+        );
+    }
+
+    /**
+     * Alertas de vencimientos y riesgos sin control: actividades, registros, compromisos
+     * de la evaluación, peligros nivel I/II abiertos y vencimientos de inventario PPPRAE.
+     * nivel: 'critica' (vencido / riesgo no aceptable), 'advertencia' (vence en ≤30 días).
+     */
+    public static function alertas(int $empresaId): array
+    {
+        $a = [];
+        $hoy = date('Y-m-d'); $limite = date('Y-m-d', strtotime('+30 days'));
+        $push = function (string $nivel, string $msg, ?string $fecha, string $ancla) use (&$a, $hoy) {
+            $a[] = ['nivel' => $nivel, 'mensaje' => $msg, 'fecha' => $fecha, 'ancla' => $ancla,
+                    'vencida' => $fecha !== null && $fecha < $hoy];
+        };
+        foreach (Database::query("SELECT titulo, fecha_vencimiento FROM sgsst_actividades WHERE empresa_id=? AND estado IN ('pendiente','en_proceso') AND fecha_vencimiento IS NOT NULL AND fecha_vencimiento <= ?", [$empresaId, $limite]) as $r) {
+            $push($r['fecha_vencimiento'] < $hoy ? 'critica' : 'advertencia', 'Actividad del plan anual: ' . $r['titulo'], $r['fecha_vencimiento'], 'plan');
+        }
+        foreach (Database::query("SELECT titulo, fecha_vencimiento FROM sgsst_registros WHERE empresa_id=? AND estado IN ('abierto','en_gestion') AND fecha_vencimiento IS NOT NULL AND fecha_vencimiento <= ?", [$empresaId, $limite]) as $r) {
+            $push($r['fecha_vencimiento'] < $hoy ? 'critica' : 'advertencia', 'Registro por cerrar: ' . $r['titulo'], $r['fecha_vencimiento'], 'registros');
+        }
+        foreach (Database::query("SELECT formato, fecha_vencimiento FROM sgsst_formularios WHERE empresa_id=? AND estado IN ('abierto','en_gestion') AND fecha_vencimiento IS NOT NULL AND fecha_vencimiento <= ?", [$empresaId, $limite]) as $r) {
+            $push($r['fecha_vencimiento'] < $hoy ? 'critica' : 'advertencia', 'Formulario por cerrar: ' . $r['formato'], $r['fecha_vencimiento'], 'formularios');
+        }
+        foreach (Database::query("SELECT codigo, fecha_compromiso FROM sgsst_evaluaciones WHERE empresa_id=? AND estado IN ('no_cumple','parcial') AND fecha_compromiso IS NOT NULL AND fecha_compromiso <= ?", [$empresaId, $limite]) as $r) {
+            $push($r['fecha_compromiso'] < $hoy ? 'critica' : 'advertencia', 'Compromiso estándar ' . $r['codigo'] . ' sin cumplir', $r['fecha_compromiso'], 'evaluacion');
+        }
+        foreach (Database::query("SELECT descripcion, clasificacion, nr_nivel FROM sgsst_peligros WHERE empresa_id=? AND estado != 'cerrado' AND nr_nivel IN ('I','II')", [$empresaId]) as $r) {
+            $push('critica', 'Peligro nivel ' . $r['nr_nivel'] . ' (' . ($r['clasificacion'] ?: 'sin clasificar') . '): ' . $r['descripcion'], null, 'matriz');
+        }
+        foreach (Database::query("SELECT b.elemento, b.fecha_vencimiento FROM inv_botiquin b JOIN analisis an ON an.id=b.analisis_id WHERE an.empresa_id=? AND b.fecha_vencimiento IS NOT NULL AND b.fecha_vencimiento <= ?", [$empresaId, $limite]) as $r) {
+            $push($r['fecha_vencimiento'] < $hoy ? 'critica' : 'advertencia', 'Botiquín vence: ' . $r['elemento'], $r['fecha_vencimiento'], 'matriz');
+        }
+        usort($a, fn($x, $y) => (($x['vencida'] ? 0 : 1) <=> ($y['vencida'] ? 0 : 1)) ?: strcmp((string)$x['fecha'], (string)$y['fecha']));
+        return $a;
+    }
+
+    /** Rol efectivo del usuario sobre la empresa: propietario | representante | lectura | null */
+    public static function permiso(int $empresaId, int $usuarioId): ?string
+    {
+        $e = Database::first('SELECT usuario_id FROM empresas WHERE id = ?', [$empresaId]);
+        if (!$e) return null;
+        if ((int)$e['usuario_id'] === $usuarioId) return 'propietario';
+        $a = Database::first('SELECT permiso FROM empresa_accesos WHERE empresa_id = ? AND usuario_id = ?', [$empresaId, $usuarioId]);
+        return $a ? (string)$a['permiso'] : null;
+    }
+
+    /**
+     * Documentación requerida según N.° de trabajadores y clase de riesgo (Res. 0312/2019).
+     * Orientativo: la aplicabilidad final la confirma el responsable del SG-SST.
+     * Devuelve el grupo y los códigos de estándares del catálogo interno aplicables.
+     */
+    public static function requisitos(array $empresa): array
+    {
+        $trab = (int)($empresa['num_trabajadores'] ?? 0);
+        $riesgo = (string)($empresa['nivel_riesgo'] ?? 'I');
+        $todos = array_column(SgsstCatalogo::estandares(), 'codigo');
+        if ($trab > 50 || in_array($riesgo, ['IV', 'V'], true)) {
+            return ['grupo' => 'Completo', 'descripcion' => 'Más de 50 trabajadores o riesgo IV–V: aplican los 60 estándares de la Res. 0312/2019.', 'codigos' => $todos, 'carpetas' => range(1, 60)];
+        }
+        if ($trab >= 11) {
+            $codigos = ['1.1.1','1.1.2','1.1.4','1.1.6','1.1.7','1.1.8','1.2.1','1.2.2','2.1.1','2.2.1','2.3.1','2.4.1','2.5.1','2.10.1','2.11.1','3.1.1','3.2.1','3.2.2','4.1.1','4.2.1','4.2.6','5.1.1','5.1.2','6.1.4','7.1.1'];
+            return ['grupo' => 'Intermedio', 'descripcion' => 'De 11 a 50 trabajadores con riesgo I–III: aplica el grupo intermedio de estándares (21 ítems de la Res. 0312/2019, aquí ampliado con emergencias).', 'codigos' => $codigos, 'carpetas' => [1,2,3,4,6,7,8,9,10,11,12,13,14,15,16,18,20,21,22,23,24,25,26,28,32,34,41,42,45,47,48,49,50,51,52,54,55,57,60]];
+        }
+        $codigos = ['1.1.1','1.1.4','1.2.1','1.2.2','2.1.1','2.4.1','3.2.1','4.1.1','4.2.1','4.2.6','5.1.1','5.1.2'];
+        return ['grupo' => 'Básico', 'descripcion' => 'Hasta 10 trabajadores con riesgo I–III: aplican los 7 estándares básicos de la Res. 0312/2019, aquí complementados con emergencias y EPP por su importancia preventiva.', 'codigos' => $codigos, 'carpetas' => [1,4,9,10,12,14,15,42,50,51,52]];
+    }
+
+    /** Token del formulario público de reportes de operarios (se crea si no existe). */
+    public static function tokenReporte(int $empresaId): string
+    {
+        $e = Database::first('SELECT reporte_token FROM empresas WHERE id = ?', [$empresaId]);
+        $token = (string)($e['reporte_token'] ?? '');
+        if ($token === '') {
+            $token = bin2hex(random_bytes(16));
+            Database::execute('UPDATE empresas SET reporte_token = ? WHERE id = ?', [$token, $empresaId]);
+        }
+        return $token;
+    }
+
+    /** Conteo de alertas críticas de todas las empresas visibles (campana del menú). */
+    public static function conteoAlertasCriticas(int $usuarioId): int
+    {
+        $n = 0;
+        foreach (self::empresasVisibles($usuarioId) as $e) {
+            foreach (self::alertas((int)$e['id']) as $al) if ($al['nivel'] === 'critica') $n++;
+        }
+        return $n;
+    }
+
+    public static function semaforo(float $puntaje): string
+    {
+        // Criterios orientativos Res. 0312/2019: crítico ≤60, moderado 61–85, aceptable >85
+        return $puntaje <= 60 ? 'CRÍTICO' : ($puntaje <= 85 ? 'MODERADAMENTE ACEPTABLE' : 'ACEPTABLE');
+    }
+}

@@ -49,6 +49,13 @@ class PersonalController extends BaseController
         ]);
     }
 
+    /** POST wizard paso5: el personal se guarda con crear/actualizar; aquí solo se avanza. */
+    public function guardarPaso5(string $id): void
+    {
+        $this->verifyCsrf();
+        $this->redirect(base_url("analisis/{$id}/wizard/paso6"));
+    }
+
     /**
      * POST /personal  →  crear nuevo
      */
@@ -128,7 +135,8 @@ class PersonalController extends BaseController
         $personalId = (int) $id;
 
         $p = Personal::buscar($personalId);
-        if (!$p) {
+        $dueno = $p ? \App\Database::first('SELECT id FROM empresas WHERE id = ? AND usuario_id = ?', [(int)$p['empresa_id'], \App\Auth::id()]) : null;
+        if (!$p || !$dueno) {
             flash('error', 'Registro no encontrado');
             $this->redirect(base_url("analisis/{$analisisId}/wizard/paso5"));
         }
@@ -174,6 +182,12 @@ class PersonalController extends BaseController
         $this->verifyCsrf();
         $analisisId = (int) ($_POST['analisis_id'] ?? 0);
 
+        $p = Personal::buscar((int) $id);
+        $dueno = $p ? \App\Database::first('SELECT id FROM empresas WHERE id = ? AND usuario_id = ?', [(int)$p['empresa_id'], \App\Auth::id()]) : null;
+        if (!$p || !$dueno) {
+            flash('error', 'Registro no encontrado');
+            $this->redirect(base_url("analisis/{$analisisId}/wizard/paso5"));
+        }
         Personal::eliminar((int) $id);
 
         flash('success', 'Registro eliminado');
@@ -215,6 +229,7 @@ class PersonalController extends BaseController
  */
 public function index(): void
 {
+    if (\App\Auth::hasRole('cliente')) { $this->redirect(base_url('mi-empresa')); }
     $empresas = Database::query(
         'SELECT e.*,
                 (SELECT COUNT(*) FROM personal p
@@ -240,6 +255,7 @@ public function index(): void
  */
 public function porEmpresa(string $id): void
 {
+    if (\App\Auth::hasRole('cliente')) { $this->redirect(base_url('mi-empresa')); }
     $empresaId = (int) $id;
 
     $empresa = Database::first(

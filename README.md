@@ -1,17 +1,70 @@
-# Project Documentation
+# Plataforma SG-SST
 
-## Fase 1 Specifications
-- Overview: Describe the main objectives and goals of Fase 1.
-- Features: List key features implemented in Fase 1.
-- Technical Requirements: Mention any technical specifications required to run this phase.
+Plataforma web (PHP + SQLite, sin framework) para **administrar, gestionar, crear y auditar el Sistema de Gestión de Seguridad y Salud en el Trabajo (SG-SST)** de empresas en Colombia, conforme al Decreto 1072/2015 y la Resolución 0312/2019. Incluye como módulo el **PPPRAE** (plan de emergencias, Res. 256/2014).
 
-## Fase 2 Specifications
-- Overview: Outline what Fase 2 aims to achieve.
-- Features: Detail the features planned or implemented in Fase 2.
-- Technical Requirements: Include any new technical requirements introduced in Fase 2.
+## Qué hace
 
-## How to Use
-Provide instructions for users to setup and use the project.
+- **Centro de cumplimiento SG-SST** (`/sgsst`): al registrar una empresa se inicializa automáticamente su SG-SST:
+  - Evaluación inicial de **estándares mínimos** (catálogo por ciclo PHVA, con evidencia, responsable y fecha compromiso) y **puntaje automático** con semáforo de la Res. 0312/2019 (≤60 % crítico, 61–85 % moderadamente aceptable, >85 % aceptable).
+  - **Plan de trabajo anual base** con 12 actividades, estados y alertas de vencimiento.
+  - **Registros de gestión**: capacitaciones, inspecciones, incidentes/accidentes, EPP, exámenes médicos, mantenimientos, simulacros, COPASST, auditorías y acciones de mejora.
+  - **12 plantillas base editables** (.doc) con los datos de la empresa (política, objetivos, plan anual, acta COPASST, matriz GTC 45, procedimiento de investigación, EPP, auditoría, rendición de cuentas, etc.), registradas con hash SHA-256.
+  - **Informe de cumplimiento imprimible** por empresa (para auditoría, ARL o Ministerio de Trabajo).
+  - **Auditoría automática**: quién hizo qué, sobre qué empresa y cuándo.
+- **Módulo PPPRAE**: asistente de 7 pasos (empresa → inventario → amenazas → vulnerabilidad → personal/brigada → revisión → generación) que produce un ZIP con 5 documentos (lista de chequeo, análisis de vulnerabilidad, matriz consolidada, MEDEVAC y plan completo).
+- **Matriz IPVR interactiva (GTC 45)**: NP = ND × NE y NR = NP × NC automáticos, nivel de aceptabilidad, medidas de intervención, filtro por nivel, exportación CSV y alertas de peligros nivel I/II sin cerrar.
+- **Indicadores automáticos (Res. 0312/2019)**: por periodo mensual, frecuencia y severidad de accidentalidad (× 240.000 HHT), ILI, % de accidentes mortales y % de ausentismo por causa médica; los accidentes/enfermedades se cuentan solos desde los registros.
+- **Alertas de vencimientos**: actividades del plan, registros, compromisos de la evaluación y botiquines (vencidos y próximos 30 días), con contador de críticas en la campana del menú.
+- **Portal del cliente (solo lectura)**: el propietario comparte el SG-SST de una empresa con un usuario cliente, que consulta cumplimiento, matriz, indicadores e informes sin poder modificar nada.
+- **Interfaz estilo macOS**: cristal translúcido, tipografía del sistema, iconos con color, notificaciones toast animadas y campana de alertas.
+- **Paquete documental automático al crear la empresa**: según su grupo (Básico/Intermedio/Completo) se generan en su BD todos los documentos que requiere, diligenciados con sus datos y en estado «pendiente de revisión». El cliente al entrar los ve todos y decide: **✅ dejarlo así**, **↻ regenerarlo** tras corregir sus datos, o **⬆ subir su versión corregida** (queda como versión oficial, con número de versión y auditoría). Las empresas ya creadas pueden generar su paquete desde el Catálogo documental.
+- **Catálogo documental maestro (plantillas reales)**: los 153 archivos del paquete «SG-SST POR ESTANDARES-V» (60 estándares) están integrados por empresa en `/sgsst/empresa/{id}/documentos`: buscar, descargar el original y **generar copia diligenciada** (DOCX/XLSX) con razón social, NIT, representante legal, actividad, ciudad y fecha; cada documento generado queda con hash SHA-256 y en la auditoría. Análisis completo en `docs/ANALISIS_PLANTILLAS.md`.
+- **Formularios web (Fase C)**: 18 formatos del paquete convertidos en formularios (inspecciones, extintores, EPP y su entrega, asistencia e inducción, encuesta de peligros, perfil sociodemográfico 🔒, remisión de exámenes, proveedores, gestión del cambio, investigación Res. 1401/2007, acta COPASST, queja de acoso 🔒, acciones correctivas, residuos, simulacros y mantenimiento) con historial, estados, fecha compromiso integrada a las alertas, detalle imprimible y exportación CSV. Varios se sincronizan solos con Registros (accidentes, capacitaciones, EPP…).
+- **Portal del representante de la empresa** (`/mi-empresa`, botón en la barra superior al tener acceso): el representante logueado ve **solo la documentación que exige el tamaño/riesgo de su empresa** (grupos Res. 0312/2019), su cumplimiento, alertas, matriz e indicadores; con permiso «Representante» puede **corregir los datos y la evaluación en línea** (queda en la BD de su empresa), **generar documentos actualizados e imprimirlos** (informe y documentos generados). El acceso «solo lectura» solo consulta.
+- **Formulario público para operarios** (`/reporte/{token}`, sin login, enlace único por empresa regenerable): reportes de condiciones/actos inseguros, incidentes, accidentes y sugerencias, incluso anónimos; llegan como registros del SG-SST de la empresa y quedan auditados.
+- **Usuarios y roles** (solo superadmin): `superadmin`, `consultor` y `cliente`, con aislamiento de datos por propietario y cambio forzado de contraseña temporal.
 
-## Conclusion
-Summarize the overall goals and what was achieved in both phases.
+> ⚠️ Las plantillas y el catálogo son **bases de partida**: la aplicabilidad de cada estándar depende del número de trabajadores y la clase de riesgo. Todo documento debe adaptarse a la empresa, ser validado por el responsable del SG-SST (con licencia cuando la norma lo exige) y firmarse. La plataforma organiza y hace trazable el cumplimiento; no reemplaza la validación profesional ni la verificación de la norma vigente.
+
+## Instalación
+
+Requisitos: PHP 8.1+ con extensiones `pdo_sqlite`, `zip`, `mbstring`; servidor Apache/Nginx o el servidor embebido de PHP.
+
+```bash
+cp .env.example .env        # ajusta APP_URL y SETUP_TOKEN
+php setup.php               # crea storage/, la BD y el usuario administrador (contraseña mostrada una sola vez)
+php -S localhost:8000 -t public   # desarrollo; en producción apunta el virtual host a /public
+```
+
+> **Mac con XAMPP:** en la raíz del proyecto corre `bash instalar.sh` (busca solo el PHP de XAMPP e instala). Guía completa, incluida la instalación limpia desde cero: `docs/PRUEBA_XAMPP.md`. Ojo: si descargas el ZIP de GitHub, copia el **contenido** de la carpeta descomprimida dentro de `htdocs/ppprae/`, no la carpeta misma.
+
+En producción: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL` con HTTPS, y elimina o bloquea `setup.php`. La contraseña inicial debe cambiarse en el primer ingreso (la plataforma lo exige).
+
+## Seguridad (Fase 1 aplicada)
+
+- Sin credenciales por defecto conocidas: contraseña inicial aleatoria o por entorno.
+- `setup.php` bloqueado sin `SETUP_TOKEN` (y sin efecto si la BD ya existe).
+- Base de datos y documentos generados **fuera de Git** (`storage/` ignorado; contiene datos personales y de salud — Ley 1581/2012).
+- Debug controlado por entorno; cabeceras de seguridad; cookie de sesión `HttpOnly`/`SameSite` (+`Secure` con HTTPS); logout por POST con CSRF; CSRF en todos los formularios.
+- Autorización por propietario en todos los módulos y auditoría de accesos y cambios.
+
+Las migraciones son automáticas e idempotentes (`app/Migrator.php`): las instalaciones existentes ganan las tablas SG-SST sin perder datos.
+
+## Estructura
+
+```
+app/            Núcleo: Router, Auth, Database, Migrator, Auditoría, catálogo SG-SST, generadores DOCX/XLSX
+app/controllers Controladores (SG-SST, PPPRAE, empresas, personal, usuarios…)
+app/Models/     Modelos PPPRAE originales
+views/          Vistas (Tailwind + Alpine por CDN)
+public/         Único punto de entrada web (index.php)
+config/         Configuración por entorno
+schema.sql      Esquema base (instalación nueva)
+storage/        BD SQLite y documentos generados (NO versionado)
+```
+
+## Hoja de ruta
+
+1. **Fase 1 (esta entrega):** seguridad, roles, rutas reparadas, migraciones, auditoría y núcleo SG-SST integral.
+2. **Fase 2 (esta entrega):** matriz IPVR (GTC 45) interactiva, indicadores automáticos, alertas de vencimientos, portal cliente de solo lectura e interfaz macOS. Pruebas: `php tests/Gtc45Test.php` y `php tests/IndicadoresTest.php`.
+3. **Fase 3:** almacenamiento externo y respaldos automáticos, notificaciones, firma electrónica, reportes ARL/MinTrabajo, migración opcional a MariaDB/PostgreSQL para multiusuario intensivo.

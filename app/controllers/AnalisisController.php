@@ -50,6 +50,7 @@ class AnalisisController extends BaseController
  */
 public function index(): void
 {
+    if (\App\Auth::hasRole('cliente')) { $this->redirect(base_url('mi-empresa')); }
     $analisis = Database::query(
         'SELECT a.*,
                 e.razon_social, e.nit, e.num_trabajadores,
@@ -283,6 +284,18 @@ private function cargarCuestionario(int $amenazaId): array
         ]);
     }
 
+    /** POST /analisis/{id}/recalcular */
+    public function recalcular(string $id): void
+    {
+        $this->verifyCsrf();
+        $analisis = $this->obtenerAnalisis((int) $id);
+        foreach (Database::query('SELECT id FROM amenazas WHERE analisis_id = ?', [(int) $id]) as $a) {
+            Calculadora::recalcularAmenaza((int) $a['id']);
+        }
+        flash('success', 'Análisis recalculado');
+        $this->redirect(base_url("analisis/{$id}/wizard/paso6"));
+    }
+
     public function guardarRespuesta(): void
     {
         header('Content-Type: application/json; charset=utf-8');
@@ -309,8 +322,20 @@ private function cargarCuestionario(int $amenazaId): array
             ]
         );
 
-        // 2. Obtener el amenaza_id de esta respuesta
-        $respuesta = Database::first('SELECT amenaza_id FROM respuestas WHERE id = ?', [$id]);
+        // 2. Obtener el amenaza_id y verificar que pertenece al usuario (anti-IDOR)
+        $respuesta = Database::first(
+            'SELECT r.amenaza_id FROM respuestas r
+             JOIN amenazas am ON am.id = r.amenaza_id
+             JOIN analisis a ON a.id = am.analisis_id
+             JOIN empresas e ON e.id = a.empresa_id
+             WHERE r.id = ? AND e.usuario_id = ?',
+            [$id, \App\Auth::id()]
+        );
+        if (!$respuesta && Database::first('SELECT id FROM respuestas WHERE id = ?', [$id])) {
+            http_response_code(403);
+            echo json_encode(['error' => 'No autorizado']);
+            return;
+        }
         if ($respuesta) {
             // 3. Recalcular promedios de esa amenaza
             Calculadora::recalcularAmenaza((int) $respuesta['amenaza_id']);
@@ -320,6 +345,12 @@ private function cargarCuestionario(int $amenazaId): array
     }
     public function promedios(string $id): void
     {
+        $propia = Database::first(
+            'SELECT am.id FROM amenazas am JOIN analisis a ON a.id = am.analisis_id
+             JOIN empresas e ON e.id = a.empresa_id WHERE am.id = ? AND e.usuario_id = ?',
+            [(int) $id, \App\Auth::id()]
+        );
+        if (!$propia) { $this->json(['error' => 'No autorizado'], 403); }
         Calculadora::recalcularAmenaza((int) $id);
         $amenaza = Database::first('SELECT * FROM amenazas WHERE id = ?', [(int) $id]);
         $this->json($amenaza);

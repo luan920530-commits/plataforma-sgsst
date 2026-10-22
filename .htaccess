@@ -1,0 +1,3 @@
+# Entrada desde la raíz del proyecto: /ppprae/ -> /ppprae/public/
+RewriteEngine On
+RewriteRule ^$ public/ [R=302,L]
