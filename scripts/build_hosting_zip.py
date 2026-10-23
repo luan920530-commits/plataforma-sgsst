@@ -41,6 +41,10 @@ add_tree("config", "normia-sst/config")
 add_tree("resources/sgsst-library", "normia-sst/resources/sgsst-library")
 add_tree("resources/pesv-library", "normia-sst/resources/pesv-library")
 add_tree("public/assets", "public_html/assets")
+for required_asset in ("css/app.css", "js/app.js", "js/vendor/qrcode.js", "js/vendor/qrcode.LICENSE.txt"):
+    target = f"public_html/assets/{required_asset}"
+    if target not in files:
+        raise SystemExit(f"Falta el recurso público obligatorio: {required_asset}. Ejecuta npm ci && npm run build.")
 add_file("public/index.php", "normia-sst/public/index.php")
 for name in ("schema.sql", ".htaccess", "index.php"):
     add_file(f"database/{name}", f"normia-sst/database/{name}")

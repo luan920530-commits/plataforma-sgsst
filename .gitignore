@@ -1,6 +1,6 @@
 # Dependencias locales
 node_modules/
-vendor/
+/vendor/
 
 # Base de datos y archivos generados
 database/*.db

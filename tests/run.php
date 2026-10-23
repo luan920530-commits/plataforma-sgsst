@@ -373,6 +373,7 @@ try {
     });
 
     $test('QR de autoreportes: renovación revoca el token anterior sin reiniciar usos', static function () use ($mainId, $constructionId): void {
+        expectTrue(is_file(BASE_PATH . '/public/assets/js/vendor/qrcode.js') && is_file(BASE_PATH . '/public/assets/js/vendor/qrcode.LICENSE.txt'), 'El generador QR y su licencia deben quedar versionados para los clones y el ZIP.');
         $admin = User::findForAuthentication('admin@andina.co');
         $tokenA = 'A' . str_repeat('a', 42);
         $tokenB = 'B' . str_repeat('b', 42);

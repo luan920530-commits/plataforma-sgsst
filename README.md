@@ -290,7 +290,7 @@ npm run build        # copia el generador QR local y compila Tailwind
 # durante desarrollo: npm run watch:css
 ```
 
-Las fuentes son del sistema; no hay llamadas a CDN, analítica ni servicios de terceros. El QR se genera en el navegador con `qrcode-generator` (MIT), cuyo archivo y licencia quedan incluidos localmente; la URL no se envía a una API externa.
+Las fuentes son del sistema; no hay llamadas a CDN, analítica ni servicios de terceros. El QR se genera en el navegador con `qrcode-generator` (MIT). La librería y su licencia quedan versionadas en `public/assets/js/vendor/` e incluidas en el ZIP; la URL no se envía a una API externa.
 
 ## Estructura
 
