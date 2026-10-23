@@ -23,12 +23,14 @@ use App\Models\Autoreporte;
 use App\Models\BibliotecaRespuesta;
 use App\Models\Capacitacion;
 use App\Models\Documento;
+use App\Models\Evidencia;
 use App\Models\Induccion;
 use App\Models\Peligro;
 use App\Models\PermisoTrabajo;
 use App\Models\PlanEmergencia;
 use App\Models\PlanSaaS;
 use App\Models\PlanTrabajo;
+use App\Models\PlanoEmergencia;
 use App\Models\ProgramaActividad;
 use App\Models\ProgramaPrevencion;
 use App\Models\RequisitoAccion;
@@ -41,8 +43,10 @@ use App\Services\ClassificationService;
 use App\Services\ComplianceService;
 use App\Services\DemoSeeder;
 use App\Services\DocumentGenerator;
+use App\Services\EvidenceLinker;
 use App\Services\EvidenceStorage;
 use App\Services\ExcelCalculator;
+use App\Services\FloorPlan;
 use App\Services\Installer;
 use App\Services\LibraryOriginal;
 use App\Services\ModuleAccess;
@@ -110,6 +114,34 @@ function programTestData(int $tenantId): array {
     ];
 }
 
+function floorPlanTestDesign(string $suffix = 'A'): array
+{
+    return [
+        'format' => 1, 'width' => 1000, 'height' => 650, 'grid' => 20,
+        'elements' => [
+            ['id' => 'wall_' . $suffix, 'tool' => 'wall', 'x' => 40, 'y' => 80, 'x2' => 420, 'y2' => 80, 'label' => 'Muro norte', 'color' => '#334155', 'rotation' => 0, 'stroke' => 10],
+            ['id' => 'route_' . $suffix, 'tool' => 'route', 'x' => 100, 'y' => 200, 'x2' => 420, 'y2' => 200, 'label' => 'Ruta principal', 'color' => '#15803d', 'rotation' => 0, 'stroke' => 8],
+            ['id' => 'exit_' . $suffix, 'tool' => 'exit', 'x' => 460, 'y' => 200, 'label' => 'SALIDA', 'color' => '#15803d', 'rotation' => 0, 'stroke' => 8],
+            ['id' => 'text_' . $suffix, 'tool' => 'text', 'x' => 80, 'y' => 120, 'label' => 'Sede de prueba', 'color' => '#334155', 'rotation' => 0, 'stroke' => 18],
+        ],
+    ];
+}
+
+function evidenceTestData(int $tenantId, string $key, string $module, int $userId): array
+{
+    $stored = substr(hash('sha256', $key), 0, 32) . '.png';
+    return [
+        'tenant_id' => $tenantId, 'requisito_clave' => '', 'modulo' => $module,
+        'categoria' => 'Reporte o informe', 'titulo' => 'EVID-SCOPE · ' . $key,
+        'fecha_evidencia' => '2026-10-23', 'entidad_tipo' => 'general', 'entidad_id' => '',
+        'entidad_referencia' => 'Archivo general de prueba', 'nombre_original' => $key . '.png',
+        'nombre_almacenado' => $stored, 'ruta_relativa' => 'tenant_' . $tenantId . '/' . $stored,
+        'mime' => 'image/png', 'extension' => 'png', 'tamano' => 68,
+        'hash_sha256' => hash('sha256', $key), 'descripcion' => 'Registro sintético de prueba',
+        'estado_revision' => 'Pendiente', 'subido_por' => $userId,
+    ];
+}
+
 $tests = [];
 $test = static function (string $name, callable $callback) use (&$tests): void { $tests[$name] = $callback; };
 
@@ -123,7 +155,7 @@ try {
     $constructionId = (int) $construction['id'];
 
     $test('Esquema, claves foráneas y catálogos', static function (): void {
-        expectSame(28, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
+        expectSame(30, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
         expectSame(1, (int) Database::first('PRAGMA foreign_keys')['foreign_keys']);
         expectSame([], Database::query('PRAGMA foreign_key_check'));
         expectSame(20, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
@@ -515,7 +547,7 @@ try {
         expectSame('Verificado', $updated['items']['emergencia_planos']['estado']);
         expectSame(1, $updated['items']['emergencia_planos']['supports']);
         expectSame(null, SoporteCumplimiento::findForTenant($supportId, $constructionId));
-        SoporteCumplimiento::delete($supportId, $mainId);
+        expectTrue(SoporteCumplimiento::delete($supportId, $mainId), 'Un soporte pendiente sí puede borrarse.');
     });
 
     $test('Rutas privadas de evidencias y tipos permitidos', static function () use ($mainId): void {
@@ -525,6 +557,146 @@ try {
         try { EvidenceStorage::path($mainId, '../database/sgsst.db'); } catch (DomainException) { $blocked = true; }
         expectTrue($blocked, 'La ruta manipulada debía rechazarse.');
         expectSame(10485760, EvidenceStorage::MAX_BYTES);
+    });
+
+    $test('Editor de planos: herramientas conocidas y validación estricta del diseño', static function (): void {
+        expectSame(['wall', 'door', 'route', 'exit', 'extinguisher', 'first_aid', 'alarm', 'assembly', 'text'], FloorPlan::tools());
+        $design = ['format' => 1, 'width' => 1000, 'height' => 650, 'grid' => 20, 'elements' => []];
+        foreach (FloorPlan::tools() as $index => $tool) {
+            $element = [
+                'id' => 'element_' . $index, 'tool' => $tool, 'x' => 40 + $index * 20, 'y' => 100,
+                'label' => $tool === 'text' ? 'Texto visible' : 'Elemento ' . $tool,
+                'color' => '#334155', 'rotation' => 0, 'stroke' => 8, 'html' => '<script>no se conserva</script>',
+            ];
+            if (in_array($tool, ['wall', 'route'], true)) {
+                $element['x2'] = 160 + $index * 20;
+                $element['y2'] = 100;
+            }
+            $design['elements'][] = $element;
+        }
+        $normalized = FloorPlan::normalize(FloorPlan::encode($design));
+        expectSame(9, count($normalized['elements']));
+        expectSame(1000, $normalized['width']);
+        expectTrue(!array_key_exists('html', $normalized['elements'][0]), 'El formato no debe conservar markup arbitrario.');
+        $invalid = ['<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>', FloorPlan::encode(FloorPlan::defaults())];
+        $duplicate = floorPlanTestDesign();
+        $duplicate['elements'][1]['id'] = $duplicate['elements'][0]['id'];
+        $invalid[] = FloorPlan::encode($duplicate);
+        $unknown = floorPlanTestDesign();
+        $unknown['elements'][0]['tool'] = 'script';
+        $invalid[] = FloorPlan::encode($unknown);
+        $outside = floorPlanTestDesign();
+        $outside['elements'][2]['x'] = 1001;
+        $invalid[] = FloorPlan::encode($outside);
+        $arrayLabel = floorPlanTestDesign();
+        $arrayLabel['elements'][3]['label'] = ['no escalar'];
+        $invalid[] = FloorPlan::encode($arrayLabel);
+        $zeroLength = floorPlanTestDesign();
+        $zeroLength['elements'][0]['x2'] = $zeroLength['elements'][0]['x'];
+        $zeroLength['elements'][0]['y2'] = $zeroLength['elements'][0]['y'];
+        $invalid[] = FloorPlan::encode($zeroLength);
+        $blocked = 0;
+        foreach ($invalid as $json) {
+            try { FloorPlan::normalize($json); } catch (DomainException) { $blocked++; }
+        }
+        expectSame(count($invalid), $blocked, 'Todos los diseños inválidos deben rechazarse.');
+    });
+
+    $test('Centro de evidencias: vínculos reales, revisión humana y alcance por módulo', static function () use ($mainId, $constructionId): void {
+        $admin = User::findForAuthentication('admin@andina.co');
+        $document = null;
+        foreach (Documento::forTenant($mainId) as $candidate) {
+            if (!ModuleAccess::documentMatches($candidate, ModuleAccess::PESV) && !ModuleAccess::documentMatches($candidate, ModuleAccess::EMERGENCIAS)) {
+                $document = $candidate;
+                break;
+            }
+        }
+        expectTrue($document !== null, 'Debe existir un documento SG-SST general para vincular.');
+        $link = EvidenceLinker::resolve('documento:' . $document['id'], $mainId, ModuleAccess::SGST);
+        expectSame('documento', $link['entidad_tipo']);
+        expectSame(ModuleAccess::SGST, $link['modulo']);
+        expectSame('/documentos/' . $document['id'], EvidenceLinker::url(['entidad_tipo' => 'documento', 'entidad_id' => (string) $document['id']]));
+        $crossTenant = false;
+        try { EvidenceLinker::resolve('documento:' . $document['id'], $constructionId, ModuleAccess::SGST); } catch (DomainException) { $crossTenant = true; }
+        expectTrue($crossTenant, 'No debe vincularse un documento de otra empresa.');
+        $crossModule = false;
+        try { EvidenceLinker::resolve('general:', $mainId, ModuleAccess::PESV, ModuleAccess::SGST); } catch (DomainException) { $crossModule = true; }
+        expectTrue($crossModule, 'Un plan PESVial no debe crear evidencia SG-SST general.');
+
+        $sgsstId = Evidencia::create(array_merge(evidenceTestData($mainId, 'sgsst', ModuleAccess::SGST, (int) $admin['id']), $link));
+        $pesvId = Evidencia::create(evidenceTestData($mainId, 'pesv', ModuleAccess::PESV, (int) $admin['id']));
+        $emergencyId = Evidencia::create(evidenceTestData($mainId, 'emergency', ModuleAccess::EMERGENCIAS, (int) $admin['id']));
+        expectSame('Pendiente', Evidencia::findForTenant($sgsstId, $mainId, ModuleAccess::SGST)['estado_revision']);
+        expectSame(null, Evidencia::findForTenant($sgsstId, $constructionId, ModuleAccess::SGST));
+        expectSame(3, count(Evidencia::forTenant($mainId, ModuleAccess::SGST, ['q' => 'EVID-SCOPE'])));
+        $pesvRows = Evidencia::forTenant($mainId, ModuleAccess::PESV, ['q' => 'EVID-SCOPE']);
+        $emergencyRows = Evidencia::forTenant($mainId, ModuleAccess::EMERGENCIAS, ['q' => 'EVID-SCOPE']);
+        expectSame(1, count($pesvRows));
+        expectSame(ModuleAccess::PESV, $pesvRows[0]['modulo']);
+        expectSame(1, count($emergencyRows));
+        expectSame(ModuleAccess::EMERGENCIAS, $emergencyRows[0]['modulo']);
+        expectSame(1, Evidencia::countForEntity($mainId, 'documento', (string) $document['id']));
+        Evidencia::review($sgsstId, $mainId, 'Revisado', 'Contenido y fecha contrastados por SST', (int) $admin['id']);
+        $reviewed = Evidencia::findForTenant($sgsstId, $mainId, ModuleAccess::SGST);
+        expectSame('Revisado', $reviewed['estado_revision']);
+        expectSame((int) $admin['id'], (int) $reviewed['revisado_por']);
+        expectTrue($reviewed['revisado_at'] !== null && $reviewed['observaciones_revision'] !== '');
+        expectTrue(!Evidencia::delete($sgsstId, $mainId), 'El borrado condicional debe rechazar una evidencia revisada.');
+        expectTrue(Evidencia::findForTenant($sgsstId, $mainId, ModuleAccess::SGST) !== null, 'El modelo no debe borrar una evidencia revisada.');
+        Evidencia::review($sgsstId, $mainId, 'Pendiente', '', (int) $admin['id']);
+        foreach ([$sgsstId, $pesvId, $emergencyId] as $id) {
+            expectTrue(Evidencia::delete($id, $mainId), 'La evidencia pendiente debe borrarse exactamente una vez.');
+            expectSame(null, Evidencia::findForTenant($id, $mainId, ModuleAccess::SGST));
+            expectTrue(!Evidencia::delete($id, $mainId), 'Un segundo borrado no debe reportar éxito.');
+        }
+    });
+
+    $test('Planos de emergencia: versiones inmutables, vínculos y cascada tenant', static function () use ($mainId, $constructionId): void {
+        $admin = User::findForAuthentication('admin@andina.co');
+        $planId = PlanEmergencia::create(emergencyTestData($mainId));
+        $firstDesign = floorPlanTestDesign('A');
+        $drawingId = PlanoEmergencia::create([
+            'tenant_id' => $mainId, 'plan_id' => $planId, 'nombre' => 'Plano sede prueba',
+            'escala' => 'Referencial · validar en sitio', 'descripcion' => 'Primer piso sintético',
+            'datos_json' => FloorPlan::encode(FloorPlan::normalize(FloorPlan::encode($firstDesign))), 'created_by' => (int) $admin['id'],
+        ]);
+        expectTrue($drawingId > 0);
+        expectSame(1, (int) PlanoEmergencia::findForTenant($drawingId, $mainId)['version']);
+        expectSame(null, PlanoEmergencia::findForTenant($drawingId, $constructionId));
+        expectSame([], PlanoEmergencia::forPlan($planId, $constructionId));
+        $secondDesign = floorPlanTestDesign('B');
+        $version = PlanoEmergencia::update($drawingId, $mainId, [
+            'nombre' => 'Plano sede actualizado', 'escala' => 'Referencial revisado', 'descripcion' => 'Segunda versión',
+            'datos_json' => FloorPlan::encode(FloorPlan::normalize(FloorPlan::encode($secondDesign))), 'created_by' => (int) $admin['id'],
+            'expected_version' => 1,
+        ]);
+        expectSame(2, $version);
+        $staleRejected = false;
+        try {
+            PlanoEmergencia::update($drawingId, $mainId, [
+                'nombre' => 'Guardado desde pestaña obsoleta', 'escala' => 'Referencial', 'descripcion' => 'No debe sobrescribir',
+                'datos_json' => FloorPlan::encode(FloorPlan::normalize(FloorPlan::encode($firstDesign))),
+                'created_by' => (int) $admin['id'], 'expected_version' => 1,
+            ]);
+        } catch (DomainException) {
+            $staleRejected = true;
+        }
+        expectTrue($staleRejected, 'Una versión base obsoleta no debe sobrescribir el trabajo más reciente.');
+        expectSame(2, (int) PlanoEmergencia::findForTenant($drawingId, $mainId)['version']);
+        $versions = PlanoEmergencia::versions($drawingId, $mainId);
+        expectSame(2, count($versions));
+        expectSame(2, (int) $versions[0]['version']);
+        expectSame(1, (int) $versions[1]['version']);
+        expectTrue(str_contains($versions[1]['datos_json'], 'wall_A'));
+        expectTrue(!str_contains($versions[1]['datos_json'], 'wall_B'));
+        expectSame(null, PlanoEmergencia::findVersion((int) $versions[1]['id'], $drawingId, $constructionId));
+        $link = EvidenceLinker::resolve('plano:' . $drawingId, $mainId, ModuleAccess::EMERGENCIAS);
+        expectSame(ModuleAccess::EMERGENCIAS, $link['modulo']);
+        expectSame('/planos-emergencia/' . $drawingId . '/editar', EvidenceLinker::url(['entidad_tipo' => 'plano', 'entidad_id' => (string) $drawingId]));
+        PlanEmergencia::delete($planId, $mainId);
+        expectSame(null, PlanoEmergencia::findForTenant($drawingId, $mainId));
+        expectSame([], PlanoEmergencia::versions($drawingId, $mainId));
+        expectSame([], Database::query('PRAGMA foreign_key_check'));
     });
 
     $test('Biblioteca SG-SST: 142 plantillas, 153 referencias y 60 estándares', static function (): void {
@@ -904,7 +1076,7 @@ try {
     $test('Migración idempotente e integridad del esquema ampliado', static function (): void {
         Database::initialize();
         expectSame([], Database::query('PRAGMA foreign_key_check'));
-        expectSame(28, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
+        expectSame(30, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
         expectSame(20, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
         $reportColumns = array_column(Database::query('PRAGMA table_info(autoreportes)'), 'name');
         foreach (['acceso_reporte_id', 'origen', 'nombre_externo', 'contacto_externo', 'anonimo'] as $column) {
@@ -916,6 +1088,13 @@ try {
         $tenantColumns = array_column(Database::query('PRAGMA table_info(tenants)'), 'name');
         expectTrue(in_array('modulo', $planColumns, true));
         expectTrue(in_array('plan_condicion', $tenantColumns, true));
+        $evidenceColumns = array_column(Database::query('PRAGMA table_info(soportes_cumplimiento)'), 'name');
+        foreach (['modulo', 'categoria', 'titulo', 'fecha_evidencia', 'entidad_tipo', 'entidad_id', 'entidad_referencia', 'estado_revision', 'observaciones_revision', 'revisado_por', 'revisado_at', 'updated_at'] as $column) {
+            expectTrue(in_array($column, $evidenceColumns, true), 'Falta la columna de evidencia ' . $column);
+        }
+        expectSame(3, SchemaMigrator::VERSION);
+        expectTrue(Database::first("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'planos_emergencia'") !== null);
+        expectTrue(Database::first("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'planos_emergencia_versiones'") !== null);
     });
 
     $test('Instalación web segura y migración automática', static function (): void {

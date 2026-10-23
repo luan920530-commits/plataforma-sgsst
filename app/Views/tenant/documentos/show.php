@@ -5,6 +5,7 @@
         <p><?= e($document['codigo_estandar']) ?> · <?= e($document['fase_phva']) ?> · Versión <?= (int) $document['version'] ?></p>
     </div>
     <div class="flex flex-wrap gap-2">
+        <a href="<?= e(url('/evidencias?vinculo=' . rawurlencode('documento:' . $document['id']) . '#cargar')) ?>" class="btn-secondary"><?= icon('upload', 'h-4 w-4') ?> Adjuntar evidencia</a>
         <a href="<?= e(url('/documentos/' . $document['id'] . '/imprimir')) ?>" class="btn-secondary" target="_blank" rel="noopener"><?= icon('download', 'h-4 w-4') ?> Imprimir / PDF</a>
         <?php if ($document['estado'] === 'Borrador'): ?>
             <form method="post" action="<?= e(url('/documentos/' . $document['id'] . '/aprobar')) ?>" data-confirm="¿Confirmas que el contenido fue revisado y está listo para aprobarse?"><?= csrf_field() ?><button class="btn-primary" type="submit"><?= icon('check-circle', 'h-4 w-4') ?> Aprobar documento</button></form>

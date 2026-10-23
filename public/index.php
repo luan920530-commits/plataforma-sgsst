@@ -15,11 +15,13 @@ use App\Controllers\DashboardController;
 use App\Controllers\DocumentGeneratorController;
 use App\Controllers\EmergenciaController;
 use App\Controllers\EquipoController;
+use App\Controllers\EvidenciaController;
 use App\Controllers\IndicadorController;
 use App\Controllers\InstallController;
 use App\Controllers\PermisoController;
 use App\Controllers\PHVAController;
 use App\Controllers\PlanController;
+use App\Controllers\PlanoEmergenciaController;
 use App\Controllers\ProcedimientoController;
 use App\Controllers\ProgramaController;
 use App\Controllers\ReporteController;
@@ -83,6 +85,11 @@ $router->get('/admin/auditoria', [AuditoriaController::class, 'index'], $super);
 
 // Portal de empresa y responsable SG-SST.
 $tenantManagers = ['AdminEmpresa', 'ResponsableSST'];
+$router->get('/evidencias', [EvidenciaController::class, 'index'], $tenantManagers, 'compartido');
+$router->post('/evidencias', [EvidenciaController::class, 'store'], $tenantManagers, 'compartido');
+$router->get('/evidencias/{id}/descargar', [EvidenciaController::class, 'download'], $tenantManagers, 'compartido');
+$router->post('/evidencias/{id}/revision', [EvidenciaController::class, 'review'], $tenantManagers, 'compartido');
+$router->post('/evidencias/{id}/eliminar', [EvidenciaController::class, 'delete'], $tenantManagers, 'compartido');
 $router->get('/documentos', [DocumentGeneratorController::class, 'index'], $tenantManagers, 'documentos');
 $router->get('/documentos/{id}', [DocumentGeneratorController::class, 'show'], $tenantManagers, 'documentos');
 $router->post('/documentos/{id}', [DocumentGeneratorController::class, 'update'], $tenantManagers, 'documentos');
@@ -161,6 +168,12 @@ $router->post('/permisos-trabajo/{id}/eliminar', [PermisoController::class, 'del
 $router->get('/emergencias', [EmergenciaController::class, 'index'], $tenantManagers, 'emergencias');
 $router->get('/emergencias/nuevo', [EmergenciaController::class, 'create'], $tenantManagers, 'emergencias');
 $router->post('/emergencias', [EmergenciaController::class, 'store'], $tenantManagers, 'emergencias');
+$router->get('/emergencias/{id}/planos/nuevo', [PlanoEmergenciaController::class, 'create'], $tenantManagers, 'emergencias');
+$router->post('/emergencias/{id}/planos', [PlanoEmergenciaController::class, 'store'], $tenantManagers, 'emergencias');
+$router->get('/planos-emergencia/{id}/editar', [PlanoEmergenciaController::class, 'edit'], $tenantManagers, 'emergencias');
+$router->post('/planos-emergencia/{id}', [PlanoEmergenciaController::class, 'update'], $tenantManagers, 'emergencias');
+$router->get('/planos-emergencia/{id}/versiones/{versionId}', [PlanoEmergenciaController::class, 'version'], $tenantManagers, 'emergencias');
+$router->post('/planos-emergencia/{id}/exportar-png', [PlanoEmergenciaController::class, 'exportPng'], $tenantManagers, 'emergencias');
 $router->get('/emergencias/{id}', [EmergenciaController::class, 'show'], $tenantManagers, 'emergencias');
 $router->get('/emergencias/{id}/editar', [EmergenciaController::class, 'edit'], $tenantManagers, 'emergencias');
 $router->post('/emergencias/{id}', [EmergenciaController::class, 'update'], $tenantManagers, 'emergencias');

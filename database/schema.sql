@@ -501,6 +501,13 @@ CREATE TABLE IF NOT EXISTS soportes_cumplimiento (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     tenant_id INTEGER NOT NULL,
     requisito_clave TEXT NOT NULL,
+    modulo TEXT NOT NULL DEFAULT 'sgsst' CHECK (modulo IN ('sgsst','pesv','emergencias')),
+    categoria TEXT NOT NULL DEFAULT 'Documento SG-SST',
+    titulo TEXT NOT NULL DEFAULT '',
+    fecha_evidencia TEXT,
+    entidad_tipo TEXT NOT NULL DEFAULT 'requisito',
+    entidad_id TEXT NOT NULL DEFAULT '',
+    entidad_referencia TEXT NOT NULL DEFAULT '',
     nombre_original TEXT NOT NULL,
     nombre_almacenado TEXT NOT NULL,
     ruta_relativa TEXT NOT NULL,
@@ -509,11 +516,54 @@ CREATE TABLE IF NOT EXISTS soportes_cumplimiento (
     tamano INTEGER NOT NULL CHECK (tamano > 0),
     hash_sha256 TEXT NOT NULL,
     descripcion TEXT NOT NULL DEFAULT '',
+    estado_revision TEXT NOT NULL DEFAULT 'Pendiente' CHECK (estado_revision IN ('Pendiente','Revisado')),
+    observaciones_revision TEXT NOT NULL DEFAULT '',
+    revisado_por INTEGER,
+    revisado_at TEXT,
     subido_por INTEGER,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
     FOREIGN KEY (subido_por) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (revisado_por) REFERENCES users(id) ON DELETE SET NULL,
     UNIQUE (tenant_id, nombre_almacenado)
+);
+
+-- Planos SVG de emergencia y versiones inmutables de cada diseño guardado.
+CREATE TABLE IF NOT EXISTS planos_emergencia (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tenant_id INTEGER NOT NULL,
+    plan_id INTEGER NOT NULL,
+    nombre TEXT NOT NULL,
+    escala TEXT NOT NULL DEFAULT 'Referencial · verificar en sitio',
+    descripcion TEXT NOT NULL DEFAULT '',
+    datos_json TEXT NOT NULL,
+    version INTEGER NOT NULL DEFAULT 1 CHECK (version > 0),
+    created_by INTEGER,
+    updated_by INTEGER,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (plan_id) REFERENCES planes_emergencia(id) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (updated_by) REFERENCES users(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS planos_emergencia_versiones (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tenant_id INTEGER NOT NULL,
+    plano_id INTEGER NOT NULL,
+    version INTEGER NOT NULL CHECK (version > 0),
+    nombre TEXT NOT NULL,
+    escala TEXT NOT NULL DEFAULT '',
+    descripcion TEXT NOT NULL DEFAULT '',
+    datos_json TEXT NOT NULL,
+    created_by INTEGER,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (plano_id) REFERENCES planos_emergencia(id) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
+    UNIQUE (plano_id, version)
 );
 
 -- Respuestas tenant de los formularios importados de la biblioteca SG-SST.
@@ -570,4 +620,9 @@ CREATE INDEX IF NOT EXISTS idx_requisito_acciones_tenant ON requisito_acciones(t
 CREATE INDEX IF NOT EXISTS idx_requisito_acciones_responsable ON requisito_acciones(responsable_id, estado);
 CREATE INDEX IF NOT EXISTS idx_requisito_seguimiento_tenant ON requisito_seguimiento(tenant_id, estado);
 CREATE INDEX IF NOT EXISTS idx_soportes_requisito ON soportes_cumplimiento(tenant_id, requisito_clave);
+CREATE INDEX IF NOT EXISTS idx_soportes_modulo ON soportes_cumplimiento(tenant_id, modulo, estado_revision);
+CREATE INDEX IF NOT EXISTS idx_soportes_entidad ON soportes_cumplimiento(tenant_id, entidad_tipo, entidad_id);
+CREATE INDEX IF NOT EXISTS idx_soportes_fecha ON soportes_cumplimiento(tenant_id, fecha_evidencia);
+CREATE INDEX IF NOT EXISTS idx_planos_emergencia_plan ON planos_emergencia(tenant_id, plan_id, updated_at);
+CREATE INDEX IF NOT EXISTS idx_planos_versiones_plano ON planos_emergencia_versiones(tenant_id, plano_id, version);
 CREATE INDEX IF NOT EXISTS idx_biblioteca_respuestas_tenant ON biblioteca_respuestas(tenant_id, plantilla_id, updated_at);

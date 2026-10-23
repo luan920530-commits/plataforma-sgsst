@@ -41,6 +41,7 @@ if ($role === 'SuperAdmin') {
                 ['Resumen PESVial', '/dashboard', 'dashboard', true],
                 ['Kit PESV · 24 pasos', '/pesv', 'shield-plain'],
                 ['Documentos PESV', '/documentos', 'documents'],
+                ['Centro de evidencias', '/evidencias', 'upload'],
             ]],
             ['label' => 'ADMINISTRACIÓN', 'items' => [
                 ['Equipo y accesos', '/equipo', 'users'],
@@ -53,6 +54,7 @@ if ($role === 'SuperAdmin') {
                 ['Planes de emergencia', '/emergencias', 'shield'],
                 ['Programas y vigilancia', '/programas-prevencion', 'activity'],
                 ['Documentos del módulo', '/documentos', 'documents'],
+                ['Centro de evidencias', '/evidencias', 'upload'],
                 ['Documentación y evidencias', '/cumplimiento-documental', 'shield-plain'],
             ]],
             ['label' => 'ADMINISTRACIÓN', 'items' => [
@@ -66,6 +68,7 @@ if ($role === 'SuperAdmin') {
         ]],
         ['label' => 'GESTIÓN', 'items' => [
             ['Documentos', '/documentos', 'documents'],
+            ['Centro de evidencias', '/evidencias', 'upload'],
             ['Procedimientos y formatos', '/procedimientos', 'book'],
             ['Biblioteca SG-SST', '/biblioteca-sgsst', 'documents'],
             ['PESV · Seguridad vial', '/pesv', 'shield-plain'],

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Core\Database;
 use App\Models\RequisitoAccion;
 use App\Models\RequisitoSeguimiento;
 use App\Models\SoporteCumplimiento;
@@ -179,6 +180,11 @@ final class CumplimientoController extends BaseController
             $data['requisito_clave'] = $key;
             $data['descripcion'] = $description;
             $data['subido_por'] = Auth::id();
+            $module = ModuleAccess::current();
+            $data['modulo'] = $module === 'integral' ? 'sgsst' : $module;
+            $data['categoria'] = 'Soporte de requisito';
+            $data['titulo'] = trim($description) !== '' ? $description : $data['nombre_original'];
+            $data['fecha_evidencia'] = date('Y-m-d');
             $id = SoporteCumplimiento::create($data);
         } catch (DomainException $exception) {
             flash('error', $exception->getMessage());
@@ -228,10 +234,17 @@ final class CumplimientoController extends BaseController
             $this->notFound();
         }
         $this->authorizeRequirement($support['requisito_clave']);
+        if (($support['estado_revision'] ?? 'Pendiente') === 'Revisado') {
+            $this->abort(403, 'Un soporte revisado se conserva para trazabilidad y no puede eliminarse desde este flujo.');
+        }
         $redirectTo = $this->requirementPath($support['requisito_clave'], 'soportes');
         try {
-            EvidenceStorage::delete($this->tenantId(), $support['nombre_almacenado']);
-            SoporteCumplimiento::delete($id, $this->tenantId());
+            Database::transaction(function () use ($id, $support): void {
+                if (!SoporteCumplimiento::delete($id, $this->tenantId())) {
+                    throw new RuntimeException('El soporte cambió de estado antes de eliminarlo.');
+                }
+                EvidenceStorage::delete($this->tenantId(), $support['nombre_almacenado']);
+            });
         } catch (Throwable $exception) {
             error_log((string) $exception);
             flash('error', 'No fue posible eliminar el archivo. Revisa los permisos de storage.');

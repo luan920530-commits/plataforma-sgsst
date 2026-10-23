@@ -35,16 +35,28 @@ final class SoporteCumplimiento
     public static function create(array $data): int
     {
         Database::execute(
-            'INSERT INTO soportes_cumplimiento (tenant_id, requisito_clave, nombre_original, nombre_almacenado,
+            'INSERT INTO soportes_cumplimiento (tenant_id, requisito_clave, modulo, categoria, titulo, fecha_evidencia,
+                entidad_tipo, entidad_id, entidad_referencia, nombre_original, nombre_almacenado,
                 ruta_relativa, mime, extension, tamano, hash_sha256, descripcion, subido_por)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [(int) $data['tenant_id'], $data['requisito_clave'], $data['nombre_original'], $data['nombre_almacenado'], $data['ruta_relativa'], $data['mime'], $data['extension'], (int) $data['tamano'], $data['hash_sha256'], trim($data['descripcion'] ?? ''), (int) $data['subido_por']]
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [
+                (int) $data['tenant_id'], $data['requisito_clave'], $data['modulo'] ?? 'sgsst',
+                $data['categoria'] ?? 'Soporte de requisito',
+                trim($data['titulo'] ?? (trim($data['descripcion'] ?? '') !== '' ? $data['descripcion'] : $data['nombre_original'])),
+                $data['fecha_evidencia'] ?? date('Y-m-d'), 'requisito', $data['requisito_clave'],
+                'Requisito: ' . $data['requisito_clave'], $data['nombre_original'], $data['nombre_almacenado'],
+                $data['ruta_relativa'], $data['mime'], $data['extension'], (int) $data['tamano'], $data['hash_sha256'],
+                trim($data['descripcion'] ?? ''), (int) $data['subido_por'],
+            ]
         );
         return Database::lastId();
     }
 
-    public static function delete(int $id, int $tenantId): void
+    public static function delete(int $id, int $tenantId): bool
     {
-        Database::execute('DELETE FROM soportes_cumplimiento WHERE id = ? AND tenant_id = ?', [$id, $tenantId]);
+        return Database::execute(
+            "DELETE FROM soportes_cumplimiento WHERE id = ? AND tenant_id = ? AND estado_revision = 'Pendiente'",
+            [$id, $tenantId]
+        ) === 1;
     }
 }

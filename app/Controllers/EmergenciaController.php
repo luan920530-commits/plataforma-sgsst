@@ -6,6 +6,7 @@ namespace App\Controllers;
 use App\Core\Database;
 use App\Models\Documento;
 use App\Models\PlanEmergencia;
+use App\Models\PlanoEmergencia;
 use App\Models\SimulacroEmergencia;
 use App\Models\Tenant;
 use App\Services\OperationalDocument;
@@ -61,6 +62,7 @@ final class EmergenciaController extends BaseController
             'plan' => $plan,
             'tenant' => Tenant::find($this->tenantId()),
             'drills' => SimulacroEmergencia::forPlan($id, $this->tenantId()),
+            'drawings' => PlanoEmergencia::forPlan($id, $this->tenantId()),
             'amenazas' => $this->decode($plan['amenazas_json']),
             'contactos' => $this->decode($plan['contactos_json']),
             'brigada' => $this->decode($plan['brigada_json']),

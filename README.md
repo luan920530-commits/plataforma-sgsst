@@ -30,6 +30,8 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - CRUD de capacitaciones, cambio de estado e indicadores con fórmulas y datos fuente.
 - Permisos de trabajo con borrador, solicitud, aprobación, activación, cierre/cancelación, revisiones e impresión; campos específicos para alturas y espacios confinados.
 - Planes de emergencia por centro de trabajo con amenazas, contactos, brigada, recursos, evacuación, rescate, ayuda mutua, simulacros y documento versionado.
+- **Centro transversal de evidencias físicas:** cargas privadas PDF/JPG/PNG de listas de asistencia, reportes, formularios, inspecciones, simulacros, fotografías y otros soportes; vínculos con su módulo de origen, filtros, descarga íntegra y revisión humana con fecha, responsable y observaciones.
+- **Microapp visual de planos de emergencia:** lienzo SVG con cuadrícula y ajuste, muros, puertas, rutas, salidas, extintores, botiquines, alarmas, puntos de encuentro y textos; historial inmutable, control de versiones concurrentes y exportación PNG archivada como evidencia pendiente de revisión.
 - Programas de promoción de la salud, prevención de accidentes/enfermedad laboral y vigilancia, con diagnóstico, objetivos, metas, presupuesto, actividades y evidencias.
 - Panel de documentación pendiente con referencias normativas, seguimiento humano y evidencias privadas PDF/JPG/PNG, incluidos planos y rutas de evacuación.
 - **Centro de gestión para cada requisito**, con acciones, usuarios responsables, recursos, fechas, evidencia de cierre y enlace al módulo operativo correspondiente; no redirige todo a la biblioteca.
@@ -85,6 +87,14 @@ El detalle técnico y la reconstrucción están en [`docs/biblioteca-pesv.md`](d
 - El cambio de plan se aplica en la siguiente solicitud, incluso con la sesión abierta. Los registros históricos no se borran, pero documentos, rutas, navegación, paneles y evidencias quedan filtrados por el nuevo módulo.
 - Equipo, configuración de empresa y seguridad de cuenta son funciones transversales. Las rutas compartidas comprueban además que cada documento, requisito, soporte o acción pertenezca al módulo habilitado.
 - Si una empresa sale del SG-SST integral, los enlaces públicos de autoreportes anteriores dejan de aceptar consultas de formulario y envíos; el consumo del token vuelve a comprobar el plan en la base de datos.
+
+### Evidencias físicas y planos de emergencia
+
+1. Entra como AdminEmpresa o ResponsableSST a **Evidencias**. También puedes usar **Adjuntar evidencia** desde un documento, reporte, capacitación, formulario, plan, simulacro o plano: ese acceso ya lleva el vínculo del registro.
+2. Selecciona la categoría, fecha, descripción y un archivo PDF, JPG o PNG de hasta 10 MB. El archivo se guarda fuera de `public/`, con nombre aleatorio y SHA-256; la descarga vuelve a comprobar empresa y módulo.
+3. Usa **Registrar revisión** para dejar estado, responsable, fecha y observaciones. `Revisado` significa que una persona registró su contraste, no que la plataforma certifique cumplimiento. Los soportes revisados se conservan y no pueden borrarse desde la interfaz.
+4. En **Emergencias → abrir un plan → Planos de emergencia**, crea un plano y dibuja sobre el lienzo SVG. Guarda antes de exportar: cada guardado crea una versión inmutable y una pestaña obsoleta no puede sobrescribir otra más reciente.
+5. **Exportar y archivar PNG** usa únicamente la última versión guardada y crea una evidencia pendiente de revisión. El editor es una herramienta de apoyo, no reemplaza un CAD profesional, un levantamiento en sitio ni la validación técnica/legal del plano.
 
 ### Compartir el formulario de autoreportes
 
@@ -200,7 +210,7 @@ Haz primero una copia de seguridad de la base y de `storage/uploads/`. Después,
 php scripts/migrate.php
 ```
 
-La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, agrega de forma idempotente las columnas nuevas de autoreportes, la relación `biblioteca_id` de documentos, `modulo` de planes y `plan_condicion` de empresas, crea la tabla de respuestas de biblioteca, conserva los registros y termina con `PRAGMA foreign_key_check`. No borra la base ni crea datos demo. El arranque web la aplica automáticamente cuando `PRAGMA user_version` es anterior a la versión del código; el comando anterior queda como alternativa administrativa. Los procedimientos no se imponen masivamente durante la migración: cada empresa decide qué kits generar desde su módulo.
+La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, agrega de forma idempotente las columnas de autoreportes, evidencias y alcance de módulos, crea respuestas de biblioteca, planos y sus versiones, completa los metadatos de soportes heredados y termina con `PRAGMA foreign_key_check`. La versión actual del esquema es **3**. Conserva los registros y archivos existentes, no borra la base ni crea datos demo. El arranque web la aplica automáticamente cuando `PRAGMA user_version` es anterior a la versión del código; el comando anterior queda como alternativa administrativa. Los procedimientos no se imponen masivamente durante la migración: cada empresa decide qué kits generar desde su módulo.
 
 ### XAMPP en macOS
 
@@ -264,6 +274,8 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - Saneamiento HTML y rollback de transacciones.
 - Generación documental y prevención de duplicados.
 - Aislamiento de documentos, autoreportes, usuarios, IPEVR, capacitaciones, permisos, emergencias, programas y soportes entre tenants.
+- Centro de evidencias por módulo, revisión humana, borrado condicional y conservación de soportes revisados.
+- Editor de planos con nueve herramientas validadas, historial inmutable, aislamiento por empresa/plan y rechazo de guardados obsoletos.
 - CRUD, historial de versiones, aprobación/cierre de permisos y simulacros.
 - Generación y escape de documentos operativos, actividades preventivas y evidencias.
 - Procedimientos/formatos CIIU, alturas y espacios confinados sin duplicados.
@@ -277,7 +289,7 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - Verificación documental exclusivamente explícita y protección de rutas de archivos.
 - Hash y verificación de contraseñas.
 
-La suite actual contiene **46 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
+La suite actual contiene **49 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
 
 ## Estilos
 
