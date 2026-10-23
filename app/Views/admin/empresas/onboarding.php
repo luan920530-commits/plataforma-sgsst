@@ -1,6 +1,16 @@
+<?php
+$selectedPlanId = (string) old('plan_id', $plans[0]['id'] ?? '');
+$initialModule = $plans[0]['modulo'] ?? 'sgsst';
+foreach ($plans as $planOption) {
+    if ((string) $planOption['id'] === $selectedPlanId) {
+        $initialModule = $planOption['modulo'];
+        break;
+    }
+}
+?>
 <div class="mx-auto max-w-6xl">
     <div class="page-heading">
-        <div><span class="eyebrow">Asistente de configuración</span><h1>Una empresa, un SG-SST a su medida.</h1><p>Clasifica la organización y genera una base de trabajo completa, lista para revisión técnica.</p></div>
+        <div><span class="eyebrow">Asistente de configuración</span><h1>Una empresa, el módulo a su medida.</h1><p>Clasifica la organización y genera únicamente la base de trabajo del plan seleccionado, lista para revisión técnica.</p></div>
         <a href="<?= e(url('/admin/empresas')) ?>" class="btn-secondary"><?= icon('arrow-left', 'h-4 w-4') ?> Volver</a>
     </div>
 
@@ -110,10 +120,11 @@
                         <h2 class="text-base font-semibold">Plan del SaaS</h2><p class="mt-1 text-xs text-slate-400">Define los límites operativos iniciales.</p>
                         <div class="mt-5 space-y-3">
                             <?php foreach ($plans as $index => $plan): ?>
-                                <label class="plan-choice"><input type="radio" name="plan_id" value="<?= (int) $plan['id'] ?>"<?= checked((string) old('plan_id', $plans[0]['id'] ?? '') === (string) $plan['id']) ?>><span class="flex-1"><strong><?= e($plan['nombre']) ?></strong><small><?= (int) $plan['max_usuarios'] ?> usuarios · <?= (int) $plan['max_empleados'] ?> empleados</small></span><span class="text-xs font-semibold text-slate-600"><?= money($plan['precio_mensual']) ?><small>/mes</small></span></label>
+                                <label class="plan-choice"><input type="radio" name="plan_id" value="<?= (int) $plan['id'] ?>"<?= checked($selectedPlanId === (string) $plan['id']) ?> data-plan-module="<?= e($plan['modulo']) ?>"><span class="flex-1"><strong><?= e($plan['nombre']) ?></strong><small><?= e(App\Services\ModuleAccess::label($plan['modulo'])) ?> · <?= (int) $plan['max_usuarios'] ?> usuarios · <?= (int) $plan['max_empleados'] ?> empleados</small></span><span class="text-xs font-semibold text-slate-600"><?= money($plan['precio_mensual']) ?><small>/mes</small></span></label>
                             <?php endforeach; ?>
                         </div>
                         <?= field_error('plan_id') ?>
+                        <div class="mt-4"><label class="label" for="plan_condicion">Condición comercial *</label><select id="plan_condicion" name="plan_condicion" class="input"><option value="Pagado"<?= selected(old('plan_condicion', 'Pagado'), 'Pagado') ?>>Pagado</option><option value="Sugerido"<?= selected(old('plan_condicion', 'Pagado'), 'Sugerido') ?>>Sugerido</option></select><p class="mt-1.5 text-[10px] leading-4 text-slate-400">Es una marca administrativa, no un comprobante de pago. En ambos casos se aplica el mismo módulo.</p><?= field_error('plan_condicion') ?></div>
                     </div>
                 </div>
                 <div>
@@ -121,15 +132,18 @@
                         <div class="bg-slate-950 p-6 text-white"><span class="text-[10px] font-bold uppercase tracking-widest text-blue-300">Lista para generar</span><h2 class="mt-3 text-xl font-semibold">Configuración inicial</h2><p class="mt-2 text-xs leading-5 text-slate-400">Se ejecutará una transacción única. Si algo falla, no quedarán registros incompletos.</p></div>
                         <div class="p-6">
                             <div class="flex items-center gap-4 rounded-2xl bg-blue-50 p-4"><strong class="text-4xl tracking-tight text-blue-600" data-summary-group>—</strong><div><p class="text-xs font-semibold text-blue-900">estándares mínimos</p><p class="mt-1 text-[10px] text-blue-600" data-summary-company>Empresa por identificar</p></div></div>
-                            <ul class="mt-5 space-y-3 text-xs text-slate-600">
-                                <?php foreach ([['documents', 'Documentos y políticas obligatorias'], ['calendar', 'Plan Anual de Trabajo'], ['cap', 'Cronograma de capacitaciones'], ['grid', 'Matriz IPEVR base y perfiles'], ['signature', 'Inducción para firma digital']] as $feature): ?><li class="flex items-center gap-2.5"><?= icon($feature[0], 'h-4 w-4 text-blue-500') ?><?= e($feature[1]) ?><?= icon('check-circle', 'ml-auto h-4 w-4 text-emerald-500') ?></li><?php endforeach; ?>
-                            </ul>
+                            <?php $generationFeatures = [
+                                'sgsst' => [['documents', 'Documentos y políticas obligatorias'], ['calendar', 'Plan Anual de Trabajo'], ['cap', 'Cronograma de capacitaciones'], ['grid', 'Matriz IPEVR base y perfiles'], ['signature', 'Inducción para firma digital']],
+                                'pesv' => [['shield-plain', 'Índice PESV de 24 pasos en borrador'], ['grid', 'Biblioteca de 97 recursos únicos'], ['edit', 'Formularios y editor visual'], ['documents', 'Versiones y control documental PESV'], ['check-circle', 'Revisión y aprobación humana']],
+                                'emergencias' => [['shield', 'Plan de emergencias en borrador'], ['activity', 'Programa de vigilancia en borrador'], ['calendar', 'Gestión de simulacros'], ['documents', 'Documentos y evidencias del módulo'], ['check-circle', 'Revisión y aprobación humana']],
+                            ]; ?>
+                            <?php foreach ($generationFeatures as $module => $features): ?><ul class="mt-5 space-y-3 text-xs text-slate-600<?= $initialModule === $module ? '' : ' hidden' ?>" data-generation-list="<?= e($module) ?>"><?php foreach ($features as $feature): ?><li class="flex items-center gap-2.5"><?= icon($feature[0], 'h-4 w-4 text-blue-500') ?><?= e($feature[1]) ?><?= icon('check-circle', 'ml-auto h-4 w-4 text-emerald-500') ?></li><?php endforeach; ?></ul><?php endforeach; ?>
                             <p class="mt-6 border-t border-slate-100 pt-4 text-[10px] leading-5 text-slate-400">Los documentos se crearán como <strong>Borrador</strong>. Deben revisarse, adaptarse y aprobarse; su generación no certifica cumplimiento legal.</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="form-footer"><button type="button" class="btn-secondary" data-previous-step><?= icon('arrow-left', 'h-4 w-4') ?> Anterior</button><button type="submit" class="btn-primary" data-generate-company><?= icon('phva', 'h-4 w-4') ?> Crear empresa y generar SG-SST</button></div>
+            <div class="form-footer"><button type="button" class="btn-secondary" data-previous-step><?= icon('arrow-left', 'h-4 w-4') ?> Anterior</button><button type="submit" class="btn-primary" data-generate-company><?= icon('phva', 'h-4 w-4') ?> <span data-generate-label>Crear empresa y generar <?= e(App\Services\ModuleAccess::shortLabel($initialModule)) ?></span></button></div>
         </section>
     </form>
 </div>

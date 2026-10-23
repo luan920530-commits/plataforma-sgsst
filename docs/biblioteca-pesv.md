@@ -53,7 +53,7 @@ El único Word es `PROCEDIMIENTO DE REPORTE, INVESTIGACION Y SEGUIMIENTO.docx`, 
 ## Funcionamiento en la aplicación
 
 1. **Portada `/pesv`:** métricas, seguridad de la conversión, 24 pasos, búsqueda y filtros por tipo/paso.
-2. **Aplicabilidad:** sector o actividad de transporte, incluido CIIU 4923, marca el kit como sugerido. El módulo sigue disponible para revisión en otras empresas sin afirmar que aplique automáticamente.
+2. **Aplicabilidad:** sector o actividad de transporte, incluido CIIU 4923, marca el kit como sugerido. El módulo sigue disponible para revisión en otras empresas sin afirmar que aplique automáticamente. El plan SaaS **PESVial**, ya sea Pagado o Sugerido, genera únicamente el índice PESV y limita rutas, navegación y documentos a este módulo; no genera el kit SG-SST general.
 3. **Generación inicial:** el asistente agrega `PESV-INDICE` para transporte dentro de la transacción existente. Las empresas ya creadas pueden generarlo desde **Procedimientos y formatos** o desde `/pesv`.
 4. **Documento editable:** el índice relaciona los 24 pasos y las plantillas, se guarda por tenant como borrador y usa editor visual, versiones, impresión y aprobación humana.
 5. **Formularios:** cada respuesta tiene empresa, plantilla, título, datos, estado, autor y fechas. Las consultas y mutaciones incluyen `tenant_id`.

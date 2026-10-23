@@ -1,5 +1,6 @@
 <?php
 $role = $user['rol'] ?? '';
+$planModule = $role === 'SuperAdmin' ? App\Services\ModuleAccess::SGST : App\Services\ModuleAccess::current();
 if ($role === 'SuperAdmin') {
     $navigation = [
         ['label' => 'PLATAFORMA', 'items' => [
@@ -16,15 +17,49 @@ if ($role === 'SuperAdmin') {
         ]],
     ];
 } elseif ($role === 'Trabajador') {
-    $navigation = [
-        ['label' => 'MI ESPACIO', 'items' => [
-            ['Mi portal', '/portal', 'dashboard', true],
-            ['Mi inducción', '/portal/induccion', 'cap'],
-            ['Crear autoreporte', '/portal#reportar', 'clipboard'],
-            ['Políticas vigentes', '/portal#politicas', 'documents'],
-        ]],
-    ];
+    if ($planModule === App\Services\ModuleAccess::SGST) {
+        $navigation = [
+            ['label' => 'MI ESPACIO', 'items' => [
+                ['Mi portal', '/portal', 'dashboard', true],
+                ['Mi inducción', '/portal/induccion', 'cap'],
+                ['Crear autoreporte', '/portal#reportar', 'clipboard'],
+                ['Políticas vigentes', '/portal#politicas', 'documents'],
+            ]],
+        ];
+    } else {
+        $navigation = [
+            ['label' => 'MI CUENTA', 'items' => [
+                ['Alcance del plan', '/dashboard', 'dashboard', true],
+                ['Seguridad de la cuenta', '/cuenta/seguridad', 'lock'],
+            ]],
+        ];
+    }
 } else {
+    if ($planModule === App\Services\ModuleAccess::PESV) {
+        $navigation = [
+            ['label' => 'PESVIAL', 'items' => [
+                ['Resumen PESVial', '/dashboard', 'dashboard', true],
+                ['Kit PESV · 24 pasos', '/pesv', 'shield-plain'],
+                ['Documentos PESV', '/documentos', 'documents'],
+            ]],
+            ['label' => 'ADMINISTRACIÓN', 'items' => [
+                ['Equipo y accesos', '/equipo', 'users'],
+            ]],
+        ];
+    } elseif ($planModule === App\Services\ModuleAccess::EMERGENCIAS) {
+        $navigation = [
+            ['label' => 'EMERGENCIAS Y VIGILANCIA', 'items' => [
+                ['Resumen del módulo', '/dashboard', 'dashboard', true],
+                ['Planes de emergencia', '/emergencias', 'shield'],
+                ['Programas y vigilancia', '/programas-prevencion', 'activity'],
+                ['Documentos del módulo', '/documentos', 'documents'],
+                ['Documentación y evidencias', '/cumplimiento-documental', 'shield-plain'],
+            ]],
+            ['label' => 'ADMINISTRACIÓN', 'items' => [
+                ['Equipo y accesos', '/equipo', 'users'],
+            ]],
+        ];
+    } else {
     $navigation = [
         ['label' => 'MI EMPRESA', 'items' => [
             ['Resumen SG-SST', '/dashboard', 'dashboard', true],
@@ -51,6 +86,7 @@ if ($role === 'SuperAdmin') {
             ['Equipo y accesos', '/equipo', 'users'],
         ]],
     ];
+    }
     if ($role === 'AdminEmpresa') {
         $navigation[] = ['label' => 'ADMINISTRACIÓN', 'items' => [
             ['Configuración de empresa', '/empresa/configuracion', 'settings'],
@@ -72,7 +108,7 @@ if ($role === 'SuperAdmin') {
             <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white text-blue-600 shadow-sm ring-1 ring-slate-200/70"><?= icon($role === 'SuperAdmin' ? 'shield-plain' : 'building', 'h-4 w-4') ?></span>
             <div class="min-w-0">
                 <p class="truncate text-xs font-semibold text-slate-800"><?= e($role === 'SuperAdmin' ? 'Consola SaaS' : ($user['razonsocial'] ?? 'Mi empresa')) ?></p>
-                <p class="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-slate-400"><?= $role === 'SuperAdmin' ? 'Vista global' : e($role === 'Trabajador' ? 'Portal de persona' : 'Portal de empresa') ?></p>
+                <p class="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-slate-400"><?= $role === 'SuperAdmin' ? 'Vista global' : e($role === 'Trabajador' ? 'Portal de persona' : App\Services\ModuleAccess::shortLabel($planModule)) ?></p>
             </div>
         </div>
     </div>

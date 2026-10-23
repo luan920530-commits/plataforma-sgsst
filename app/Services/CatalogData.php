@@ -113,9 +113,11 @@ final class CatalogData
     public static function plans(): array
     {
         return [
-            ['Esencial', 'Para equipos que inician su SG-SST: documentos, PAT y portal de trabajadores.', 129900, 5, 50],
-            ['Profesional', 'Gestión PHVA completa, indicadores, IPEVR y seguimiento ampliado.', 299900, 15, 200],
-            ['Empresarial', 'Mayor capacidad, múltiples usuarios y acompañamiento para la operación.', 699900, 50, 1000],
+            ['Esencial', 'Para equipos que inician su SG-SST: documentos, PAT y portal de trabajadores.', 129900, 5, 50, 'sgsst'],
+            ['Profesional', 'Gestión PHVA completa, indicadores, IPEVR y seguimiento ampliado.', 299900, 15, 200, 'sgsst'],
+            ['Empresarial', 'Mayor capacidad, múltiples usuarios y acompañamiento para la operación.', 699900, 50, 1000, 'sgsst'],
+            ['PESVial', 'Módulo exclusivo PESV: 24 pasos, 97 recursos, formularios, versiones y aprobación humana.', 189900, 8, 150, 'pesv'],
+            ['Emergencias y Vigilancia', 'Módulo exclusivo de emergencias, simulacros, programas de prevención y vigilancia, con evidencias.', 189900, 8, 150, 'emergencias'],
         ];
     }
 }

@@ -23,7 +23,7 @@ final class CatalogSeeder
             }
 
             $planStatement = Database::connection()->prepare(
-                'INSERT OR IGNORE INTO planes_saas (nombre, descripcion, precio_mensual, max_usuarios, max_empleados) VALUES (?, ?, ?, ?, ?)'
+                'INSERT OR IGNORE INTO planes_saas (nombre, descripcion, precio_mensual, max_usuarios, max_empleados, modulo) VALUES (?, ?, ?, ?, ?, ?)'
             );
             foreach (CatalogData::plans() as $plan) {
                 $planStatement->execute($plan);

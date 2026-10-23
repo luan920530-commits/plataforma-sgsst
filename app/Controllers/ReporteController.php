@@ -63,6 +63,30 @@ final class ReporteController extends BaseController
         redirect('/autoreportes/accesos');
     }
 
+    public function renewAccess(int $id): void
+    {
+        $tenantId = $this->tenantId();
+        $access = AccesoReporte::findForTenant($id, $tenantId);
+        if ($access === null) {
+            $this->notFound();
+        }
+        if (!AccesoReporte::isUsable($access)) {
+            flash('error', 'El acceso está vencido, revocado o alcanzó su límite. Crea uno nuevo para definir otra vigencia.');
+            redirect('/autoreportes/accesos');
+        }
+        $token = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
+        if (!AccesoReporte::rotateToken($id, $tenantId, hash('sha256', $token), text_substr($token, 0, 6) . '…' . text_substr($token, -4))) {
+            flash('error', 'El acceso cambió de estado. Recarga la página e inténtalo nuevamente.');
+            redirect('/autoreportes/accesos');
+        }
+        $_SESSION['_new_report_access'] = [
+            'id' => $id, 'nombre' => $access['nombre'], 'url' => absolute_url('/reportar?token=' . rawurlencode($token)),
+        ];
+        Audit::record('Enlace y QR de autoreportes renovados', 'AccesoReporte', $id);
+        flash('success', 'QR renovado. El enlace anterior quedó invalidado; la vigencia y el número de usos se conservaron.');
+        redirect('/autoreportes/accesos');
+    }
+
     public function revokeAccess(int $id): void
     {
         $access = AccesoReporte::findForTenant($id, $this->tenantId());

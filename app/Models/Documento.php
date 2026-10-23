@@ -14,6 +14,7 @@ final class Documento
         $sql = 'SELECT d.*, u.nombre AS aprobado_por_nombre FROM documentos_sgsst d
                 LEFT JOIN users u ON u.id = d.aprobado_por WHERE d.tenant_id = ?';
         $params = [$tenantId];
+        $sql .= self::moduleSql($filters['modulo'] ?? null);
         if (!empty($filters['fase'])) {
             $sql .= ' AND d.fase_phva = ?';
             $params[] = $filters['fase'];
@@ -31,16 +32,16 @@ final class Documento
         return Database::query($sql, $params);
     }
 
-    public static function findForTenant(int $id, int $tenantId): ?array
+    public static function findForTenant(int $id, int $tenantId, ?string $module = null): ?array
     {
         return Database::first(
             'SELECT d.*, u.nombre AS aprobado_por_nombre FROM documentos_sgsst d
-             LEFT JOIN users u ON u.id = d.aprobado_por WHERE d.id = ? AND d.tenant_id = ?',
+             LEFT JOIN users u ON u.id = d.aprobado_por WHERE d.id = ? AND d.tenant_id = ?' . self::moduleSql($module),
             [$id, $tenantId]
         );
     }
 
-    public static function stats(int $tenantId): array
+    public static function stats(int $tenantId, ?string $module = null): array
     {
         return Database::first(
             "SELECT COUNT(*) AS total,
@@ -50,7 +51,7 @@ final class Documento
                     SUM(CASE WHEN fase_phva = 'Hacer' THEN 1 ELSE 0 END) AS hacer,
                     SUM(CASE WHEN fase_phva = 'Verificar' THEN 1 ELSE 0 END) AS verificar,
                     SUM(CASE WHEN fase_phva = 'Actuar' THEN 1 ELSE 0 END) AS actuar
-             FROM documentos_sgsst WHERE tenant_id = ?",
+             FROM documentos_sgsst d WHERE d.tenant_id = ?" . self::moduleSql($module),
             [$tenantId]
         ) ?? [];
     }
@@ -166,5 +167,15 @@ final class Documento
     public static function setObsolete(int $id, int $tenantId): void
     {
         Database::execute("UPDATE documentos_sgsst SET estado = 'Obsoleto', updated_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_id = ?", [$id, $tenantId]);
+    }
+
+    private static function moduleSql(?string $module): string
+    {
+        return match ($module) {
+            null, '', 'sgsst' => '',
+            'pesv' => " AND (d.codigo_estandar = 'PESV-INDICE' OR d.biblioteca_id = 'PESV-INDICE' OR d.biblioteca_id LIKE 'PESV-%')",
+            'emergencias' => " AND (d.codigo_estandar LIKE 'EMG-PLAN-%' OR d.codigo_estandar LIKE 'PYP-DOC-%')",
+            default => ' AND 1 = 0',
+        };
     }
 }

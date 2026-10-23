@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Services\ModuleAccess;
 use App\Support\Auth;
 use Throwable;
 
@@ -10,19 +11,22 @@ final class Router
 {
     private array $routes = [];
 
-    public function get(string $path, array $handler, ?array $roles = []): void
+    public function get(string $path, array $handler, ?array $roles = [], ?string $module = null): void
     {
-        $this->add('GET', $path, $handler, $roles);
+        $this->add('GET', $path, $handler, $roles, $module);
     }
 
-    public function post(string $path, array $handler, ?array $roles = []): void
+    public function post(string $path, array $handler, ?array $roles = [], ?string $module = null): void
     {
-        $this->add('POST', $path, $handler, $roles);
+        $this->add('POST', $path, $handler, $roles, $module);
     }
 
-    private function add(string $method, string $path, array $handler, ?array $roles): void
+    private function add(string $method, string $path, array $handler, ?array $roles, ?string $module): void
     {
-        $this->routes[] = compact('method', 'path', 'handler', 'roles');
+        if ($module === null && $roles !== null && array_intersect($roles, ['AdminEmpresa', 'ResponsableSST']) !== []) {
+            $module = ModuleAccess::SGST;
+        }
+        $this->routes[] = compact('method', 'path', 'handler', 'roles', 'module');
     }
 
     public function dispatch(string $method, string $uri): void
@@ -57,6 +61,10 @@ final class Router
             }
             if ($route['roles'] !== null && $route['roles'] !== [] && !Auth::hasRole($route['roles'])) {
                 $this->error(403, 'No tienes permisos para acceder a este módulo.');
+            }
+            if ($route['module'] !== null && !ModuleAccess::allows($route['module'])) {
+                $module = ModuleAccess::current();
+                $this->error(403, 'El plan asignado habilita únicamente ' . ModuleAccess::shortLabel($module) . '. Este módulo no está incluido.');
             }
 
             array_shift($matches);

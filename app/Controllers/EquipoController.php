@@ -8,6 +8,7 @@ use App\Models\Empleado;
 use App\Models\PlanSaaS;
 use App\Models\Tenant;
 use App\Models\User;
+use App\Services\ModuleAccess;
 use App\Support\Audit;
 use App\Support\Auth;
 use App\Support\Validator;
@@ -24,6 +25,7 @@ final class EquipoController extends BaseController
             'employees' => Empleado::forTenant($tenantId, $search),
             'users' => User::allByTenant($tenantId),
             'tenant' => Tenant::find($tenantId),
+            'planModule' => ModuleAccess::forTenant($tenantId),
             'search' => $search,
         ]);
     }
@@ -75,6 +77,9 @@ final class EquipoController extends BaseController
             ->required('rol', 'rol')->in('rol', 'rol', ['ResponsableSST', 'Trabajador'])
             ->required('password', 'contraseña')->password('password')->confirmed('password', 'password_confirmation');
         $errors = $validator->errors();
+        if ($data['rol'] === 'Trabajador' && ModuleAccess::forTenant($tenantId) !== ModuleAccess::SGST) {
+            $errors['rol'] = 'Este plan especializado no incluye el portal SG-SST de trabajadores. Crea una cuenta de Responsable SST o cambia el plan.';
+        }
         if (User::emailExists($data['email'])) {
             $errors['email'] = 'Este correo ya está registrado en la plataforma.';
         }

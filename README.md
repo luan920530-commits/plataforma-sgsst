@@ -14,7 +14,8 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - Alta de empresas mediante un asistente de tres pasos.
 - Clasificación por número de trabajadores, riesgo ARL, actividad económica o método combinado.
 - Catálogo precargado de 20 actividades CIIU con peligros base, perfil sociodemográfico y evaluaciones médicas sugeridas.
-- Catálogo de 7, 21 y 60 estándares, planes SaaS, activación de empresas y auditoría global.
+- Catálogo de 7, 21 y 60 estándares, cinco planes SaaS —tres SG-SST integrales, PESVial y Emergencias y Vigilancia—, activación de empresas y auditoría global.
+- Condición administrativa **Pagado** o **Sugerido** por empresa y alcance de módulo validado en el servidor, no solamente mediante enlaces ocultos.
 
 ### Administración de empresa y responsable SG-SST
 
@@ -34,7 +35,7 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - **Centro de gestión para cada requisito**, con acciones, usuarios responsables, recursos, fechas, evidencia de cierre y enlace al módulo operativo correspondiente; no redirige todo a la biblioteca.
 - Directorio de empleados/contratistas y accesos por rol.
 - Bandeja y detalle de autoreportes con respuestas de seguimiento.
-- **Accesos HSE compartibles por URL o QR local**, con token aleatorio almacenado como hash, vencimiento, límite de usos, revocación y reportes identificados o anónimos sin crear una cuenta.
+- **Accesos HSE compartibles por URL o QR local**, con token aleatorio almacenado como hash, vencimiento, límite de usos, revocación y reportes identificados o anónimos sin crear una cuenta. El QR visible se descarga como PNG —GIF si no hay canvas— y puede renovarse sin reiniciar la vigencia ni los usos.
 
 ### Portal Trabajador / Contratista
 
@@ -43,6 +44,7 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - Consulta y firma de inducción con contraseña actual, fecha, IP, user-agent y hash de evidencia.
 - Creación de autoreportes y consulta de las respuestas recibidas.
 - Cambio de contraseña disponible también para los demás roles.
+- El portal general de trabajadores pertenece al SG-SST integral. Los planes PESVial y Emergencias y Vigilancia no lo cargan ni permiten crear ese rol; una cuenta heredada solo ve el aviso de alcance y la seguridad de su cuenta.
 
 ### Biblioteca SG-SST importada
 
@@ -70,12 +72,27 @@ El módulo **PESV · Seguridad vial** (`/pesv`) organiza el contenido de `pesvia
 
 El detalle técnico y la reconstrucción están en [`docs/biblioteca-pesv.md`](docs/biblioteca-pesv.md). Los recursos de ejecución están en `resources/pesv-library/`; el 7z solo se necesita para volver a importar y no se incluye en el ZIP de hosting.
 
+### Planes SaaS y alcance por módulo
+
+| Plan | Módulo que carga la empresa |
+|---|---|
+| Esencial, Profesional o Empresarial | SG-SST integral, incluidos PESV, emergencias y portal de trabajadores. |
+| PESVial | Kit PESV de 24 pasos, 97 recursos y documentos PESV. No genera PAT, IPEVR, inducción ni documentos SG-SST generales. |
+| Emergencias y Vigilancia | Planes de emergencia, simulacros, programas de prevención/vigilancia, documentos y evidencias relacionados. No carga PESV ni el SG-SST general. |
+
+- Al crear una empresa se genera automáticamente **solo el kit del plan**: índice PESV en PESVial; un plan de emergencias y un programa de vigilancia, ambos en borrador y con campos pendientes, en Emergencias y Vigilancia.
+- **Pagado** y **Sugerido** son condiciones administrativas seleccionadas al asignar el plan; no representan una pasarela de pago y tienen exactamente el mismo alcance funcional.
+- El cambio de plan se aplica en la siguiente solicitud, incluso con la sesión abierta. Los registros históricos no se borran, pero documentos, rutas, navegación, paneles y evidencias quedan filtrados por el nuevo módulo.
+- Equipo, configuración de empresa y seguridad de cuenta son funciones transversales. Las rutas compartidas comprueban además que cada documento, requisito, soporte o acción pertenezca al módulo habilitado.
+- Si una empresa sale del SG-SST integral, los enlaces públicos de autoreportes anteriores dejan de aceptar consultas de formulario y envíos; el consumo del token vuelve a comprobar el plan en la base de datos.
+
 ### Compartir el formulario de autoreportes
 
 1. Entra como AdminEmpresa o ResponsableSST a **Autoreportes → Generar acceso / QR**.
 2. Define nombre, vencimiento y límite de usos; `0` significa sin límite de cantidad.
-3. Copia la URL o comparte el QR inmediatamente. Por seguridad, el token completo solo aparece al crear el acceso; si se pierde, revócalo y crea otro.
-4. Los reportes externos llegan a la misma bandeja, identificados por origen. El formulario no permite consultar casos y los reportes anónimos no guardan nombre ni contacto.
+3. Copia la URL o descarga el QR inmediatamente. Por seguridad, el token completo solo aparece en esta pantalla. Si se pierde, usa **Renovar enlace y QR**: el token anterior se invalida y se conservan vencimiento y usos; para cambiar esos parámetros crea un acceso nuevo.
+4. El navegador genera el QR localmente y descarga PNG; si canvas no está disponible, utiliza el GIF del generador local. Sin JavaScript permanece disponible la URL de texto y se muestra una explicación.
+5. Los reportes externos llegan a la misma bandeja, identificados por origen. El formulario no permite consultar casos y los reportes anónimos no guardan nombre ni contacto.
 
 ## Clasificación aplicada
 
@@ -183,7 +200,7 @@ Haz primero una copia de seguridad de la base y de `storage/uploads/`. Después,
 php scripts/migrate.php
 ```
 
-La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, agrega de forma idempotente las columnas nuevas de autoreportes y la relación `biblioteca_id` de documentos, crea la tabla de respuestas de biblioteca, conserva los registros y termina con `PRAGMA foreign_key_check`. No borra la base ni crea datos demo. El arranque web la aplica automáticamente cuando `PRAGMA user_version` es anterior a la versión del código; el comando anterior queda como alternativa administrativa. Los procedimientos no se imponen masivamente durante la migración: cada empresa decide qué kits generar desde su módulo.
+La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, agrega de forma idempotente las columnas nuevas de autoreportes, la relación `biblioteca_id` de documentos, `modulo` de planes y `plan_condicion` de empresas, crea la tabla de respuestas de biblioteca, conserva los registros y termina con `PRAGMA foreign_key_check`. No borra la base ni crea datos demo. El arranque web la aplica automáticamente cuando `PRAGMA user_version` es anterior a la versión del código; el comando anterior queda como alternativa administrativa. Los procedimientos no se imponen masivamente durante la migración: cada empresa decide qué kits generar desde su módulo.
 
 ### XAMPP en macOS
 
@@ -252,14 +269,15 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - Procedimientos/formatos CIIU, alturas y espacios confinados sin duplicados.
 - Biblioteca PESV: 97 recursos, 24 pasos, PAT hasta IW, generación automática en transporte, versiones y respuestas aisladas.
 - Las 5.820 fórmulas PESV procesadas sin referencias externas en los recursos editables.
-- Accesos externos con token hash, anonimato, consumo, revocación y aislamiento.
+- Accesos externos con token hash, anonimato, consumo, revocación y aislamiento; renovación QR sin reiniciar usos y cierre de tokens al cambiar de módulo.
+- Planes PESVial y Emergencias y Vigilancia en condiciones Pagado/Sugerido, generación exclusiva y filtrado documental al cambiar de plan.
 - Acciones de gestión con responsables, recursos y evidencia.
 - Biblioteca importada: 142 recursos, deduplicación, cobertura de 60 estándares, generación por tenant y respuestas aisladas.
 - Las 2.337 fórmulas Excel, compatibilidad numérica, fallback explícito y extracción opcional desde un ZIP externo con SHA-256 y caché privada.
 - Verificación documental exclusivamente explícita y protección de rutas de archivos.
 - Hash y verificación de contraseñas.
 
-La suite actual contiene **42 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
+La suite actual contiene **46 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
 
 ## Estilos
 
@@ -281,7 +299,7 @@ app/
   Controllers/       Controladores por módulo y rol
   Core/              PDO, router, vistas, CSRF y entorno
   Models/            Consultas preparadas y aislamiento por tenant
-  Services/          Catálogos, clasificación, instalación y generación
+  Services/          Catálogos, clasificación, instalación, generación y alcance por plan
   Support/           Autenticación, validación, auditoría y helpers
   Views/             Layouts y vistas PHP
 config/              Configuración de aplicación y SQLite
@@ -291,7 +309,8 @@ public/
   router.php         Router para php -S
   assets/            CSS compilado y JavaScript propio
 resources/css/       Fuente Tailwind
-resources/sgsst-library/ Manifiesto, documentos y formularios convertidos
+resources/sgsst-library/ Manifiesto, documentos y formularios SG-SST convertidos
+resources/pesv-library/  Manifiesto y 97 recursos PESV convertidos
 docs/biblioteca-sgsst.md Inventario, comparación y notas de importación
 scripts/install.php  Instalador de producción/demo
 scripts/migrate.php  Migración no destructiva de instalaciones existentes
@@ -303,7 +322,7 @@ tests/run.php        Pruebas funcionales de dominio y persistencia
 
 - Consultas preparadas con PDO y `PRAGMA foreign_keys=ON` en cada conexión.
 - `tenant_id` obligatorio en los registros operativos y filtros por empresa en las consultas.
-- Autorización por rol en el router y validación de pertenencia antes de operar un registro.
+- Autorización por rol y módulo de plan en el router, validación de pertenencia antes de operar un registro y comprobación de alcance en documentos, requisitos, acciones y evidencias compartidas.
 - Contraseñas con `password_hash()` y `password_verify()`, regeneración de sesión y bloqueo temporal por intentos.
 - Tokens CSRF en formularios, incluido el formulario público, cookies HttpOnly/SameSite y sesiones con expiración por inactividad.
 - Enlaces externos de 256 bits, almacenamiento del hash SHA-256 y no del token, consumo atómico del límite de usos, vencimiento, revocación, controles de frecuencia y campo trampa. El acceso público solo crea reportes; nunca lista información.

@@ -14,7 +14,8 @@ use App\Models\PlanTrabajo;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Services\ClassificationService;
-use App\Services\DocumentGenerator;
+use App\Services\ModuleAccess;
+use App\Services\TenantModuleGenerator;
 use App\Support\Audit;
 use App\Support\Auth;
 use App\Support\Validator;
@@ -57,6 +58,7 @@ final class TenantController extends BaseController
             'numero_trabajadores' => $this->input('numero_trabajadores'),
             'nivel_riesgo' => (string) $this->input('nivel_riesgo'),
             'plan_id' => (int) $this->input('plan_id', 0),
+            'plan_condicion' => (string) $this->input('plan_condicion', 'Pagado'),
             'representante_legal' => (string) $this->input('representante_legal'),
             'correo_contacto' => (string) $this->input('correo_contacto'),
             'telefono' => (string) $this->input('telefono'),
@@ -75,6 +77,7 @@ final class TenantController extends BaseController
             ->required('numero_trabajadores', 'número de trabajadores')->integer('numero_trabajadores', 'número de trabajadores', 1, 1000000)
             ->required('nivel_riesgo', 'clase de riesgo')->in('nivel_riesgo', 'clase de riesgo', ['I', 'II', 'III', 'IV', 'V'])
             ->required('sector_economico', 'sector económico')->max('sector_economico', 'sector', 100)
+            ->required('plan_condicion', 'condición del plan')->in('plan_condicion', 'condición del plan', ModuleAccess::conditions())
             ->required('representante_legal', 'representante legal')
             ->required('correo_contacto', 'correo de contacto')->email('correo_contacto')
             ->required('ciudad', 'ciudad')->max('direccion', 'dirección', 250)
@@ -121,7 +124,7 @@ final class TenantController extends BaseController
                     'password' => password_hash($data['password'], PASSWORD_DEFAULT),
                     'rol' => 'AdminEmpresa',
                 ]);
-                $summary = DocumentGenerator::generate($tenantId);
+                $summary = TenantModuleGenerator::generate($tenantId);
                 Audit::record('Empresa creada y configurada', 'Tenant', $tenantId, [
                     'grupo_estandares' => $data['grupo_estandares'], 'admin_user_id' => $adminId, 'generacion' => $summary,
                 ], $tenantId);
@@ -135,7 +138,7 @@ final class TenantController extends BaseController
             fail_validation(['general' => 'La configuración no se completó y se revirtieron los cambios. ' . ($GLOBALS['config']['debug'] ? $exception->getMessage() : 'Inténtalo nuevamente.')], $data, '/admin/empresas/nueva');
         }
 
-        flash('success', "Empresa configurada: {$summary['estandares']} estándares, {$summary['plan_trabajo']} actividades del PAT y {$summary['peligros']} peligros base.");
+        flash('success', TenantModuleGenerator::successMessage($summary));
         redirect('/admin/empresas/' . $tenantId);
     }
 
@@ -185,9 +188,14 @@ final class TenantController extends BaseController
             flash('error', 'Selecciona un plan activo.');
             redirect('/admin/empresas/' . $id);
         }
-        Tenant::setPlan($id, $planId);
-        Audit::record('Plan de empresa actualizado', 'Tenant', $id, ['plan_id' => $planId], $id);
-        flash('success', 'El plan de la empresa fue actualizado.');
+        $condition = (string) $this->input('plan_condicion', 'Pagado');
+        if (!in_array($condition, ModuleAccess::conditions(), true)) {
+            flash('error', 'Selecciona si el plan está pagado o sugerido.');
+            redirect('/admin/empresas/' . $id);
+        }
+        Tenant::setPlan($id, $planId, $condition);
+        Audit::record('Plan de empresa actualizado', 'Tenant', $id, ['plan_id' => $planId, 'modulo' => $plan['modulo'], 'condicion' => $condition], $id);
+        flash('success', 'Plan actualizado. El portal cargará únicamente ' . ModuleAccess::shortLabel($plan['modulo']) . '; la condición ' . text_lower($condition) . ' no cambia ese alcance.');
         redirect('/admin/empresas/' . $id);
     }
 

@@ -30,8 +30,14 @@
 
     <div class="space-y-6">
         <section class="ios-card p-5">
-            <div class="flex items-center gap-3"><span class="metric-icon h-10 w-10 bg-violet-50 text-violet-600"><?= icon('grid', 'h-4 w-4') ?></span><div><h2 class="text-base font-semibold">Plan contratado</h2><p class="text-xs text-slate-400"><?= e($tenant['plan_nombre'] ?? 'Sin plan asignado') ?></p></div></div>
-            <form method="post" action="<?= e(url('/admin/empresas/' . $tenant['id'] . '/plan')) ?>" class="mt-5 space-y-3"><?= csrf_field() ?><label class="label" for="plan_id">Cambiar plan</label><select id="plan_id" name="plan_id" class="input"><?php foreach ($plans as $plan): ?><option value="<?= (int) $plan['id'] ?>"<?= selected($tenant['plan_id'], $plan['id']) ?>><?= e($plan['nombre']) ?> · <?= money($plan['precio_mensual']) ?>/mes</option><?php endforeach; ?></select><button class="btn-secondary w-full" type="submit">Actualizar plan</button></form>
+            <div class="flex items-center gap-3"><span class="metric-icon h-10 w-10 bg-violet-50 text-violet-600"><?= icon('grid', 'h-4 w-4') ?></span><div><h2 class="text-base font-semibold">Plan asignado</h2><p class="text-xs text-slate-400"><?= e($tenant['plan_nombre'] ?? 'Sin plan asignado') ?> · <?= e($tenant['plan_condicion'] ?? 'Pagado') ?></p></div></div>
+            <p class="mt-3 text-[11px] font-semibold text-blue-600"><?= e(App\Services\ModuleAccess::label($tenant['plan_modulo'] ?? 'sgsst')) ?></p>
+            <form method="post" action="<?= e(url('/admin/empresas/' . $tenant['id'] . '/plan')) ?>" class="mt-5 space-y-3">
+                <?= csrf_field() ?>
+                <div><label class="label" for="plan_id">Cambiar plan</label><select id="plan_id" name="plan_id" class="input"><?php foreach ($plans as $plan): ?><option value="<?= (int) $plan['id'] ?>"<?= selected($tenant['plan_id'], $plan['id']) ?>><?= e($plan['nombre']) ?> · <?= money($plan['precio_mensual']) ?>/mes</option><?php endforeach; ?></select></div>
+                <div><label class="label" for="plan_condicion">Condición</label><select id="plan_condicion" name="plan_condicion" class="input"><option value="Pagado"<?= selected($tenant['plan_condicion'] ?? 'Pagado', 'Pagado') ?>>Pagado</option><option value="Sugerido"<?= selected($tenant['plan_condicion'] ?? 'Pagado', 'Sugerido') ?>>Sugerido</option></select><p class="mt-1 text-[10px] text-slate-400">La condición no altera el módulo habilitado.</p></div>
+                <button class="btn-secondary w-full" type="submit">Actualizar plan y alcance</button>
+            </form>
         </section>
         <section class="ios-card p-5">
             <h2 class="text-base font-semibold">Trazabilidad reciente</h2><p class="mt-1 text-xs text-slate-400">Actividad asociada exclusivamente a este tenant.</p>

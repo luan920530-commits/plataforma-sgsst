@@ -175,6 +175,17 @@
       preview.append(title, profile, resources);
     };
 
+    const planInputs = $$('[data-plan-module]', onboarding);
+    const updatePlanSummary = () => {
+      const selected = planInputs.find((input) => input.checked);
+      const module = selected?.dataset.planModule || 'sgsst';
+      $$('[data-generation-list]', onboarding).forEach((list) => list.classList.toggle('hidden', list.dataset.generationList !== module));
+      const label = $('[data-generate-label]', onboarding);
+      if (label) label.textContent = 'Crear empresa y generar ' + ({ pesv: 'PESVial', emergencias: 'Emergencias y Vigilancia', sgsst: 'SG-SST' }[module] || 'SG-SST');
+    };
+    planInputs.forEach((input) => input.addEventListener('change', updatePlanSummary));
+    updatePlanSummary();
+
     methodInputs.forEach((input) => input.addEventListener('change', updateMethod));
     activitySelect?.addEventListener('change', () => {
       const option = activitySelect.selectedOptions[0];
@@ -375,33 +386,68 @@
       window.setTimeout(() => { button.textContent = previous; }, 1800);
     });
   });
-  $$('[data-qr-code]').forEach((container) => {
+  $$('[data-qr-card]').forEach((card) => {
+    const container = $('[data-qr-code]', card);
+    const button = $('[data-download-qr]', card);
+    if (!container || !button) return;
+    const fail = (message) => {
+      container.textContent = message;
+      container.setAttribute('aria-busy', 'false');
+      button.disabled = true;
+    };
     if (typeof window.qrcode !== 'function') {
-      container.textContent = 'No fue posible cargar el generador QR local. Puedes copiar la URL.';
+      fail('No fue posible cargar el generador QR local. Puedes copiar la URL o renovar el acceso.');
       return;
     }
     try {
       const code = window.qrcode(0, 'M');
-      code.addData(container.dataset.qrCode);
+      code.addData(container.dataset.qrCode || '');
       code.make();
-      container.innerHTML = code.createImgTag(5, 4);
-      const image = $('img', container);
-      if (image) {
-        image.alt = 'Código QR del enlace de autoreportes';
-        image.className = 'h-48 w-48 max-w-full';
+      let source;
+      let extension = 'png';
+      try {
+        // PNG nítido para navegadores actuales; no depende de un servicio externo.
+        const canvas = document.createElement('canvas');
+        const scale = 8;
+        const margin = 4;
+        const modules = code.getModuleCount();
+        canvas.width = (modules + margin * 2) * scale;
+        canvas.height = canvas.width;
+        const context = canvas.getContext('2d');
+        if (!context) throw new Error('Canvas no disponible');
+        context.fillStyle = '#ffffff';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = '#000000';
+        for (let row = 0; row < modules; row += 1) {
+          for (let column = 0; column < modules; column += 1) {
+            if (code.isDark(row, column)) context.fillRect((column + margin) * scale, (row + margin) * scale, scale, scale);
+          }
+        }
+        source = canvas.toDataURL('image/png');
+        if (!source.startsWith('data:image/png;base64,')) throw new Error('PNG no disponible');
+      } catch (_) {
+        // Compatibilidad con navegadores o visores sin canvas.
+        source = code.createDataURL(8, 4);
+        extension = 'gif';
       }
+      const image = new Image();
+      image.src = source;
+      image.alt = 'Código QR del enlace de autoreportes';
+      image.className = 'h-48 w-48 max-w-full';
+      image.style.imageRendering = 'pixelated';
+      container.replaceChildren(image);
+      container.setAttribute('aria-busy', 'false');
+      button.qrSource = source;
+      button.dataset.qrExtension = extension;
+      button.disabled = false;
     } catch (_) {
-      container.textContent = 'No fue posible generar el QR. Puedes copiar la URL.';
+      fail('No fue posible generar el QR. Puedes copiar la URL o renovar el acceso.');
     }
-  });
-  $$('[data-download-qr]').forEach((button) => {
     button.addEventListener('click', () => {
-      const frame = button.parentElement?.querySelector('[data-qr-code]');
-      const image = frame?.querySelector('img');
-      if (!image?.src) return;
+      if (!button.qrSource || button.disabled) return;
       const link = document.createElement('a');
-      link.href = image.src;
-      link.download = (button.dataset.downloadQr || 'autoreporte-qr') + '.gif';
+      link.href = button.qrSource;
+      link.download = (button.dataset.downloadQr || 'autoreporte-qr') + '.' + (button.dataset.qrExtension || 'png');
       document.body.appendChild(link);
       link.click();
       link.remove();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\PlanSaaS;
+use App\Services\ModuleAccess;
 use App\Support\Audit;
 use App\Support\Validator;
 use PDOException;
@@ -12,7 +13,7 @@ final class PlanController extends BaseController
 {
     public function index(): void
     {
-        $this->view('admin/planes/index', ['title' => 'Planes del SaaS', 'plans' => PlanSaaS::all()]);
+        $this->view('admin/planes/index', ['title' => 'Planes del SaaS', 'plans' => PlanSaaS::all(), 'moduleOptions' => ModuleAccess::options()]);
     }
 
     public function store(): void
@@ -57,6 +58,7 @@ final class PlanController extends BaseController
             'nombre' => (string) $this->input('nombre'), 'descripcion' => (string) $this->input('descripcion'),
             'precio_mensual' => $this->input('precio_mensual'), 'max_usuarios' => $this->input('max_usuarios'),
             'max_empleados' => $this->input('max_empleados'),
+            'modulo' => (string) $this->input('modulo', 'sgsst'),
         ];
     }
 
@@ -67,7 +69,8 @@ final class PlanController extends BaseController
             ->required('descripcion', 'descripción')->max('descripcion', 'descripción', 500)
             ->required('precio_mensual', 'precio')->numeric('precio_mensual', 'precio')
             ->required('max_usuarios', 'máximo de usuarios')->integer('max_usuarios', 'máximo de usuarios', 1, 100000)
-            ->required('max_empleados', 'máximo de empleados')->integer('max_empleados', 'máximo de empleados', 1, 10000000);
+            ->required('max_empleados', 'máximo de empleados')->integer('max_empleados', 'máximo de empleados', 1, 10000000)
+            ->required('modulo', 'módulo del plan')->in('modulo', 'módulo del plan', array_keys(ModuleAccess::options()));
         return $validator;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 use App\Models\Documento;
 use App\Models\Tenant;
+use App\Services\ModuleAccess;
 use App\Support\Audit;
 use App\Support\Auth;
 use App\Support\Sanitizer;
@@ -20,10 +21,12 @@ final class DocumentGeneratorController extends BaseController
             'fase' => (string) $this->query('fase'),
             'estado' => (string) $this->query('estado'),
         ];
+        $module = ModuleAccess::current();
+        $filters['modulo'] = $module;
         $this->view('tenant/documentos/index', [
-            'title' => 'Documentos del SG-SST',
+            'title' => $module === 'sgsst' ? 'Documentos del SG-SST' : 'Documentos de ' . ModuleAccess::shortLabel($module),
             'documents' => Documento::forTenant($tenantId, $filters),
-            'stats' => Documento::stats($tenantId),
+            'stats' => Documento::stats($tenantId, $module),
             'filters' => $filters,
             'tenant' => Tenant::find($tenantId),
         ]);
@@ -32,7 +35,7 @@ final class DocumentGeneratorController extends BaseController
     public function show(int $id): void
     {
         $tenantId = $this->tenantId();
-        $document = Documento::findForTenant($id, $tenantId);
+        $document = Documento::findForTenant($id, $tenantId, ModuleAccess::current());
         if ($document === null) {
             $this->notFound();
         }
@@ -47,7 +50,7 @@ final class DocumentGeneratorController extends BaseController
     public function update(int $id): void
     {
         $tenantId = $this->tenantId();
-        $document = Documento::findForTenant($id, $tenantId);
+        $document = Documento::findForTenant($id, $tenantId, ModuleAccess::current());
         if ($document === null) {
             $this->notFound();
         }
@@ -74,7 +77,7 @@ final class DocumentGeneratorController extends BaseController
     public function approve(int $id): void
     {
         $tenantId = $this->tenantId();
-        $document = Documento::findForTenant($id, $tenantId);
+        $document = Documento::findForTenant($id, $tenantId, ModuleAccess::current());
         if ($document === null) {
             $this->notFound();
         }
@@ -90,7 +93,7 @@ final class DocumentGeneratorController extends BaseController
     public function obsolete(int $id): void
     {
         $tenantId = $this->tenantId();
-        if (Documento::findForTenant($id, $tenantId) === null) {
+        if (Documento::findForTenant($id, $tenantId, ModuleAccess::current()) === null) {
             $this->notFound();
         }
         Documento::setObsolete($id, $tenantId);
@@ -102,7 +105,7 @@ final class DocumentGeneratorController extends BaseController
     public function version(int $id, int $versionId): void
     {
         $tenantId = $this->tenantId();
-        $document = Documento::findForTenant($id, $tenantId);
+        $document = Documento::findForTenant($id, $tenantId, ModuleAccess::current());
         $version = Documento::findVersionForTenant($versionId, $id, $tenantId);
         if ($document === null || $version === null) {
             $this->notFound();
@@ -118,7 +121,7 @@ final class DocumentGeneratorController extends BaseController
     public function print(int $id): void
     {
         $tenantId = $this->tenantId();
-        $document = Documento::findForTenant($id, $tenantId);
+        $document = Documento::findForTenant($id, $tenantId, ModuleAccess::current());
         if ($document === null) {
             $this->notFound();
         }

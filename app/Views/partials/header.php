@@ -3,7 +3,7 @@
         <button type="button" id="sidebar-toggle" class="btn-icon lg:hidden" aria-label="Abrir menú" aria-controls="app-sidebar" aria-expanded="false"><?= icon('menu', 'h-5 w-5') ?></button>
         <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400">
-                <span><?= $user['rol'] === 'SuperAdmin' ? 'Plataforma' : 'SG-SST' ?></span>
+                <span><?= $user['rol'] === 'SuperAdmin' ? 'Plataforma' : e(App\Services\ModuleAccess::shortLabel(App\Services\ModuleAccess::current())) ?></span>
                 <?= icon('chevron-right', 'h-3 w-3') ?>
                 <span class="truncate text-slate-500"><?= e($title ?? 'Inicio') ?></span>
             </div>

@@ -9,6 +9,7 @@ use App\Models\SoporteCumplimiento;
 use App\Models\User;
 use App\Services\ComplianceService;
 use App\Services\EvidenceStorage;
+use App\Services\ModuleAccess;
 use App\Support\Audit;
 use App\Support\Auth;
 use App\Support\Validator;
@@ -53,7 +54,7 @@ final class CumplimientoController extends BaseController
     {
         $key = (string) $this->query('requisito');
         try {
-            ComplianceService::definition($key);
+            ComplianceService::definition($key, ModuleAccess::current());
         } catch (InvalidArgumentException) {
             $this->notFound('El módulo de gestión solicitado no existe.');
         }
@@ -102,6 +103,7 @@ final class CumplimientoController extends BaseController
         if ($action === null) {
             $this->notFound();
         }
+        $this->authorizeRequirement($action['requisito_clave']);
         $data = ['estado' => (string) $this->input('estado'), 'evidencia' => (string) $this->input('evidencia')];
         $validator = new Validator($data);
         $validator->required('estado', 'estado')->in('estado', 'estado', ['Pendiente', 'En Proceso', 'Completado'])
@@ -124,6 +126,7 @@ final class CumplimientoController extends BaseController
         if ($action === null) {
             $this->notFound();
         }
+        $this->authorizeRequirement($action['requisito_clave']);
         RequisitoAccion::delete($id, $this->tenantId());
         Audit::record('Acción de gestión eliminada', 'RequisitoAccion', $id, ['requisito' => $action['requisito_clave']]);
         flash('success', 'La acción fue eliminada. Los soportes y el seguimiento documental se conservaron.');
@@ -199,6 +202,7 @@ final class CumplimientoController extends BaseController
         if ($support === null) {
             $this->notFound();
         }
+        $this->authorizeRequirement($support['requisito_clave']);
         try {
             $path = EvidenceStorage::path($this->tenantId(), $support['nombre_almacenado']);
             if (!hash_equals($support['hash_sha256'], (string) hash_file('sha256', $path))) {
@@ -223,6 +227,7 @@ final class CumplimientoController extends BaseController
         if ($support === null) {
             $this->notFound();
         }
+        $this->authorizeRequirement($support['requisito_clave']);
         $redirectTo = $this->requirementPath($support['requisito_clave'], 'soportes');
         try {
             EvidenceStorage::delete($this->tenantId(), $support['nombre_almacenado']);
@@ -237,6 +242,15 @@ final class CumplimientoController extends BaseController
         redirect($redirectTo);
     }
 
+    private function authorizeRequirement(string $key): void
+    {
+        try {
+            ComplianceService::definition($key, ModuleAccess::current());
+        } catch (InvalidArgumentException) {
+            $this->abort(403, 'Este requisito no pertenece al módulo asignado a la empresa.');
+        }
+    }
+
     private function requirementPath(string $key, string $anchor): string
     {
         $base = $this->input('origen') === 'centro' ? '/cumplimiento-documental/gestion?requisito=' : '/cumplimiento-documental?requisito=';
@@ -247,7 +261,7 @@ final class CumplimientoController extends BaseController
     {
         $key = (string) $this->input('requisito_clave');
         try {
-            ComplianceService::definition($key);
+            ComplianceService::definition($key, ModuleAccess::current());
         } catch (InvalidArgumentException) {
             $this->abort(403, 'El requisito documental indicado no es válido.');
         }

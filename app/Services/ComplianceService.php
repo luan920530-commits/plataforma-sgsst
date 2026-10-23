@@ -13,15 +13,16 @@ use InvalidArgumentException;
 
 final class ComplianceService
 {
-    public static function board(int $tenantId): array
+    public static function board(int $tenantId, ?string $module = null): array
     {
+        $module ??= ModuleAccess::forTenant($tenantId);
         $tenant = Tenant::find($tenantId);
         $tracking = RequisitoSeguimiento::forTenant($tenantId);
         $supportCounts = SoporteCumplimiento::counts($tenantId);
         $actionCounts = RequisitoAccion::counts($tenantId);
-        $documents = Documento::forTenant($tenantId);
+        $documents = Documento::forTenant($tenantId, ['modulo' => $module]);
         $items = [];
-        foreach (self::definitions() as $key => $definition) {
+        foreach (self::definitions($module) as $key => $definition) {
             $signal = self::signal($definition['detector'], $tenantId, $documents);
             $item = $definition;
             $item['key'] = $key;
@@ -33,16 +34,17 @@ final class ComplianceService
             $item['supports'] = $supportCounts[$key] ?? 0;
             $items[$key] = $item;
         }
-        $stats = ['Pendiente' => 0, 'En gestion' => 0, 'Verificado' => 0, 'No aplica' => 0, 'soportes' => array_sum($supportCounts)];
+        $stats = ['Pendiente' => 0, 'En gestion' => 0, 'Verificado' => 0, 'No aplica' => 0, 'soportes' => 0];
         foreach ($items as $item) {
             $stats[$item['estado']]++;
+            $stats['soportes'] += $item['supports'];
         }
         return ['items' => $items, 'stats' => $stats, 'tenant' => $tenant];
     }
 
-    public static function definition(string $key): array
+    public static function definition(string $key, string $module = ModuleAccess::SGST): array
     {
-        $definitions = self::definitions();
+        $definitions = self::definitions($module);
         if (!isset($definitions[$key])) {
             throw new InvalidArgumentException('El requisito documental no existe.');
         }
@@ -54,9 +56,9 @@ final class ComplianceService
         return ['Planear', 'Hacer', 'Verificar', 'Actuar'];
     }
 
-    private static function definitions(): array
+    private static function definitions(string $module = ModuleAccess::SGST): array
     {
-        return [
+        $definitions = [
             'responsabilidades_sst' => self::makeDefinition('Planear', 'Asignación de responsabilidades y recursos del SG-SST', 'Responsable SG-SST, funciones, recursos humanos, técnicos y financieros.', 'Decreto 1072, arts. 2.2.4.6.7 y 2.2.4.6.8; Res. 0312 según grupo.', 'ISO 45001: roles y recursos (5.3 y 7.1), referencia voluntaria.', '/documentos', ['document', ['responsab', 'recursos']]),
             'politica_sst' => self::makeDefinition('Planear', 'Política de Seguridad y Salud en el Trabajo', 'Política firmada, vigente, comunicada y coherente con los riesgos de la empresa.', 'Decreto 1072, art. 2.2.4.6.5; Res. 0312 según grupo.', 'ISO 45001: liderazgo y política (5.2), referencia voluntaria.', '/documentos', ['policy', ['política de seguridad', 'politica de seguridad']]),
             'evaluacion_inicial' => self::makeDefinition('Planear', 'Evaluación inicial del SG-SST', 'Línea base, prioridades, normatividad, peligros, salud, capacitación e indicadores.', 'Decreto 1072, art. 2.2.4.6.16; Res. 0312 según evidencias aplicables.', 'ISO 45001: planificación y evaluación del desempeño (6 y 9), referencia voluntaria.', '/documentos', ['document', ['evaluación inicial', 'evaluacion inicial']]),
@@ -87,6 +89,11 @@ final class ComplianceService
             'mejora_acpa' => self::makeDefinition('Actuar', 'Acciones preventivas, correctivas y de mejora', 'Hallazgos, responsables, cierre y evidencia de eficacia de las acciones.', 'Decreto 1072, arts. 2.2.4.6.21, 2.2.4.6.22 y 2.2.4.6.32.', 'ISO 45001: no conformidad, acción correctiva y mejora (10), referencia voluntaria.', '/hallazgos', ['findings', []]),
             'archivo_retencion' => self::makeDefinition('Actuar', 'Archivo, conservación y retención documental', 'Documentos legibles, identificables, accesibles, protegidos y reglas de retención según el registro.', 'Decreto 1072, arts. 2.2.4.6.12 y 2.2.4.6.13.', 'ISO 45001: información documentada (7.5), referencia voluntaria.', '/documentos', ['manual', []]),
         ];
+        if ($module === ModuleAccess::EMERGENCIAS) {
+            $allowed = ['programas_pyp', 'vigilancia_epidemiologica', 'emergencia_plan', 'emergencia_planos', 'emergencia_brigada', 'emergencia_equipos', 'emergencia_simulacro'];
+            return array_intersect_key($definitions, array_flip($allowed));
+        }
+        return $module === ModuleAccess::SGST ? $definitions : [];
     }
 
     private static function makeDefinition(string $phase, string $name, string $description, string $legal, string $iso, string $route, array $detector): array

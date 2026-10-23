@@ -23,8 +23,8 @@ final class PlanSaaS
     public static function create(array $data): int
     {
         Database::execute(
-            'INSERT INTO planes_saas (nombre, descripcion, precio_mensual, max_usuarios, max_empleados) VALUES (?, ?, ?, ?, ?)',
-            [trim($data['nombre']), trim($data['descripcion']), (float) $data['precio_mensual'], (int) $data['max_usuarios'], (int) $data['max_empleados']]
+            'INSERT INTO planes_saas (nombre, descripcion, precio_mensual, max_usuarios, max_empleados, modulo) VALUES (?, ?, ?, ?, ?, ?)',
+            [trim($data['nombre']), trim($data['descripcion']), (float) $data['precio_mensual'], (int) $data['max_usuarios'], (int) $data['max_empleados'], $data['modulo']]
         );
         return Database::lastId();
     }
@@ -32,8 +32,8 @@ final class PlanSaaS
     public static function update(int $id, array $data): void
     {
         Database::execute(
-            'UPDATE planes_saas SET descripcion = ?, precio_mensual = ?, max_usuarios = ?, max_empleados = ?, activo = ? WHERE id = ?',
-            [trim($data['descripcion']), (float) $data['precio_mensual'], (int) $data['max_usuarios'], (int) $data['max_empleados'], !empty($data['activo']) ? 1 : 0, $id]
+            'UPDATE planes_saas SET descripcion = ?, precio_mensual = ?, max_usuarios = ?, max_empleados = ?, modulo = ?, activo = ? WHERE id = ?',
+            [trim($data['descripcion']), (float) $data['precio_mensual'], (int) $data['max_usuarios'], (int) $data['max_empleados'], $data['modulo'], !empty($data['activo']) ? 1 : 0, $id]
         );
     }
 }

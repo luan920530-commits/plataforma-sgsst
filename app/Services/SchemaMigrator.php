@@ -9,7 +9,7 @@ use RuntimeException;
 /** Aplica migraciones aditivas sin borrar datos y marca la versión en SQLite. */
 final class SchemaMigrator
 {
-    public const VERSION = 1;
+    public const VERSION = 2;
 
     public static function migrateIfNeeded(): bool
     {
@@ -41,6 +41,8 @@ final class SchemaMigrator
         self::ensureColumn('autoreportes', 'contacto_externo', "TEXT NOT NULL DEFAULT ''");
         self::ensureColumn('autoreportes', 'anonimo', 'INTEGER NOT NULL DEFAULT 0');
         self::ensureColumn('documentos_sgsst', 'biblioteca_id', 'TEXT');
+        self::ensureColumn('planes_saas', 'modulo', "TEXT NOT NULL DEFAULT 'sgsst' CHECK (modulo IN ('sgsst','pesv','emergencias'))");
+        self::ensureColumn('tenants', 'plan_condicion', "TEXT NOT NULL DEFAULT 'Pagado' CHECK (plan_condicion IN ('Pagado','Sugerido'))");
 
         $violations = Database::query('PRAGMA foreign_key_check');
         if ($violations !== []) {

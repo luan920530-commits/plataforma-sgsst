@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS planes_saas (
     precio_mensual REAL NOT NULL DEFAULT 0 CHECK (precio_mensual >= 0),
     max_usuarios INTEGER NOT NULL DEFAULT 5 CHECK (max_usuarios > 0),
     max_empleados INTEGER NOT NULL DEFAULT 50 CHECK (max_empleados > 0),
+    modulo TEXT NOT NULL DEFAULT 'sgsst' CHECK (modulo IN ('sgsst','pesv','emergencias')),
     activo INTEGER NOT NULL DEFAULT 1 CHECK (activo IN (0, 1)),
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -38,6 +39,7 @@ CREATE TABLE IF NOT EXISTS tenants (
     grupo_estandares INTEGER NOT NULL CHECK (grupo_estandares IN (7,21,60)),
     metodo_configuracion TEXT NOT NULL DEFAULT 'Combinado' CHECK (metodo_configuracion IN ('Riesgo','Actividad','Combinado')),
     plan_id INTEGER,
+    plan_condicion TEXT NOT NULL DEFAULT 'Pagado' CHECK (plan_condicion IN ('Pagado','Sugerido')),
     representante_legal TEXT NOT NULL DEFAULT '',
     correo_contacto TEXT NOT NULL DEFAULT '',
     telefono TEXT NOT NULL DEFAULT '',

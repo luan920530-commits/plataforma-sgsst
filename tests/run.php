@@ -27,6 +27,7 @@ use App\Models\Induccion;
 use App\Models\Peligro;
 use App\Models\PermisoTrabajo;
 use App\Models\PlanEmergencia;
+use App\Models\PlanSaaS;
 use App\Models\PlanTrabajo;
 use App\Models\ProgramaActividad;
 use App\Models\ProgramaPrevencion;
@@ -44,11 +45,13 @@ use App\Services\EvidenceStorage;
 use App\Services\ExcelCalculator;
 use App\Services\Installer;
 use App\Services\LibraryOriginal;
+use App\Services\ModuleAccess;
 use App\Services\OperationalDocument;
 use App\Services\PesvLibrary;
 use App\Services\SgsstLibrary;
 use App\Services\SchemaMigrator;
 use App\Services\ProcedureLibrary;
+use App\Services\TenantModuleGenerator;
 use App\Support\Auth;
 use App\Support\Indicator;
 use App\Support\Risk;
@@ -369,6 +372,39 @@ try {
         expectSame(null, AccesoReporte::findForTenant($accessId, $constructionId));
     });
 
+    $test('QR de autoreportes: renovación revoca el token anterior sin reiniciar usos', static function () use ($mainId, $constructionId): void {
+        $admin = User::findForAuthentication('admin@andina.co');
+        $tokenA = 'A' . str_repeat('a', 42);
+        $tokenB = 'B' . str_repeat('b', 42);
+        $tokenC = 'C' . str_repeat('c', 42);
+        $id = AccesoReporte::create([
+            'tenant_id' => $mainId, 'nombre' => 'Acceso renovable de prueba', 'token_hash' => hash('sha256', $tokenA),
+            'token_hint' => 'Aaaaaa…aaaa', 'expira_at' => date('Y-m-d H:i:s', strtotime('+30 days')),
+            'max_usos' => 2, 'created_by' => (int) $admin['id'],
+        ]);
+        expectTrue(AccesoReporte::isUsable(AccesoReporte::findByToken($tokenA)));
+        expectTrue(AccesoReporte::isUsable(AccesoReporte::findForTenant($id, $mainId)), 'La renovación debe recibir también el estado de la empresa y del plan.');
+        expectTrue(AccesoReporte::rotateToken($id, $mainId, hash('sha256', $tokenB), 'Bbbbbb…bbbb'));
+        expectSame(null, AccesoReporte::findByToken($tokenA), 'El token anterior debe quedar invalidado.');
+        expectTrue(AccesoReporte::isUsable(AccesoReporte::findByToken($tokenB)));
+        expectTrue(AccesoReporte::consume($id));
+        expectTrue(!AccesoReporte::rotateToken($id, $constructionId, hash('sha256', 'X' . str_repeat('x', 42)), 'Xxxxxx…xxxx'));
+        expectTrue(AccesoReporte::rotateToken($id, $mainId, hash('sha256', $tokenC), 'Cccccc…cccc'));
+        $current = AccesoReporte::findForTenant($id, $mainId);
+        expectSame(1, (int) $current['usos'], 'La renovación no debe reiniciar el consumo.');
+        expectSame(hash('sha256', $tokenC), $current['token_hash']);
+        expectTrue($current['token_hash'] !== $tokenC && !str_contains($current['token_hint'], $tokenC));
+        expectTrue(AccesoReporte::isUsable(AccesoReporte::findByToken($tokenC)));
+        $tenant = Tenant::find($mainId);
+        $pesvPlanId = (int) Database::first("SELECT id FROM planes_saas WHERE nombre = 'PESVial'")['id'];
+        Tenant::setPlan($mainId, $pesvPlanId, 'Sugerido');
+        expectTrue(!AccesoReporte::isUsable(AccesoReporte::findByToken($tokenC)), 'Un plan especializado debe cerrar el autoreporte público.');
+        expectTrue(!AccesoReporte::consume($id), 'El consumo debe bloquearse también si el plan cambia durante el envío.');
+        expectSame(1, (int) AccesoReporte::findForTenant($id, $mainId)['usos']);
+        Tenant::setPlan($mainId, $tenant['plan_id'] !== null ? (int) $tenant['plan_id'] : null, $tenant['plan_condicion']);
+        expectTrue(AccesoReporte::isUsable(AccesoReporte::findByToken($tokenC)));
+    });
+
     $test('Módulos de gestión: responsable, recursos y evidencia', static function () use ($mainId, $constructionId): void {
         $admin = User::findForAuthentication('admin@andina.co');
         $id = RequisitoAccion::create([
@@ -636,6 +672,93 @@ try {
         expectSame(1, count(Documento::versions((int) $document['id'], $transportId)));
     });
 
+    $test('Planes SaaS: catálogo PESVial y Emergencias con autorización por módulo', static function (): void {
+        $pesv = Database::first("SELECT * FROM planes_saas WHERE nombre = 'PESVial'");
+        $emergency = Database::first("SELECT * FROM planes_saas WHERE nombre = 'Emergencias y Vigilancia'");
+        expectTrue($pesv !== null && $emergency !== null);
+        expectSame(ModuleAccess::PESV, $pesv['modulo']);
+        expectSame(ModuleAccess::EMERGENCIAS, $emergency['modulo']);
+        expectSame(['Pagado', 'Sugerido'], ModuleAccess::conditions());
+        expectTrue(ModuleAccess::allows(ModuleAccess::PESV, ModuleAccess::PESV));
+        expectTrue(ModuleAccess::allows(ModuleAccess::PESV, ModuleAccess::SGST));
+        expectTrue(!ModuleAccess::allows(ModuleAccess::SGST, ModuleAccess::PESV));
+        expectTrue(!ModuleAccess::allows(ModuleAccess::EMERGENCIAS, ModuleAccess::PESV));
+        expectTrue(ModuleAccess::allows(ModuleAccess::EMERGENCIAS, ModuleAccess::EMERGENCIAS));
+        expectTrue(ModuleAccess::allows(ModuleAccess::SHARED, ModuleAccess::PESV));
+    });
+
+    $test('Plan PESVial pagado: genera solo PESV y restringe documentos al cambiar de plan', static function (): void {
+        $plan = PlanSaaS::find((int) Database::first("SELECT id FROM planes_saas WHERE nombre = 'PESVial'")['id']);
+        $otherPlan = PlanSaaS::find((int) Database::first("SELECT id FROM planes_saas WHERE nombre = 'Emergencias y Vigilancia'")['id']);
+        $tenantId = Tenant::create([
+            'razonsocial' => 'Empresa exclusiva PESVial', 'nit' => '901.999.101-1', 'sector_economico' => 'Servicios',
+            'actividad_economica_id' => null, 'numero_trabajadores' => 12, 'nivel_riesgo' => 'II',
+            'grupo_estandares' => 21, 'metodo_configuracion' => 'Riesgo', 'plan_id' => (int) $plan['id'], 'plan_condicion' => 'Pagado',
+            'representante_legal' => 'Responsable PESV', 'correo_contacto' => 'pesvial@example.test',
+        ]);
+        $summary = TenantModuleGenerator::generate($tenantId);
+        expectSame(ModuleAccess::PESV, $summary['modulo']);
+        expectSame(1, $summary['documentos']);
+        expectSame(0, $summary['estandares']);
+        expectSame(0, (int) Database::first('SELECT COUNT(*) AS n FROM plan_trabajo WHERE tenant_id = ?', [$tenantId])['n']);
+        expectSame(0, (int) Database::first('SELECT COUNT(*) AS n FROM capacitaciones WHERE tenant_id = ?', [$tenantId])['n']);
+        expectSame(0, (int) Database::first('SELECT COUNT(*) AS n FROM peligros_ipevr WHERE tenant_id = ?', [$tenantId])['n']);
+        expectSame(0, (int) Database::first('SELECT COUNT(*) AS n FROM inducciones WHERE tenant_id = ?', [$tenantId])['n']);
+        $documents = Documento::forTenant($tenantId);
+        expectSame(1, count($documents));
+        expectSame(PesvLibrary::PLAN_CODE, $documents[0]['codigo_estandar']);
+        expectTrue(str_contains($documents[0]['contenido_html'], 'Paso 24'));
+        expectSame(1, count(Documento::forTenant($tenantId, ['modulo' => ModuleAccess::PESV])));
+        expectSame([], Documento::forTenant($tenantId, ['modulo' => ModuleAccess::EMERGENCIAS]));
+        expectSame(null, Documento::findForTenant((int) $documents[0]['id'], $tenantId, ModuleAccess::EMERGENCIAS));
+        expectTrue(ModuleAccess::documentMatches($documents[0], ModuleAccess::PESV));
+        expectTrue(!ModuleAccess::documentMatches($documents[0], ModuleAccess::EMERGENCIAS));
+        expectSame(ModuleAccess::PESV, ModuleAccess::forTenant($tenantId));
+        Tenant::setPlan($tenantId, (int) $otherPlan['id'], 'Sugerido');
+        expectSame(ModuleAccess::EMERGENCIAS, ModuleAccess::forTenant($tenantId));
+        expectSame([], Documento::forTenant($tenantId, ['modulo' => ModuleAccess::EMERGENCIAS]), 'Un documento PESV histórico no debe aparecer en Emergencias.');
+        Tenant::setPlan($tenantId, (int) $plan['id'], 'Pagado');
+        expectSame(1, count(Documento::forTenant($tenantId, ['modulo' => ModuleAccess::PESV])));
+    });
+
+    $test('Plan Emergencias sugerido: genera plan y vigilancia sin cargar SG-SST general', static function (): void {
+        $plan = PlanSaaS::find((int) Database::first("SELECT id FROM planes_saas WHERE nombre = 'Emergencias y Vigilancia'")['id']);
+        $tenantId = Tenant::create([
+            'razonsocial' => 'Empresa exclusiva Emergencias', 'nit' => '901.999.102-9', 'sector_economico' => 'Servicios',
+            'actividad_economica_id' => null, 'numero_trabajadores' => 8, 'nivel_riesgo' => 'I',
+            'grupo_estandares' => 7, 'metodo_configuracion' => 'Riesgo', 'plan_id' => (int) $plan['id'], 'plan_condicion' => 'Sugerido',
+            'representante_legal' => 'Responsable Emergencias', 'correo_contacto' => 'emergencias@example.test',
+        ]);
+        $summary = TenantModuleGenerator::generate($tenantId);
+        expectSame(ModuleAccess::EMERGENCIAS, $summary['modulo']);
+        expectSame(2, $summary['documentos']);
+        expectSame(0, $summary['plan_trabajo']);
+        expectSame(1, count(PlanEmergencia::forTenant($tenantId)));
+        $programs = ProgramaPrevencion::forTenant($tenantId);
+        expectSame(1, count($programs));
+        expectSame('Vigilancia epidemiologica', $programs[0]['categoria']);
+        expectSame(0, (int) Database::first('SELECT COUNT(*) AS n FROM peligros_ipevr WHERE tenant_id = ?', [$tenantId])['n']);
+        expectSame(0, (int) Database::first('SELECT COUNT(*) AS n FROM inducciones WHERE tenant_id = ?', [$tenantId])['n']);
+        $documents = Documento::forTenant($tenantId, ['modulo' => ModuleAccess::EMERGENCIAS]);
+        expectSame(2, count($documents));
+        foreach ($documents as $document) {
+            expectTrue(ModuleAccess::documentMatches($document, ModuleAccess::EMERGENCIAS));
+            expectSame('Borrador', $document['estado']);
+        }
+        expectSame([], Documento::forTenant($tenantId, ['modulo' => ModuleAccess::PESV]));
+        $board = ComplianceService::board($tenantId, ModuleAccess::EMERGENCIAS);
+        expectSame(7, count($board['items']));
+        expectTrue(isset($board['items']['emergencia_plan'], $board['items']['vigilancia_epidemiologica']));
+        expectTrue(!$board['items']['emergencia_brigada']['signal']['available'], 'Una brigada pendiente no debe contarse como evidencia registrada.');
+        expectTrue(!$board['items']['emergencia_equipos']['signal']['available'], 'Un inventario pendiente no debe contarse como recurso registrado.');
+        expectTrue(!isset($board['items']['politica_sst'], $board['items']['matriz_ipevr']));
+        $blocked = false;
+        try { ComplianceService::definition('politica_sst', ModuleAccess::EMERGENCIAS); } catch (InvalidArgumentException) { $blocked = true; }
+        expectTrue($blocked, 'Un requisito general no debe quedar disponible en el plan especializado.');
+        Tenant::setPlan($tenantId, (int) $plan['id'], 'Pagado');
+        expectSame(ModuleAccess::EMERGENCIAS, ModuleAccess::forTenant($tenantId), 'Pagado y Sugerido deben conservar el mismo alcance.');
+    });
+
     $test('Respuestas PESV: persistencia y aislamiento por tenant', static function () use ($mainId, $constructionId): void {
         $template = null;
         foreach (PesvLibrary::all() as $item) {
@@ -788,6 +911,10 @@ try {
         }
         $documentColumns = array_column(Database::query('PRAGMA table_info(documentos_sgsst)'), 'name');
         expectTrue(in_array('biblioteca_id', $documentColumns, true));
+        $planColumns = array_column(Database::query('PRAGMA table_info(planes_saas)'), 'name');
+        $tenantColumns = array_column(Database::query('PRAGMA table_info(tenants)'), 'name');
+        expectTrue(in_array('modulo', $planColumns, true));
+        expectTrue(in_array('plan_condicion', $tenantColumns, true));
     });
 
     $test('Instalación web segura y migración automática', static function (): void {
