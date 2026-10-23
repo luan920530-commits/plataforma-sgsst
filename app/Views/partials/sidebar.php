@@ -33,6 +33,7 @@ if ($role === 'SuperAdmin') {
             ['Documentos', '/documentos', 'documents'],
             ['Procedimientos y formatos', '/procedimientos', 'book'],
             ['Biblioteca SG-SST', '/biblioteca-sgsst', 'documents'],
+            ['PESV · Seguridad vial', '/pesv', 'shield-plain'],
             ['Documentación y evidencias', '/cumplimiento-documental', 'shield-plain'],
             ['Ciclo PHVA', '/phva', 'phva', true],
             ['Plan Anual de Trabajo', '/plan-anual', 'calendar'],

@@ -2,7 +2,7 @@
 
 Dominio: `normiasst.whf.bz`.
 
-El paquete `normia-sst-hosting.zip` incluye el cargador público, la aplicación privada, el entorno de producción, las 142 plantillas y un instalador web. **No necesitas Terminal, Cron, Composer, Node.js, MySQL, phpMyAdmin ni crear manualmente `.env`.**
+El paquete `normia-sst-hosting.zip` incluye el cargador público, la aplicación privada, el entorno de producción, las 142 plantillas SG-SST, los 97 recursos PESV y un instalador web. **No necesitas Terminal, Cron, Composer, Node.js, MySQL, phpMyAdmin ni crear manualmente `.env`.**
 
 ## Instalación en cuatro pasos
 

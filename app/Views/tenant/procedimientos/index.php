@@ -9,7 +9,7 @@
         <section class="ios-card flex flex-col p-5 sm:p-6">
             <div class="flex items-start justify-between gap-4">
                 <div><div class="flex flex-wrap items-center gap-2"><h2 class="text-base font-semibold text-slate-800"><?= e($group['nombre']) ?></h2><?php if ($group['recomendado']): ?><span class="badge badge-blue">Sugerido</span><?php endif; ?></div><p class="mt-2 text-xs leading-6 text-slate-500"><?= e($group['descripcion']) ?></p></div>
-                <span class="metric-icon h-10 w-10 shrink-0 bg-violet-50 text-violet-600"><?= icon($key === 'ast' ? 'clipboard' : 'document', 'h-4 w-4') ?></span>
+                <span class="metric-icon h-10 w-10 shrink-0 bg-violet-50 text-violet-600"><?= icon($key === 'ast' ? 'clipboard' : ($key === 'pesv' ? 'shield-plain' : 'document'), 'h-4 w-4') ?></span>
             </div>
             <p class="mt-3 rounded-xl bg-slate-50 p-3 text-[11px] leading-5 text-slate-500"><?= e($group['aplicabilidad']) ?></p>
             <div class="mt-4 flex-1 space-y-2">
@@ -22,7 +22,7 @@
                 <?php endforeach; ?>
             </div>
             <div class="mt-5 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
-                <span class="text-[11px] text-slate-400"><?= $generated ?> de <?= count($group['documentos']) ?> generado(s)</span>
+                <div class="flex flex-wrap items-center gap-3"><span class="text-[11px] text-slate-400"><?= $generated ?> de <?= count($group['documentos']) ?> generado(s)</span><?php if (!empty($group['related_route'])): ?><a href="<?= e(url($group['related_route'])) ?>" class="text-link">Abrir módulo relacionado</a><?php endif; ?></div>
                 <?php if ($generated < count($group['documentos'])): ?><form method="post" action="<?= e(url('/procedimientos/generar')) ?>"><?= csrf_field() ?><input type="hidden" name="kit" value="<?= e($key) ?>"><button class="btn-primary" type="submit">Generar borradores</button></form><?php else: ?><span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600"><?= icon('check-circle', 'h-4 w-4') ?> Kit generado</span><?php endif; ?>
             </div>
         </section>

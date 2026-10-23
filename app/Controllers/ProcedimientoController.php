@@ -33,6 +33,7 @@ final class ProcedimientoController extends BaseController
         flash($created > 0 ? 'success' : 'warning', $created > 0
             ? $created . ' documento(s) en borrador fueron agregados a la biblioteca. Revísalos y apruébalos después de adaptarlos.'
             : 'Este kit ya se encontraba generado; no se duplicaron documentos.');
-        redirect('/procedimientos');
+        $return = (string) $this->input('return', '/procedimientos');
+        redirect(in_array($return, ['/procedimientos', '/pesv'], true) ? $return : '/procedimientos');
     }
 }

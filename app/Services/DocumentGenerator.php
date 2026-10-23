@@ -90,13 +90,15 @@ final class DocumentGenerator
                 'contenido_html' => DocumentTemplate::induction($templateTenant),
                 'version' => 1,
             ]);
-            $procedureDocuments = ProcedureLibrary::generate($tenantId, ProcedureLibrary::automaticKeys($tenantId));
+            $procedureKeys = ProcedureLibrary::automaticKeys($tenantId);
+            $procedureDocuments = ProcedureLibrary::generate($tenantId, $procedureKeys);
             Tenant::markGenerated($tenantId);
 
             return [
                 'documentos' => count($standards) + count($mandatoryPolicies) + $procedureDocuments,
                 'estandares' => count($standards),
                 'procedimientos_formatos' => $procedureDocuments,
+                'pesv' => in_array('pesv', $procedureKeys, true),
                 'plan_trabajo' => count($planActivities),
                 'capacitaciones' => count(self::trainingProgram($tenant)),
                 'peligros' => $hazardCount,

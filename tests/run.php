@@ -34,6 +34,7 @@ use App\Models\RequisitoAccion;
 use App\Models\RequisitoSeguimiento;
 use App\Models\SimulacroEmergencia;
 use App\Models\SoporteCumplimiento;
+use App\Models\Tenant;
 use App\Models\User;
 use App\Services\ClassificationService;
 use App\Services\ComplianceService;
@@ -44,6 +45,7 @@ use App\Services\ExcelCalculator;
 use App\Services\Installer;
 use App\Services\LibraryOriginal;
 use App\Services\OperationalDocument;
+use App\Services\PesvLibrary;
 use App\Services\SgsstLibrary;
 use App\Services\SchemaMigrator;
 use App\Services\ProcedureLibrary;
@@ -542,6 +544,152 @@ try {
         expectSame(1, BibliotecaRespuesta::counts($mainId)[$template['id']]);
         BibliotecaRespuesta::delete($id, $mainId);
         expectSame(null, BibliotecaRespuesta::findForTenant($id, $mainId));
+    });
+
+    $test('Biblioteca PESV: 97 recursos, 24 pasos y contenido íntegro', static function (): void {
+        $items = PesvLibrary::all();
+        $stats = PesvLibrary::stats();
+        expectSame(97, count($items));
+        expectSame(114, $stats['source_entries']);
+        expectSame(17, $stats['duplicate_entries']);
+        expectSame(96, $stats['forms']);
+        expectSame(1, $stats['documents']);
+        expectSame(24, $stats['steps']);
+        expectSame(5820, $stats['formulas']);
+        expectSame(0, $stats['security']['macros_activex_ole_files']);
+        expectSame(0, $stats['security']['risk_formulas_detected']);
+        expectSame(113, $stats['security']['files_with_external_links']);
+        expectSame(15762, $stats['security']['external_link_parts_excluded']);
+        expectSame(range(1, 24), array_map(static fn(array $step): int => (int) $step['step'], PesvLibrary::steps()));
+        $duplicates = 0;
+        $values = 0;
+        foreach ($items as $item) {
+            expectSame($item['id'], PesvLibrary::find((int) $item['number'])['id']);
+            expectSame($item['number'], PesvLibrary::findById($item['id'])['number']);
+            expectTrue(is_file(BASE_PATH . '/resources/pesv-library/' . $item['content']));
+            expectTrue($item['sources'] !== []);
+            $duplicates += (int) $item['duplicate_entries'];
+            $values += (int) ($item['stats']['cells'] ?? 0);
+            if ($item['kind'] === 'document') {
+                $content = PesvLibrary::content($item);
+                expectTrue(trim(strip_tags($content)) !== '' && !str_contains(text_lower($content), '<script'));
+                expectSame(1, preg_match('/<td[^>]*>.*<strong>.*<\/strong>.*<\/td>/s', $content), 'El Word debe conservar el formato de runs dentro de tablas.');
+            } else {
+                $form = PesvLibrary::form($item);
+                expectTrue($form['sheets'] !== []);
+                foreach ($form['sheets'] as $sheet) {
+                    foreach ($sheet['cells'] as $cell) {
+                        if (isset($cell['f'])) expectSame(0, preg_match('/\[[0-9]+\]|\b(?:WEBSERVICE|RTD|DDE|CALL|SHELL|EXEC)\s*\(/i', $cell['f']));
+                    }
+                }
+            }
+        }
+        expectSame(17, $duplicates);
+        expectSame(14143, $values);
+        $pat = null;
+        $matrix = null;
+        foreach ($items as $item) {
+            if ($item['title'] === 'PLAN DE TRABAJO ANUAL') $pat = $item;
+            if (str_starts_with($item['title'], 'MATRIZ DE CONTROL DE DOCUMENTOS')) $matrix = $item;
+        }
+        expectTrue($pat !== null && $matrix !== null);
+        $patSheet = PesvLibrary::form($pat)['sheets'][0];
+        expectSame(257, max($patSheet['columns']));
+        expectTrue(isset($patSheet['cells']['IW52']));
+        $matrixSheets = PesvLibrary::form($matrix)['sheets'];
+        $matrixColumns = max(array_map(static fn(array $sheet): int => max($sheet['columns'] ?: [0]), $matrixSheets));
+        expectSame(9, $matrixColumns);
+        expectTrue((int) $matrix['stats']['residual_format_cells_excluded'] > 0);
+    });
+
+    $test('PESV en transporte: generación automática, trazabilidad e idempotencia', static function () use ($mainId): void {
+        expectTrue(PesvLibrary::isRecommended(['sector_economico' => 'Transporte']));
+        expectTrue(PesvLibrary::isRecommended(['sector_economico' => 'Servicios'], ['codigo_ciuu' => '4923', 'descripcion' => 'Transporte de carga por carretera']));
+        expectTrue(!PesvLibrary::isRecommended(['sector_economico' => 'Servicios'], ['codigo_ciuu' => '6201', 'descripcion' => 'Desarrollo de software']));
+        $activity = Database::first('SELECT * FROM actividades_economicas WHERE codigo_ciuu = ?', ['4923']);
+        expectTrue($activity !== null);
+        $transportId = Tenant::create([
+            'razonsocial' => 'Transporte Prueba PESV S.A.S.', 'nit' => '901.999.001-7', 'sector_economico' => 'Transporte',
+            'actividad_economica_id' => (int) $activity['id'], 'numero_trabajadores' => 20, 'nivel_riesgo' => 'V',
+            'grupo_estandares' => 60, 'metodo_configuracion' => 'Combinado', 'plan_id' => null,
+            'representante_legal' => 'Responsable de prueba', 'correo_contacto' => 'pesv@example.test',
+        ]);
+        $keys = ProcedureLibrary::automaticKeys($transportId);
+        expectTrue(in_array('pesv', $keys, true));
+        expectTrue(!in_array('pesv', ProcedureLibrary::automaticKeys($mainId), true));
+        $summary = DocumentGenerator::generate($transportId);
+        expectTrue($summary['pesv']);
+        $document = Documento::findByCode(PesvLibrary::PLAN_CODE, $transportId);
+        expectTrue($document !== null);
+        expectSame('Borrador', $document['estado']);
+        expectSame('Planear', $document['fase_phva']);
+        expectSame(PesvLibrary::PLAN_CODE, $document['biblioteca_id']);
+        expectTrue(str_contains($document['contenido_html'], 'Paso 24'));
+        expectTrue(!str_contains($document['contenido_html'], '0 plantilla(s)'), 'Los pasos con recursos deduplicados deben conservar sus alias.');
+        expectTrue(str_contains($document['contenido_html'], 'Transporte Prueba PESV S.A.S.'));
+        expectTrue(strlen($document['contenido_html']) < 300000);
+        expectSame(null, Documento::findByCode(PesvLibrary::PLAN_CODE, $mainId));
+        expectSame(null, Documento::findForTenant((int) $document['id'], $mainId));
+        expectSame(0, ProcedureLibrary::generate($transportId, ['pesv']));
+        Documento::saveDraft((int) $document['id'], $transportId, $document['contenido_html'] . '<p>Revisión operativa de prueba.</p>');
+        expectSame(2, (int) Documento::findByCode(PesvLibrary::PLAN_CODE, $transportId)['version']);
+        expectSame(1, count(Documento::versions((int) $document['id'], $transportId)));
+    });
+
+    $test('Respuestas PESV: persistencia y aislamiento por tenant', static function () use ($mainId, $constructionId): void {
+        $template = null;
+        foreach (PesvLibrary::all() as $item) {
+            if ($item['kind'] === 'form') { $template = $item; break; }
+        }
+        expectTrue($template !== null);
+        $form = PesvLibrary::form($template);
+        $data = ExcelCalculator::calculate($form, ExcelCalculator::initialValues($form));
+        $admin = User::findForAuthentication('admin@andina.co');
+        $id = BibliotecaRespuesta::create([
+            'tenant_id' => $mainId, 'plantilla_id' => $template['id'], 'titulo' => 'Registro PESV aislado',
+            'datos_json' => json_encode($data, JSON_THROW_ON_ERROR), 'estado' => 'Borrador', 'created_by' => $admin['id'],
+        ]);
+        expectTrue($id > 0);
+        expectSame(null, BibliotecaRespuesta::findForTenant($id, $constructionId));
+        expectSame(1, BibliotecaRespuesta::counts($mainId)[$template['id']]);
+        BibliotecaRespuesta::update($id, $mainId, ['titulo' => 'Registro PESV actualizado', 'datos_json' => json_encode($data, JSON_THROW_ON_ERROR), 'estado' => 'Completado']);
+        expectSame('Completado', BibliotecaRespuesta::findForTenant($id, $mainId)['estado']);
+        BibliotecaRespuesta::delete($id, $mainId);
+        expectSame(null, BibliotecaRespuesta::findForTenant($id, $mainId));
+    });
+
+    $test('Calculador PESV: 5.820 fórmulas procesadas sin referencias externas', static function (): void {
+        $total = 0;
+        foreach (PesvLibrary::all() as $template) {
+            if ($template['kind'] !== 'form') continue;
+            $form = PesvLibrary::form($template);
+            $result = ExcelCalculator::calculate($form, ExcelCalculator::initialValues($form));
+            expectTrue(isset($result['values'], $result['calculated'], $result['unsupported']));
+            foreach ($form['sheets'] as $sheet) {
+                foreach ($sheet['cells'] as $cell) if (isset($cell['f'])) $total++;
+            }
+        }
+        expectSame(5820, $total);
+        $maintenance = null;
+        foreach (PesvLibrary::all() as $template) if ($template['title'] === 'PROGRAMA DE MANTENIMIENTO') $maintenance = $template;
+        expectTrue($maintenance !== null);
+        $form = PesvLibrary::form($maintenance);
+        $input = [];
+        $count = 0;
+        foreach ($form['sheets'] as $sheet) {
+            if (($sheet['state'] ?? 'visible') !== 'visible') continue;
+            foreach ($sheet['rows'] as $row) foreach ($sheet['columns'] as $column) {
+                $coordinate = SgsstLibrary::columnName($column) . $row;
+                if (isset($sheet['merged'][$coordinate]) || isset($sheet['cells'][$coordinate]['f'])) continue;
+                $input[$sheet['name']][$coordinate] = $sheet['cells'][$coordinate]['v'] ?? '';
+                $count++;
+            }
+        }
+        expectSame(34905, $count);
+        expectTrue(strlen(json_encode($input, JSON_THROW_ON_ERROR)) < 12 * 1024 * 1024);
+        $normalized = ExcelCalculator::normalizeInput($form, $input);
+        $result = ExcelCalculator::calculate($form, $normalized);
+        expectTrue(isset($result['values'], $result['calculated']));
     });
 
     $test('Calculador Excel: funciones, hojas anuales y fórmulas reales', static function (): void {

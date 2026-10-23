@@ -39,6 +39,7 @@ def add_tree(source: str, target: str) -> None:
 add_tree("app", "normia-sst/app")
 add_tree("config", "normia-sst/config")
 add_tree("resources/sgsst-library", "normia-sst/resources/sgsst-library")
+add_tree("resources/pesv-library", "normia-sst/resources/pesv-library")
 add_tree("public/assets", "public_html/assets")
 add_file("public/index.php", "normia-sst/public/index.php")
 for name in ("schema.sql", ".htaccess", "index.php"):

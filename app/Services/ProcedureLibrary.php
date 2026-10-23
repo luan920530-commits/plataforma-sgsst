@@ -50,6 +50,16 @@ final class ProcedureLibrary
                     ['codigo' => 'FT-ALT-01', 'nombre' => 'Formato de verificación previa para trabajo en alturas', 'tipo' => 'Registro', 'contenido' => ProcedureTemplate::heightsFormat($prepared, 'FT-ALT-01')],
                 ],
             ],
+            'pesv' => [
+                'nombre' => 'Plan Estratégico de Seguridad Vial (PESV)',
+                'descripcion' => 'Índice editable del paquete de 24 pasos aportado, con acceso a sus formularios y controles de versión.',
+                'aplicabilidad' => 'Sugerido para actividades de transporte. Revisa desplazamientos, flota, contratistas y evidencias antes de aprobar.',
+                'recomendado' => PesvLibrary::isRecommended($tenant, $activity),
+                'related_route' => '/pesv',
+                'documentos' => [
+                    ['codigo' => PesvLibrary::PLAN_CODE, 'nombre' => 'Plan Estratégico de Seguridad Vial (PESV)', 'fase' => 'Planear', 'tipo' => 'Plan', 'biblioteca_id' => PesvLibrary::PLAN_CODE, 'contenido' => PesvLibrary::planDraft($prepared)],
+                ],
+            ],
             'espacios_confinados' => [
                 'nombre' => 'Espacios confinados',
                 'descripcion' => 'Procedimiento y formato para aislamiento, medición atmosférica, vigilancia, permiso, rescate y cierre.',
@@ -103,7 +113,8 @@ final class ProcedureLibrary
                 foreach ($catalog[$key]['documentos'] as $document) {
                     $id = Documento::createOperationalIfMissing([
                         'tenant_id' => $tenantId, 'codigo' => $document['codigo'], 'nombre' => $document['nombre'],
-                        'fase' => 'Hacer', 'contenido' => $document['contenido'], 'tipo' => $document['tipo'],
+                        'fase' => $document['fase'] ?? 'Hacer', 'contenido' => $document['contenido'], 'tipo' => $document['tipo'],
+                        'biblioteca_id' => $document['biblioteca_id'] ?? null,
                     ]);
                     $created += $id !== null ? 1 : 0;
                 }
@@ -133,6 +144,9 @@ final class ProcedureLibrary
             'alturas' => ['recomendado' => self::riskDetected($activity, ['altura', 'techo', 'andamio']), 'documentos' => [
                 ['codigo' => 'PR-ALT-01', 'nombre' => 'Procedimiento para trabajo en alturas', 'tipo' => 'Procedimiento', 'contenido' => ProcedureTemplate::heights($prepared, 'PR-ALT-01')],
                 ['codigo' => 'FT-ALT-01', 'nombre' => 'Formato de verificación previa para trabajo en alturas', 'tipo' => 'Registro', 'contenido' => ProcedureTemplate::heightsFormat($prepared, 'FT-ALT-01')],
+            ]],
+            'pesv' => ['recomendado' => PesvLibrary::isRecommended($tenant, $activity), 'documentos' => [
+                ['codigo' => PesvLibrary::PLAN_CODE, 'nombre' => 'Plan Estratégico de Seguridad Vial (PESV)', 'fase' => 'Planear', 'tipo' => 'Plan', 'biblioteca_id' => PesvLibrary::PLAN_CODE, 'contenido' => PesvLibrary::planDraft($prepared)],
             ]],
             'espacios_confinados' => ['recomendado' => self::riskDetected($activity, ['confinado', 'tanque', 'silo', 'alcantar']), 'documentos' => [
                 ['codigo' => 'PR-EC-01', 'nombre' => 'Procedimiento para trabajo en espacios confinados', 'tipo' => 'Procedimiento', 'contenido' => ProcedureTemplate::confined($prepared, 'PR-EC-01')],

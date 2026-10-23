@@ -92,6 +92,13 @@ $router->get('/documentos/{id}/imprimir', [DocumentGeneratorController::class, '
 $router->get('/documentos/{id}/versiones/{versionId}', [DocumentGeneratorController::class, 'version'], $tenantManagers);
 $router->get('/procedimientos', [ProcedimientoController::class, 'index'], $tenantManagers);
 $router->post('/procedimientos/generar', [ProcedimientoController::class, 'generate'], $tenantManagers);
+$router->get('/pesv', [BibliotecaController::class, 'index'], $tenantManagers);
+$router->get('/pesv/respuestas/{id}', [BibliotecaController::class, 'editResponse'], $tenantManagers);
+$router->post('/pesv/respuestas/{id}', [BibliotecaController::class, 'updateResponse'], $tenantManagers);
+$router->post('/pesv/respuestas/{id}/eliminar', [BibliotecaController::class, 'deleteResponse'], $tenantManagers);
+$router->get('/pesv/{id}', [BibliotecaController::class, 'show'], $tenantManagers);
+$router->post('/pesv/{id}/generar', [BibliotecaController::class, 'generate'], $tenantManagers);
+$router->post('/pesv/{id}/respuestas', [BibliotecaController::class, 'storeResponse'], $tenantManagers);
 $router->get('/biblioteca-sgsst', [BibliotecaController::class, 'index'], $tenantManagers);
 $router->get('/biblioteca-sgsst/respuestas/{id}', [BibliotecaController::class, 'editResponse'], $tenantManagers);
 $router->post('/biblioteca-sgsst/respuestas/{id}', [BibliotecaController::class, 'updateResponse'], $tenantManagers);

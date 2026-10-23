@@ -4,6 +4,13 @@
     <div class="flex flex-wrap gap-2"><a href="<?= e(url('/plan-anual')) ?>" class="btn-secondary"><?= icon('calendar', 'h-4 w-4') ?> Ver PAT</a><a href="<?= e(url('/documentos')) ?>" class="btn-primary"><?= icon('documents', 'h-4 w-4') ?> Gestionar documentos</a></div>
 </div>
 
+<?php if ($pesvRecommended): ?>
+<section class="ios-card mt-5 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-start gap-3"><span class="metric-icon h-10 w-10 shrink-0 bg-blue-50 text-blue-600"><?= icon('shield-plain', 'h-4 w-4') ?></span><div><h2 class="text-sm font-semibold">PESV para tu actividad de transporte</h2><p class="mt-1 text-xs leading-5 text-slate-500">El paquete de 24 pasos está disponible. <?= $pesvDocument ? 'El índice ya fue generado como ' . e(strtolower($pesvDocument['estado'])) . '; revísalo junto con los formatos y evidencias.' : 'Genera el índice editable y completa los formatos con las condiciones reales de la operación.' ?></p></div></div>
+    <a href="<?= e(url($pesvDocument ? '/documentos/' . $pesvDocument['id'] : '/pesv')) ?>" class="btn-secondary shrink-0"><?= icon('arrow-right', 'h-4 w-4') ?> <?= $pesvDocument ? 'Revisar borrador PESV' : 'Abrir módulo PESV' ?></a>
+</section>
+<?php endif; ?>
+
 <section class="dashboard-hero mt-7">
     <div class="relative z-10 max-w-2xl"><span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-[11px] font-medium text-blue-100 ring-1 ring-white/10"><span class="h-1.5 w-1.5 rounded-full bg-emerald-300"></span> Ciclo de mejora continua</span><h2 class="mt-5 text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">Cada avance construye un lugar de trabajo más seguro.</h2><p class="mt-3 max-w-xl text-sm leading-6 text-blue-100/70">Prioriza los borradores, ejecuta el plan anual y haz seguimiento a los controles con tu equipo.</p><div class="mt-6 flex flex-wrap gap-3"><a href="<?= e(url('/phva')) ?>" class="btn-white">Explorar ciclo PHVA <?= icon('arrow-right', 'h-4 w-4') ?></a><a href="<?= e(url('/matriz-ipevr')) ?>" class="btn-glass">Revisar IPEVR</a></div></div>
     <div class="hero-progress"><div class="progress-ring progress-ring-dark" style="--progress: <?= $documentProgress * 3.6 ?>deg"><span><?= $documentProgress ?>%</span></div><p>Documentos aprobados</p><small><?= (int) $documentStats['aprobados'] ?> de <?= (int) $documentStats['total'] ?> registros</small></div>

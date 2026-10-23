@@ -93,6 +93,11 @@ final class Documento
         return $created === 1 ? Database::lastId() : null;
     }
 
+    public static function findByCode(string $code, int $tenantId): ?array
+    {
+        return Database::first('SELECT * FROM documentos_sgsst WHERE tenant_id = ? AND codigo_estandar = ?', [$tenantId, $code]);
+    }
+
     public static function findByLibrary(string $libraryId, int $tenantId): ?array
     {
         return Database::first('SELECT * FROM documentos_sgsst WHERE tenant_id = ? AND biblioteca_id = ?', [$tenantId, $libraryId]);

@@ -15,6 +15,7 @@ use App\Models\Indicador;
 use App\Models\Peligro;
 use App\Models\PlanTrabajo;
 use App\Models\Tenant;
+use App\Services\PesvLibrary;
 use App\Support\Auth;
 
 final class DashboardController extends BaseController
@@ -50,9 +51,13 @@ final class DashboardController extends BaseController
         $tenantId = $this->tenantId();
         $documentStats = Documento::stats($tenantId);
         $planStats = PlanTrabajo::stats($tenantId);
+        $tenant = Tenant::find($tenantId);
+        $activity = !empty($tenant['actividad_economica_id']) ? ActividadEconomica::find((int) $tenant['actividad_economica_id']) : null;
         $this->view('tenant/dashboard', [
             'title' => 'Resumen del SG-SST',
-            'tenant' => Tenant::find($tenantId),
+            'tenant' => $tenant,
+            'pesvRecommended' => PesvLibrary::isRecommended($tenant ?? [], $activity),
+            'pesvDocument' => Documento::findByCode(PesvLibrary::PLAN_CODE, $tenantId),
             'documentStats' => $documentStats,
             'planStats' => $planStats,
             'hazardStats' => Peligro::stats($tenantId),

@@ -22,6 +22,7 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - Biblioteca documental con filtros, **editor visual** para títulos, párrafos, listas y tablas, saneamiento en servidor, historial de versiones, aprobación, obsolescencia e impresión.
 - Biblioteca de **procedimientos y formatos** por actividad CIIU, AST, trabajo en alturas y espacios confinados. Los kits se generan como borradores sin duplicados y se diferencian de los permisos de cada tarea.
 - **Biblioteca SG-SST por estándares:** 142 plantillas únicas recuperadas del ZIP suministrado, con 88 documentos editables, 54 formularios por empresa, 60 estándares, módulos relacionados y descarga privada opcional de los originales DOC/DOCX/XLS/XLSX/PPTX/PDF.
+- **PESV para transporte:** módulo propio con 24 pasos y 97 recursos únicos recuperados del paquete suministrado, índice editable generado automáticamente para actividades de transporte, formularios aislados por tenant, trazabilidad, versiones y aprobación humana.
 - Tablero PHVA y Plan Anual de Trabajo con consulta individual, creación, edición completa, avance, fecha real de ejecución y eliminación auditada.
 - Hallazgos y acciones correctivas ACPA.
 - CRUD de matriz IPEVR con cálculo orientativo `ND × NE × NC`, nivel de riesgo y controles.
@@ -57,6 +58,18 @@ Desde **Biblioteca SG-SST** puedes:
 
 La biblioteca contiene 94 hojas, 15.918 celdas con contenido y 2.337 fórmulas. Las imágenes, gráficos o características no reproducidas se identifican en las notas de conversión; para consultar esos elementos se necesita la copia privada del original. El detalle está en `docs/biblioteca-sgsst.md`; los recursos convertidos están en `resources/sgsst-library/` y no requieren Office ni el ZIP en el servidor.
 
+### Biblioteca PESV importada
+
+El módulo **PESV · Seguridad vial** (`/pesv`) organiza el contenido de `pesvial.7z` en 24 pasos. La importación consolidó 114 ubicaciones en **97 recursos únicos**: 96 formularios y un procedimiento DOCX, con 17 duplicados exactos vinculados como alias. Conserva 14.143 celdas con valor y 5.820 fórmulas; el Plan de Trabajo Anual mantiene contenido real hasta la columna IW (257).
+
+- Las empresas cuya actividad o sector corresponda a transporte reciben el kit PESV durante la generación inicial. También puede generarse manualmente desde **Procedimientos y formatos** o desde la portada PESV.
+- El índice se crea como **borrador independiente por empresa**, con editor visual, historial, impresión y aprobación humana. Los formularios se diligencian y recalculan con el mismo motor de la biblioteca SG-SST.
+- La auditoría no encontró partes de macros, ActiveX u OLE y ninguna se ejecutó. Los 113 Excel contenían vínculos externos: sus relaciones, nombres definidos externos, cachés y rutas no se copiaron. Por esta razón, el módulo PESV no ofrece descarga de los Excel originales.
+- Solo se excluyeron 69.368 celdas vacías de formato residual fuera del área útil, sin recortar valores ni fórmulas. Las imágenes, gráficos y demás notas de conversión permanecen visibles para revisión.
+- El DOCX se convierte de forma recursiva, conservando párrafos, énfasis de runs, tablas y tablas anidadas. La conversión no acredita cumplimiento ni sustituye la verificación de evidencias.
+
+El detalle técnico y la reconstrucción están en [`docs/biblioteca-pesv.md`](docs/biblioteca-pesv.md). Los recursos de ejecución están en `resources/pesv-library/`; el 7z solo se necesita para volver a importar y no se incluye en el ZIP de hosting.
+
 ### Compartir el formulario de autoreportes
 
 1. Entra como AdminEmpresa o ResponsableSST a **Autoreportes → Generar acceso / QR**.
@@ -75,7 +88,7 @@ La biblioteca contiene 94 hojas, 15.918 celdas con contenido y 2.337 fórmulas. 
 
 El riesgo IV/V tiene prioridad sobre el número de trabajadores. La clasificación es una guía de configuración; la empresa debe revisar cualquier condición especial que le resulte aplicable.
 
-Al finalizar el alta, una **única transacción** crea la empresa, su administrador y la configuración inicial: documentos del grupo correspondiente, políticas, PAT, capacitaciones, IPEVR, perfiles, inducción y el kit base de procedimiento/formato de la actividad y AST. Si los peligros base identifican alturas o espacios confinados, también se sugiere y genera ese kit. Si algo falla, se revierte el conjunto. Una segunda ejecución no duplica la configuración. Las empresas ya registradas pueden generar los kits pendientes desde **Procedimientos y formatos**, incluso los de alto riesgo cuando determinen que aplican.
+Al finalizar el alta, una **única transacción** crea la empresa, su administrador y la configuración inicial: documentos del grupo correspondiente, políticas, PAT, capacitaciones, IPEVR, perfiles, inducción y el kit base de procedimiento/formato de la actividad y AST. Si los peligros base identifican alturas o espacios confinados, también se sugiere y genera ese kit; para actividades de transporte se agrega el índice PESV como borrador. Si algo falla, se revierte el conjunto. Una segunda ejecución no duplica la configuración. Las empresas ya registradas pueden generar los kits pendientes desde **Procedimientos y formatos**, incluso los de alto riesgo cuando determinen que aplican.
 
 ## Requisitos
 
@@ -237,6 +250,8 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - CRUD, historial de versiones, aprobación/cierre de permisos y simulacros.
 - Generación y escape de documentos operativos, actividades preventivas y evidencias.
 - Procedimientos/formatos CIIU, alturas y espacios confinados sin duplicados.
+- Biblioteca PESV: 97 recursos, 24 pasos, PAT hasta IW, generación automática en transporte, versiones y respuestas aisladas.
+- Las 5.820 fórmulas PESV procesadas sin referencias externas en los recursos editables.
 - Accesos externos con token hash, anonimato, consumo, revocación y aislamiento.
 - Acciones de gestión con responsables, recursos y evidencia.
 - Biblioteca importada: 142 recursos, deduplicación, cobertura de 60 estándares, generación por tenant y respuestas aisladas.
@@ -244,7 +259,7 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - Verificación documental exclusivamente explícita y protección de rutas de archivos.
 - Hash y verificación de contraseñas.
 
-La suite actual contiene **37 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
+La suite actual contiene **42 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
 
 ## Estilos
 

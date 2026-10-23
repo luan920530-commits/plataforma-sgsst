@@ -18,6 +18,8 @@ NORMIA SST · INSTALACIÓN EN GOOGIEHOST / DIRECTADMIN
 
 No necesitas Terminal, Cron, Composer, Node.js, MySQL ni crear .env.
 No se instalan datos demo ni credenciales predeterminadas.
+Incluye las 142 plantillas SG-SST y los 97 recursos PESV; no incluye
+los archivos ZIP/7z de origen, bases de datos ni credenciales.
 
 ACTUALIZAR SIN PERDER DATOS
 ---------------------------
