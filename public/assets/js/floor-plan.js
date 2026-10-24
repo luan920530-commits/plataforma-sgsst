@@ -9,19 +9,24 @@
     const NS = 'http://www.w3.org/2000/svg';
     const palette = root.querySelector('[data-floor-palette]');
     const signLibrary = window.FLOOR_PLAN_SIGNS || {};
+    const cadBundle = window.FLOOR_PLAN_CAD || {};
+    const cadLibrary = cadBundle.objects || {};
+    const cadCategories = cadBundle.categories || {};
     const legacySigns = {exit: 'E002', extinguisher: 'F001', first_aid: 'E003', alarm: 'F005', assembly: 'E007'};
     const categoryColors = {emergency: '#237f52', fire: '#b71f2e', mandatory: '#005387', prohibition: '#b71f2e', warning: '#f9a800'};
     const tools = ['wall', 'door', 'route', 'exit', 'extinguisher', 'first_aid', 'alarm', 'assembly', 'text',
-        ...Object.keys(signLibrary).map(code => `iso_${code.toLowerCase()}`)];
+        ...Object.keys(signLibrary).map(code => `iso_${code.toLowerCase()}`), ...Object.keys(cadLibrary)];
     const colors = ['#0f172a', '#334155', '#64748b', '#2563eb', '#15803d', '#16a34a', '#dc2626', '#f97316',
-        '#237f52', '#b71f2e', '#005387', '#f9a800'];
+        '#237f52', '#b71f2e', '#005387', '#f9a800', '#ca8a04', '#b45309', '#475569'];
     const labels = {
         wall: 'Muro', door: 'Puerta', route: 'Ruta de evacuación', exit: 'Salida de emergencia',
         extinguisher: 'Extintor de incendios', first_aid: 'Primeros auxilios', alarm: 'Pulsador de alarma de incendios',
         assembly: 'Punto de encuentro de evacuación', text: 'Texto y datos', select: 'Seleccionar y mover'
     };
     Object.entries(signLibrary).forEach(([code, sign]) => { labels[`iso_${code.toLowerCase()}`] = sign.name; });
+    Object.entries(cadLibrary).forEach(([tool, object]) => { labels[tool] = object.name; });
     const signSources = new Map();
+    const cadSources = new Map();
     const fallback = (() => {
         try {
             const value = JSON.parse(root.dataset.fallbackDesign || '');
@@ -114,9 +119,15 @@
         return signLibrary[code] ? code : null;
     }
 
+    function cadDefinitionForTool(tool) {
+        return Object.prototype.hasOwnProperty.call(cadLibrary, tool) ? cadLibrary[tool] : null;
+    }
+
     function defaultColorForTool(tool) {
         const code = signCodeForTool(tool);
         if (code) return categoryColors[signLibrary[code].category] || '#334155';
+        const cad = cadDefinitionForTool(tool);
+        if (cad) return cad.color;
         return tool === 'route' ? '#237f52' : '#334155';
     }
 
@@ -158,6 +169,36 @@
         return clone;
     }
 
+    function sourceCad(tool) {
+        if (cadSources.has(tool)) return cadSources.get(tool);
+        const definition = cadDefinitionForTool(tool);
+        if (!definition) throw new Error('El objeto CAD no pertenece al catálogo local.');
+        const source = new DOMParser().parseFromString(definition.svg, 'image/svg+xml');
+        if (source.querySelector('parsererror') || source.documentElement.nodeName.toLowerCase() !== 'svg') {
+            throw new Error(`No fue posible leer el objeto CAD ${definition.name}.`);
+        }
+        cadSources.set(tool, source.documentElement);
+        return source.documentElement;
+    }
+
+    function cadDimensions(item) {
+        const width = Math.max(40, Number(item.stroke || 8) * 12.5);
+        return {width, height: width};
+    }
+
+    function appendCadObject(group, item) {
+        if (!cadDefinitionForTool(item.tool)) return;
+        const {width, height} = cadDimensions(item);
+        const object = document.importNode(sourceCad(item.tool), true);
+        object.setAttribute('x', -width / 2);
+        object.setAttribute('y', -height / 2);
+        object.setAttribute('width', width);
+        object.setAttribute('height', height);
+        object.setAttribute('color', item.color);
+        object.setAttribute('class', 'floor-cad-object');
+        group.appendChild(object);
+    }
+
     function appendIsoSign(group, item) {
         const code = signCodeForTool(item.tool);
         if (!code) return;
@@ -192,6 +233,13 @@
         return image;
     }
 
+    function cadIcon(tool, color) {
+        const icon = document.importNode(sourceCad(tool), true);
+        icon.setAttribute('color', color || cadLibrary[tool].color);
+        icon.setAttribute('aria-hidden', 'true');
+        return icon;
+    }
+
     function mountPaletteIcons() {
         root.querySelectorAll('[data-basic-icon]').forEach(slot => slot.replaceChildren(basicIcon(slot.dataset.basicIcon)));
         root.querySelectorAll('[data-sign-icon], [data-category-icon]').forEach(slot => {
@@ -201,10 +249,15 @@
     }
 
     let pendingSignTool = 'iso_e002';
+    let pendingCadTool = 'cad_desk';
     let configuratorKey = '';
+    let cadConfiguratorKey = '';
     let renderedSignCode = '';
+    let renderedCadTool = '';
     let tooltipTarget = null;
     const signSelect = root.querySelector('[data-sign-type]');
+    const signConfigurator = root.querySelector('[data-sign-configurator]');
+    const cadConfigurator = root.querySelector('[data-cad-configurator]');
     const signOptionGroups = [...signSelect.querySelectorAll('optgroup')].map(group => group.cloneNode(true));
     const tooltip = document.createElement('div');
     tooltip.id = 'floor-tool-tooltip';
@@ -256,6 +309,53 @@
             preview.animate([{opacity: 0.35, transform: 'translateY(4px) scale(.98)'}, {opacity: 1, transform: 'translateY(0) scale(1)'}], {duration: 180, easing: 'ease-out'});
         }
         renderedSignCode = code;
+    }
+
+    function currentCadTool() {
+        const item = selected();
+        if (item && cadDefinitionForTool(item.tool)) return item.tool;
+        return pendingCadTool;
+    }
+
+    function syncConfiguratorVisibility() {
+        const item = selected();
+        const showCad = Boolean(cadDefinitionForTool(activeTool)
+            || (activeTool === 'select' && item && cadDefinitionForTool(item.tool)));
+        cadConfigurator.hidden = !showCad;
+        signConfigurator.hidden = showCad;
+    }
+
+    function syncCadConfigurator(force = false) {
+        const item = selected();
+        const selectedCad = item && cadDefinitionForTool(item.tool);
+        const tool = currentCadTool();
+        const definition = cadDefinitionForTool(tool) || cadLibrary.cad_desk;
+        if (!definition) return;
+        const color = selectedCad ? item.color : definition.color;
+        const key = selectedCad ? `${item.id}:${item.tool}:${color}` : `pending:${tool}`;
+        if (!force && key === cadConfiguratorKey) return;
+        cadConfiguratorKey = key;
+        root.querySelector('[data-cad-preview-name]').textContent = definition.name;
+        root.querySelector('[data-cad-preview-category]').textContent = cadCategories[definition.category]?.label || definition.category;
+        root.querySelector('[data-cad-preview-description]').textContent = definition.description;
+        root.querySelectorAll('[data-cad-preview-icon], [data-cad-tool-icon]').forEach(slot => {
+            slot.replaceChildren(cadIcon(tool, color));
+        });
+        const cadButton = root.querySelector('[data-cad-tool]');
+        cadButton.dataset.name = definition.name;
+        cadButton.dataset.reference = cadCategories[definition.category]?.label || 'Equipamiento CAD';
+        cadButton.dataset.description = `${definition.description} Configura el tipo en el panel derecho.`;
+        cadButton.setAttribute('aria-label', `Equipamiento CAD: ${definition.name}`);
+        root.querySelectorAll('[data-cad-type]').forEach(button => {
+            const active = button.dataset.cadType === tool;
+            button.classList.toggle('is-active', active);
+            button.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        const preview = cadConfigurator.querySelector('.floor-sign-preview');
+        if (tool !== renderedCadTool && typeof preview.animate === 'function' && (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+            preview.animate([{opacity: 0.35, transform: 'translateY(4px) scale(.98)'}, {opacity: 1, transform: 'translateY(0) scale(1)'}], {duration: 180, easing: 'ease-out'});
+        }
+        renderedCadTool = tool;
     }
 
     function normalizeSearch(value) {
@@ -314,15 +414,63 @@
         syncSignConfigurator(true);
     }
 
+    function filterCadOptions() {
+        const input = root.querySelector('[data-cad-search]');
+        const category = root.querySelector('[data-cad-category]').value;
+        const query = normalizeSearch(input.value);
+        let visible = 0;
+        root.querySelectorAll('[data-cad-type]').forEach(button => {
+            const matches = (!category || button.dataset.category === category)
+                && (!query || normalizeSearch(button.dataset.search).includes(query));
+            button.hidden = !matches;
+            if (matches) visible += 1;
+        });
+        root.querySelector('[data-cad-count]').textContent = `${visible}`;
+        const empty = root.querySelector('[data-cad-empty]');
+        if (empty) empty.hidden = visible !== 0;
+        input.setAttribute('aria-label', query || category ? `${visible} objetos CAD encontrados` : 'Buscar entre los 32 objetos CAD');
+    }
+
+    function chooseCad(tool) {
+        const definition = cadDefinitionForTool(tool);
+        if (!definition) return;
+        pendingCadTool = tool;
+        const item = selected();
+        if (item && cadDefinitionForTool(item.tool)) {
+            if (item.tool === tool) {
+                syncCadConfigurator(true);
+                return;
+            }
+            const before = snapshot();
+            const previousDefinition = cadDefinitionForTool(item.tool);
+            const previousDefaultLabel = labels[item.tool];
+            item.tool = tool;
+            if (!item.label || item.label === previousDefaultLabel) item.label = definition.name;
+            if (!item.color || item.color === previousDefinition.color) item.color = definition.color;
+            pushHistory(before);
+            setTool('select');
+            setStatus(`Objeto cambiado a ${definition.name}. Se conservaron posición, tamaño y rotación.`);
+            scheduleRender();
+            return;
+        }
+        setTool(tool);
+        syncCadConfigurator(true);
+    }
+
     function hideToolTooltip() {
         if (tooltipTarget) tooltipTarget.removeAttribute('aria-describedby');
         tooltipTarget = null;
         tooltip.hidden = true;
+        tooltip.replaceChildren();
     }
 
     function showToolTooltip(target) {
-        if (!target?.dataset.name) return;
+        if (!target?.dataset.name) {
+            hideToolTooltip();
+            return;
+        }
         hideToolTooltip();
+        tooltip.replaceChildren();
         tooltipTarget = target;
         const name = document.createElement('strong');
         name.textContent = target.dataset.name;
@@ -354,7 +502,7 @@
 
     function mountPaletteInteractions() {
         if (!palette) return;
-        const tooltipSelector = '[data-tool], [data-sign-tool]';
+        const tooltipSelector = '[data-tool], [data-sign-tool], [data-cad-tool]';
         palette.addEventListener('pointerover', event => {
             if (event.pointerType === 'touch') return;
             const target = event.target.closest(tooltipSelector);
@@ -372,6 +520,8 @@
             const target = event.target.closest(tooltipSelector);
             if (target && !target.contains(event.relatedTarget)) hideToolTooltip();
         });
+        palette.addEventListener('pointerleave', hideToolTooltip);
+        palette.addEventListener('pointercancel', hideToolTooltip);
         root.querySelector('[data-sign-tool]').addEventListener('click', () => {
             selectedId = null;
             setTool(pendingSignTool);
@@ -389,7 +539,25 @@
             }
         });
         root.querySelector('[data-sign-category]').addEventListener('change', filterSignOptions);
+        root.querySelector('[data-cad-tool]').addEventListener('click', () => {
+            selectedId = null;
+            setTool(pendingCadTool);
+            render();
+        });
+        root.querySelectorAll('[data-cad-type]').forEach(button => button.addEventListener('click', () => chooseCad(button.dataset.cadType)));
+        const cadSearch = root.querySelector('[data-cad-search]');
+        cadSearch.addEventListener('input', filterCadOptions);
+        cadSearch.addEventListener('keydown', event => {
+            if (event.key === 'Enter') event.preventDefault();
+            if (event.key === 'Escape') {
+                cadSearch.value = '';
+                root.querySelector('[data-cad-category]').value = '';
+                filterCadOptions();
+            }
+        });
+        root.querySelector('[data-cad-category]').addEventListener('change', filterCadOptions);
         filterSignOptions();
+        filterCadOptions();
     }
 
     function scheduleRender() {
@@ -433,6 +601,10 @@
 
     function renderElement(item) {
         const isLine = item.tool === 'wall' || item.tool === 'route';
+        const cad = cadDefinitionForTool(item.tool);
+        const cadSize = cad ? cadDimensions(item) : null;
+        const signSize = signCodeForTool(item.tool) ? Math.max(40, item.stroke * 5) : 72;
+        const selectionRadius = cadSize ? Math.hypot(cadSize.width, cadSize.height) / 2 + 6 : Math.max(36, signSize / 2 + 6);
         const group = svgNode('g', {
             'data-element-id': item.id,
             class: `floor-element${item.id === selectedId ? ' is-selected' : ''}`,
@@ -440,7 +612,7 @@
         });
         if (!isLine) {
             group.setAttribute('transform', `translate(${item.x} ${item.y}) rotate(${item.rotation || 0})`);
-            group.appendChild(svgNode('circle', {r: 36, fill: 'transparent'}));
+            group.appendChild(svgNode('circle', {r: selectionRadius, fill: 'transparent'}));
         } else {
             const cx = (item.x + item.x2) / 2;
             const cy = (item.y + item.y2) / 2;
@@ -471,18 +643,19 @@
             }, item.label));
         } else if (signCodeForTool(item.tool)) {
             appendIsoSign(group, item);
+        } else if (cad) {
+            appendCadObject(group, item);
         }
 
-        const signSize = signCodeForTool(item.tool) ? Math.max(40, item.stroke * 5) : 72;
         if (!isLine && item.tool !== 'text' && item.label) {
             group.appendChild(svgNode('text', {
-                x: 0, y: Math.max(48, signSize / 2 + 16), 'text-anchor': 'middle', fill: item.color, 'font-size': 11,
+                x: 0, y: cadSize ? cadSize.height / 2 + 16 : Math.max(48, signSize / 2 + 16), 'text-anchor': 'middle', fill: item.color, 'font-size': 11,
                 'font-weight': 600, 'font-family': 'Arial, sans-serif', stroke: '#ffffff',
                 'stroke-width': 3, 'paint-order': 'stroke', 'stroke-linejoin': 'round'
             }, item.label));
         }
         if (item.id === selectedId && !isLine) {
-            group.appendChild(svgNode('circle', {r: Math.max(36, signSize / 2 + 6), fill: 'none', stroke: '#2563eb', 'stroke-width': 2, 'stroke-dasharray': '5 4', class: 'editor-only', 'pointer-events': 'none'}));
+            group.appendChild(svgNode('circle', {r: selectionRadius, fill: 'none', stroke: '#2563eb', 'stroke-width': 2, 'stroke-dasharray': '5 4', class: 'editor-only', 'pointer-events': 'none'}));
         }
         return group;
     }
@@ -544,7 +717,7 @@
 
     function setTool(tool) {
         if (tool !== 'select' && !tools.includes(tool)) {
-            setStatus('La biblioteca de señalización no se cargó completa. Recarga la página antes de continuar.', true);
+            setStatus('Las bibliotecas del editor no se cargaron completas. Recarga la página antes de continuar.', true);
             return;
         }
         activeTool = tool;
@@ -556,12 +729,18 @@
             if (active) activeButton = button;
         });
         const code = signCodeForTool(tool);
+        const cad = cadDefinitionForTool(tool);
         if (code && tool.startsWith('iso_')) pendingSignTool = tool;
+        if (cad) pendingCadTool = tool;
         const signButton = root.querySelector('[data-sign-tool]');
         signButton.classList.toggle('is-active', Boolean(code));
         signButton.setAttribute('aria-pressed', code ? 'true' : 'false');
-        const name = activeButton?.dataset.name || labels[tool] || tool;
-        const description = activeButton?.dataset.description || 'Selecciona y edita elementos del plano.';
+        const cadButton = root.querySelector('[data-cad-tool]');
+        cadButton.classList.toggle('is-active', Boolean(cad));
+        cadButton.setAttribute('aria-pressed', cad ? 'true' : 'false');
+        syncConfiguratorVisibility();
+        const name = activeButton?.dataset.name || cad?.name || labels[tool] || tool;
+        const description = activeButton?.dataset.description || (cad ? `${cad.description} Configura el tipo en el panel derecho.` : 'Selecciona y edita elementos del plano.');
         const activeName = root.querySelector('[data-active-tool-name]');
         const activeDescription = root.querySelector('[data-active-tool-description]');
         if (activeName) activeName.textContent = name;
@@ -721,7 +900,9 @@
 
     function updateInspector() {
         const item = selected();
+        syncConfiguratorVisibility();
         syncSignConfigurator();
+        syncCadConfigurator();
         const empty = root.querySelector('[data-no-selection]');
         const properties = root.querySelector('[data-selection-properties]');
         empty.classList.toggle('hidden', Boolean(item));
@@ -736,7 +917,9 @@
         root.querySelector('[data-standard-color-note]').classList.add('hidden');
         if (!item) return;
         const signCode = signCodeForTool(item.tool);
-        root.querySelector('[data-selected-type]').textContent = `${labels[item.tool]}${signCode ? ` · ISO 7010 ${signCode}` : ''}`;
+        const cad = cadDefinitionForTool(item.tool);
+        const cadReference = cad ? ` · CAD · ${cadCategories[cad.category]?.label || cad.category}` : '';
+        root.querySelector('[data-selected-type]').textContent = `${labels[item.tool]}${signCode ? ` · ISO 7010 ${signCode}` : cadReference}`;
         root.querySelector('[data-element-label]').value = item.label || '';
         root.querySelector('[data-element-color]').value = item.color;
         root.querySelector('[data-element-color]').disabled = Boolean(signCode);
@@ -947,6 +1130,9 @@
             render();
         }
     });
+
+    window.addEventListener('blur', hideToolTooltip);
+    document.addEventListener('scroll', hideToolTooltip, true);
 
     window.addEventListener('beforeunload', event => {
         if (metadataDirty || snapshot() !== savedSnapshot) {

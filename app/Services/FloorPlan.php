@@ -7,7 +7,7 @@ use DomainException;
 use JsonException;
 use RuntimeException;
 
-/** Valida el formato del editor; los únicos pictogramas permitidos provienen del catálogo local ISO 7010. */
+/** Valida el formato del editor; solo permite pictogramas ISO y geometría CAD de los catálogos locales. */
 final class FloorPlan
 {
     private const BASE_TOOLS = ['wall', 'door', 'route', 'exit', 'extinguisher', 'first_aid', 'alarm', 'assembly', 'text'];
@@ -16,8 +16,8 @@ final class FloorPlan
         'alarm' => 'F005', 'assembly' => 'E007',
     ];
     private const COLORS = [
-        '#0f172a', '#334155', '#64748b', '#2563eb', '#15803d', '#16a34a', '#dc2626', '#f97316',
-        '#237f52', '#b71f2e', '#005387', '#f9a800',
+        '#0f172a', '#334155', '#475569', '#64748b', '#2563eb', '#15803d', '#16a34a', '#dc2626', '#f97316',
+        '#237f52', '#b71f2e', '#005387', '#f9a800', '#ca8a04', '#b45309',
     ];
     private const CATEGORY_COLORS = [
         'emergency' => '#237f52', 'fire' => '#b71f2e', 'mandatory' => '#005387',
@@ -26,6 +26,7 @@ final class FloorPlan
     private static ?array $library = null;
     private static ?array $tools = null;
     private static ?array $toolCatalog = null;
+    private static ?array $cadLibrary = null;
 
     public static function defaults(): array
     {
@@ -38,7 +39,8 @@ final class FloorPlan
         if (self::$tools === null) {
             self::$tools = array_merge(
                 self::BASE_TOOLS,
-                array_map(static fn(string $code): string => 'iso_' . strtolower($code), array_keys(self::library()['signs']))
+                array_map(static fn(string $code): string => 'iso_' . strtolower($code), array_keys(self::library()['signs'])),
+                array_keys(self::cadCatalog())
             );
         }
         return self::$tools;
@@ -70,6 +72,16 @@ final class FloorPlan
     public static function categories(): array
     {
         return self::library()['categories'];
+    }
+
+    public static function cadCatalog(): array
+    {
+        return self::cadLibrary()['objects'];
+    }
+
+    public static function cadCategories(): array
+    {
+        return self::cadLibrary()['categories'];
     }
 
     /** Devuelve el código ISO tanto para tipos nuevos como para alias de versiones anteriores. */
@@ -169,6 +181,35 @@ final class FloorPlan
             throw new RuntimeException('El catálogo local debe contener las 332 señales registradas.');
         }
         self::$library = $library;
+        return $library;
+    }
+
+    private static function cadLibrary(): array
+    {
+        if (self::$cadLibrary !== null) {
+            return self::$cadLibrary;
+        }
+        $path = BASE_PATH . '/resources/cad-objects.json';
+        if (!is_file($path)) {
+            throw new RuntimeException('Falta el catálogo local de objetos CAD.');
+        }
+        try {
+            $library = json_decode((string) file_get_contents($path), true, 16, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new RuntimeException('El catálogo local de objetos CAD no es válido.', 0, $exception);
+        }
+        if (!isset($library['objects'], $library['categories']) || !is_array($library['objects'])
+            || !is_array($library['categories']) || count($library['objects']) !== 32) {
+            throw new RuntimeException('El catálogo CAD debe contener 32 objetos y sus familias.');
+        }
+        foreach ($library['objects'] as $tool => $object) {
+            if (!is_array($object) || !is_string($tool) || !preg_match('/^cad_[a-z][a-z0-9_]{2,30}$/D', $tool)
+                || !isset($library['categories'][$object['category'] ?? ''], $object['name'], $object['description'], $object['color'], $object['svg'])
+                || !in_array($object['color'], self::COLORS, true) || !str_contains($object['svg'], '<svg')) {
+                throw new RuntimeException('El catálogo local contiene un objeto CAD inválido.');
+            }
+        }
+        self::$cadLibrary = $library;
         return $library;
     }
 

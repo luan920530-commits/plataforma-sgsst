@@ -31,7 +31,7 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - Permisos de trabajo con borrador, solicitud, aprobación, activación, cierre/cancelación, revisiones e impresión; campos específicos para alturas y espacios confinados.
 - Planes de emergencia por centro de trabajo con amenazas, contactos, brigada, recursos, evacuación, rescate, ayuda mutua, simulacros y documento versionado.
 - **Centro transversal de evidencias físicas:** cargas privadas PDF/JPG/PNG de listas de asistencia, reportes, formularios, inspecciones, simulacros, fotografías y otros soportes; vínculos con su módulo de origen, filtros, descarga íntegra y revisión humana con fecha, responsable y observaciones.
-- **Microapp visual de planos de emergencia:** rail oscuro de iconos con un único objeto de señalización configurable desde el panel derecho; buscador, familias, vista previa y 332 pictogramas ISO 7010 en español —73 de emergencia, 19 de incendio, 72 de obligación, 81 de prohibición y 87 de advertencia—, muros, puertas, rutas y textos; historial inmutable, control de versiones concurrentes y exportación PNG como evidencia pendiente de revisión.
+- **Microapp visual de planos de emergencia:** rail oscuro de iconos con un único objeto de señalización y un único objeto de equipamiento CAD, ambos configurables desde el panel derecho. Incluye buscador, familias y vista previa; 332 pictogramas ISO 7010 en español —73 de emergencia, 19 de incendio, 72 de obligación, 81 de prohibición y 87 de advertencia— y 32 representaciones CAD en seis familias: mobiliario, baños, cocinas, equipos industriales, vehículos/maquinaria y conexiones entre pisos. Conserva muros, puertas, rutas y textos, colores CAD editables, escalado, rotación, historial inmutable, control de versiones concurrentes y exportación PNG como evidencia pendiente de revisión.
 - Programas de promoción de la salud, prevención de accidentes/enfermedad laboral y vigilancia, con diagnóstico, objetivos, metas, presupuesto, actividades y evidencias.
 - Panel de documentación pendiente con referencias normativas, seguimiento humano y evidencias privadas PDF/JPG/PNG, incluidos planos y rutas de evacuación.
 - **Centro de gestión para cada requisito**, con acciones, usuarios responsables, recursos, fechas, evidencia de cierre y enlace al módulo operativo correspondiente; no redirige todo a la biblioteca.
@@ -93,8 +93,9 @@ El detalle técnico y la reconstrucción están en [`docs/biblioteca-pesv.md`](d
 1. Entra como AdminEmpresa o ResponsableSST a **Evidencias**. También puedes usar **Adjuntar evidencia** desde un documento, reporte, capacitación, formulario, plan, simulacro o plano: ese acceso ya lleva el vínculo del registro.
 2. Selecciona la categoría, fecha, descripción y un archivo PDF, JPG o PNG de hasta 10 MB. El archivo se guarda fuera de `public/`, con nombre aleatorio y SHA-256; la descarga vuelve a comprobar empresa y módulo.
 3. Usa **Registrar revisión** para dejar estado, responsable, fecha y observaciones. `Revisado` significa que una persona registró su contraste, no que la plataforma certifique cumplimiento. Los soportes revisados se conservan y no pueden borrarse desde la interfaz.
-4. En **Emergencias → abrir un plan → Planos de emergencia**, crea un plano y dibuja sobre el lienzo SVG. Usa el icono **Señal de seguridad** del rail y configura el tipo en el panel derecho: busca por nombre o código, filtra por familia y revisa la vista previa. Si seleccionas una señal ya dibujada, el selector cambia su tipo conservando posición, tamaño y rotación. Los colores se conservan por familia y los planos antiguos siguen abriendo mediante alias compatibles. Guarda antes de exportar: cada guardado crea una versión inmutable y una pestaña obsoleta no puede sobrescribir otra más reciente.
-5. **Exportar y archivar PNG** usa únicamente la última versión guardada y crea una evidencia pendiente de revisión. El editor es una herramienta de apoyo, no reemplaza un CAD profesional, un levantamiento en sitio ni la validación técnica/legal del plano.
+4. En **Emergencias → abrir un plan → Planos de emergencia**, crea un plano y dibuja sobre el lienzo SVG. Usa el icono **Señal de seguridad** del rail y configura el tipo en el panel derecho: busca por nombre o código, filtra por familia y revisa la vista previa. Si seleccionas una señal ya dibujada, el selector cambia su tipo conservando posición, tamaño y rotación. Los colores se conservan por familia y los planos antiguos siguen abriendo mediante alias compatibles.
+5. Usa **Equipamiento CAD** para buscar y ubicar mesas, escritorios, sillas, bancas, estanterías, lockers, baños, cocinas, equipos industriales, vehículos, maquinaria amarilla, escaleras, ascensor, escalera eléctrica y rampa. El panel muestra 32 iconos en seis familias. Con un objeto seleccionado puedes cambiar su tipo, color, tamaño y rotación; el cambio de tipo conserva su geometría y su color personalizado. Estas representaciones son esquemáticas: verifica dimensiones y escala en sitio. Guarda antes de exportar: cada guardado crea una versión inmutable y una pestaña obsoleta no puede sobrescribir otra más reciente.
+6. **Exportar y archivar PNG** usa únicamente la última versión guardada y crea una evidencia pendiente de revisión. El editor es una herramienta de apoyo, no reemplaza un CAD profesional, un levantamiento en sitio ni la validación técnica/legal del plano.
 
 ### Compartir el formulario de autoreportes
 
@@ -285,7 +286,7 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - Generación documental y prevención de duplicados.
 - Aislamiento de documentos, autoreportes, usuarios, IPEVR, capacitaciones, permisos, emergencias, programas y soportes entre tenants.
 - Centro de evidencias por módulo, revisión humana, borrado condicional y conservación de soportes revisados.
-- Editor de planos con 332 señales ISO 7010, 341 tipos persistidos compatibles, 337 entradas en el catálogo servidor, historial inmutable, aislamiento por empresa/plan y rechazo de guardados obsoletos o códigos desconocidos.
+- Editor de planos con 332 señales ISO 7010, 32 objetos CAD en seis familias, 373 tipos persistidos compatibles, 337 entradas en el catálogo servidor ISO/base, historial inmutable, aislamiento por empresa/plan y rechazo de guardados obsoletos o códigos desconocidos.
 - CRUD, historial de versiones, aprobación/cierre de permisos y simulacros.
 - Generación y escape de documentos operativos, actividades preventivas y evidencias.
 - Procedimientos/formatos CIIU, alturas y espacios confinados sin duplicados.
@@ -307,12 +308,12 @@ El CSS compilado ya está incluido en `public/assets/css/app.css`. Para modifica
 
 ```bash
 npm install
-npm run build        # copia QR, genera las 332 señales locales y compila Tailwind
-# o por separado: npm run build:signs / npm run build:css
+npm run build        # copia QR, genera 332 señales + 32 CAD locales y compila Tailwind
+# o por separado: npm run build:signs / npm run build:cad / npm run build:css
 # durante desarrollo: npm run watch:css
 ```
 
-Las fuentes son del sistema; no hay llamadas a CDN, analítica ni servicios de terceros. El QR se genera en el navegador con `qrcode-generator` (MIT). Los 332 pictogramas se compilan localmente desde `@iso-safety-signs/core`; el build comprueba conteos, traducciones, ausencia de scripts/eventos y recursos externos. La librería, licencia MIT y enlaces de atribución de cada dibujo quedan en `public/assets/js/vendor/` e incluidos en el ZIP. Ninguna URL se envía a una API externa.
+Las fuentes son del sistema; no hay llamadas a CDN, analítica ni servicios de terceros. El QR se genera en el navegador con `qrcode-generator` (MIT). Los 332 pictogramas se compilan localmente desde `@iso-safety-signs/core`; el build comprueba conteos, traducciones, ausencia de scripts/eventos y recursos externos. La librería, licencia MIT y enlaces de atribución de cada dibujo quedan en `public/assets/js/vendor/` e incluidos en el ZIP. Los 32 objetos CAD son geometría SVG propia, local y editable mediante `currentColor`; no descargan recursos ni ejecutan scripts. Ninguna URL se envía a una API externa.
 
 ## Estructura
 
@@ -334,6 +335,7 @@ resources/css/       Fuente Tailwind
 resources/sgsst-library/ Manifiesto, documentos y formularios SG-SST convertidos
 resources/pesv-library/  Manifiesto y 97 recursos PESV convertidos
 resources/iso7010-catalog.json  332 nombres y descripciones en español
+resources/cad-objects.json     32 objetos CAD vectoriales en seis familias
 docs/biblioteca-sgsst.md Inventario, comparación y notas de importación
 scripts/install.php  Instalador de producción/demo
 scripts/migrate.php  Migración no destructiva de instalaciones existentes

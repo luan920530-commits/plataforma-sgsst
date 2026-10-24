@@ -576,11 +576,21 @@ try {
         expectSame(10485760, EvidenceStorage::MAX_BYTES);
     });
 
-    $test('Editor de planos: 332 señales ISO, compatibilidad y validación estricta', static function (): void {
+    $test('Editor de planos: 332 señales ISO, 32 objetos CAD y validación estricta', static function (): void {
         $tools = FloorPlan::tools();
         $catalog = FloorPlan::toolCatalog();
-        expectSame(341, count($tools), 'Deben persistir 332 tipos ISO y 9 tipos base/heredados.');
-        expectSame(337, count($catalog), 'El catálogo debe incluir 332 señales y 5 herramientas base, sin alias duplicados.');
+        $cadCatalog = FloorPlan::cadCatalog();
+        expectSame(373, count($tools), 'Deben persistir 332 tipos ISO, 32 objetos CAD y 9 tipos base/heredados.');
+        expectSame(337, count($catalog), 'El catálogo ISO debe conservar 332 señales y 5 herramientas base, sin alias duplicados.');
+        expectSame(32, count($cadCatalog));
+        expectSame([6, 4, 4, 5, 7, 6], array_map(
+            static fn(string $category): int => count(array_filter($cadCatalog, static fn(array $item): bool => $item['category'] === $category)),
+            array_keys(FloorPlan::cadCategories())
+        ));
+        expectTrue(isset($cadCatalog['cad_table'], $cadCatalog['cad_toilet'], $cadCatalog['cad_kitchen_sink'], $cadCatalog['cad_drill_press'], $cadCatalog['cad_forklift'], $cadCatalog['cad_elevator'], $cadCatalog['cad_ramp']));
+        foreach ($cadCatalog as $cadObject) {
+            expectTrue(str_contains($cadObject['svg'], 'currentColor') && !str_contains($cadObject['svg'], '<script'), 'Cada CAD debe ser vectorial, local y editable.');
+        }
         expectTrue(str_contains(asset('css/app.css'), '?v='), 'Los assets deben versionarse para evitar CSS/JS obsoleto en hosting.');
         expectSame([73, 19, 72, 81, 87], array_map(
             static fn(string $category): int => count(array_filter($catalog, static fn(array $item): bool => $item['category'] === $category)),
@@ -596,7 +606,7 @@ try {
             $element = [
                 'id' => 'element_' . $index, 'tool' => $tool, 'x' => $x, 'y' => 80 + intdiv($index, 40) * 20,
                 'label' => $tool === 'text' ? 'Texto visible' : 'Elemento ' . $tool,
-                'color' => '#334155', 'rotation' => 0, 'stroke' => 8, 'html' => '<script>no se conserva</script>',
+                'color' => $tool === 'cad_forklift' ? '#ca8a04' : '#334155', 'rotation' => 0, 'stroke' => 8, 'html' => '<script>no se conserva</script>',
             ];
             if (in_array($tool, ['wall', 'route'], true)) {
                 $element['x2'] = $x + 100;
@@ -611,6 +621,8 @@ try {
         $byTool = array_column($normalized['elements'], null, 'tool');
         expectSame('#f9a800', $byTool['iso_w012']['color'], 'Las advertencias deben conservar su color normalizado.');
         expectSame('#b71f2e', $byTool['alarm']['color'], 'Los alias antiguos deben adoptar el color de su familia.');
+        expectSame('#ca8a04', $byTool['cad_forklift']['color'], 'La maquinaria debe aceptar amarillo editable.');
+        expectTrue(!array_key_exists('html', $byTool['cad_forklift']), 'Los objetos CAD no deben conservar markup arbitrario.');
         $invalid = ['<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>', FloorPlan::encode(FloorPlan::defaults())];
         $duplicate = floorPlanTestDesign();
         $duplicate['elements'][1]['id'] = $duplicate['elements'][0]['id'];
@@ -621,6 +633,9 @@ try {
         $unknownIso = floorPlanTestDesign();
         $unknownIso['elements'][0]['tool'] = 'iso_e999';
         $invalid[] = FloorPlan::encode($unknownIso);
+        $unknownCad = floorPlanTestDesign();
+        $unknownCad['elements'][0]['tool'] = 'cad_script';
+        $invalid[] = FloorPlan::encode($unknownCad);
         $outside = floorPlanTestDesign();
         $outside['elements'][2]['x'] = 1001;
         $invalid[] = FloorPlan::encode($outside);

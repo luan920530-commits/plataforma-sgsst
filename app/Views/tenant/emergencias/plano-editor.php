@@ -8,6 +8,8 @@ $clientDesign = $resumedDesign ? (string) $oldInput['datos_json'] : $encodedDesi
 $action = $isNew ? '/emergencias/' . $plan['id'] . '/planos' : '/planos-emergencia/' . $drawing['id'];
 $toolCatalog = App\Services\FloorPlan::toolCatalog();
 $toolCategories = App\Services\FloorPlan::categories();
+$cadObjects = App\Services\FloorPlan::cadCatalog();
+$cadCategories = App\Services\FloorPlan::cadCategories();
 $basicGlyphs = ['select' => '↖', 'wall' => '━', 'door' => '◜', 'route' => '⇢', 'text' => 'T'];
 ?>
 <div class="page-heading">
@@ -60,6 +62,10 @@ $basicGlyphs = ['select' => '↖', 'wall' => '━', 'door' => '◜', 'route' => 
                         <span class="floor-tool-icon floor-sign-tool-icon" data-sign-tool-icon data-category-icon="E002" aria-hidden="true">E002</span>
                         <span class="floor-tool-copy"><strong>Señal de seguridad</strong><small>ISO 7010</small></span>
                     </button>
+                    <button type="button" class="floor-tool floor-sign-tool floor-cad-tool" data-cad-tool data-name="Equipamiento CAD" data-description="Elige mobiliario, equipos, vehículos o conexiones entre pisos y haz clic sobre el lienzo para ubicarlos." data-reference="Mobiliario" aria-label="Configurar y ubicar equipamiento CAD" aria-pressed="false">
+                        <span class="floor-tool-icon floor-sign-tool-icon floor-cad-tool-icon" data-cad-tool-icon aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9h18v4H3zM5 13v7m14-7v7M8 9V5h8v4"/></svg></span>
+                        <span class="floor-tool-copy"><strong>Equipamiento CAD</strong><small>32 objetos</small></span>
+                    </button>
                 </div>
             </div>
         </aside>
@@ -110,13 +116,35 @@ $basicGlyphs = ['select' => '↖', 'wall' => '━', 'door' => '◜', 'route' => 
                 </select>
                 <p class="floor-sign-hint">Sin una señal seleccionada, define la próxima que ubicarás. Con una señal seleccionada, cambia su tipo conservando posición, tamaño y rotación.</p>
             </section>
+            <section class="ios-card floor-sign-configurator floor-cad-configurator p-4" data-cad-configurator hidden>
+                <div class="floor-sign-preview">
+                    <span class="floor-sign-preview-icon floor-cad-preview-icon" data-cad-preview-icon style="color: <?= e($cadObjects['cad_desk']['color']) ?>" aria-hidden="true"><?= $cadObjects['cad_desk']['svg'] ?></span>
+                    <div class="min-w-0"><span>Equipamiento CAD</span><h2 data-cad-preview-name><?= e($cadObjects['cad_desk']['name']) ?></h2><small data-cad-preview-category><?= e($cadCategories[$cadObjects['cad_desk']['category']]['label']) ?></small></div>
+                </div>
+                <p class="floor-sign-description" data-cad-preview-description><?= e($cadObjects['cad_desk']['description']) ?></p>
+                <div class="floor-sign-filters">
+                    <div class="floor-sign-search"><?= icon('search', 'h-3.5 w-3.5') ?><label class="sr-only" for="floor-cad-search">Buscar entre los 32 objetos CAD</label><input id="floor-cad-search" type="search" placeholder="Buscar equipo o mueble…" autocomplete="off" data-cad-search></div>
+                    <label class="sr-only" for="floor-cad-category">Filtrar objetos CAD por familia</label>
+                    <select id="floor-cad-category" data-cad-category aria-label="Filtrar objetos CAD por familia"><option value="">Seis familias</option><?php foreach ($cadCategories as $categoryKey => $category): ?><option value="<?= e($categoryKey) ?>"><?= e($category['label']) ?></option><?php endforeach; ?></select>
+                </div>
+                <div class="floor-sign-select-heading"><span>Tipo de objeto</span><span data-cad-count aria-live="polite">32</span></div>
+                <div class="floor-cad-grid" data-cad-grid aria-label="Catálogo visual de equipamiento CAD">
+                    <?php foreach ($cadObjects as $tool => $object): ?>
+                    <button type="button" class="floor-cad-option<?= $tool === 'cad_desk' ? ' is-active' : '' ?>" data-cad-type="<?= e($tool) ?>" data-category="<?= e($object['category']) ?>" data-search="<?= e($object['name'] . ' ' . $object['description'] . ' ' . $cadCategories[$object['category']]['label']) ?>" aria-label="<?= e($object['name']) ?>" aria-pressed="<?= $tool === 'cad_desk' ? 'true' : 'false' ?>">
+                        <span class="floor-cad-option-icon" style="color: <?= e($object['color']) ?>" aria-hidden="true"><?= $object['svg'] ?></span><span><?= e($object['name']) ?></span>
+                    </button>
+                    <?php endforeach; ?>
+                </div>
+                <p class="mt-2 rounded-lg bg-slate-50 p-2 text-center text-[10px] text-slate-500" data-cad-empty hidden>No hay objetos que coincidan con la búsqueda.</p>
+                <p class="floor-sign-hint">Haz clic en el lienzo para ubicarlo. Ajusta Grosor / tamaño para escalarlo y usa Rotación para orientarlo. Sin selección defines el próximo objeto; con uno seleccionado cambias su tipo conservando su geometría.</p>
+            </section>
             <section class="ios-card p-4">
                 <h2 class="text-xs font-semibold text-slate-800">Propiedades del elemento</h2>
                 <div data-no-selection class="mt-3 rounded-xl bg-slate-50 p-3 text-[11px] leading-5 text-slate-400">Selecciona un elemento para cambiar su texto, tamaño u orientación.</div>
                 <div data-selection-properties class="mt-4 hidden space-y-3">
                     <p class="text-[11px] font-semibold text-blue-600" data-selected-type></p>
                     <div><label class="label" for="element-label">Texto / identificación</label><input id="element-label" class="input h-9 text-xs" data-element-label maxlength="160"></div>
-                    <div data-color-field><label class="label" for="element-color">Color</label><select id="element-color" class="input h-9 text-xs" data-element-color><option value="#334155">Gris oscuro</option><option value="#0f172a">Negro</option><option value="#64748b">Gris</option><option value="#2563eb">Azul</option><option value="#15803d">Verde oscuro</option><option value="#16a34a">Verde</option><option value="#dc2626">Rojo</option><option value="#f97316">Naranja</option></select></div>
+                    <div data-color-field><label class="label" for="element-color">Color</label><select id="element-color" class="input h-9 text-xs" data-element-color><option value="#334155">Gris oscuro</option><option value="#0f172a">Negro</option><option value="#475569">Gris pizarra</option><option value="#64748b">Gris</option><option value="#2563eb">Azul</option><option value="#005387">Azul ISO</option><option value="#15803d">Verde oscuro</option><option value="#16a34a">Verde</option><option value="#237f52">Verde ISO</option><option value="#dc2626">Rojo</option><option value="#b71f2e">Rojo ISO</option><option value="#f97316">Naranja</option><option value="#f9a800">Amarillo ISO</option><option value="#ca8a04">Amarillo maquinaria</option><option value="#b45309">Ocre industrial</option></select></div>
                     <p class="hidden rounded-lg bg-slate-50 p-2 text-[10px] leading-4 text-slate-500" data-standard-color-note>El pictograma conserva los colores y la forma de su familia de seguridad.</p>
                     <div class="grid grid-cols-2 gap-3"><div><label class="label" for="element-stroke">Grosor / tamaño</label><input id="element-stroke" type="number" min="2" max="30" step="1" class="input h-9 text-xs" data-element-stroke></div><div><label class="label" for="element-rotation">Rotación °</label><input id="element-rotation" type="number" min="-360" max="360" step="15" class="input h-9 text-xs" data-element-rotation></div></div>
                 </div>

@@ -230,10 +230,18 @@
   .floor-sign-search input { @apply pl-8 pr-2 placeholder:text-slate-400; }
   .floor-sign-filters > select { @apply cursor-pointer px-1.5; }
   .floor-sign-select-heading { @apply mt-3 flex items-center justify-between gap-2 text-[9px] font-semibold text-slate-500; }
-  .floor-sign-select-heading > span { @apply rounded-md bg-blue-50 px-1.5 py-0.5 text-[9px] text-blue-600; }
+  .floor-sign-select-heading > span:last-child { @apply rounded-md bg-blue-50 px-1.5 py-0.5 text-[9px] text-blue-600; }
   .floor-sign-options { @apply mt-2 w-full rounded-xl border border-slate-200 bg-white p-1 text-[10px] text-slate-600 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100; }
   .floor-sign-options optgroup { @apply bg-slate-50 font-semibold text-slate-500; }
   .floor-sign-options option { @apply bg-white px-2 py-1.5 font-normal text-slate-600; }
+  .floor-cad-preview-icon svg { @apply block h-12 w-12; }
+  .floor-cad-grid { @apply mt-2 grid max-h-64 grid-cols-3 gap-1.5 overflow-y-auto rounded-xl border border-slate-200 bg-white p-1.5; scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+  .floor-cad-option { @apply flex min-w-0 flex-col items-center gap-1 rounded-lg border border-transparent bg-slate-50 p-1.5 text-center text-[8px] font-medium leading-3 text-slate-500 outline-none transition duration-150 hover:-translate-y-0.5 hover:bg-blue-50/60 hover:text-slate-800 focus-visible:ring-2 focus-visible:ring-blue-300; }
+  .floor-cad-option.is-active { @apply border-blue-200 bg-blue-50 text-blue-700 shadow-sm; }
+  .floor-cad-option[hidden] { @apply hidden; }
+  .floor-cad-option-icon { @apply flex h-12 w-full items-center justify-center rounded-md bg-white p-1 ring-1 ring-inset ring-slate-200/70; }
+  .floor-cad-option-icon svg { @apply block h-11 w-full; }
+  .floor-cad-option > span:last-child { @apply block w-full truncate; }
   .floor-sign-hint { @apply mt-3 border-t border-slate-100 pt-3 text-[9px] leading-4 text-slate-400; }
   .floor-tool-tooltip { @apply pointer-events-none fixed z-[120] hidden w-60 rounded-lg border border-white/10 bg-[#171b23] px-3 py-2 text-slate-200 shadow-2xl shadow-slate-950/40; }
   .floor-tool-tooltip:not([hidden]) { @apply block; }
