@@ -12,7 +12,7 @@
             <section class="ios-card p-6 sm:p-8">
                 <span class="eyebrow">Paso único</span>
                 <h1 class="mt-3 text-3xl font-semibold tracking-[-0.035em] text-slate-950"><?= $databaseReady ? 'Finaliza la instalación' : 'Todo listo para arrancar' ?></h1>
-                <p class="mt-3 text-sm leading-6 text-slate-500">El sistema creará la base SQLite y los catálogos. Solo necesitas definir el acceso principal; no se instalarán datos demo.</p>
+                <p class="mt-3 text-sm leading-6 text-slate-500"><?= $demoMode ? 'Este paquete creará SQLite, los catálogos y un conjunto completo de datos ficticios para explorar la plataforma. No requiere crear una cuenta inicial.' : 'El sistema creará la base SQLite y los catálogos. Solo necesitas definir el acceso principal; no se instalarán datos demo.' ?></p>
 
                 <div class="mt-7 space-y-3">
                     <?php foreach ($checks as $check): ?>
@@ -37,45 +37,37 @@
             </section>
 
             <section class="ios-card p-6 sm:p-8">
-                <span class="metric-icon bg-blue-50 text-blue-600"><?= icon('lock', 'h-6 w-6') ?></span>
-                <h2 class="mt-5 text-xl font-semibold tracking-tight text-slate-950">Crea el SuperAdmin</h2>
-                <p class="mt-2 text-xs leading-5 text-slate-500">Esta cuenta administrará empresas y usuarios. La instalación quedará bloqueada después de crearla.</p>
-
-                <?php require BASE_PATH . '/app/Views/partials/flash.php'; ?>
-                <?php if (!empty($errors['general'])): ?>
-                    <div class="mt-5 rounded-2xl bg-rose-50 p-4 text-xs leading-5 text-rose-700 ring-1 ring-rose-100"><?= e($errors['general']) ?></div>
+                <?php if ($demoMode): ?>
+                    <span class="metric-icon bg-blue-50 text-blue-600"><?= icon('database', 'h-6 w-6') ?></span>
+                    <h2 class="mt-5 text-xl font-semibold tracking-tight text-slate-950">Instalar datos de demostración</h2>
+                    <p class="mt-2 text-xs leading-5 text-slate-500">Se crearán tres empresas, cuatro perfiles de acceso, documentos, indicadores, reportes y un plan de emergencia con su plano editable.</p>
+                    <div class="mt-5 rounded-2xl bg-blue-50 p-4 text-[11px] leading-5 text-blue-800 ring-1 ring-blue-100">
+                        <strong>Acceso principal después de instalar</strong><br>AdminEmpresa: <code>admin@andina.co</code><br>Contraseña demo: <code>Normia2026!</code>
+                    </div>
+                    <div class="mt-4 rounded-2xl bg-amber-50 p-4 text-[11px] leading-5 text-amber-800 ring-1 ring-amber-100">Todos los datos son ficticios. No uses este paquete para información real ni conserves estas credenciales en un entorno de producción.</div>
+                    <?php require BASE_PATH . '/app/Views/partials/flash.php'; ?>
+                    <?php if (!empty($errors['general'])): ?><div class="mt-5 rounded-2xl bg-rose-50 p-4 text-xs leading-5 text-rose-700 ring-1 ring-rose-100"><?= e($errors['general']) ?></div><?php endif; ?>
+                    <form method="post" action="<?= e(url('/instalar')) ?>" class="mt-7">
+                        <?= csrf_field() ?>
+                        <button type="submit" class="btn-primary h-12 w-full" <?= $canInstall ? '' : 'disabled' ?>><?= icon('database', 'h-4 w-4') ?> Instalar demo y continuar</button>
+                    </form>
+                <?php else: ?>
+                    <span class="metric-icon bg-blue-50 text-blue-600"><?= icon('lock', 'h-6 w-6') ?></span>
+                    <h2 class="mt-5 text-xl font-semibold tracking-tight text-slate-950">Crea el SuperAdmin</h2>
+                    <p class="mt-2 text-xs leading-5 text-slate-500">Esta cuenta administrará empresas y usuarios. La instalación quedará bloqueada después de crearla.</p>
+                    <?php require BASE_PATH . '/app/Views/partials/flash.php'; ?>
+                    <?php if (!empty($errors['general'])): ?><div class="mt-5 rounded-2xl bg-rose-50 p-4 text-xs leading-5 text-rose-700 ring-1 ring-rose-100"><?= e($errors['general']) ?></div><?php endif; ?>
+                    <form method="post" action="<?= e(url('/instalar')) ?>" class="mt-7 space-y-5" novalidate>
+                        <?= csrf_field() ?>
+                        <div><label for="nombre" class="label">Nombre del administrador *</label><input id="nombre" name="nombre" class="input" value="<?= e(old('nombre')) ?>" maxlength="120" autocomplete="name" required autofocus><?= field_error('nombre') ?></div>
+                        <div><label for="email" class="label">Correo de acceso *</label><input id="email" name="email" type="email" class="input" value="<?= e(old('email')) ?>" maxlength="190" autocomplete="username" required><?= field_error('email') ?></div>
+                        <div><label for="password" class="label">Contraseña *</label><input id="password" name="password" type="password" class="input" autocomplete="new-password" required><p class="mt-1.5 text-[10px] text-slate-400">Mínimo 10 caracteres, con mayúsculas, minúsculas y números.</p><?= field_error('password') ?></div>
+                        <div><label for="password_confirmation" class="label">Confirmar contraseña *</label><input id="password_confirmation" name="password_confirmation" type="password" class="input" autocomplete="new-password" required><?= field_error('password_confirmation') ?></div>
+                        <button type="submit" class="btn-primary h-12 w-full" <?= $canInstall ? '' : 'disabled' ?>><?= icon('database', 'h-4 w-4') ?> Instalar y crear acceso</button>
+                    </form>
                 <?php endif; ?>
-
-                <form method="post" action="<?= e(url('/instalar')) ?>" class="mt-7 space-y-5" novalidate>
-                    <?= csrf_field() ?>
-                    <div>
-                        <label for="nombre" class="label">Nombre del administrador *</label>
-                        <input id="nombre" name="nombre" class="input" value="<?= e(old('nombre')) ?>" maxlength="120" autocomplete="name" required autofocus>
-                        <?= field_error('nombre') ?>
-                    </div>
-                    <div>
-                        <label for="email" class="label">Correo de acceso *</label>
-                        <input id="email" name="email" type="email" class="input" value="<?= e(old('email')) ?>" maxlength="190" autocomplete="username" required>
-                        <?= field_error('email') ?>
-                    </div>
-                    <div>
-                        <label for="password" class="label">Contraseña *</label>
-                        <input id="password" name="password" type="password" class="input" autocomplete="new-password" required>
-                        <p class="mt-1.5 text-[10px] text-slate-400">Mínimo 10 caracteres, con mayúsculas, minúsculas y números.</p>
-                        <?= field_error('password') ?>
-                    </div>
-                    <div>
-                        <label for="password_confirmation" class="label">Confirmar contraseña *</label>
-                        <input id="password_confirmation" name="password_confirmation" type="password" class="input" autocomplete="new-password" required>
-                        <?= field_error('password_confirmation') ?>
-                    </div>
-                    <button type="submit" class="btn-primary h-12 w-full" <?= $canInstall ? '' : 'disabled' ?>><?= icon('database', 'h-4 w-4') ?> Instalar y crear acceso</button>
-                </form>
-
-                <?php if (!$canInstall): ?>
-                    <p class="mt-4 text-center text-[11px] leading-5 text-rose-600">Corrige los requisitos marcados en rojo y recarga la página para habilitar la instalación.</p>
-                <?php endif; ?>
-                <p class="mt-6 text-center text-[10px] leading-5 text-slate-400">SQLite privado · contraseña con hash seguro · protección CSRF · sin cuentas de demostración</p>
+                <?php if (!$canInstall): ?><p class="mt-4 text-center text-[11px] leading-5 text-rose-600">Corrige los requisitos marcados en rojo y recarga la página para habilitar la instalación.</p><?php endif; ?>
+                <p class="mt-6 text-center text-[10px] leading-5 text-slate-400"><?= $demoMode ? 'SQLite privado · datos ficticios · no usar en producción' : 'SQLite privado · contraseña con hash seguro · protección CSRF · sin cuentas de demostración' ?></p>
             </section>
         </div>
     </div>

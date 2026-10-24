@@ -41,7 +41,6 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Services\ClassificationService;
 use App\Services\ComplianceService;
-use App\Services\DemoSeeder;
 use App\Services\DocumentGenerator;
 use App\Services\EvidenceLinker;
 use App\Services\EvidenceStorage;
@@ -146,8 +145,10 @@ $tests = [];
 $test = static function (string $name, callable $callback) use (&$tests): void { $tests[$name] = $callback; };
 
 try {
-    Installer::run();
-    DemoSeeder::seed();
+    $demoInstallation = Installer::installDemo();
+    if (!($demoInstallation['created'] ?? false)) {
+        throw new TestFailure('La instalación demo inicial no se completó.');
+    }
     $main = tenantByNit('901.245.780-3');
     $construction = tenantByNit('900.812.447-1');
     $bakery = tenantByNit('901.552.019-8');
@@ -160,6 +161,22 @@ try {
         expectSame([], Database::query('PRAGMA foreign_key_check'));
         expectSame(20, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
         expectTrue((int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'index' AND sql IS NOT NULL")['n'] >= 20);
+    });
+
+    $test('Instalación demo: perfiles, empresas y plano editable', static function () use ($mainId): void {
+        expectSame(3, (int) Database::first('SELECT COUNT(*) AS n FROM tenants')['n']);
+        expectSame(4, (int) Database::first('SELECT COUNT(*) AS n FROM users')['n']);
+        $plan = Database::first('SELECT * FROM planes_emergencia WHERE tenant_id = ? AND titulo = ?', [$mainId, 'Plan de emergencia · sede de demostración']);
+        expectTrue($plan !== null && (int) $plan['documento_id'] > 0, 'La demo debe incluir el plan y su documento.');
+        $drawings = PlanoEmergencia::forPlan((int) $plan['id'], $mainId);
+        expectSame(1, count($drawings));
+        $design = FloorPlan::normalize($drawings[0]['datos_json']);
+        expectSame(11, count($design['elements']));
+        $byTool = array_column($design['elements'], null, 'tool');
+        expectSame('#f9a800', $byTool['iso_w012']['color']);
+        expectSame(false, Installer::installDemo()['created'], 'Una segunda instalación demo no debe duplicar ni reemplazar datos.');
+        expectSame(1, count(PlanEmergencia::forTenant($mainId)));
+        expectSame(3, (int) Database::first('SELECT COUNT(*) AS n FROM tenants')['n']);
     });
 
     foreach ([7, 21, 60] as $group) {

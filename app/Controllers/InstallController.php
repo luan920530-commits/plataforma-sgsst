@@ -24,6 +24,7 @@ final class InstallController extends BaseController
             'databaseReady' => Database::isInstalled(),
             'detectedUrl' => absolute_url('/'),
             'secureConnection' => str_starts_with(absolute_url('/'), 'https://'),
+            'demoMode' => (bool) ($GLOBALS['config']['demo'] ?? false),
         ], 'layouts/auth');
     }
 
@@ -36,26 +37,29 @@ final class InstallController extends BaseController
             fail_validation(['general' => 'La sesión de instalación venció. Recarga la página e inténtalo nuevamente.'], [], '/instalar');
         }
 
+        $demoMode = (bool) ($GLOBALS['config']['demo'] ?? false);
         $data = [
             'nombre' => (string) $this->input('nombre'),
             'email' => text_lower((string) $this->input('email')),
             'password' => (string) $this->input('password'),
             'password_confirmation' => (string) $this->input('password_confirmation'),
         ];
-        $validator = new Validator($data);
-        $validator->required('nombre', 'nombre')->max('nombre', 'nombre', 120)
-            ->required('email', 'correo electrónico')->email('email')->max('email', 'correo electrónico', 190)
-            ->required('password', 'contraseña')->password('password')
-            ->confirmed('password', 'password_confirmation');
-        if ($validator->fails()) {
-            fail_validation($validator->errors(), $data, '/instalar');
+        if (!$demoMode) {
+            $validator = new Validator($data);
+            $validator->required('nombre', 'nombre')->max('nombre', 'nombre', 120)
+                ->required('email', 'correo electrónico')->email('email')->max('email', 'correo electrónico', 190)
+                ->required('password', 'contraseña')->password('password')
+                ->confirmed('password', 'password_confirmation');
+            if ($validator->fails()) {
+                fail_validation($validator->errors(), $data, '/instalar');
+            }
         }
         if (!Installer::canInstall()) {
             fail_validation(['general' => 'El servidor todavía no cumple los requisitos señalados. Corrígelos y recarga esta página.'], $data, '/instalar');
         }
 
         try {
-            $admin = Installer::installWithSuperAdmin($data['email'], $data['password'], $data['nombre']);
+            $admin = $demoMode ? Installer::installDemo() : Installer::installWithSuperAdmin($data['email'], $data['password'], $data['nombre']);
         } catch (Throwable $exception) {
             error_log((string) $exception);
             fail_validation([
@@ -67,7 +71,9 @@ final class InstallController extends BaseController
             redirect('/login');
         }
         session_regenerate_id(true);
-        flash('success', 'Instalación completada. Ingresa con el correo ' . $admin['email'] . ' y la contraseña que acabas de crear.');
+        flash('success', $demoMode
+            ? 'Instalación demo completada. Usa los accesos de demostración indicados en LEEME.txt.'
+            : 'Instalación completada. Ingresa con el correo ' . $admin['email'] . ' y la contraseña que acabas de crear.');
         redirect('/login');
     }
 }

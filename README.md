@@ -192,6 +192,16 @@ python3 scripts/build_hosting_zip.py
 
 El archivo se crea en `dist/normia-sst-hosting.zip` y queda excluido de Git.
 
+### ZIP de hosting con datos de demostración
+
+Para evaluar la plataforma sin cargar información real, genera la variante demo:
+
+```bash
+python3 scripts/build_hosting_zip.py --demo
+```
+
+Se crea `dist/normia-sst-hosting-demo.zip`, también excluido de Git. El instalador web mostrará **Instalar demo y continuar** y generará tres empresas, usuarios, documentos, indicadores, reportes y un plan de emergencia con plano editable. El paquete incluye `APP_DEMO=true` y los accesos ficticios en `LEEME.txt`; **no incluye una base SQLite ni sesiones**. Es solo para evaluación: para información real usa el paquete limpio de producción.
+
 ### Instalación manual alternativa
 
 Para un virtual host propio cuyo DocumentRoot sea `public/`, copia `.env.example` a `.env`, configura `APP_ENV=production`, `APP_DEBUG=false`, `APP_DEMO=false` y la URL pública. Otorga escritura a `database/` y `storage/` sin exponerlos al DocumentRoot y ejecuta `php scripts/install.php`. El comando mostrará el acceso inicial si no existe un SuperAdmin.
@@ -289,7 +299,7 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - Verificación documental exclusivamente explícita y protección de rutas de archivos.
 - Hash y verificación de contraseñas.
 
-La suite actual contiene **49 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
+La suite actual contiene **50 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
 
 ## Estilos
 

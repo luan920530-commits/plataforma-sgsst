@@ -12,7 +12,7 @@ require BASE_PATH . '/app/bootstrap.php';
 use App\Services\DemoSeeder;
 use App\Services\Installer;
 
-$demo = in_array('--demo', $argv, true);
+$demo = in_array('--demo', $argv, true) || (bool) ($GLOBALS['config']['demo'] ?? false);
 
 try {
     if (!extension_loaded('pdo_sqlite')) {

@@ -43,6 +43,22 @@ final class Installer
         }
     }
 
+    public static function installDemo(): array
+    {
+        $lock = self::acquireInstallLock();
+        try {
+            if (self::hasInitialSuperAdmin()) {
+                return ['created' => false];
+            }
+            self::run();
+            DemoSeeder::seed();
+            return ['created' => true, 'email' => 'superadmin@normia.co', 'demo' => true];
+        } finally {
+            flock($lock, LOCK_UN);
+            fclose($lock);
+        }
+    }
+
     /** Comprobaciones legibles para el instalador web, sin modificar archivos. */
     public static function requirements(): array
     {

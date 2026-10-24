@@ -1,0 +1,45 @@
+NORMIA SST · PAQUETE DE DEMOSTRACIÓN PARA HOSTING
+=================================================
+
+IMPORTANTE: este paquete contiene datos y credenciales ficticios de prueba.
+No lo uses para registrar información real ni como instalación de producción.
+
+1. En DirectAdmin selecciona PHP 8.1 o superior y habilita:
+   pdo_sqlite, sqlite3, dom, libxml, json, session y fileinfo.
+
+2. Sube este ZIP a la carpeta del dominio, un nivel ENCIMA de public_html.
+   Por ejemplo: /domains/normiasst.whf.bz/
+
+3. Extrae el ZIP allí. Deben quedar estas dos carpetas:
+   /domains/normiasst.whf.bz/public_html/
+   /domains/normiasst.whf.bz/normia-sst/
+
+4. Abre el dominio. La primera pantalla comprobará el servidor y mostrará
+   "Instalar datos de demostración". Pulsa "Instalar demo y continuar".
+   No necesitas Terminal, Composer, Node.js, MySQL ni crear manualmente .env.
+
+La instalación crea SQLite fuera de public_html y carga datos ficticios:
+- Tres empresas con distintos grupos de estándares.
+- Documentos SG-SST, plan anual, indicadores, hallazgos y autoreportes.
+- Un plan de emergencia con documento y plano editable de demostración.
+- Los 97 recursos PESV y la biblioteca de 332 señales ISO 7010.
+
+ACCESOS DEMO
+------------
+Contraseña para todas las cuentas: Normia2026!
+
+SuperAdmin:      superadmin@normia.co
+AdminEmpresa:    admin@andina.co
+ResponsableSST:  sst@andina.co
+Trabajador:      trabajador@andina.co
+
+Para revisar el editor, entra como AdminEmpresa o ResponsableSST y abre:
+Emergencias > Plan de emergencia · sede de demostración > Planos.
+
+El ZIP no incluye una base SQLite, sesiones, evidencias ni archivos subidos.
+La base y los ejemplos se generan únicamente al completar la instalación web.
+Los planos y documentos de ejemplo no representan validación técnica o legal.
+
+Para una instalación con información real utiliza normia-sst-hosting.zip,
+que crea un SuperAdmin privado y no instala datos de demostración.
+Mantén APP_DEBUG=false y activa HTTPS incluso para publicar la demo.

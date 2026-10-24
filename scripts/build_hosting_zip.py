@@ -7,7 +7,12 @@ import zipfile
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT / "dist" / "normia-sst-hosting.zip"
+DEMO = "--demo" in sys.argv[1:]
+arguments = [argument for argument in sys.argv[1:] if argument != "--demo"]
+if len(arguments) > 1:
+    raise SystemExit("Uso: python3 scripts/build_hosting_zip.py [--demo] [ruta_de_salida]")
+default_name = "normia-sst-hosting-demo.zip" if DEMO else "normia-sst-hosting.zip"
+OUTPUT = Path(arguments[0]).resolve() if arguments else ROOT / "dist" / default_name
 
 files: dict[str, Path] = {}
 
@@ -55,7 +60,7 @@ for name in ("install.php", "migrate.php"):
     add_file(f"scripts/{name}", f"normia-sst/scripts/{name}")
 add_file("deploy/public_html/index.php", "public_html/index.php")
 add_file("deploy/public_html/.htaccess", "public_html/.htaccess")
-add_file("deploy/LEEME.txt", "LEEME.txt")
+add_file("deploy/LEEME-DEMO.txt" if DEMO else "deploy/LEEME.txt", "LEEME.txt")
 
 for archive_name in files:
     pure = PurePosixPath(archive_name)
@@ -69,7 +74,8 @@ OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(OUTPUT, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
     for target, source in sorted(files.items()):
         archive.write(source, target)
-    environment = (ROOT / "deploy/production.env.example").read_bytes()
+    environment_name = "deploy/demo.env.example" if DEMO else "deploy/production.env.example"
+    environment = (ROOT / environment_name).read_bytes()
     env_info = zipfile.ZipInfo("normia-sst/.env")
     env_info.external_attr = 0o100600 << 16
     archive.writestr(env_info, environment)
@@ -90,4 +96,4 @@ with zipfile.ZipFile(OUTPUT) as archive:
 
 print(f"ZIP verificado: {OUTPUT}")
 print(f"{len(names)} entradas · {OUTPUT.stat().st_size / 1024 / 1024:.2f} MiB")
-print("Estructura: public_html + normia-sst · sin base demo ni credenciales")
+print("Estructura: public_html + normia-sst · " + ("datos ficticios al instalar · sin base ni sesiones" if DEMO else "sin base demo ni credenciales"))

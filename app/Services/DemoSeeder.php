@@ -10,6 +10,8 @@ use App\Models\Documento;
 use App\Models\Empleado;
 use App\Models\Hallazgo;
 use App\Models\Indicador;
+use App\Models\PlanEmergencia;
+use App\Models\PlanoEmergencia;
 use App\Models\PlanTrabajo;
 use App\Models\Tenant;
 use App\Models\User;
@@ -121,7 +123,58 @@ final class DemoSeeder
         Autoreporte::updateManagement($reportId, $mainId, 'En revision', 'Recibimos tu reporte. Se revisará la distribución de reuniones y las pausas visuales con tu líder.');
         Autoreporte::create(['tenant_id' => $mainId, 'user_id' => $workerId, 'tipo' => 'Sugerencia', 'descripcion' => 'Propongo habilitar una pausa activa corta los martes y jueves para el equipo de producto.', 'ubicacion' => 'Equipo de producto', 'fecha_evento' => date('Y-m-d', strtotime('-8 days'))]);
 
+        self::createEmergencyExample($mainId, $sstId);
         Database::execute('INSERT INTO auditoria_saas (tenant_id, user_id, accion, entidad, entidad_id, detalles_json, ip_address) VALUES (?, ?, ?, ?, ?, ?, ?)', [$mainId, $sstId, 'Configuración inicial', 'Tenant', $mainId, json_encode($summary, JSON_UNESCAPED_UNICODE), '127.0.0.1']);
+    }
+
+    private static function createEmergencyExample(int $tenantId, int $userId): void
+    {
+        if (PlanEmergencia::forTenant($tenantId) !== []) {
+            return;
+        }
+        $design = FloorPlan::normalize(FloorPlan::encode([
+            'format' => 1, 'width' => 1000, 'height' => 650, 'grid' => 20,
+            'elements' => [
+                ['id' => 'demo_wall_north', 'tool' => 'wall', 'x' => 60, 'y' => 100, 'x2' => 760, 'y2' => 100, 'label' => 'Muro norte', 'color' => '#334155', 'rotation' => 0, 'stroke' => 10],
+                ['id' => 'demo_wall_left', 'tool' => 'wall', 'x' => 60, 'y' => 100, 'x2' => 60, 'y2' => 500, 'label' => 'Muro occidental', 'color' => '#334155', 'rotation' => 0, 'stroke' => 10],
+                ['id' => 'demo_door', 'tool' => 'door', 'x' => 720, 'y' => 120, 'label' => 'Puerta principal', 'color' => '#334155', 'rotation' => 0, 'stroke' => 8],
+                ['id' => 'demo_route', 'tool' => 'route', 'x' => 160, 'y' => 320, 'x2' => 720, 'y2' => 320, 'label' => 'Ruta principal', 'color' => '#237f52', 'rotation' => 0, 'stroke' => 8],
+                ['id' => 'demo_exit', 'tool' => 'exit', 'x' => 800, 'y' => 320, 'label' => 'Salida', 'color' => '#15803d', 'rotation' => 0, 'stroke' => 10],
+                ['id' => 'demo_assembly', 'tool' => 'assembly', 'x' => 920, 'y' => 320, 'label' => 'Punto de encuentro', 'color' => '#15803d', 'rotation' => 0, 'stroke' => 10],
+                ['id' => 'demo_hose', 'tool' => 'iso_f002', 'x' => 180, 'y' => 180, 'label' => 'Manguera', 'color' => '#334155', 'rotation' => 0, 'stroke' => 10],
+                ['id' => 'demo_helmet', 'tool' => 'iso_m014', 'x' => 300, 'y' => 180, 'label' => 'Casco obligatorio', 'color' => '#334155', 'rotation' => 0, 'stroke' => 10],
+                ['id' => 'demo_obstruct', 'tool' => 'iso_p023', 'x' => 420, 'y' => 180, 'label' => 'No obstruir', 'color' => '#334155', 'rotation' => 0, 'stroke' => 10],
+                ['id' => 'demo_electric', 'tool' => 'iso_w012', 'x' => 540, 'y' => 180, 'label' => 'Tablero eléctrico', 'color' => '#334155', 'rotation' => 0, 'stroke' => 10],
+                ['id' => 'demo_text', 'tool' => 'text', 'x' => 180, 'y' => 460, 'label' => 'Plano ficticio · verificar dimensiones en sitio', 'color' => '#334155', 'rotation' => 0, 'stroke' => 18],
+            ],
+        ]));
+        Database::transaction(static function () use ($tenantId, $userId, $design): void {
+            $planId = PlanEmergencia::create([
+                'tenant_id' => $tenantId, 'titulo' => 'Plan de emergencia · sede de demostración',
+                'centro_trabajo' => 'Sede principal · datos ficticios', 'direccion' => 'Bogotá D.C. · dirección de ejemplo',
+                'alcance' => 'Ejemplo para trabajadores, contratistas y visitantes de todos los turnos.',
+                'amenazas_json' => json_encode([['nombre' => 'Incendio', 'probabilidad' => 'Media', 'impacto' => 'Alto', 'controles' => 'Extintores, alarma y recorridos de evacuación']], JSON_UNESCAPED_UNICODE),
+                'contactos_json' => json_encode([['nombre' => 'Bomberos', 'tipo' => 'Externo', 'telefono' => '119']], JSON_UNESCAPED_UNICODE),
+                'brigada_json' => json_encode([['nombre' => 'Brigadista de demostración', 'rol' => 'Evacuación', 'contacto' => '123']], JSON_UNESCAPED_UNICODE),
+                'recursos_json' => json_encode([
+                    ['nombre' => 'Extintor multipropósito', 'cantidad' => '2', 'ubicacion' => 'Pasillo principal', 'estado' => 'Disponible', 'inspeccion' => 'Por verificar'],
+                    ['nombre' => 'Botiquín', 'cantidad' => '1', 'ubicacion' => 'Recepción', 'estado' => 'Disponible', 'inspeccion' => 'Por verificar'],
+                ], JSON_UNESCAPED_UNICODE),
+                'rutas_evacuacion' => 'Recorrido principal hacia la salida y la zona segura exterior.',
+                'puntos_encuentro' => 'Punto de encuentro exterior indicado en el plano.',
+                'procedimientos' => 'Alarmar, evacuar por el recorrido señalado, verificar a las personas y reportar novedades.',
+                'plan_rescate' => 'Primeros auxilios y coordinación con apoyo externo.', 'ayuda_mutua' => 'Bomberos y ambulancia.',
+                'responsable_plan' => 'Responsable SST de demostración', 'telefono_alarma' => '123',
+                'proximo_simulacro' => date('Y-m-d', strtotime('+6 months')), 'fecha_revision' => date('Y-m-d', strtotime('+1 year')),
+            ]);
+            $documentId = OperationalDocument::createEmergency($planId, $tenantId);
+            PlanEmergencia::linkDocument($planId, $tenantId, $documentId);
+            PlanoEmergencia::create([
+                'tenant_id' => $tenantId, 'plan_id' => $planId, 'nombre' => 'Plano general · datos de demostración',
+                'escala' => 'Referencial · verificar en sitio', 'descripcion' => 'Plano ficticio para explorar el editor; no representa un levantamiento real.',
+                'datos_json' => FloorPlan::encode($design), 'created_by' => $userId,
+            ]);
+        });
     }
 
     private static function createUserIfMissing(?int $tenantId, string $name, string $email, string $role, ?string $license = null): int
