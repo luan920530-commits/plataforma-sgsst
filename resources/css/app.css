@@ -201,39 +201,56 @@
   .print-signatures p { @apply text-center text-[10px] leading-5 text-slate-500; }
   .print-audit { @apply mt-10 border-t border-slate-100 pt-3 text-center text-[8px] text-slate-400; }
   .floor-plan-workspace { @apply grid items-start gap-5; }
-  .floor-palette { @apply flex min-w-0 flex-col overflow-hidden; }
-  .floor-palette-heading { @apply border-b border-slate-100 p-4; }
-  .floor-palette-heading p { @apply mt-2 text-[10px] leading-4 text-slate-400; }
-  .floor-palette-search { @apply relative m-3 flex items-center rounded-xl border border-slate-200 bg-slate-50 text-slate-400 focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100; }
-  .floor-palette-search > svg { @apply pointer-events-none absolute left-3; }
-  .floor-palette-search input { @apply h-10 w-full rounded-xl bg-transparent py-2 pl-9 pr-10 text-[11px] text-slate-700 outline-none placeholder:text-slate-400; }
-  .floor-palette-search > span { @apply absolute right-3 rounded-md bg-blue-50 px-1.5 py-0.5 text-[9px] font-bold text-blue-600; }
+  .floor-palette { @apply relative z-30 flex w-14 min-w-0; }
+  .floor-tool-rail { @apply flex w-14 shrink-0 flex-col items-center rounded-xl border border-[#171b23] bg-[#252a34] p-1.5 shadow-xl shadow-slate-950/20; max-height: min(72vh, 720px); overflow-y: auto; scrollbar-width: none; }
+  .floor-tool-rail::-webkit-scrollbar { display: none; }
+  .floor-rail-actions, .floor-rail-tools, .floor-rail-categories { @apply flex w-full shrink-0 flex-col items-center gap-1; }
+  .floor-rail-divider { @apply my-2 h-px w-8 shrink-0 bg-white/10; }
+  .floor-rail-button { @apply relative flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-slate-300 transition duration-150 hover:bg-[#363c48] hover:text-white; }
+  .floor-rail-button > svg { @apply h-4 w-4; }
+  .floor-rail-button.is-current { @apply bg-[#363c48] text-white; }
+  .floor-category-toggle.has-active-tool { @apply bg-[#603642] text-white ring-1 ring-inset ring-[#83505d]; }
+  .floor-palette.is-catalog-open [data-catalog-toggle] > svg { @apply rotate-180; }
+  .floor-category-icon { @apply flex h-7 w-7 items-center justify-center overflow-hidden text-[7px] font-bold; }
+  .floor-category-icon img { @apply block h-7 w-7; }
+  .floor-palette-drawer { @apply absolute left-[66px] top-0 z-50 hidden max-h-[72vh] w-64 flex-col overflow-hidden rounded-xl border border-[#363c48] bg-[#252a34] text-slate-200 shadow-2xl shadow-slate-950/30; }
+  .floor-palette.is-catalog-open .floor-palette-drawer { @apply flex; }
+  .floor-palette-heading { @apply flex shrink-0 items-center gap-2 border-b border-white/10 px-3 py-3; }
+  .floor-palette-heading > div { @apply flex-1; }
+  .floor-drawer-kicker { @apply block text-[8px] font-bold uppercase tracking-[0.14em] text-slate-500; }
+  .floor-palette-heading h2 { @apply mt-0.5 truncate text-[11px] font-semibold text-slate-100; }
+  .floor-drawer-count { @apply rounded-md bg-white/[0.07] px-1.5 py-0.5 text-[9px] font-semibold text-slate-400; }
+  .floor-palette-search { @apply relative m-2 flex shrink-0 items-center rounded-lg border border-white/10 bg-[#1d212a] text-slate-500 focus-within:border-[#83505d] focus-within:ring-2 focus-within:ring-[#603642]/40; }
+  .floor-palette-search > svg { @apply pointer-events-none absolute left-2.5; }
+  .floor-palette-search input { @apply h-9 w-full rounded-lg bg-transparent py-2 pl-8 pr-9 text-[11px] text-slate-200 outline-none placeholder:text-slate-600; }
+  .floor-palette-search > span { @apply absolute right-2 rounded bg-[#603642] px-1.5 py-0.5 text-[9px] font-bold text-rose-100; }
   .floor-palette-search > span:empty { @apply hidden; }
-  .floor-palette-groups { @apply min-h-0 flex-1 overflow-y-auto px-2 pb-2; max-height: min(62vh, 720px); }
-  .floor-tool-section { @apply mb-2 rounded-xl border border-slate-100 bg-white; }
-  .floor-tool-section > h3, .floor-tool-section > summary { @apply flex cursor-pointer list-none items-center justify-between gap-2 px-3 py-2.5 text-[10px] font-bold text-slate-600; }
-  .floor-tool-section > h3 > span:last-child, .floor-tool-section > summary > span:last-child { @apply rounded-md bg-slate-100 px-1.5 py-0.5 text-[9px] text-slate-400; }
+  .floor-palette-groups { @apply min-h-0 flex-1 overflow-y-auto px-2 pb-2; max-height: min(60vh, 580px); }
+  .floor-tool-section { @apply mb-2 rounded-lg border border-white/[0.07] bg-white/[0.025]; }
+  .floor-tool-section > summary { @apply flex cursor-pointer list-none items-center justify-between gap-2 px-2.5 py-2 text-[9px] font-semibold text-slate-400 transition hover:text-slate-200; }
+  .floor-tool-section > summary > span:last-child { @apply rounded bg-white/[0.07] px-1.5 py-0.5 text-[8px] text-slate-500; }
   .floor-tool-section > summary::-webkit-details-marker { display: none; }
-  .floor-tool-section[open] > summary { @apply border-b border-slate-100 text-blue-700; }
-  .floor-tool-list { @apply space-y-1 p-1.5; }
-  .floor-tool { @apply flex w-full items-start gap-2.5 rounded-xl p-2 text-left text-slate-600 transition hover:bg-blue-50/70 hover:text-blue-700; }
-  .floor-tool.is-active { @apply bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200; }
-  .floor-tool-icon { @apply flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-100 text-[7px] font-bold text-slate-500 ring-1 ring-inset ring-slate-200/70; }
+  .floor-tool-section[open] > summary { @apply border-b border-white/[0.07] text-slate-200; }
+  .floor-tool-list { @apply grid grid-cols-4 gap-1 p-2; }
+  .floor-tool { @apply flex h-11 w-full items-center justify-center rounded-lg p-1 text-slate-300 transition duration-150 hover:bg-[#363c48] hover:text-white; }
+  .floor-rail-tools .floor-tool { @apply h-10 w-10; }
+  .floor-tool.is-active { @apply bg-[#603642] text-white ring-1 ring-inset ring-[#83505d]; }
+  .floor-tool-icon { @apply flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-md text-[7px] font-bold; }
   .floor-tool-icon img, .floor-tool-icon svg { @apply block h-7 w-7; }
-  .floor-tool-icon--basic { @apply bg-slate-800 text-white ring-slate-700; }
+  .floor-tool-icon--basic { @apply text-slate-300; }
   .floor-tool-icon--basic svg { @apply h-5 w-5; }
-  .floor-tool-icon--emergency { @apply bg-emerald-50 ring-emerald-100; }
-  .floor-tool-icon--fire, .floor-tool-icon--prohibition { @apply bg-red-50 ring-red-100; }
-  .floor-tool-icon--mandatory { @apply bg-blue-50 ring-blue-100; }
-  .floor-tool-icon--warning { @apply bg-amber-50 ring-amber-100; }
-  .floor-tool-copy { @apply min-w-0 flex-1; }
-  .floor-tool-copy strong { @apply block text-[10px] font-semibold leading-4; }
-  .floor-tool-copy small { @apply mt-0.5 block text-[8px] leading-3 text-slate-400; }
-  .floor-tool.is-active .floor-tool-copy small { @apply text-blue-500; }
-  .floor-active-tool { @apply border-t border-slate-100 bg-slate-50/80 p-4; }
-  .floor-active-tool > span { @apply text-[8px] font-bold uppercase tracking-wider text-slate-400; }
-  .floor-active-tool > strong { @apply mt-1 block text-[11px] font-bold text-slate-700; }
+  .floor-tool.is-active .floor-tool-icon--basic { @apply text-white; }
+  .floor-tool-icon--emergency, .floor-tool-icon--fire, .floor-tool-icon--mandatory, .floor-tool-icon--prohibition, .floor-tool-icon--warning { @apply bg-transparent; }
+  .floor-tool-copy { @apply sr-only; }
+  .floor-active-tool { @apply shrink-0 border-t border-white/10 bg-[#1d212a] p-3; }
+  .floor-active-tool > span { @apply text-[8px] font-bold uppercase tracking-wider text-slate-600; }
+  .floor-active-tool > strong { @apply mt-1 block text-[10px] font-semibold text-slate-200; }
   .floor-active-tool > p { @apply mt-1 text-[9px] leading-4 text-slate-500; }
+  .floor-tool-tooltip { @apply pointer-events-none fixed z-[120] hidden w-60 rounded-lg border border-white/10 bg-[#171b23] px-3 py-2 text-slate-200 shadow-2xl shadow-slate-950/40; }
+  .floor-tool-tooltip:not([hidden]) { @apply block; }
+  .floor-tool-tooltip > strong { @apply block text-[11px] font-semibold leading-4 text-white; }
+  .floor-tool-tooltip > span { @apply mt-1 block text-[8px] font-bold uppercase tracking-wider text-rose-200/70; }
+  .floor-tool-tooltip > p { @apply mt-1 text-[10px] leading-4 text-slate-400; }
   .floor-canvas-heading { @apply flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3; }
   .floor-canvas-heading h2 { @apply mt-0.5 text-xs font-bold text-slate-700; }
   .floor-canvas-tool { @apply max-w-[55%] truncate rounded-lg bg-blue-50 px-2.5 py-1 text-[9px] font-semibold text-blue-700; }
@@ -248,17 +265,23 @@
 }
 
 @media (min-width: 1280px) {
-  .floor-plan-workspace { grid-template-columns: 232px minmax(0, 1fr) 280px; }
+  .floor-plan-workspace { grid-template-columns: 56px minmax(0, 1fr) 280px; }
   .floor-palette, .floor-plan-properties { position: sticky; top: 88px; }
 }
 
 @media (min-width: 768px) and (max-width: 1279px) {
-  .floor-plan-workspace { grid-template-columns: 220px minmax(0, 1fr); }
+  .floor-plan-workspace { grid-template-columns: 56px minmax(0, 1fr); }
   .floor-plan-properties { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 }
 
 @media (max-width: 767px) {
+  .floor-palette { @apply w-full flex-col; }
+  .floor-tool-rail { @apply w-full flex-row overflow-x-auto overflow-y-hidden p-1.5; max-height: none; }
+  .floor-rail-actions, .floor-rail-tools, .floor-rail-categories { @apply w-auto flex-row; }
+  .floor-rail-divider { @apply mx-1 my-0 h-8 w-px; }
+  .floor-palette-drawer { @apply relative left-0 top-2 max-h-[70vh] w-full; }
   .floor-palette-groups { max-height: 340px; }
+  .floor-tool-list { grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); }
   .floor-canvas-tool { max-width: 48%; }
 }
 

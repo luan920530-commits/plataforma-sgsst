@@ -7,6 +7,7 @@
     if (!root || !svg || !form) return;
 
     const NS = 'http://www.w3.org/2000/svg';
+    const palette = root.querySelector('[data-floor-palette]');
     const signLibrary = window.FLOOR_PLAN_SIGNS || {};
     const legacySigns = {exit: 'E002', extinguisher: 'F001', first_aid: 'E003', alarm: 'F005', assembly: 'E007'};
     const categoryColors = {emergency: '#237f52', fire: '#b71f2e', mandatory: '#005387', prohibition: '#b71f2e', warning: '#f9a800'};
@@ -185,8 +186,8 @@
 
     function mountPaletteIcons() {
         root.querySelectorAll('[data-basic-icon]').forEach(slot => slot.replaceChildren(basicIcon(slot.dataset.basicIcon)));
-        root.querySelectorAll('[data-sign-icon]').forEach(slot => {
-            const sign = signLibrary[slot.dataset.signIcon];
+        root.querySelectorAll('[data-sign-icon], [data-category-icon]').forEach(slot => {
+            const sign = signLibrary[slot.dataset.signIcon || slot.dataset.categoryIcon];
             if (!sign) return;
             const image = document.createElement('img');
             image.alt = '';
@@ -195,6 +196,118 @@
             image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(sign.svg)}`;
             slot.replaceChildren(image);
         });
+    }
+
+    let catalogCategory = 'emergency';
+    let tooltipTarget = null;
+    const tooltip = document.createElement('div');
+    tooltip.id = 'floor-tool-tooltip';
+    tooltip.className = 'floor-tool-tooltip';
+    tooltip.setAttribute('role', 'tooltip');
+    tooltip.hidden = true;
+    document.body.appendChild(tooltip);
+
+    function setCatalogOpen(open, categoryKey = null) {
+        if (!palette) return;
+        if (categoryKey && palette.querySelector(`[data-category-toggle="${categoryKey}"]`)) catalogCategory = categoryKey;
+        palette.classList.toggle('is-catalog-open', open);
+        const drawer = palette.querySelector('[data-catalog-drawer]');
+        drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+        const toggle = palette.querySelector('[data-catalog-toggle]');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggle.dataset.name = open ? 'Ocultar catálogo' : 'Mostrar catálogo';
+        palette.querySelectorAll('[data-category-toggle]').forEach(button => {
+            const current = open && button.dataset.categoryToggle === catalogCategory;
+            button.classList.toggle('is-current', current);
+            button.setAttribute('aria-expanded', current ? 'true' : 'false');
+        });
+        if (open && categoryKey) {
+            palette.querySelectorAll('[data-tool-group]').forEach(group => { group.open = group.dataset.toolGroup === catalogCategory; });
+            const categoryButton = palette.querySelector(`[data-category-toggle="${catalogCategory}"]`);
+            palette.querySelector('[data-catalog-title]').textContent = categoryButton?.dataset.name || 'Señalización';
+        }
+        if (!open) {
+            hideToolTooltip();
+            if (drawer.contains(document.activeElement)) toggle.focus();
+        }
+    }
+
+    function hideToolTooltip() {
+        if (tooltipTarget) tooltipTarget.removeAttribute('aria-describedby');
+        tooltipTarget = null;
+        tooltip.hidden = true;
+    }
+
+    function showToolTooltip(target) {
+        if (!target?.dataset.name) return;
+        hideToolTooltip();
+        tooltipTarget = target;
+        const name = document.createElement('strong');
+        name.textContent = target.dataset.name;
+        tooltip.appendChild(name);
+        const sign = target.querySelector('[data-sign-icon]');
+        if (sign) {
+            const reference = document.createElement('span');
+            reference.textContent = `ISO 7010 ${sign.dataset.signIcon}`;
+            tooltip.appendChild(reference);
+        }
+        if (target.dataset.description) {
+            const description = document.createElement('p');
+            description.textContent = target.dataset.description;
+            tooltip.appendChild(description);
+        }
+        target.setAttribute('aria-describedby', tooltip.id);
+        tooltip.hidden = false;
+        const rect = target.getBoundingClientRect();
+        const width = tooltip.offsetWidth || 240;
+        const height = tooltip.offsetHeight || 80;
+        let left = rect.right + 10;
+        let top = rect.top;
+        if (left + width > window.innerWidth - 8) {
+            left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
+            top = rect.bottom + 8;
+        }
+        tooltip.style.left = `${Math.max(8, left)}px`;
+        tooltip.style.top = `${Math.max(8, Math.min(top, window.innerHeight - height - 8))}px`;
+    }
+
+    function mountPaletteInteractions() {
+        if (!palette) return;
+        const tooltipSelector = '[data-tool], [data-category-toggle], [data-catalog-toggle], [data-search-toggle], [data-catalog-close]';
+        palette.addEventListener('pointerover', event => {
+            if (event.pointerType === 'touch') return;
+            const target = event.target.closest(tooltipSelector);
+            if (target && !target.contains(event.relatedTarget)) showToolTooltip(target);
+        });
+        palette.addEventListener('pointerout', event => {
+            const target = event.target.closest(tooltipSelector);
+            if (target && !target.contains(event.relatedTarget)) hideToolTooltip();
+        });
+        palette.addEventListener('focusin', event => {
+            const target = event.target.closest(tooltipSelector);
+            if (target) showToolTooltip(target);
+        });
+        palette.addEventListener('focusout', event => {
+            const target = event.target.closest(tooltipSelector);
+            if (target && !target.contains(event.relatedTarget)) hideToolTooltip();
+        });
+        palette.querySelector('[data-catalog-toggle]').addEventListener('click', () => {
+            setCatalogOpen(!palette.classList.contains('is-catalog-open'), catalogCategory);
+        });
+        palette.querySelector('[data-catalog-close]').addEventListener('click', () => setCatalogOpen(false));
+        palette.querySelector('[data-search-toggle]').addEventListener('click', () => {
+            setCatalogOpen(true, catalogCategory);
+            window.setTimeout(() => palette.querySelector('[data-tool-search]').focus(), 0);
+        });
+        palette.querySelectorAll('[data-category-toggle]').forEach(button => button.addEventListener('click', () => {
+            const key = button.dataset.categoryToggle;
+            const opening = !palette.classList.contains('is-catalog-open') || catalogCategory !== key;
+            const input = palette.querySelector('[data-tool-search]');
+            input.value = '';
+            filterTools();
+            setCatalogOpen(opening, key);
+        }));
+        setCatalogOpen(false);
     }
 
     function normalizeSearch(value) {
@@ -226,7 +339,13 @@
         });
         root.querySelector('[data-tool-empty]').classList.toggle('hidden', visible !== 0);
         root.querySelector('[data-search-count]').textContent = query ? `${visible}` : '';
-        input.setAttribute('aria-label', query ? `${visible} herramientas o señales encontradas` : 'Buscar señal por nombre o código ISO');
+        const title = root.querySelector('[data-catalog-title]');
+        if (query) title.textContent = `Resultados · ${visible}`;
+        else {
+            const category = root.querySelector(`[data-category-toggle="${catalogCategory}"]`);
+            title.textContent = category?.dataset.name || 'Señalización';
+        }
+        input.setAttribute('aria-label', query ? `${visible} señales encontradas` : 'Buscar señal por nombre o código ISO');
     }
 
     function scheduleRender() {
@@ -391,6 +510,11 @@
             button.classList.toggle('is-active', active);
             button.setAttribute('aria-pressed', active ? 'true' : 'false');
             if (active) activeButton = button;
+        });
+        const code = signCodeForTool(tool);
+        const category = code ? signLibrary[code].category : null;
+        root.querySelectorAll('[data-category-toggle]').forEach(button => {
+            button.classList.toggle('has-active-tool', button.dataset.categoryToggle === category);
         });
         const name = activeButton?.dataset.name || labels[tool] || tool;
         const description = activeButton?.dataset.description || 'Selecciona y edita elementos del plano.';
@@ -717,7 +841,10 @@
         if (event.key === 'Enter') event.preventDefault();
         if (event.key === 'Escape') { toolSearch.value = ''; filterTools(); }
     });
-    root.querySelectorAll('[data-tool]').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
+    root.querySelectorAll('[data-tool]').forEach(button => button.addEventListener('click', () => {
+        setTool(button.dataset.tool);
+        if (button.closest('.floor-tool-rail')) setCatalogOpen(false);
+    }));
     root.querySelector('[data-undo]').addEventListener('click', undo);
     root.querySelector('[data-redo]').addEventListener('click', redo);
     root.querySelector('[data-delete]').addEventListener('click', deleteSelected);
@@ -766,6 +893,10 @@
             if (form.querySelector('[data-save]')) form.requestSubmit();
             return;
         }
+        if (event.key === 'Escape' && palette?.classList.contains('is-catalog-open') && document.activeElement !== toolSearch) {
+            setCatalogOpen(false);
+            return;
+        }
         if (editing) return;
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') {
             event.preventDefault();
@@ -791,6 +922,7 @@
     });
 
     mountPaletteIcons();
+    mountPaletteInteractions();
     setTool('select');
     render();
 })();
