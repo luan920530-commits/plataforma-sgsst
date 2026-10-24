@@ -1,0 +1,1694 @@
+{
+  "format": 1,
+  "standard": "ISO 7010",
+  "source": "@iso-safety-signs/core 1.1.0 · SVG locales optimizados; revisar atribución de cada pictograma.",
+  "categories": {
+    "emergency": {
+      "label": "Emergencia y condición segura",
+      "short": "Condición segura",
+      "description": "Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "fire": {
+      "label": "Respuesta contra incendios",
+      "short": "Equipo contra incendios",
+      "description": "Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "mandatory": {
+      "label": "Acciones obligatorias",
+      "short": "Acción obligatoria",
+      "description": "Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "prohibition": {
+      "label": "Prohibiciones y restricciones",
+      "short": "Prohibición",
+      "description": "Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "warning": {
+      "label": "Advertencias de peligro",
+      "short": "Advertencia",
+      "description": "Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    }
+  },
+  "signs": {
+    "E001": {
+      "name": "Salida de emergencia (izquierda)",
+      "category": "emergency",
+      "description": "Salida de emergencia (izquierda). Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E002": {
+      "name": "Salida de emergencia (derecha)",
+      "category": "emergency",
+      "description": "Salida de emergencia (derecha). Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E003": {
+      "name": "Primeros auxilios",
+      "category": "emergency",
+      "description": "Primeros auxilios. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E004": {
+      "name": "Teléfono de emergencia",
+      "category": "emergency",
+      "description": "Teléfono de emergencia. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E007": {
+      "name": "Punto de encuentro de evacuación",
+      "category": "emergency",
+      "description": "Punto de encuentro de evacuación. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E008": {
+      "name": "Romper para obtener acceso",
+      "category": "emergency",
+      "description": "Romper para obtener acceso. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E009": {
+      "name": "Médico",
+      "category": "emergency",
+      "description": "Médico. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E010": {
+      "name": "Desfibrilador externo automático (DEA)",
+      "category": "emergency",
+      "description": "Desfibrilador externo automático (DEA). Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E011": {
+      "name": "Estación lavaojos",
+      "category": "emergency",
+      "description": "Estación lavaojos. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E012": {
+      "name": "Ducha de seguridad",
+      "category": "emergency",
+      "description": "Ducha de seguridad. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E013": {
+      "name": "Camilla",
+      "category": "emergency",
+      "description": "Camilla. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E014": {
+      "name": "Sistema de detección de presencia y orientación de silla infantil (CPOD)",
+      "category": "emergency",
+      "description": "Sistema de detección de presencia y orientación de silla infantil (CPOD). Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E015": {
+      "name": "Agua potable",
+      "category": "emergency",
+      "description": "Agua potable. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E016": {
+      "name": "Ventana de emergencia con escalera de escape",
+      "category": "emergency",
+      "description": "Ventana de emergencia con escalera de escape. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E017": {
+      "name": "Ventana de rescate",
+      "category": "emergency",
+      "description": "Ventana de rescate. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E018": {
+      "name": "Girar a la izquierda para abrir",
+      "category": "emergency",
+      "description": "Girar a la izquierda para abrir. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E019": {
+      "name": "Girar a la derecha para abrir",
+      "category": "emergency",
+      "description": "Girar a la derecha para abrir. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E020": {
+      "name": "Botón de parada de emergencia",
+      "category": "emergency",
+      "description": "Botón de parada de emergencia. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E021": {
+      "name": "Refugio de protección",
+      "category": "emergency",
+      "description": "Refugio de protección. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E022": {
+      "name": "Puerta que se abre empujando el lado izquierdo",
+      "category": "emergency",
+      "description": "Puerta que se abre empujando el lado izquierdo. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E023": {
+      "name": "Puerta que se abre empujando el lado derecho",
+      "category": "emergency",
+      "description": "Puerta que se abre empujando el lado derecho. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E024": {
+      "name": "Refugio temporal de evacuación",
+      "category": "emergency",
+      "description": "Refugio temporal de evacuación. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E025": {
+      "name": "Martillo de emergencia",
+      "category": "emergency",
+      "description": "Martillo de emergencia. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E026": {
+      "name": "Salida de emergencia para personas con movilidad reducida (izquierda)",
+      "category": "emergency",
+      "description": "Salida de emergencia para personas con movilidad reducida (izquierda). Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E027": {
+      "name": "Bolsa médica de emergencia",
+      "category": "emergency",
+      "description": "Bolsa médica de emergencia. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E028": {
+      "name": "Reanimador con oxígeno",
+      "category": "emergency",
+      "description": "Reanimador con oxígeno. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E029": {
+      "name": "Equipo de respiración para escape de emergencia",
+      "category": "emergency",
+      "description": "Equipo de respiración para escape de emergencia. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E030": {
+      "name": "Salida de emergencia para personas con movilidad reducida (derecha)",
+      "category": "emergency",
+      "description": "Salida de emergencia para personas con movilidad reducida (derecha). Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E031": {
+      "name": "Alarma general a bordo",
+      "category": "emergency",
+      "description": "Alarma general a bordo. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E032": {
+      "name": "Estación de reunión a bordo",
+      "category": "emergency",
+      "description": "Estación de reunión a bordo. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E033": {
+      "name": "Puerta corrediza: deslizar a la derecha para abrir",
+      "category": "emergency",
+      "description": "Puerta corrediza: deslizar a la derecha para abrir. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E034": {
+      "name": "Puerta corrediza: deslizar a la izquierda para abrir",
+      "category": "emergency",
+      "description": "Puerta corrediza: deslizar a la izquierda para abrir. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E035": {
+      "name": "Cuchillo de balsa salvavidas",
+      "category": "emergency",
+      "description": "Cuchillo de balsa salvavidas. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E036": {
+      "name": "Bote salvavidas",
+      "category": "emergency",
+      "description": "Bote salvavidas. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E037": {
+      "name": "Bote de rescate",
+      "category": "emergency",
+      "description": "Bote de rescate. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E038": {
+      "name": "Balsa salvavidas",
+      "category": "emergency",
+      "description": "Balsa salvavidas. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E039": {
+      "name": "Balsa salvavidas lanzada por pescante",
+      "category": "emergency",
+      "description": "Balsa salvavidas lanzada por pescante. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E040": {
+      "name": "Boya salvavidas",
+      "category": "emergency",
+      "description": "Boya salvavidas. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E041": {
+      "name": "Boya salvavidas con línea",
+      "category": "emergency",
+      "description": "Boya salvavidas con línea. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E042": {
+      "name": "Boya salvavidas con luz",
+      "category": "emergency",
+      "description": "Boya salvavidas con luz. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E043": {
+      "name": "Boya salvavidas con línea y luz",
+      "category": "emergency",
+      "description": "Boya salvavidas con línea y luz. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E044": {
+      "name": "Chaleco salvavidas",
+      "category": "emergency",
+      "description": "Chaleco salvavidas. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E045": {
+      "name": "Chaleco salvavidas infantil",
+      "category": "emergency",
+      "description": "Chaleco salvavidas infantil. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E046": {
+      "name": "Chaleco salvavidas para bebés",
+      "category": "emergency",
+      "description": "Chaleco salvavidas para bebés. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E047": {
+      "name": "Transpondedor de búsqueda y rescate",
+      "category": "emergency",
+      "description": "Transpondedor de búsqueda y rescate. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E048": {
+      "name": "Señales de socorro de embarcaciones de supervivencia",
+      "category": "emergency",
+      "description": "Señales de socorro de embarcaciones de supervivencia. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E049": {
+      "name": "Bengala de paracaídas",
+      "category": "emergency",
+      "description": "Bengala de paracaídas. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E050": {
+      "name": "Lanzacabos",
+      "category": "emergency",
+      "description": "Lanzacabos. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E051": {
+      "name": "Radioteléfono VHF bidireccional",
+      "category": "emergency",
+      "description": "Radioteléfono VHF bidireccional. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E052": {
+      "name": "Radiobaliza de localización de emergencia",
+      "category": "emergency",
+      "description": "Radiobaliza de localización de emergencia. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E053": {
+      "name": "Escalera de embarque",
+      "category": "emergency",
+      "description": "Escalera de embarque. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E054": {
+      "name": "Tobogán de evacuación marina",
+      "category": "emergency",
+      "description": "Tobogán de evacuación marina. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E055": {
+      "name": "Rampa de evacuación marina",
+      "category": "emergency",
+      "description": "Rampa de evacuación marina. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E056": {
+      "name": "Ropa de supervivencia",
+      "category": "emergency",
+      "description": "Ropa de supervivencia. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E057": {
+      "name": "Puerta que se abre tirando del lado izquierdo",
+      "category": "emergency",
+      "description": "Puerta que se abre tirando del lado izquierdo. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E058": {
+      "name": "Puerta que se abre tirando del lado derecho",
+      "category": "emergency",
+      "description": "Puerta que se abre tirando del lado derecho. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E059": {
+      "name": "Escalera de escape",
+      "category": "emergency",
+      "description": "Escalera de escape. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E060": {
+      "name": "Silla de evacuación",
+      "category": "emergency",
+      "description": "Silla de evacuación. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E061": {
+      "name": "Equipo de salvamento acuático",
+      "category": "emergency",
+      "description": "Equipo de salvamento acuático. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E062": {
+      "name": "Zona de evacuación por tsunami",
+      "category": "emergency",
+      "description": "Zona de evacuación por tsunami. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E063": {
+      "name": "Edificio de evacuación por tsunami",
+      "category": "emergency",
+      "description": "Edificio de evacuación por tsunami. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E064": {
+      "name": "Socorrista",
+      "category": "emergency",
+      "description": "Socorrista. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E065": {
+      "name": "Zona exterior de refugio por desastre natural",
+      "category": "emergency",
+      "description": "Zona exterior de refugio por desastre natural. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E067": {
+      "name": "Colchón de evacuación",
+      "category": "emergency",
+      "description": "Colchón de evacuación. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E068": {
+      "name": "Boya salvavidas con luz y humo",
+      "category": "emergency",
+      "description": "Boya salvavidas con luz y humo. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E069": {
+      "name": "Punto de llamada por persona al agua",
+      "category": "emergency",
+      "description": "Punto de llamada por persona al agua. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E070": {
+      "name": "Ascensor de evacuación para personas que no pueden usar escaleras",
+      "category": "emergency",
+      "description": "Ascensor de evacuación para personas que no pueden usar escaleras. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E071": {
+      "name": "Trineo de rescate",
+      "category": "emergency",
+      "description": "Trineo de rescate. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E072": {
+      "name": "Punto de anclaje seguro",
+      "category": "emergency",
+      "description": "Punto de anclaje seguro. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E073": {
+      "name": "Dispositivo de descenso de emergencia",
+      "category": "emergency",
+      "description": "Dispositivo de descenso de emergencia. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E074": {
+      "name": "Raciones de emergencia",
+      "category": "emergency",
+      "description": "Raciones de emergencia. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E075": {
+      "name": "Salvavidas (persona)",
+      "category": "emergency",
+      "description": "Salvavidas (persona). Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "E076": {
+      "name": "Equipo de evacuación",
+      "category": "emergency",
+      "description": "Equipo de evacuación. Verifica la ubicación, orientación y accesibilidad de la señal en el sitio."
+    },
+    "F001": {
+      "name": "Extintor de incendios",
+      "category": "fire",
+      "description": "Extintor de incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F002": {
+      "name": "Carrete con manguera contra incendios",
+      "category": "fire",
+      "description": "Carrete con manguera contra incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F003": {
+      "name": "Escalera contra incendios",
+      "category": "fire",
+      "description": "Escalera contra incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F004": {
+      "name": "Conjunto de equipos contra incendios",
+      "category": "fire",
+      "description": "Conjunto de equipos contra incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F005": {
+      "name": "Pulsador de alarma de incendios",
+      "category": "fire",
+      "description": "Pulsador de alarma de incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F006": {
+      "name": "Teléfono de emergencia de incendios",
+      "category": "fire",
+      "description": "Teléfono de emergencia de incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F007": {
+      "name": "Puerta de protección contra incendios",
+      "category": "fire",
+      "description": "Puerta de protección contra incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F008": {
+      "name": "Batería fija de extinción de incendios",
+      "category": "fire",
+      "description": "Batería fija de extinción de incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F009": {
+      "name": "Extintor de incendios con ruedas",
+      "category": "fire",
+      "description": "Extintor de incendios con ruedas. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F010": {
+      "name": "Unidad portátil de aplicación de espuma",
+      "category": "fire",
+      "description": "Unidad portátil de aplicación de espuma. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F011": {
+      "name": "Aplicador de agua nebulizada",
+      "category": "fire",
+      "description": "Aplicador de agua nebulizada. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F012": {
+      "name": "Instalación fija de extinción de incendios",
+      "category": "fire",
+      "description": "Instalación fija de extinción de incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F013": {
+      "name": "Botella fija de extinción de incendios",
+      "category": "fire",
+      "description": "Botella fija de extinción de incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F014": {
+      "name": "Estación de activación remota",
+      "category": "fire",
+      "description": "Estación de activación remota. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F015": {
+      "name": "Monitor contra incendios",
+      "category": "fire",
+      "description": "Monitor contra incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F016": {
+      "name": "Manta ignífuga",
+      "category": "fire",
+      "description": "Manta ignífuga. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F017": {
+      "name": "Ascensor para bomberos",
+      "category": "fire",
+      "description": "Ascensor para bomberos. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F018": {
+      "name": "Luz intermitente de alarma de incendios",
+      "category": "fire",
+      "description": "Luz intermitente de alarma de incendios. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "F019": {
+      "name": "Manguera contra incendios desconectada",
+      "category": "fire",
+      "description": "Manguera contra incendios desconectada. Ubica la señal solo si el equipo o elemento existe, es accesible y está operativo."
+    },
+    "M001": {
+      "name": "Señal general de acción obligatoria",
+      "category": "mandatory",
+      "description": "Señal general de acción obligatoria. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M002": {
+      "name": "Consultar el manual de instrucciones",
+      "category": "mandatory",
+      "description": "Consultar el manual de instrucciones. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M003": {
+      "name": "Usar protección auditiva",
+      "category": "mandatory",
+      "description": "Usar protección auditiva. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M004": {
+      "name": "Usar protección ocular",
+      "category": "mandatory",
+      "description": "Usar protección ocular. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M005": {
+      "name": "Conectar un terminal de puesta a tierra",
+      "category": "mandatory",
+      "description": "Conectar un terminal de puesta a tierra. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M006": {
+      "name": "Desconectar el enchufe de la red eléctrica",
+      "category": "mandatory",
+      "description": "Desconectar el enchufe de la red eléctrica. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M007": {
+      "name": "Usar protección ocular opaca",
+      "category": "mandatory",
+      "description": "Usar protección ocular opaca. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M008": {
+      "name": "Usar calzado de seguridad",
+      "category": "mandatory",
+      "description": "Usar calzado de seguridad. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M009": {
+      "name": "Usar guantes de protección",
+      "category": "mandatory",
+      "description": "Usar guantes de protección. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M010": {
+      "name": "Usar ropa de protección",
+      "category": "mandatory",
+      "description": "Usar ropa de protección. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M011": {
+      "name": "Lavarse las manos",
+      "category": "mandatory",
+      "description": "Lavarse las manos. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M012": {
+      "name": "Usar el pasamanos",
+      "category": "mandatory",
+      "description": "Usar el pasamanos. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M013": {
+      "name": "Usar protector facial",
+      "category": "mandatory",
+      "description": "Usar protector facial. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M014": {
+      "name": "Usar casco de seguridad",
+      "category": "mandatory",
+      "description": "Usar casco de seguridad. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M015": {
+      "name": "Usar ropa de alta visibilidad",
+      "category": "mandatory",
+      "description": "Usar ropa de alta visibilidad. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M016": {
+      "name": "Usar mascarilla",
+      "category": "mandatory",
+      "description": "Usar mascarilla. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M017": {
+      "name": "Usar protección respiratoria",
+      "category": "mandatory",
+      "description": "Usar protección respiratoria. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M018": {
+      "name": "Usar arnés de seguridad",
+      "category": "mandatory",
+      "description": "Usar arnés de seguridad. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M019": {
+      "name": "Usar máscara de soldadura",
+      "category": "mandatory",
+      "description": "Usar máscara de soldadura. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M020": {
+      "name": "Usar cinturón de seguridad",
+      "category": "mandatory",
+      "description": "Usar cinturón de seguridad. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M021": {
+      "name": "Desconectar antes de mantenimiento o reparación",
+      "category": "mandatory",
+      "description": "Desconectar antes de mantenimiento o reparación. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M022": {
+      "name": "Usar crema barrera",
+      "category": "mandatory",
+      "description": "Usar crema barrera. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M023": {
+      "name": "Usar la pasarela peatonal",
+      "category": "mandatory",
+      "description": "Usar la pasarela peatonal. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M024": {
+      "name": "Usar este camino peatonal",
+      "category": "mandatory",
+      "description": "Usar este camino peatonal. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M025": {
+      "name": "Proteger los ojos de bebés con protección ocular opaca",
+      "category": "mandatory",
+      "description": "Proteger los ojos de bebés con protección ocular opaca. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M026": {
+      "name": "Usar delantal de protección",
+      "category": "mandatory",
+      "description": "Usar delantal de protección. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M027": {
+      "name": "Verificar el resguardo",
+      "category": "mandatory",
+      "description": "Verificar el resguardo. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M028": {
+      "name": "Mantener bajo llave",
+      "category": "mandatory",
+      "description": "Mantener bajo llave. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M029": {
+      "name": "Hacer sonar la bocina",
+      "category": "mandatory",
+      "description": "Hacer sonar la bocina. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M030": {
+      "name": "Usar el contenedor de residuos",
+      "category": "mandatory",
+      "description": "Usar el contenedor de residuos. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M031": {
+      "name": "Usar el resguardo ajustable de la sierra de mesa",
+      "category": "mandatory",
+      "description": "Usar el resguardo ajustable de la sierra de mesa. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M032": {
+      "name": "Usar calzado antiestático",
+      "category": "mandatory",
+      "description": "Usar calzado antiestático. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M033": {
+      "name": "Cerrar la barra de seguridad del telesilla",
+      "category": "mandatory",
+      "description": "Cerrar la barra de seguridad del telesilla. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M034": {
+      "name": "Abrir la barra de seguridad del telesilla",
+      "category": "mandatory",
+      "description": "Abrir la barra de seguridad del telesilla. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M035": {
+      "name": "Abandonar inmediatamente la pista de arrastre en caso de caída",
+      "category": "mandatory",
+      "description": "Abandonar inmediatamente la pista de arrastre en caso de caída. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M036": {
+      "name": "Levantar las puntas de los esquís",
+      "category": "mandatory",
+      "description": "Levantar las puntas de los esquís. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M037": {
+      "name": "Cerrar y asegurar las escotillas en la secuencia de lanzamiento",
+      "category": "mandatory",
+      "description": "Cerrar y asegurar las escotillas en la secuencia de lanzamiento. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M038": {
+      "name": "Arrancar el motor en la secuencia de lanzamiento",
+      "category": "mandatory",
+      "description": "Arrancar el motor en la secuencia de lanzamiento. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M039": {
+      "name": "Bajar el bote salvavidas al agua en la secuencia de lanzamiento",
+      "category": "mandatory",
+      "description": "Bajar el bote salvavidas al agua en la secuencia de lanzamiento. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M040": {
+      "name": "Bajar la balsa salvavidas al agua en la secuencia de lanzamiento",
+      "category": "mandatory",
+      "description": "Bajar la balsa salvavidas al agua en la secuencia de lanzamiento. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M041": {
+      "name": "Bajar el bote de rescate al agua en la secuencia de lanzamiento",
+      "category": "mandatory",
+      "description": "Bajar el bote de rescate al agua en la secuencia de lanzamiento. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M042": {
+      "name": "Soltar los cables de izado en la secuencia de lanzamiento",
+      "category": "mandatory",
+      "description": "Soltar los cables de izado en la secuencia de lanzamiento. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M043": {
+      "name": "Activar el rociado de agua en la secuencia de lanzamiento",
+      "category": "mandatory",
+      "description": "Activar el rociado de agua en la secuencia de lanzamiento. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M044": {
+      "name": "Activar el suministro de aire en la secuencia de lanzamiento",
+      "category": "mandatory",
+      "description": "Activar el suministro de aire en la secuencia de lanzamiento. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M045": {
+      "name": "Soltar las amarras del bote salvavidas en la secuencia de lanzamiento",
+      "category": "mandatory",
+      "description": "Soltar las amarras del bote salvavidas en la secuencia de lanzamiento. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M046": {
+      "name": "Asegurar los cilindros de gas",
+      "category": "mandatory",
+      "description": "Asegurar los cilindros de gas. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M047": {
+      "name": "Usar equipo de respiración autónomo",
+      "category": "mandatory",
+      "description": "Usar equipo de respiración autónomo. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M048": {
+      "name": "Usar detector de gases",
+      "category": "mandatory",
+      "description": "Usar detector de gases. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M049": {
+      "name": "Usar equipo de protección para deportes con ruedas",
+      "category": "mandatory",
+      "description": "Usar equipo de protección para deportes con ruedas. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M050": {
+      "name": "Bajar del trineo por la izquierda",
+      "category": "mandatory",
+      "description": "Bajar del trineo por la izquierda. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M051": {
+      "name": "Bajar del trineo por la derecha",
+      "category": "mandatory",
+      "description": "Bajar del trineo por la derecha. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M052": {
+      "name": "Mantener distancia entre trineos",
+      "category": "mandatory",
+      "description": "Mantener distancia entre trineos. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M053": {
+      "name": "Usar dispositivos de flotación personal",
+      "category": "mandatory",
+      "description": "Usar dispositivos de flotación personal. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M054": {
+      "name": "Supervisar a los niños en el entorno acuático",
+      "category": "mandatory",
+      "description": "Supervisar a los niños en el entorno acuático. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M055": {
+      "name": "Mantener fuera del alcance de los niños",
+      "category": "mandatory",
+      "description": "Mantener fuera del alcance de los niños. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M056": {
+      "name": "Ventilar antes y durante el ingreso",
+      "category": "mandatory",
+      "description": "Ventilar antes y durante el ingreso. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M057": {
+      "name": "Garantizar ventilación continua",
+      "category": "mandatory",
+      "description": "Garantizar ventilación continua. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M058": {
+      "name": "Ingresar solo con supervisor en el exterior",
+      "category": "mandatory",
+      "description": "Ingresar solo con supervisor en el exterior. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M059": {
+      "name": "Usar bata de laboratorio",
+      "category": "mandatory",
+      "description": "Usar bata de laboratorio. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M060": {
+      "name": "Sostener el manillar del carrito",
+      "category": "mandatory",
+      "description": "Sostener el manillar del carrito. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M061": {
+      "name": "Desinfectarse las manos",
+      "category": "mandatory",
+      "description": "Desinfectarse las manos. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M062": {
+      "name": "Desinfectar la superficie",
+      "category": "mandatory",
+      "description": "Desinfectar la superficie. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M063": {
+      "name": "Quitarse la correa del bastón de esquí de la muñeca",
+      "category": "mandatory",
+      "description": "Quitarse la correa del bastón de esquí de la muñeca. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M064": {
+      "name": "Sostener dos bastones de esquí con una sola mano",
+      "category": "mandatory",
+      "description": "Sostener dos bastones de esquí con una sola mano. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M065": {
+      "name": "Los niños deben ir acompañados",
+      "category": "mandatory",
+      "description": "Los niños deben ir acompañados. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M066": {
+      "name": "Usar casco deportivo",
+      "category": "mandatory",
+      "description": "Usar casco deportivo. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M067": {
+      "name": "Usar gafas de nieve",
+      "category": "mandatory",
+      "description": "Usar gafas de nieve. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M068": {
+      "name": "Bloquear las partes mecánicas móviles",
+      "category": "mandatory",
+      "description": "Bloquear las partes mecánicas móviles. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M069": {
+      "name": "Las herramientas deben estar amarradas",
+      "category": "mandatory",
+      "description": "Las herramientas deben estar amarradas. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M070": {
+      "name": "Usar lámpara en luminaria con pantalla",
+      "category": "mandatory",
+      "description": "Usar lámpara en luminaria con pantalla. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M071": {
+      "name": "Usar retenedores antivuelco",
+      "category": "mandatory",
+      "description": "Usar retenedores antivuelco. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "M072": {
+      "name": "Usar ducha de descontaminación",
+      "category": "mandatory",
+      "description": "Usar ducha de descontaminación. Confirma que esta acción obligatoria aplica al área y a las personas expuestas."
+    },
+    "P001": {
+      "name": "Señal general de prohibición",
+      "category": "prohibition",
+      "description": "Señal general de prohibición. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P002": {
+      "name": "No fumar",
+      "category": "prohibition",
+      "description": "No fumar. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P003": {
+      "name": "Prohibido el fuego, las llamas abiertas, las fuentes de ignición y fumar",
+      "category": "prohibition",
+      "description": "Prohibido el fuego, las llamas abiertas, las fuentes de ignición y fumar. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P004": {
+      "name": "Prohibido el paso",
+      "category": "prohibition",
+      "description": "Prohibido el paso. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P005": {
+      "name": "Agua no potable",
+      "category": "prohibition",
+      "description": "Agua no potable. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P006": {
+      "name": "Prohibido el acceso de montacargas y vehículos industriales",
+      "category": "prohibition",
+      "description": "Prohibido el acceso de montacargas y vehículos industriales. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P007": {
+      "name": "Prohibido el acceso a personas con dispositivos cardíacos implantados activos",
+      "category": "prohibition",
+      "description": "Prohibido el acceso a personas con dispositivos cardíacos implantados activos. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P008": {
+      "name": "Prohibidos los artículos metálicos y relojes",
+      "category": "prohibition",
+      "description": "Prohibidos los artículos metálicos y relojes. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P009": {
+      "name": "Prohibido trepar",
+      "category": "prohibition",
+      "description": "Prohibido trepar. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P010": {
+      "name": "No tocar",
+      "category": "prohibition",
+      "description": "No tocar. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P011": {
+      "name": "No apagar con agua",
+      "category": "prohibition",
+      "description": "No apagar con agua. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P012": {
+      "name": "Prohibidas las cargas pesadas",
+      "category": "prohibition",
+      "description": "Prohibidas las cargas pesadas. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P013": {
+      "name": "Prohibido el uso de teléfonos móviles encendidos",
+      "category": "prohibition",
+      "description": "Prohibido el uso de teléfonos móviles encendidos. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P014": {
+      "name": "Prohibido el acceso a personas con implantes metálicos",
+      "category": "prohibition",
+      "description": "Prohibido el acceso a personas con implantes metálicos. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P015": {
+      "name": "No introducir las manos",
+      "category": "prohibition",
+      "description": "No introducir las manos. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P016": {
+      "name": "No pulverizar con agua",
+      "category": "prohibition",
+      "description": "No pulverizar con agua. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P017": {
+      "name": "Prohibido empujar",
+      "category": "prohibition",
+      "description": "Prohibido empujar. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P018": {
+      "name": "Prohibido sentarse",
+      "category": "prohibition",
+      "description": "Prohibido sentarse. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P019": {
+      "name": "No pisar la superficie",
+      "category": "prohibition",
+      "description": "No pisar la superficie. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P020": {
+      "name": "No usar el ascensor en caso de incendio",
+      "category": "prohibition",
+      "description": "No usar el ascensor en caso de incendio. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P021": {
+      "name": "Prohibidos los perros",
+      "category": "prohibition",
+      "description": "Prohibidos los perros. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P022": {
+      "name": "Prohibido comer o beber",
+      "category": "prohibition",
+      "description": "Prohibido comer o beber. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P023": {
+      "name": "No obstruir",
+      "category": "prohibition",
+      "description": "No obstruir. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P024": {
+      "name": "No caminar ni permanecer aquí",
+      "category": "prohibition",
+      "description": "No caminar ni permanecer aquí. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P025": {
+      "name": "No usar este andamio incompleto",
+      "category": "prohibition",
+      "description": "No usar este andamio incompleto. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P026": {
+      "name": "No usar este dispositivo en bañeras, duchas o depósitos con agua",
+      "category": "prohibition",
+      "description": "No usar este dispositivo en bañeras, duchas o depósitos con agua. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P027": {
+      "name": "No usar este elevador para personas",
+      "category": "prohibition",
+      "description": "No usar este elevador para personas. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P028": {
+      "name": "No usar guantes",
+      "category": "prohibition",
+      "description": "No usar guantes. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P029": {
+      "name": "Prohibido tomar fotografías",
+      "category": "prohibition",
+      "description": "Prohibido tomar fotografías. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P030": {
+      "name": "No hacer nudos en la cuerda",
+      "category": "prohibition",
+      "description": "No hacer nudos en la cuerda. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P031": {
+      "name": "No alterar el estado del interruptor",
+      "category": "prohibition",
+      "description": "No alterar el estado del interruptor. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P032": {
+      "name": "No usar para esmerilado frontal",
+      "category": "prohibition",
+      "description": "No usar para esmerilado frontal. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P033": {
+      "name": "No usar para esmerilado en húmedo",
+      "category": "prohibition",
+      "description": "No usar para esmerilado en húmedo. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P034": {
+      "name": "No usar con esmeriladora manual",
+      "category": "prohibition",
+      "description": "No usar con esmeriladora manual. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P035": {
+      "name": "No usar calzado con tacos metálicos",
+      "category": "prohibition",
+      "description": "No usar calzado con tacos metálicos. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P036": {
+      "name": "Prohibido el acceso de niños",
+      "category": "prohibition",
+      "description": "Prohibido el acceso de niños. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P037": {
+      "name": "No abandonar la pista de arrastre",
+      "category": "prohibition",
+      "description": "No abandonar la pista de arrastre. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P038": {
+      "name": "No balancear la silla",
+      "category": "prohibition",
+      "description": "No balancear la silla. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P039": {
+      "name": "Prohibidos los trabajos en caliente",
+      "category": "prohibition",
+      "description": "Prohibidos los trabajos en caliente. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P040": {
+      "name": "No lanzar fuegos artificiales",
+      "category": "prohibition",
+      "description": "No lanzar fuegos artificiales. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P041": {
+      "name": "No apoyarse",
+      "category": "prohibition",
+      "description": "No apoyarse. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P042": {
+      "name": "No apto para mujeres embarazadas",
+      "category": "prohibition",
+      "description": "No apto para mujeres embarazadas. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P043": {
+      "name": "No apto para personas en estado de embriaguez",
+      "category": "prohibition",
+      "description": "No apto para personas en estado de embriaguez. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P044": {
+      "name": "Prohibido el uso de gafas inteligentes",
+      "category": "prohibition",
+      "description": "Prohibido el uso de gafas inteligentes. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P045": {
+      "name": "Prohibidas las fogatas",
+      "category": "prohibition",
+      "description": "Prohibidas las fogatas. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P046": {
+      "name": "No asomarse desde el trineo",
+      "category": "prohibition",
+      "description": "No asomarse desde el trineo. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P047": {
+      "name": "No embestir otros trineos",
+      "category": "prohibition",
+      "description": "No embestir otros trineos. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P048": {
+      "name": "Prohibido correr",
+      "category": "prohibition",
+      "description": "Prohibido correr. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P049": {
+      "name": "Prohibido nadar",
+      "category": "prohibition",
+      "description": "Prohibido nadar. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P050": {
+      "name": "Prohibido practicar esnórquel",
+      "category": "prohibition",
+      "description": "Prohibido practicar esnórquel. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P051": {
+      "name": "Prohibido el buceo con equipo autónomo",
+      "category": "prohibition",
+      "description": "Prohibido el buceo con equipo autónomo. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P052": {
+      "name": "Prohibido saltar al agua",
+      "category": "prohibition",
+      "description": "Prohibido saltar al agua. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P053": {
+      "name": "Prohibida la navegación a vela",
+      "category": "prohibition",
+      "description": "Prohibida la navegación a vela. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P054": {
+      "name": "Prohibido practicar windsurf",
+      "category": "prohibition",
+      "description": "Prohibido practicar windsurf. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P055": {
+      "name": "Prohibidas las embarcaciones de propulsión manual",
+      "category": "prohibition",
+      "description": "Prohibidas las embarcaciones de propulsión manual. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P056": {
+      "name": "Prohibidas las embarcaciones de propulsión mecánica",
+      "category": "prohibition",
+      "description": "Prohibidas las embarcaciones de propulsión mecánica. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P057": {
+      "name": "Prohibidas las motos acuáticas",
+      "category": "prohibition",
+      "description": "Prohibidas las motos acuáticas. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P058": {
+      "name": "Prohibidas las actividades acuáticas de arrastre",
+      "category": "prohibition",
+      "description": "Prohibidas las actividades acuáticas de arrastre. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P059": {
+      "name": "Prohibidas las embarcaciones de surf",
+      "category": "prohibition",
+      "description": "Prohibidas las embarcaciones de surf. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P060": {
+      "name": "Prohibido el calzado de calle",
+      "category": "prohibition",
+      "description": "Prohibido el calzado de calle. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P061": {
+      "name": "Prohibido saltar al agua",
+      "category": "prohibition",
+      "description": "Prohibido saltar al agua. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P062": {
+      "name": "Prohibido empujar al agua",
+      "category": "prohibition",
+      "description": "Prohibido empujar al agua. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P063": {
+      "name": "Prohibido practicar bodyboard",
+      "category": "prohibition",
+      "description": "Prohibido practicar bodyboard. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P064": {
+      "name": "Prohibido surfear entre las banderas rojas y amarillas",
+      "category": "prohibition",
+      "description": "Prohibido surfear entre las banderas rojas y amarillas. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P065": {
+      "name": "Prohibido practicar kitesurf",
+      "category": "prohibition",
+      "description": "Prohibido practicar kitesurf. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P066": {
+      "name": "Prohibido practicar parasailing",
+      "category": "prohibition",
+      "description": "Prohibido practicar parasailing. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P067": {
+      "name": "Prohibido practicar carrovelismo",
+      "category": "prohibition",
+      "description": "Prohibido practicar carrovelismo. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P068": {
+      "name": "No exponer a luz solar directa o superficies calientes",
+      "category": "prohibition",
+      "description": "No exponer a luz solar directa o superficies calientes. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P069": {
+      "name": "No debe ser reparado por usuarios",
+      "category": "prohibition",
+      "description": "No debe ser reparado por usuarios. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P070": {
+      "name": "No introducir el dedo en la boquilla de hidromasaje",
+      "category": "prohibition",
+      "description": "No introducir el dedo en la boquilla de hidromasaje. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P071": {
+      "name": "No cruzar la barrera",
+      "category": "prohibition",
+      "description": "No cruzar la barrera. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P072": {
+      "name": "Prohibido saltar desde altura",
+      "category": "prohibition",
+      "description": "Prohibido saltar desde altura. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P073": {
+      "name": "No cerrar la tapa con los quemadores encendidos",
+      "category": "prohibition",
+      "description": "No cerrar la tapa con los quemadores encendidos. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P074": {
+      "name": "Prohibida la instalación de sillas infantiles",
+      "category": "prohibition",
+      "description": "Prohibida la instalación de sillas infantiles. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P075": {
+      "name": "No mirar fijamente la fuente de luz",
+      "category": "prohibition",
+      "description": "No mirar fijamente la fuente de luz. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P076": {
+      "name": "Prohibido esquiar",
+      "category": "prohibition",
+      "description": "Prohibido esquiar. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P077": {
+      "name": "Prohibido practicar snowboard",
+      "category": "prohibition",
+      "description": "Prohibido practicar snowboard. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P078": {
+      "name": "Prohibido usar trineos o deslizarse en ellos",
+      "category": "prohibition",
+      "description": "Prohibido usar trineos o deslizarse en ellos. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P079": {
+      "name": "Prohibido patinar sobre hielo",
+      "category": "prohibition",
+      "description": "Prohibido patinar sobre hielo. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P080": {
+      "name": "Prohibido el acceso a personas no autorizadas",
+      "category": "prohibition",
+      "description": "Prohibido el acceso a personas no autorizadas. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "P081": {
+      "name": "No cubrir el aparato",
+      "category": "prohibition",
+      "description": "No cubrir el aparato. Verifica la conducta, el acceso o la actividad restringida y su alcance."
+    },
+    "W001": {
+      "name": "Advertencia general",
+      "category": "warning",
+      "description": "Advertencia general. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W002": {
+      "name": "Material explosivo",
+      "category": "warning",
+      "description": "Material explosivo. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W003": {
+      "name": "Material radiactivo o radiación ionizante",
+      "category": "warning",
+      "description": "Material radiactivo o radiación ionizante. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W004": {
+      "name": "Haz láser",
+      "category": "warning",
+      "description": "Haz láser. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W005": {
+      "name": "Radiación no ionizante",
+      "category": "warning",
+      "description": "Radiación no ionizante. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W006": {
+      "name": "Campo magnético",
+      "category": "warning",
+      "description": "Campo magnético. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W007": {
+      "name": "Obstáculo a nivel del piso",
+      "category": "warning",
+      "description": "Obstáculo a nivel del piso. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W008": {
+      "name": "Caída desde altura",
+      "category": "warning",
+      "description": "Caída desde altura. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W009": {
+      "name": "Peligro biológico",
+      "category": "warning",
+      "description": "Peligro biológico. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W010": {
+      "name": "Baja temperatura o congelación",
+      "category": "warning",
+      "description": "Baja temperatura o congelación. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W011": {
+      "name": "Superficie resbaladiza",
+      "category": "warning",
+      "description": "Superficie resbaladiza. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W012": {
+      "name": "Peligro eléctrico",
+      "category": "warning",
+      "description": "Peligro eléctrico. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W013": {
+      "name": "Perro de guarda",
+      "category": "warning",
+      "description": "Perro de guarda. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W014": {
+      "name": "Montacargas y otros vehículos industriales",
+      "category": "warning",
+      "description": "Montacargas y otros vehículos industriales. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W015": {
+      "name": "Carga suspendida",
+      "category": "warning",
+      "description": "Carga suspendida. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W016": {
+      "name": "Material tóxico",
+      "category": "warning",
+      "description": "Material tóxico. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W017": {
+      "name": "Superficie caliente",
+      "category": "warning",
+      "description": "Superficie caliente. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W018": {
+      "name": "Arranque automático",
+      "category": "warning",
+      "description": "Arranque automático. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W019": {
+      "name": "Aplastamiento",
+      "category": "warning",
+      "description": "Aplastamiento. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W020": {
+      "name": "Obstáculo elevado",
+      "category": "warning",
+      "description": "Obstáculo elevado. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W021": {
+      "name": "Material inflamable",
+      "category": "warning",
+      "description": "Material inflamable. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W022": {
+      "name": "Elemento cortante",
+      "category": "warning",
+      "description": "Elemento cortante. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W023": {
+      "name": "Sustancia corrosiva",
+      "category": "warning",
+      "description": "Sustancia corrosiva. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W024": {
+      "name": "Aplastamiento de manos",
+      "category": "warning",
+      "description": "Aplastamiento de manos. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W025": {
+      "name": "Rodillos contrarrotativos",
+      "category": "warning",
+      "description": "Rodillos contrarrotativos. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W026": {
+      "name": "Carga de baterías",
+      "category": "warning",
+      "description": "Carga de baterías. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W027": {
+      "name": "Radiación óptica",
+      "category": "warning",
+      "description": "Radiación óptica. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W028": {
+      "name": "Sustancia comburente u oxidante",
+      "category": "warning",
+      "description": "Sustancia comburente u oxidante. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W029": {
+      "name": "Cilindro presurizado",
+      "category": "warning",
+      "description": "Cilindro presurizado. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W030": {
+      "name": "Aplastamiento de manos entre útiles de prensa plegadora",
+      "category": "warning",
+      "description": "Aplastamiento de manos entre útiles de prensa plegadora. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W031": {
+      "name": "Aplastamiento de manos entre prensa plegadora y material",
+      "category": "warning",
+      "description": "Aplastamiento de manos entre prensa plegadora y material. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W032": {
+      "name": "Movimiento rápido de la pieza en prensa plegadora",
+      "category": "warning",
+      "description": "Movimiento rápido de la pieza en prensa plegadora. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W033": {
+      "name": "Alambre de púas",
+      "category": "warning",
+      "description": "Alambre de púas. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W034": {
+      "name": "Toro",
+      "category": "warning",
+      "description": "Toro. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W035": {
+      "name": "Caída de objetos",
+      "category": "warning",
+      "description": "Caída de objetos. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W036": {
+      "name": "Techo frágil",
+      "category": "warning",
+      "description": "Techo frágil. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W037": {
+      "name": "Atropello por máquina controlada a distancia",
+      "category": "warning",
+      "description": "Atropello por máquina controlada a distancia. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W038": {
+      "name": "Ruido fuerte repentino",
+      "category": "warning",
+      "description": "Ruido fuerte repentino. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W039": {
+      "name": "Caída de hielo",
+      "category": "warning",
+      "description": "Caída de hielo. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W040": {
+      "name": "Avalancha desde el techo",
+      "category": "warning",
+      "description": "Avalancha desde el techo. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W041": {
+      "name": "Atmósfera asfixiante",
+      "category": "warning",
+      "description": "Atmósfera asfixiante. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W042": {
+      "name": "Arco eléctrico",
+      "category": "warning",
+      "description": "Arco eléctrico. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W043": {
+      "name": "Hielo delgado",
+      "category": "warning",
+      "description": "Hielo delgado. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W044": {
+      "name": "Rampa de varada",
+      "category": "warning",
+      "description": "Rampa de varada. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W045": {
+      "name": "Zona de actividades acuáticas de arrastre",
+      "category": "warning",
+      "description": "Zona de actividades acuáticas de arrastre. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W046": {
+      "name": "Zona de embarcaciones de surf",
+      "category": "warning",
+      "description": "Zona de embarcaciones de surf. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W047": {
+      "name": "Aguas profundas",
+      "category": "warning",
+      "description": "Aguas profundas. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W048": {
+      "name": "Aguas poco profundas (salto)",
+      "category": "warning",
+      "description": "Aguas poco profundas (salto). Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W049": {
+      "name": "Objetos sumergidos",
+      "category": "warning",
+      "description": "Objetos sumergidos. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W050": {
+      "name": "Desnivel repentino en piscinas",
+      "category": "warning",
+      "description": "Desnivel repentino en piscinas. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W051": {
+      "name": "Borde sin protección",
+      "category": "warning",
+      "description": "Borde sin protección. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W052": {
+      "name": "Borde de acantilado inestable",
+      "category": "warning",
+      "description": "Borde de acantilado inestable. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W053": {
+      "name": "Acantilado inestable",
+      "category": "warning",
+      "description": "Acantilado inestable. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W054": {
+      "name": "Tiburones",
+      "category": "warning",
+      "description": "Tiburones. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W055": {
+      "name": "Descarga de aguas residuales",
+      "category": "warning",
+      "description": "Descarga de aguas residuales. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W056": {
+      "name": "Zona de peligro de tsunami",
+      "category": "warning",
+      "description": "Zona de peligro de tsunami. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W057": {
+      "name": "Corrientes fuertes",
+      "category": "warning",
+      "description": "Corrientes fuertes. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W058": {
+      "name": "Zona de navegación",
+      "category": "warning",
+      "description": "Zona de navegación. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W059": {
+      "name": "Zona de carrovelismo",
+      "category": "warning",
+      "description": "Zona de carrovelismo. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W060": {
+      "name": "Mareas ascendentes",
+      "category": "warning",
+      "description": "Mareas ascendentes. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W061": {
+      "name": "Arenas movedizas, barro o limo profundo",
+      "category": "warning",
+      "description": "Arenas movedizas, barro o limo profundo. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W062": {
+      "name": "Zona de kitesurf",
+      "category": "warning",
+      "description": "Zona de kitesurf. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W063": {
+      "name": "Zona de parasailing",
+      "category": "warning",
+      "description": "Zona de parasailing. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W064": {
+      "name": "Vientos fuertes",
+      "category": "warning",
+      "description": "Vientos fuertes. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W065": {
+      "name": "Oleaje alto u olas rompientes grandes",
+      "category": "warning",
+      "description": "Oleaje alto u olas rompientes grandes. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W066": {
+      "name": "Playa con desnivel pronunciado",
+      "category": "warning",
+      "description": "Playa con desnivel pronunciado. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W067": {
+      "name": "Cocodrilos, caimanes o yacarés",
+      "category": "warning",
+      "description": "Cocodrilos, caimanes o yacarés. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W068": {
+      "name": "Caída al agua al subir o bajar de una superficie flotante",
+      "category": "warning",
+      "description": "Caída al agua al subir o bajar de una superficie flotante. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W069": {
+      "name": "Medusas",
+      "category": "warning",
+      "description": "Medusas. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W070": {
+      "name": "Desnivel o escalón",
+      "category": "warning",
+      "description": "Desnivel o escalón. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W071": {
+      "name": "Sustancia o mezcla peligrosa para la salud",
+      "category": "warning",
+      "description": "Sustancia o mezcla peligrosa para la salud. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W072": {
+      "name": "Sustancia o mezcla peligrosa para el ambiente",
+      "category": "warning",
+      "description": "Sustancia o mezcla peligrosa para el ambiente. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W073": {
+      "name": "Zona de incendio de gran magnitud",
+      "category": "warning",
+      "description": "Zona de incendio de gran magnitud. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W074": {
+      "name": "Zona de tornados",
+      "category": "warning",
+      "description": "Zona de tornados. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W075": {
+      "name": "Zona de volcán activo",
+      "category": "warning",
+      "description": "Zona de volcán activo. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W076": {
+      "name": "Zona de flujos de escombros",
+      "category": "warning",
+      "description": "Zona de flujos de escombros. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W077": {
+      "name": "Zona de inundación",
+      "category": "warning",
+      "description": "Zona de inundación. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W078": {
+      "name": "Zona de deslizamientos",
+      "category": "warning",
+      "description": "Zona de deslizamientos. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W079": {
+      "name": "Contenido caliente",
+      "category": "warning",
+      "description": "Contenido caliente. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W080": {
+      "name": "Vapor caliente",
+      "category": "warning",
+      "description": "Vapor caliente. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W082": {
+      "name": "Grietas bajo la nieve",
+      "category": "warning",
+      "description": "Grietas bajo la nieve. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W083": {
+      "name": "Avalancha",
+      "category": "warning",
+      "description": "Avalancha. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W084": {
+      "name": "Tormenta eléctrica",
+      "category": "warning",
+      "description": "Tormenta eléctrica. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W085": {
+      "name": "Zona de tifones, huracanes o ciclones",
+      "category": "warning",
+      "description": "Zona de tifones, huracanes o ciclones. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W087": {
+      "name": "Niveles altos de volumen sonoro",
+      "category": "warning",
+      "description": "Niveles altos de volumen sonoro. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W088": {
+      "name": "Cuchillas en movimiento",
+      "category": "warning",
+      "description": "Cuchillas en movimiento. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    },
+    "W089": {
+      "name": "Engranajes en movimiento",
+      "category": "warning",
+      "description": "Engranajes en movimiento. Contrasta el peligro con las condiciones reales y la evaluación de riesgos del centro."
+    }
+  }
+}

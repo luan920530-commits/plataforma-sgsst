@@ -5,21 +5,84 @@ namespace App\Services;
 
 use DomainException;
 use JsonException;
+use RuntimeException;
 
-/** Valida y normaliza el formato de datos del editor SVG; nunca acepta markup del cliente. */
+/** Valida el formato del editor; los únicos pictogramas permitidos provienen del catálogo local ISO 7010. */
 final class FloorPlan
 {
-    private const TOOLS = ['wall', 'door', 'route', 'exit', 'extinguisher', 'first_aid', 'alarm', 'assembly', 'text'];
-    private const COLORS = ['#0f172a', '#334155', '#64748b', '#2563eb', '#15803d', '#16a34a', '#dc2626', '#f97316'];
+    private const BASE_TOOLS = ['wall', 'door', 'route', 'exit', 'extinguisher', 'first_aid', 'alarm', 'assembly', 'text'];
+    private const LEGACY_SIGNS = [
+        'exit' => 'E002', 'extinguisher' => 'F001', 'first_aid' => 'E003',
+        'alarm' => 'F005', 'assembly' => 'E007',
+    ];
+    private const COLORS = [
+        '#0f172a', '#334155', '#64748b', '#2563eb', '#15803d', '#16a34a', '#dc2626', '#f97316',
+        '#237f52', '#b71f2e', '#005387', '#f9a800',
+    ];
+    private const CATEGORY_COLORS = [
+        'emergency' => '#237f52', 'fire' => '#b71f2e', 'mandatory' => '#005387',
+        'prohibition' => '#b71f2e', 'warning' => '#f9a800',
+    ];
+    private static ?array $library = null;
+    private static ?array $tools = null;
+    private static ?array $toolCatalog = null;
 
     public static function defaults(): array
     {
         return ['format' => 1, 'width' => 1000, 'height' => 650, 'grid' => 20, 'elements' => []];
     }
 
+    /** Incluye los tipos heredados para abrir versiones antiguas sin migrar ni reescribir su diseño. */
     public static function tools(): array
     {
-        return self::TOOLS;
+        if (self::$tools === null) {
+            self::$tools = array_merge(
+                self::BASE_TOOLS,
+                array_map(static fn(string $code): string => 'iso_' . strtolower($code), array_keys(self::library()['signs']))
+            );
+        }
+        return self::$tools;
+    }
+
+    /** Catálogo visible: herramientas de dibujo y las 332 señales, sin duplicar alias heredados. */
+    public static function toolCatalog(): array
+    {
+        if (self::$toolCatalog !== null) {
+            return self::$toolCatalog;
+        }
+        $catalog = [
+            'select' => ['name' => 'Seleccionar y mover', 'category' => 'draw', 'description' => 'Selecciona, mueve o ajusta los extremos de muros y rutas.', 'reference' => 'Herramienta'],
+            'wall' => ['name' => 'Muro', 'category' => 'draw', 'description' => 'Arrastra para delimitar espacios y recorridos del plano.', 'reference' => 'Dibujo'],
+            'door' => ['name' => 'Puerta', 'category' => 'draw', 'description' => 'Ubica una puerta y ajusta su orientación según el levantamiento.', 'reference' => 'Dibujo'],
+            'route' => ['name' => 'Ruta de evacuación', 'category' => 'draw', 'description' => 'Arrastra para trazar el recorrido; la flecha marca el sentido.', 'reference' => 'Dibujo'],
+            'text' => ['name' => 'Texto y datos', 'category' => 'draw', 'description' => 'Añade pisos, áreas, norte, escala u observaciones útiles.', 'reference' => 'Dibujo'],
+        ];
+        foreach (self::library()['signs'] as $code => $sign) {
+            $catalog['iso_' . strtolower($code)] = [
+                'name' => $sign['name'], 'category' => $sign['category'],
+                'description' => $sign['description'], 'reference' => $code,
+            ];
+        }
+        self::$toolCatalog = $catalog;
+        return $catalog;
+    }
+
+    public static function categories(): array
+    {
+        return self::library()['categories'];
+    }
+
+    /** Devuelve el código ISO tanto para tipos nuevos como para alias de versiones anteriores. */
+    public static function signCode(string $tool): ?string
+    {
+        if (isset(self::LEGACY_SIGNS[$tool])) {
+            return self::LEGACY_SIGNS[$tool];
+        }
+        if (preg_match('/^iso_([efmpw][0-9]{3})$/D', $tool, $matches)) {
+            $code = strtoupper($matches[1]);
+            return isset(self::library()['signs'][$code]) ? $code : null;
+        }
+        return null;
     }
 
     public static function normalize(string $json): array
@@ -43,6 +106,7 @@ final class FloorPlan
         }
         $elements = [];
         $ids = [];
+        $allowedTools = self::tools();
         foreach ($design['elements'] as $element) {
             if (!is_array($element)) {
                 throw new DomainException('Uno de los elementos del plano no es válido.');
@@ -52,16 +116,17 @@ final class FloorPlan
             $label = $element['label'] ?? '';
             $color = $element['color'] ?? '';
             if (!is_string($id) || !is_string($tool) || !is_string($label) || !is_string($color)
-                || !preg_match('/^[A-Za-z0-9_-]{1,48}$/D', $id) || isset($ids[$id]) || !in_array($tool, self::TOOLS, true)) {
+                || !preg_match('/^[A-Za-z0-9_-]{1,48}$/D', $id) || isset($ids[$id]) || !in_array($tool, $allowedTools, true)) {
                 throw new DomainException('El identificador o tipo de un elemento no es válido.');
             }
             $ids[$id] = true;
+            $isSign = self::signCode($tool) !== null;
             $normalized = [
                 'id' => $id, 'tool' => $tool,
                 'x' => self::coordinate($element['x'] ?? null, $width, 'X'),
                 'y' => self::coordinate($element['y'] ?? null, $height, 'Y'),
                 'label' => text_substr(trim($label), 0, 160),
-                'color' => in_array($color, self::COLORS, true) ? $color : '#334155',
+                'color' => $isSign ? self::defaultColor($tool) : (in_array($color, self::COLORS, true) ? $color : '#334155'),
                 'rotation' => self::number($element['rotation'] ?? 0, -360, 360),
                 'stroke' => self::number($element['stroke'] ?? 8, 2, 30),
             ];
@@ -83,6 +148,38 @@ final class FloorPlan
     public static function encode(array $design): string
     {
         return json_encode($design, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+    }
+
+    private static function library(): array
+    {
+        if (self::$library !== null) {
+            return self::$library;
+        }
+        $path = BASE_PATH . '/resources/iso7010-catalog.json';
+        if (!is_file($path)) {
+            throw new RuntimeException('Falta el catálogo local de señalización ISO 7010.');
+        }
+        try {
+            $library = json_decode((string) file_get_contents($path), true, 16, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new RuntimeException('El catálogo local de señalización no es válido.', 0, $exception);
+        }
+        if (!isset($library['signs'], $library['categories']) || !is_array($library['signs'])
+            || !is_array($library['categories']) || count($library['signs']) !== 332) {
+            throw new RuntimeException('El catálogo local debe contener las 332 señales registradas.');
+        }
+        self::$library = $library;
+        return $library;
+    }
+
+    private static function defaultColor(string $tool): string
+    {
+        $code = self::signCode($tool);
+        if ($code !== null) {
+            $category = self::library()['signs'][$code]['category'];
+            return self::CATEGORY_COLORS[$category] ?? '#334155';
+        }
+        return $tool === 'route' ? '#237f52' : '#334155';
     }
 
     private static function integer(mixed $value, int $minimum, int $maximum, string $label): int

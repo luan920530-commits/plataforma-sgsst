@@ -147,7 +147,8 @@ final class PlanoEmergenciaController extends BaseController
         $this->view('tenant/emergencias/plano-editor', [
             'title' => $drawing === null ? 'Nuevo plano de emergencia' : $drawing['nombre'],
             'plan' => $plan, 'drawing' => $drawing, 'design' => $design, 'versions' => $versions,
-            'sourceVersion' => $sourceVersion, 'extraScripts' => ['js/floor-plan.js'],
+            'sourceVersion' => $sourceVersion,
+            'extraScripts' => ['js/floor-plan-signs.js', 'js/floor-plan.js'],
             'tools' => FloorPlan::tools(),
         ]);
     }

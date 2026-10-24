@@ -40,8 +40,9 @@ add_tree("app", "normia-sst/app")
 add_tree("config", "normia-sst/config")
 add_tree("resources/sgsst-library", "normia-sst/resources/sgsst-library")
 add_tree("resources/pesv-library", "normia-sst/resources/pesv-library")
+add_file("resources/iso7010-catalog.json", "normia-sst/resources/iso7010-catalog.json")
 add_tree("public/assets", "public_html/assets")
-for required_asset in ("css/app.css", "js/app.js", "js/floor-plan.js", "js/vendor/qrcode.js", "js/vendor/qrcode.LICENSE.txt"):
+for required_asset in ("css/app.css", "js/app.js", "js/floor-plan.js", "js/floor-plan-signs.js", "js/vendor/qrcode.js", "js/vendor/qrcode.LICENSE.txt", "js/vendor/iso-safety-signs.LICENSE.txt", "js/vendor/iso-safety-signs.NOTICE.txt"):
     target = f"public_html/assets/{required_asset}"
     if target not in files:
         raise SystemExit(f"Falta el recurso público obligatorio: {required_asset}. Ejecuta npm ci && npm run build.")

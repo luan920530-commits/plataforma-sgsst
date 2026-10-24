@@ -6,27 +6,35 @@ $encodedDesign = App\Services\FloorPlan::encode($design);
 $resumedDesign = array_key_exists('datos_json', $oldInput);
 $clientDesign = $resumedDesign ? (string) $oldInput['datos_json'] : $encodedDesign;
 $action = $isNew ? '/emergencias/' . $plan['id'] . '/planos' : '/planos-emergencia/' . $drawing['id'];
-$toolLabels = [
-    'select' => ['Seleccionar y mover', '↖'], 'wall' => ['Muro', '━'], 'door' => ['Puerta', '◜'],
-    'route' => ['Ruta de evacuación', '⇢'], 'exit' => ['Salida', 'S'], 'extinguisher' => ['Extintor', 'E'],
-    'first_aid' => ['Botiquín', '+'], 'alarm' => ['Alarma', 'A'], 'assembly' => ['Punto de encuentro', 'PE'],
-    'text' => ['Texto', 'T'],
-];
+$toolCatalog = App\Services\FloorPlan::toolCatalog();
+$toolCategories = App\Services\FloorPlan::categories();
+$basicGlyphs = ['select' => '↖', 'wall' => '━', 'door' => '◜', 'route' => '⇢', 'text' => 'T'];
 ?>
 <div class="page-heading">
-    <div><a href="<?= e(url('/emergencias/' . $plan['id'])) ?>" class="text-link mb-3"><?= icon('arrow-left', 'h-3.5 w-3.5') ?> Volver a <?= e($plan['codigo']) ?></a><span class="eyebrow">Editor visual de planos</span><div class="flex flex-wrap items-center gap-3"><h1 class="!text-2xl"><?= e($isNew ? 'Nuevo plano de emergencia' : $drawing['nombre']) ?></h1><?php if (!$isNew): ?><span class="badge badge-blue">v<?= (int) $drawing['version'] ?></span><span class="badge badge-amber">Borrador</span><?php endif; ?></div><p><?= e($plan['titulo']) ?> · <?= e($plan['centro_trabajo']) ?></p></div>
+    <div>
+        <a href="<?= e(url('/emergencias/' . $plan['id'])) ?>" class="text-link mb-3"><?= icon('arrow-left', 'h-3.5 w-3.5') ?> Volver a <?= e($plan['codigo']) ?></a>
+        <span class="eyebrow">Editor visual de planos</span>
+        <div class="flex flex-wrap items-center gap-3">
+            <h1 class="!text-2xl"><?= e($isNew ? 'Nuevo plano de emergencia' : $drawing['nombre']) ?></h1>
+            <?php if (!$isNew): ?><span class="badge badge-blue">v<?= (int) $drawing['version'] ?></span><span class="badge badge-amber">Borrador</span><?php endif; ?>
+        </div>
+        <p><?= e($plan['titulo']) ?> · <?= e($plan['centro_trabajo']) ?></p>
+    </div>
     <?php if (!$isNew): ?><a href="<?= e(url('/evidencias?vinculo=' . rawurlencode('plano:' . $drawing['id']) . '#cargar')) ?>" class="btn-secondary"><?= icon('upload', 'h-4 w-4') ?> Adjuntar otro soporte</a><?php endif; ?>
 </div>
 
-<div class="mt-5 rounded-2xl bg-amber-50 p-4 text-[11px] leading-5 text-amber-800 ring-1 ring-amber-100"><strong>Herramienta de apoyo, no validación técnica.</strong> El editor no reemplaza un levantamiento del centro, un software CAD profesional ni la revisión de una persona competente. Verifica dimensiones, recorridos, señalización, accesibilidad y condiciones reales antes de usar el plano.</div>
+<div class="mt-5 rounded-2xl bg-amber-50 p-4 text-[11px] leading-5 text-amber-800 ring-1 ring-amber-100">
+    <strong>Biblioteca técnica de apoyo, no validación automática.</strong> Incluye 332 pictogramas de referencia ISO 7010 y las familias de color y forma usadas por NTC 1461. No todas las señales aplican a todos los centros: selecciona únicamente las necesarias y verifica pictograma, orientación, dimensiones, iluminación, recorridos y condiciones reales con una persona competente. No reemplaza un CAD profesional ni una revisión técnica/legal.
+</div>
 <?php if ($isHistorical): ?><div class="mt-4 rounded-2xl bg-blue-50 p-4 text-[11px] leading-5 text-blue-800 ring-1 ring-blue-100">Estás consultando la <strong>versión <?= (int) $sourceVersion['version'] ?></strong>, creada por <?= e($sourceVersion['created_by_nombre'] ?? 'Usuario') ?> el <?= e(format_date($sourceVersion['created_at'])) ?>. Si guardas, se creará una versión nueva a partir de este diseño; la versión actual es la <?= (int) $drawing['version'] ?>. Para exportar, primero guarda esta copia o vuelve a la versión actual.</div><?php endif; ?>
-<?php if ($isObsolete): ?><div class="mt-4 rounded-2xl bg-slate-100 p-4 text-[11px] leading-5 text-slate-600">El plan de emergencia está obsoleto. Este plano se conserva para consulta y exportación, pero no admite nuevas versiones.</div><?php endif; ?>
+<?php if ($isObsolete): ?><div class="mt-4 rounded-2xl bg-slate-100 p-4 text-[11px] leading-5 text-slate-600 ring-1 ring-slate-200">El plan de emergencia está obsoleto. Este plano se conserva para consulta y exportación, pero no admite nuevas versiones.</div><?php endif; ?>
 
 <form method="post" action="<?= e(url($action)) ?>" id="floor-plan-form" class="mt-6">
     <?= csrf_field() ?>
     <input type="hidden" name="id" value="<?= (int) ($drawing['id'] ?? 0) ?>"><input type="hidden" name="plan_id" value="<?= (int) $plan['id'] ?>">
     <input type="hidden" name="datos_json" id="floor-plan-data">
     <?php if (!$isNew): ?><input type="hidden" name="version_actual" value="<?= (int) $drawing['version'] ?>"><?php endif; ?>
+
     <section class="ios-card p-5 sm:p-6">
         <div class="grid gap-4 lg:grid-cols-[1fr_240px_1fr]">
             <div><label class="label" for="plan-name">Nombre del plano *</label><input id="plan-name" name="nombre" class="input" required maxlength="180" value="<?= e(old('nombre', $drawing['nombre'] ?? 'Plano de evacuación · ' . $plan['centro_trabajo'])) ?>"><?= field_error('nombre') ?></div>
@@ -36,26 +44,95 @@ $toolLabels = [
         <?= field_error('datos_json') ?>
     </section>
 
-    <div id="floor-plan-editor" class="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1fr)_300px]" data-design="<?= e($clientDesign) ?>" data-fallback-design="<?= e($encodedDesign) ?>" data-resumed="<?= $resumedDesign ? '1' : '0' ?>" data-export-url="<?= e($isNew ? '' : url('/planos-emergencia/' . $drawing['id'] . '/exportar-png')) ?>" data-can-export="<?= !$isNew && !$isHistorical ? '1' : '0' ?>" data-version="<?= (int) ($drawing['version'] ?? 0) ?>" data-plan="<?= e($plan['codigo'] . ' · ' . $plan['centro_trabajo']) ?>">
+    <div id="floor-plan-editor" class="floor-plan-workspace mt-5" data-design="<?= e($clientDesign) ?>" data-fallback-design="<?= e($encodedDesign) ?>" data-resumed="<?= $resumedDesign ? '1' : '0' ?>" data-export-url="<?= e($isNew ? '' : url('/planos-emergencia/' . $drawing['id'] . '/exportar-png')) ?>" data-can-export="<?= !$isNew && !$isHistorical ? '1' : '0' ?>" data-version="<?= (int) ($drawing['version'] ?? 0) ?>" data-plan="<?= e($plan['codigo'] . ' · ' . $plan['centro_trabajo']) ?>">
+        <aside class="floor-palette ios-card" aria-label="Biblioteca de herramientas y señalización">
+            <div class="floor-palette-heading">
+                <span class="eyebrow">Biblioteca visual</span>
+                <div class="mt-1 flex items-center justify-between gap-2"><h2 class="text-sm font-bold text-slate-800">Herramientas</h2><span class="badge badge-blue">332 señales</span></div>
+                <p>Elige un elemento y luego haz clic o arrastra sobre el lienzo.</p>
+            </div>
+            <div class="floor-palette-search">
+                <?= icon('search', 'h-4 w-4') ?>
+                <label class="sr-only" for="floor-tool-search">Buscar señal por nombre o código ISO</label>
+                <input id="floor-tool-search" type="search" placeholder="Buscar nombre o código…" autocomplete="off" data-tool-search>
+                <span data-search-count aria-live="polite"></span>
+            </div>
+
+            <div class="floor-palette-groups" data-tool-groups>
+                <section class="floor-tool-section" data-tool-group="draw">
+                    <h3><span>Dibujo y edición</span><span>5</span></h3>
+                    <div class="floor-tool-list">
+                        <?php foreach ($toolCatalog as $tool => $info): ?>
+                            <?php if ($info['category'] !== 'draw') continue; ?>
+                            <button type="button" class="floor-tool<?= $tool === 'select' ? ' is-active' : '' ?>" data-tool="<?= e($tool) ?>" data-name="<?= e($info['name']) ?>" data-description="<?= e($info['description']) ?>" data-search="<?= e($info['name'] . ' ' . $info['reference'] . ' ' . $info['description']) ?>" aria-pressed="<?= $tool === 'select' ? 'true' : 'false' ?>">
+                                <span class="floor-tool-icon floor-tool-icon--basic" data-basic-icon="<?= e($tool) ?>" aria-hidden="true"><?= e($basicGlyphs[$tool]) ?></span>
+                                <span class="floor-tool-copy"><strong><?= e($info['name']) ?></strong><small><?= e($info['reference']) ?></small></span>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
+                </section>
+
+                <?php $categoryIndex = 0; ?>
+                <?php foreach ($toolCategories as $categoryKey => $category): ?>
+                    <?php $categoryIndex++; $categoryTools = array_filter($toolCatalog, static fn(array $info): bool => $info['category'] === $categoryKey); ?>
+                    <details class="floor-tool-section" data-tool-group="<?= e($categoryKey) ?>"<?= $categoryIndex === 1 ? ' open' : '' ?>>
+                        <summary><span><?= e($category['label']) ?></span><span><?= count($categoryTools) ?></span></summary>
+                        <div class="floor-tool-list">
+                            <?php foreach ($categoryTools as $tool => $info): ?>
+                                <button type="button" class="floor-tool" data-tool="<?= e($tool) ?>" data-name="<?= e($info['name']) ?>" data-description="<?= e($info['description']) ?>" data-search="<?= e($info['name'] . ' ' . $info['reference'] . ' ' . $info['description']) ?>" aria-pressed="false" title="<?= e($info['description']) ?>">
+                                    <span class="floor-tool-icon floor-tool-icon--<?= e($categoryKey) ?>" data-sign-icon="<?= e($info['reference']) ?>" aria-hidden="true"><?= e($info['reference']) ?></span>
+                                    <span class="floor-tool-copy"><strong><?= e($info['name']) ?></strong><small>ISO 7010 <?= e($info['reference']) ?> · <?= e($category['short']) ?></small></span>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+                    </details>
+                <?php endforeach; ?>
+                <div class="hidden p-5 text-center text-xs leading-5 text-slate-500" data-tool-empty>No hay señales que coincidan. Prueba con “salida”, “incendio”, “casco” o un código como E001.</div>
+            </div>
+
+            <div class="floor-active-tool" aria-live="polite">
+                <span>Herramienta activa</span>
+                <strong data-active-tool-name>Seleccionar y mover</strong>
+                <p data-active-tool-description>Selecciona, mueve o ajusta los extremos de muros y rutas.</p>
+            </div>
+        </aside>
+
         <section class="ios-card min-w-0 overflow-hidden">
-            <div class="floor-plan-toolbar" role="toolbar" aria-label="Herramientas del plano">
-                <?php foreach ($toolLabels as $tool => $info): ?><button type="button" class="floor-tool<?= $tool === 'select' ? ' is-active' : '' ?>" data-tool="<?= e($tool) ?>" aria-pressed="<?= $tool === 'select' ? 'true' : 'false' ?>" title="<?= e($info[0]) ?>"><span aria-hidden="true"><?= e($info[1]) ?></span><small><?= e($info[0]) ?></small></button><?php endforeach; ?>
+            <div class="floor-canvas-heading">
+                <div><span class="eyebrow">Área de trabajo</span><h2>Lienzo del plano</h2></div>
+                <span class="floor-canvas-tool" data-canvas-tool>Seleccionar y mover</span>
             </div>
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 bg-slate-50/70 px-3 py-2">
-                <div class="flex items-center gap-1"><button type="button" class="btn-icon h-8 w-8" data-undo title="Deshacer (Ctrl+Z)" aria-label="Deshacer"><?= icon('arrow-left', 'h-4 w-4') ?></button><button type="button" class="btn-icon h-8 w-8" data-redo title="Rehacer (Ctrl+Y)" aria-label="Rehacer"><?= icon('arrow-right', 'h-4 w-4') ?></button><button type="button" class="btn-icon h-8 w-8" data-delete title="Eliminar selección (Supr)" aria-label="Eliminar selección"><?= icon('x', 'h-4 w-4') ?></button><span class="mx-1 h-5 w-px bg-slate-200"></span><button type="button" class="btn-icon h-8 w-8" data-zoom-out aria-label="Reducir">−</button><span data-zoom-label class="w-10 text-center text-[10px] font-semibold text-slate-500">100%</span><button type="button" class="btn-icon h-8 w-8" data-zoom-in aria-label="Ampliar">+</button></div>
+                <div class="flex items-center gap-1">
+                    <button type="button" class="btn-icon h-8 w-8" data-undo title="Deshacer (Ctrl+Z)" aria-label="Deshacer"><?= icon('arrow-left', 'h-3.5 w-3.5') ?></button>
+                    <button type="button" class="btn-icon h-8 w-8" data-redo title="Rehacer (Ctrl+Y)" aria-label="Rehacer"><?= icon('arrow-right', 'h-3.5 w-3.5') ?></button>
+                    <button type="button" class="btn-icon h-8 w-8" data-delete title="Eliminar selección (Supr)" aria-label="Eliminar selección"><?= icon('x', 'h-3.5 w-3.5') ?></button>
+                    <span class="mx-1 h-5 w-px bg-slate-200"></span>
+                    <button type="button" class="btn-icon h-8 w-8" data-zoom-out aria-label="Reducir">−</button><span data-zoom-label class="w-10 text-center text-[10px] font-semibold text-slate-500">100%</span><button type="button" class="btn-icon h-8 w-8" data-zoom-in aria-label="Ampliar">+</button>
+                </div>
                 <div class="flex flex-wrap items-center gap-3 text-[10px] text-slate-500"><label class="flex items-center gap-1.5"><input type="checkbox" class="checkbox" data-grid-visible checked> Cuadrícula</label><label class="flex items-center gap-1.5"><input type="checkbox" class="checkbox" data-snap checked> Ajustar</label><span data-cursor-position class="font-mono text-slate-400">X 0 · Y 0</span></div>
             </div>
             <div class="floor-plan-scroll" id="floor-plan-scroll">
                 <svg id="floor-plan-canvas" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lienzo visual del plano de emergencia" tabindex="0"></svg>
             </div>
-            <div class="flex flex-col gap-2 border-t border-slate-100 px-4 py-3 text-[10px] leading-4 text-slate-400 sm:flex-row sm:items-center sm:justify-between"><p data-editor-status role="status">Selecciona una herramienta. Arrastra para crear muros o rutas; haz clic para ubicar señalización.</p><p class="shrink-0">Mayús: sin ajuste · Supr: eliminar · Ctrl+S: guardar</p></div>
+            <div class="flex flex-col gap-2 border-t border-slate-100 px-4 py-3 text-[10px] leading-4 text-slate-400 sm:flex-row sm:items-center sm:justify-between"><p data-editor-status role="status">Selecciona una herramienta. Busca por nombre o código ISO y haz clic para ubicar la señal.</p><p class="shrink-0">Mayús: sin ajuste · Supr: eliminar · Ctrl+S: guardar</p></div>
         </section>
 
-        <aside class="space-y-5 xl:self-start">
-            <section class="ios-card p-4"><h2 class="text-xs font-semibold text-slate-800">Propiedades del elemento</h2><div data-no-selection class="mt-3 rounded-xl bg-slate-50 p-3 text-[11px] leading-5 text-slate-400">Selecciona un elemento para cambiar su texto, color, grosor o rotación.</div><div data-selection-properties class="mt-4 hidden space-y-3"><p class="text-[11px] font-semibold text-blue-600" data-selected-type></p><div><label class="label" for="element-label">Texto / identificación</label><input id="element-label" class="input h-9 text-xs" data-element-label maxlength="160"></div><div><label class="label" for="element-color">Color</label><select id="element-color" class="input h-9 text-xs" data-element-color><option value="#334155">Gris oscuro</option><option value="#0f172a">Negro</option><option value="#64748b">Gris</option><option value="#2563eb">Azul</option><option value="#15803d">Verde oscuro</option><option value="#16a34a">Verde</option><option value="#dc2626">Rojo</option><option value="#f97316">Naranja</option></select></div><div class="grid grid-cols-2 gap-3"><div><label class="label" for="element-stroke">Grosor / tamaño</label><input id="element-stroke" type="number" min="2" max="30" step="1" class="input h-9 text-xs" data-element-stroke></div><div><label class="label" for="element-rotation">Rotación °</label><input id="element-rotation" type="number" min="-360" max="360" step="15" class="input h-9 text-xs" data-element-rotation></div></div></div></section>
+        <aside class="floor-plan-properties space-y-5">
+            <section class="ios-card p-4">
+                <h2 class="text-xs font-semibold text-slate-800">Propiedades del elemento</h2>
+                <div data-no-selection class="mt-3 rounded-xl bg-slate-50 p-3 text-[11px] leading-5 text-slate-400">Selecciona un elemento para cambiar su texto, tamaño u orientación.</div>
+                <div data-selection-properties class="mt-4 hidden space-y-3">
+                    <p class="text-[11px] font-semibold text-blue-600" data-selected-type></p>
+                    <div><label class="label" for="element-label">Texto / identificación</label><input id="element-label" class="input h-9 text-xs" data-element-label maxlength="160"></div>
+                    <div data-color-field><label class="label" for="element-color">Color</label><select id="element-color" class="input h-9 text-xs" data-element-color><option value="#334155">Gris oscuro</option><option value="#0f172a">Negro</option><option value="#64748b">Gris</option><option value="#2563eb">Azul</option><option value="#15803d">Verde oscuro</option><option value="#16a34a">Verde</option><option value="#dc2626">Rojo</option><option value="#f97316">Naranja</option></select></div>
+                    <p class="hidden rounded-lg bg-slate-50 p-2 text-[10px] leading-4 text-slate-500" data-standard-color-note>El pictograma conserva los colores y la forma de su familia de seguridad.</p>
+                    <div class="grid grid-cols-2 gap-3"><div><label class="label" for="element-stroke">Grosor / tamaño</label><input id="element-stroke" type="number" min="2" max="30" step="1" class="input h-9 text-xs" data-element-stroke></div><div><label class="label" for="element-rotation">Rotación °</label><input id="element-rotation" type="number" min="-360" max="360" step="15" class="input h-9 text-xs" data-element-rotation></div></div>
+                </div>
+            </section>
             <section class="ios-card p-4"><h2 class="text-xs font-semibold text-slate-800">Lienzo y cuadrícula</h2><div class="mt-4 grid grid-cols-3 gap-2"><div><label class="label" for="canvas-width">Ancho</label><input id="canvas-width" type="number" min="400" max="2400" step="20" class="input h-9 px-2 text-xs" data-canvas-width></div><div><label class="label" for="canvas-height">Alto</label><input id="canvas-height" type="number" min="300" max="1600" step="20" class="input h-9 px-2 text-xs" data-canvas-height></div><div><label class="label" for="canvas-grid">Malla</label><input id="canvas-grid" type="number" min="5" max="100" step="5" class="input h-9 px-2 text-xs" data-canvas-grid></div></div><p class="mt-3 text-[10px] leading-4 text-slate-400">Unidades del dibujo, no metros reales. Documenta por separado la escala verificada.</p></section>
-            <section class="ios-card p-4"><h2 class="text-xs font-semibold text-slate-800">Convenciones</h2><ul class="mt-3 space-y-2 text-[10px] leading-4 text-slate-500"><li><strong class="text-slate-700">Muros y puertas:</strong> delimitan el recorrido.</li><li><strong class="text-green-700">Rutas y salidas:</strong> deben contrastarse en sitio.</li><li><strong class="text-red-600">Equipos y alarmas:</strong> ubica solo recursos existentes.</li><li><strong class="text-slate-700">Textos:</strong> identifica pisos, áreas, norte y datos útiles.</li></ul></section>
-            <?php if (!$isNew): ?><section class="ios-card p-4"><div class="flex items-center justify-between"><h2 class="text-xs font-semibold text-slate-800">Historial de versiones</h2><span class="badge badge-gray"><?= count($versions) ?></span></div><div class="mt-3 max-h-64 space-y-2 overflow-y-auto"><?php foreach ($versions as $version): ?><a href="<?= e(url('/planos-emergencia/' . $drawing['id'] . '/versiones/' . $version['id'])) ?>" class="block rounded-xl p-3 text-[10px] leading-4 ring-1 <?= !$isHistorical && (int) $version['version'] === (int) $drawing['version'] ? 'bg-blue-50 text-blue-700 ring-blue-100' : ($isHistorical && (int) $version['id'] === (int) $sourceVersion['id'] ? 'bg-blue-50 text-blue-700 ring-blue-100' : 'bg-slate-50 text-slate-500 ring-slate-100') ?>"><strong> Versión <?= (int) $version['version'] ?></strong><?php if (!$isHistorical && (int) $version['version'] === (int) $drawing['version']): ?> · actual<?php endif; ?><br><?= e($version['created_by_nombre'] ?? 'Usuario') ?> · <?= e(format_date($version['created_at'])) ?></a><?php endforeach; ?></div><?php if ($isHistorical): ?><a href="<?= e(url('/planos-emergencia/' . $drawing['id'] . '/editar')) ?>" class="text-link mt-3">Volver a la versión actual</a><?php endif; ?></section><?php endif; ?>
+            <section class="ios-card p-4"><h2 class="text-xs font-semibold text-slate-800">Familias de señalización</h2><ul class="mt-3 space-y-2 text-[10px] leading-4 text-slate-500"><li><strong class="text-green-700">Verde:</strong> emergencia y condición segura.</li><li><strong class="text-red-700">Rojo:</strong> equipos contra incendio y prohibiciones.</li><li><strong class="text-blue-700">Azul:</strong> acciones obligatorias.</li><li><strong class="text-amber-600">Amarillo:</strong> advertencias de peligro.</li></ul><p class="mt-3 border-t border-slate-100 pt-3 text-[10px] leading-4 text-slate-400">El código ISO ayuda a identificar el pictograma; no indica por sí solo que su uso sea exigible en ese punto.</p></section>
+            <?php if (!$isNew): ?><section class="ios-card p-4"><div class="flex items-center justify-between"><h2 class="text-xs font-semibold text-slate-800">Historial de versiones</h2><span class="badge badge-gray"><?= count($versions) ?></span></div><div class="mt-3 max-h-64 space-y-2 overflow-y-auto"><?php foreach ($versions as $version): ?><a href="<?= e(url('/planos-emergencia/' . $drawing['id'] . '/versiones/' . $version['id'])) ?>" class="block rounded-xl p-3 text-[10px] leading-4 ring-1 <?= !$isHistorical && (int) $version['version'] === (int) $drawing['version'] ? 'bg-blue-50 text-blue-700 ring-blue-100' : ($isHistorical && (int) $version['id'] === (int) $sourceVersion['id'] ? 'bg-blue-50 text-blue-700 ring-blue-100' : 'bg-slate-50 text-slate-500 ring-slate-100') ?>"><strong>Versión <?= (int) $version['version'] ?></strong><?php if (!$isHistorical && (int) $version['version'] === (int) $drawing['version']): ?> · actual<?php endif; ?><br><?= e($version['created_by_nombre'] ?? 'Usuario') ?> · <?= e(format_date($version['created_at'])) ?></a><?php endforeach; ?></div><?php if ($isHistorical): ?><a href="<?= e(url('/planos-emergencia/' . $drawing['id'] . '/editar')) ?>" class="text-link mt-3">Volver a la versión actual</a><?php endif; ?></section><?php endif; ?>
         </aside>
     </div>
 

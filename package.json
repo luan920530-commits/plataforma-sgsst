@@ -4,12 +4,14 @@
   "private": true,
   "description": "Compilación de estilos Tailwind para Normia SST; no se requiere Node en producción.",
   "scripts": {
-    "build": "npm run build:vendor && npm run build:css",
+    "build": "npm run build:vendor && npm run build:signs && npm run build:css",
     "build:css": "tailwindcss -c tailwind.config.js -i ./resources/css/app.css -o ./public/assets/css/app.css --minify",
+    "build:signs": "node scripts/build_floor_plan_signs.mjs",
     "build:vendor": "mkdir -p public/assets/js/vendor && cp node_modules/qrcode-generator/qrcode.js public/assets/js/vendor/qrcode.js",
     "watch:css": "tailwindcss -c tailwind.config.js -i ./resources/css/app.css -o ./public/assets/css/app.css --watch"
   },
   "devDependencies": {
+    "@iso-safety-signs/core": "^1.1.0",
     "qrcode-generator": "^1.4.4",
     "tailwindcss": "^3.4.17"
   }

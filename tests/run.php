@@ -559,25 +559,40 @@ try {
         expectSame(10485760, EvidenceStorage::MAX_BYTES);
     });
 
-    $test('Editor de planos: herramientas conocidas y validación estricta del diseño', static function (): void {
-        expectSame(['wall', 'door', 'route', 'exit', 'extinguisher', 'first_aid', 'alarm', 'assembly', 'text'], FloorPlan::tools());
+    $test('Editor de planos: 332 señales ISO, compatibilidad y validación estricta', static function (): void {
+        $tools = FloorPlan::tools();
+        $catalog = FloorPlan::toolCatalog();
+        expectSame(341, count($tools), 'Deben persistir 332 tipos ISO y 9 tipos base/heredados.');
+        expectSame(337, count($catalog), 'El panel debe mostrar 332 señales y 5 herramientas, sin alias duplicados.');
+        expectSame([73, 19, 72, 81, 87], array_map(
+            static fn(string $category): int => count(array_filter($catalog, static fn(array $item): bool => $item['category'] === $category)),
+            array_keys(FloorPlan::categories())
+        ));
+        expectSame('E002', FloorPlan::signCode('exit'));
+        expectSame('W089', FloorPlan::signCode('iso_w089'));
+        expectSame(null, FloorPlan::signCode('iso_e999'));
+        expectSame('Salida de emergencia (izquierda)', $catalog['iso_e001']['name']);
         $design = ['format' => 1, 'width' => 1000, 'height' => 650, 'grid' => 20, 'elements' => []];
-        foreach (FloorPlan::tools() as $index => $tool) {
+        foreach ($tools as $index => $tool) {
+            $x = 40 + ($index % 40) * 20;
             $element = [
-                'id' => 'element_' . $index, 'tool' => $tool, 'x' => 40 + $index * 20, 'y' => 100,
+                'id' => 'element_' . $index, 'tool' => $tool, 'x' => $x, 'y' => 80 + intdiv($index, 40) * 20,
                 'label' => $tool === 'text' ? 'Texto visible' : 'Elemento ' . $tool,
                 'color' => '#334155', 'rotation' => 0, 'stroke' => 8, 'html' => '<script>no se conserva</script>',
             ];
             if (in_array($tool, ['wall', 'route'], true)) {
-                $element['x2'] = 160 + $index * 20;
-                $element['y2'] = 100;
+                $element['x2'] = $x + 100;
+                $element['y2'] = 80;
             }
             $design['elements'][] = $element;
         }
         $normalized = FloorPlan::normalize(FloorPlan::encode($design));
-        expectSame(9, count($normalized['elements']));
+        expectSame(count($tools), count($normalized['elements']));
         expectSame(1000, $normalized['width']);
         expectTrue(!array_key_exists('html', $normalized['elements'][0]), 'El formato no debe conservar markup arbitrario.');
+        $byTool = array_column($normalized['elements'], null, 'tool');
+        expectSame('#f9a800', $byTool['iso_w012']['color'], 'Las advertencias deben conservar su color normalizado.');
+        expectSame('#b71f2e', $byTool['alarm']['color'], 'Los alias antiguos deben adoptar el color de su familia.');
         $invalid = ['<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>', FloorPlan::encode(FloorPlan::defaults())];
         $duplicate = floorPlanTestDesign();
         $duplicate['elements'][1]['id'] = $duplicate['elements'][0]['id'];
@@ -585,6 +600,9 @@ try {
         $unknown = floorPlanTestDesign();
         $unknown['elements'][0]['tool'] = 'script';
         $invalid[] = FloorPlan::encode($unknown);
+        $unknownIso = floorPlanTestDesign();
+        $unknownIso['elements'][0]['tool'] = 'iso_e999';
+        $invalid[] = FloorPlan::encode($unknownIso);
         $outside = floorPlanTestDesign();
         $outside['elements'][2]['x'] = 1001;
         $invalid[] = FloorPlan::encode($outside);

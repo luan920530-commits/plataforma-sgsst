@@ -7,18 +7,20 @@
     if (!root || !svg || !form) return;
 
     const NS = 'http://www.w3.org/2000/svg';
-    const tools = ['wall', 'door', 'route', 'exit', 'extinguisher', 'first_aid', 'alarm', 'assembly', 'text'];
-    const colors = ['#0f172a', '#334155', '#64748b', '#2563eb', '#15803d', '#16a34a', '#dc2626', '#f97316'];
+    const signLibrary = window.FLOOR_PLAN_SIGNS || {};
+    const legacySigns = {exit: 'E002', extinguisher: 'F001', first_aid: 'E003', alarm: 'F005', assembly: 'E007'};
+    const categoryColors = {emergency: '#237f52', fire: '#b71f2e', mandatory: '#005387', prohibition: '#b71f2e', warning: '#f9a800'};
+    const tools = ['wall', 'door', 'route', 'exit', 'extinguisher', 'first_aid', 'alarm', 'assembly', 'text',
+        ...Object.keys(signLibrary).map(code => `iso_${code.toLowerCase()}`)];
+    const colors = ['#0f172a', '#334155', '#64748b', '#2563eb', '#15803d', '#16a34a', '#dc2626', '#f97316',
+        '#237f52', '#b71f2e', '#005387', '#f9a800'];
     const labels = {
-        wall: 'Muro', door: 'Puerta', route: 'Ruta de evacuación', exit: 'SALIDA',
-        extinguisher: 'Extintor', first_aid: 'Botiquín', alarm: 'Alarma',
-        assembly: 'Punto de encuentro', text: 'Texto', select: 'Selección'
+        wall: 'Muro', door: 'Puerta', route: 'Ruta de evacuación', exit: 'Salida de emergencia',
+        extinguisher: 'Extintor de incendios', first_aid: 'Primeros auxilios', alarm: 'Pulsador de alarma de incendios',
+        assembly: 'Punto de encuentro de evacuación', text: 'Texto y datos', select: 'Seleccionar y mover'
     };
-    const defaultColors = {
-        wall: '#334155', door: '#334155', route: '#15803d', exit: '#15803d',
-        extinguisher: '#dc2626', first_aid: '#15803d', alarm: '#f97316',
-        assembly: '#15803d', text: '#334155'
-    };
+    Object.entries(signLibrary).forEach(([code, sign]) => { labels[`iso_${code.toLowerCase()}`] = sign.name; });
+    const signSources = new Map();
     const fallback = (() => {
         try {
             const value = JSON.parse(root.dataset.fallbackDesign || '');
@@ -61,7 +63,7 @@
                     ...item,
                     id: String(item.id || uniqueId()),
                     label: String(item.label || labels[item.tool] || ''),
-                    color: colors.includes(item.color) ? item.color : defaultColors[item.tool],
+                    color: signCodeForTool(item.tool) ? defaultColorForTool(item.tool) : (colors.includes(item.color) ? item.color : '#334155'),
                     x: Number(item.x), y: Number(item.y),
                     x2: item.x2 === undefined ? undefined : Number(item.x2),
                     y2: item.y2 === undefined ? undefined : Number(item.y2),
@@ -102,6 +104,129 @@
         });
         if (text !== null) node.textContent = text;
         return node;
+    }
+
+    function signCodeForTool(tool) {
+        if (legacySigns[tool]) return legacySigns[tool];
+        if (!/^iso_[efmpw][0-9]{3}$/.test(tool)) return null;
+        const code = tool.slice(4).toUpperCase();
+        return signLibrary[code] ? code : null;
+    }
+
+    function defaultColorForTool(tool) {
+        const code = signCodeForTool(tool);
+        if (code) return categoryColors[signLibrary[code].category] || '#334155';
+        return tool === 'route' ? '#237f52' : '#334155';
+    }
+
+    function sourceSign(code) {
+        if (signSources.has(code)) return signSources.get(code);
+        const source = new DOMParser().parseFromString(signLibrary[code].svg, 'image/svg+xml');
+        if (source.querySelector('parsererror') || source.documentElement.nodeName.toLowerCase() !== 'svg') {
+            throw new Error(`No fue posible leer el pictograma ${code}.`);
+        }
+        signSources.set(code, source.documentElement);
+        return source.documentElement;
+    }
+
+    /** Clona un SVG confiable y reasigna IDs para que varias copias no compartan clipPaths. */
+    function cloneSign(code, instanceId) {
+        const clone = document.importNode(sourceSign(code), true);
+        const nodes = [clone, ...clone.querySelectorAll('*')];
+        const ids = new Map();
+        let sequence = 0;
+        nodes.forEach(node => {
+            const oldId = node.getAttribute('id');
+            if (!oldId) return;
+            sequence += 1;
+            const newId = `fp-${instanceId}-${sequence}`;
+            ids.set(oldId, newId);
+            node.setAttribute('id', newId);
+        });
+        nodes.forEach(node => {
+            [...node.attributes].forEach(attribute => {
+                if (attribute.name === 'id') return;
+                let value = attribute.value;
+                ids.forEach((newId, oldId) => {
+                    value = value.replaceAll(`url(#${oldId})`, `url(#${newId})`);
+                    if (value === `#${oldId}`) value = `#${newId}`;
+                });
+                if (value !== attribute.value) node.setAttribute(attribute.name, value);
+            });
+        });
+        return clone;
+    }
+
+    function appendIsoSign(group, item) {
+        const code = signCodeForTool(item.tool);
+        if (!code) return;
+        const size = Math.max(40, item.stroke * 5);
+        const sign = cloneSign(code, item.id);
+        sign.setAttribute('x', -size / 2);
+        sign.setAttribute('y', -size / 2);
+        sign.setAttribute('width', size);
+        sign.setAttribute('height', size);
+        sign.setAttribute('class', 'floor-safety-sign');
+        group.appendChild(sign);
+    }
+
+    function basicIcon(tool) {
+        const icon = svgNode('svg', {viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 1.8, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true'});
+        const paths = {
+            select: [['path', {d: 'M5 3l13 9-6 1.5L9 20z'}]],
+            wall: [['path', {d: 'M4 5h16v14H4zM4 10h16M4 15h16M9 5v5M15 10v5M9 15v4'}]],
+            door: [['path', {d: 'M5 20V4h10v16M5 20h15M5 20a15 15 0 0 0 15-15'}]],
+            route: [['path', {d: 'M3 12h15M13 6l6 6-6 6'}]],
+            text: [['path', {d: 'M5 5h14M12 5v14M8 19h8'}]]
+        };
+        (paths[tool] || paths.select).forEach(([name, attributes]) => icon.appendChild(svgNode(name, attributes)));
+        return icon;
+    }
+
+    function mountPaletteIcons() {
+        root.querySelectorAll('[data-basic-icon]').forEach(slot => slot.replaceChildren(basicIcon(slot.dataset.basicIcon)));
+        root.querySelectorAll('[data-sign-icon]').forEach(slot => {
+            const sign = signLibrary[slot.dataset.signIcon];
+            if (!sign) return;
+            const image = document.createElement('img');
+            image.alt = '';
+            image.loading = 'lazy';
+            image.decoding = 'async';
+            image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(sign.svg)}`;
+            slot.replaceChildren(image);
+        });
+    }
+
+    function normalizeSearch(value) {
+        return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+
+    function filterTools() {
+        const input = root.querySelector('[data-tool-search]');
+        const query = normalizeSearch(input.value);
+        let visible = 0;
+        root.querySelectorAll('[data-tool-group]').forEach(group => {
+            let groupVisible = 0;
+            group.querySelectorAll('[data-tool]').forEach(button => {
+                const matches = !query || normalizeSearch(button.dataset.search).includes(query);
+                button.classList.toggle('hidden', !matches);
+                if (matches) groupVisible += 1;
+            });
+            group.classList.toggle('hidden', groupVisible === 0);
+            visible += groupVisible;
+            if (group.tagName === 'DETAILS') {
+                if (query) {
+                    if (!group.dataset.wasOpen) group.dataset.wasOpen = group.open ? '1' : '0';
+                    group.open = groupVisible > 0;
+                } else if (group.dataset.wasOpen) {
+                    group.open = group.dataset.wasOpen === '1';
+                    delete group.dataset.wasOpen;
+                }
+            }
+        });
+        root.querySelector('[data-tool-empty]').classList.toggle('hidden', visible !== 0);
+        root.querySelector('[data-search-count]').textContent = query ? `${visible}` : '';
+        input.setAttribute('aria-label', query ? `${visible} herramientas o señales encontradas` : 'Buscar señal por nombre o código ISO');
     }
 
     function scheduleRender() {
@@ -176,40 +301,25 @@
                 d: 'M -20 20 V -20 H 20 M -20 20 A 40 40 0 0 1 20 -20',
                 fill: 'none', stroke: item.color, 'stroke-width': Math.max(2, item.stroke / 2), 'stroke-linecap': 'round'
             }));
-        } else if (item.tool === 'exit') {
-            group.appendChild(svgNode('rect', {x: -28, y: -17, width: 56, height: 34, rx: 4, fill: item.color}));
-            group.appendChild(svgNode('text', {x: 0, y: 5, 'text-anchor': 'middle', fill: '#ffffff', 'font-size': 13, 'font-weight': 700}, 'SALIDA'));
-        } else if (item.tool === 'extinguisher') {
-            group.appendChild(svgNode('rect', {x: -12, y: -18, width: 24, height: 38, rx: 6, fill: item.color}));
-            group.appendChild(svgNode('path', {d: 'M -5 -18 V -25 H 8 M 7 -25 Q 22 -20 17 -7', fill: 'none', stroke: item.color, 'stroke-width': 4}));
-            group.appendChild(svgNode('text', {x: 0, y: 7, 'text-anchor': 'middle', fill: '#ffffff', 'font-size': 16, 'font-weight': 700}, 'E'));
-        } else if (item.tool === 'first_aid') {
-            group.appendChild(svgNode('rect', {x: -22, y: -18, width: 44, height: 36, rx: 5, fill: '#ffffff', stroke: item.color, 'stroke-width': 3}));
-            group.appendChild(svgNode('path', {d: 'M -12 0 H 12 M 0 -12 V 12', stroke: item.color, 'stroke-width': 7}));
-        } else if (item.tool === 'alarm') {
-            group.appendChild(svgNode('circle', {cx: 0, cy: 0, r: 19, fill: item.color}));
-            group.appendChild(svgNode('path', {d: 'M -26 -12 Q -34 0 -26 12 M 26 -12 Q 34 0 26 12', fill: 'none', stroke: item.color, 'stroke-width': 3}));
-            group.appendChild(svgNode('text', {x: 0, y: 6, 'text-anchor': 'middle', fill: '#ffffff', 'font-size': 17, 'font-weight': 700}, 'A'));
-        } else if (item.tool === 'assembly') {
-            group.appendChild(svgNode('circle', {cx: 0, cy: 0, r: 25, fill: '#ffffff', stroke: item.color, 'stroke-width': 4}));
-            group.appendChild(svgNode('circle', {cx: 0, cy: -8, r: 5, fill: item.color}));
-            group.appendChild(svgNode('path', {d: 'M -11 15 V 7 Q 0 -2 11 7 V 15 M -19 -17 L -10 -10 M 19 -17 L 10 -10', fill: 'none', stroke: item.color, 'stroke-width': 4, 'stroke-linecap': 'round'}));
         } else if (item.tool === 'text') {
             group.appendChild(svgNode('text', {
                 x: 0, y: 0, fill: item.color, 'font-size': Math.max(8, item.stroke),
                 'font-weight': 600, 'font-family': 'Arial, sans-serif'
             }, item.label));
+        } else if (signCodeForTool(item.tool)) {
+            appendIsoSign(group, item);
         }
 
+        const signSize = signCodeForTool(item.tool) ? Math.max(40, item.stroke * 5) : 72;
         if (!isLine && item.tool !== 'text' && item.label) {
             group.appendChild(svgNode('text', {
-                x: 0, y: 48, 'text-anchor': 'middle', fill: item.color, 'font-size': 11,
+                x: 0, y: Math.max(48, signSize / 2 + 16), 'text-anchor': 'middle', fill: item.color, 'font-size': 11,
                 'font-weight': 600, 'font-family': 'Arial, sans-serif', stroke: '#ffffff',
                 'stroke-width': 3, 'paint-order': 'stroke', 'stroke-linejoin': 'round'
             }, item.label));
         }
         if (item.id === selectedId && !isLine) {
-            group.appendChild(svgNode('circle', {r: 36, fill: 'none', stroke: '#2563eb', 'stroke-width': 2, 'stroke-dasharray': '5 4', class: 'editor-only', 'pointer-events': 'none'}));
+            group.appendChild(svgNode('circle', {r: Math.max(36, signSize / 2 + 6), fill: 'none', stroke: '#2563eb', 'stroke-width': 2, 'stroke-dasharray': '5 4', class: 'editor-only', 'pointer-events': 'none'}));
         }
         return group;
     }
@@ -270,20 +380,31 @@
     }
 
     function setTool(tool) {
+        if (tool !== 'select' && !tools.includes(tool)) {
+            setStatus('La biblioteca de señalización no se cargó completa. Recarga la página antes de continuar.', true);
+            return;
+        }
         activeTool = tool;
+        let activeButton = null;
         root.querySelectorAll('[data-tool]').forEach(button => {
             const active = button.dataset.tool === tool;
             button.classList.toggle('is-active', active);
             button.setAttribute('aria-pressed', active ? 'true' : 'false');
+            if (active) activeButton = button;
         });
+        const name = activeButton?.dataset.name || labels[tool] || tool;
+        const description = activeButton?.dataset.description || 'Selecciona y edita elementos del plano.';
+        root.querySelector('[data-active-tool-name]').textContent = name;
+        root.querySelector('[data-active-tool-description]').textContent = description;
+        root.querySelector('[data-canvas-tool]').textContent = name;
         svg.style.cursor = tool === 'select' ? 'default' : 'crosshair';
-        setStatus(tool === 'select' ? 'Haz clic y arrastra para mover. En muros y rutas, arrastra los puntos azules para cambiar sus extremos.' : `${labels[tool]}: ${['wall', 'route'].includes(tool) ? 'arrastra sobre el lienzo para dibujar.' : 'haz clic sobre el lienzo para ubicarlo.'}`);
+        setStatus(tool === 'select' ? 'Haz clic y arrastra para mover. En muros y rutas, arrastra los puntos azules para cambiar sus extremos.' : `${name}: ${['wall', 'route'].includes(tool) ? 'arrastra sobre el lienzo para dibujar.' : 'haz clic sobre el lienzo para ubicarlo.'}`);
     }
 
     function createElement(tool, point, event) {
         const item = {
             id: uniqueId(), tool, x: point.x, y: point.y,
-            label: labels[tool], color: defaultColors[tool], rotation: 0,
+            label: labels[tool], color: defaultColorForTool(tool), rotation: 0,
             stroke: tool === 'text' ? 18 : (tool === 'wall' ? 10 : 8)
         };
         if (['wall', 'route'].includes(tool)) {
@@ -440,17 +561,23 @@
         root.querySelector('[data-canvas-width]').value = Math.round(design.width);
         root.querySelector('[data-canvas-height]').value = Math.round(design.height);
         root.querySelector('[data-canvas-grid]').value = Math.round(design.grid);
+        root.querySelector('[data-color-field]').classList.add('hidden');
+        root.querySelector('[data-standard-color-note]').classList.add('hidden');
         if (!item) return;
-        root.querySelector('[data-selected-type]').textContent = labels[item.tool];
+        const signCode = signCodeForTool(item.tool);
+        root.querySelector('[data-selected-type]').textContent = `${labels[item.tool]}${signCode ? ` · ISO 7010 ${signCode}` : ''}`;
         root.querySelector('[data-element-label]').value = item.label || '';
         root.querySelector('[data-element-color]').value = item.color;
+        root.querySelector('[data-element-color]').disabled = Boolean(signCode);
+        root.querySelector('[data-color-field]').classList.toggle('hidden', Boolean(signCode));
+        root.querySelector('[data-standard-color-note]').classList.toggle('hidden', !signCode);
         root.querySelector('[data-element-stroke]').value = item.stroke;
         root.querySelector('[data-element-rotation]').value = item.rotation || 0;
     }
 
     function changeSelected(property, value) {
         const item = selected();
-        if (!item) return;
+        if (!item || (property === 'color' && signCodeForTool(item.tool))) return;
         const before = snapshot();
         if (property === 'stroke') value = boundedNumber(value, 2, 30, item.stroke);
         if (property === 'rotation') value = boundedNumber(value, -360, 360, item.rotation || 0);
@@ -584,6 +711,12 @@
         window.setTimeout(() => URL.revokeObjectURL(url), 2000);
     }
 
+    const toolSearch = root.querySelector('[data-tool-search]');
+    toolSearch.addEventListener('input', filterTools);
+    toolSearch.addEventListener('keydown', event => {
+        if (event.key === 'Enter') event.preventDefault();
+        if (event.key === 'Escape') { toolSearch.value = ''; filterTools(); }
+    });
     root.querySelectorAll('[data-tool]').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
     root.querySelector('[data-undo]').addEventListener('click', undo);
     root.querySelector('[data-redo]').addEventListener('click', redo);
@@ -657,6 +790,7 @@
         }
     });
 
+    mountPaletteIcons();
     setTool('select');
     render();
 })();
