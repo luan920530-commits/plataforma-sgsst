@@ -184,22 +184,28 @@
         return icon;
     }
 
+    function signImage(code) {
+        const image = document.createElement('img');
+        image.alt = '';
+        image.decoding = 'async';
+        image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(signLibrary[code].svg)}`;
+        return image;
+    }
+
     function mountPaletteIcons() {
         root.querySelectorAll('[data-basic-icon]').forEach(slot => slot.replaceChildren(basicIcon(slot.dataset.basicIcon)));
         root.querySelectorAll('[data-sign-icon], [data-category-icon]').forEach(slot => {
-            const sign = signLibrary[slot.dataset.signIcon || slot.dataset.categoryIcon];
-            if (!sign) return;
-            const image = document.createElement('img');
-            image.alt = '';
-            image.loading = 'lazy';
-            image.decoding = 'async';
-            image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(sign.svg)}`;
-            slot.replaceChildren(image);
+            const code = slot.dataset.signIcon || slot.dataset.categoryIcon;
+            if (signLibrary[code]) slot.replaceChildren(signImage(code));
         });
     }
 
-    let catalogCategory = 'emergency';
+    let pendingSignTool = 'iso_e002';
+    let configuratorKey = '';
+    let renderedSignCode = '';
     let tooltipTarget = null;
+    const signSelect = root.querySelector('[data-sign-type]');
+    const signOptionGroups = [...signSelect.querySelectorAll('optgroup')].map(group => group.cloneNode(true));
     const tooltip = document.createElement('div');
     tooltip.id = 'floor-tool-tooltip';
     tooltip.className = 'floor-tool-tooltip';
@@ -207,29 +213,105 @@
     tooltip.hidden = true;
     document.body.appendChild(tooltip);
 
-    function setCatalogOpen(open, categoryKey = null) {
-        if (!palette) return;
-        if (categoryKey && palette.querySelector(`[data-category-toggle="${categoryKey}"]`)) catalogCategory = categoryKey;
-        palette.classList.toggle('is-catalog-open', open);
-        const drawer = palette.querySelector('[data-catalog-drawer]');
-        drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
-        const toggle = palette.querySelector('[data-catalog-toggle]');
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        toggle.dataset.name = open ? 'Ocultar catálogo' : 'Mostrar catálogo';
-        palette.querySelectorAll('[data-category-toggle]').forEach(button => {
-            const current = open && button.dataset.categoryToggle === catalogCategory;
-            button.classList.toggle('is-current', current);
-            button.setAttribute('aria-expanded', current ? 'true' : 'false');
+    function currentSignTool() {
+        const item = selected();
+        if (item) {
+            const code = signCodeForTool(item.tool);
+            if (code) return `iso_${code.toLowerCase()}`;
+        }
+        return pendingSignTool;
+    }
+
+    function selectSignValue(tool) {
+        const code = signCodeForTool(tool);
+        const value = code ? `iso_${code.toLowerCase()}` : tool;
+        signSelect.value = value;
+        if (signSelect.value !== value) signSelect.selectedIndex = -1;
+    }
+
+    function syncSignConfigurator(force = false) {
+        const item = selected();
+        const tool = currentSignTool();
+        const key = item && signCodeForTool(item.tool) ? `${item.id}:${item.tool}` : `pending:${tool}`;
+        if (!force && key === configuratorKey) return;
+        configuratorKey = key;
+        const code = signCodeForTool(tool) || 'E002';
+        const sign = signLibrary[code];
+        if (!sign) return;
+        root.querySelector('[data-sign-preview-name]').textContent = sign.name;
+        root.querySelector('[data-sign-preview-code]').textContent = `ISO 7010 ${code}`;
+        root.querySelector('[data-sign-preview-description]').textContent = sign.description;
+        root.querySelectorAll('[data-sign-preview-icon], [data-sign-tool-icon]').forEach(slot => {
+            slot.dataset.categoryIcon = code;
+            slot.replaceChildren(signImage(code));
         });
-        if (open && categoryKey) {
-            palette.querySelectorAll('[data-tool-group]').forEach(group => { group.open = group.dataset.toolGroup === catalogCategory; });
-            const categoryButton = palette.querySelector(`[data-category-toggle="${catalogCategory}"]`);
-            palette.querySelector('[data-catalog-title]').textContent = categoryButton?.dataset.name || 'Señalización';
+        const signButton = root.querySelector('[data-sign-tool]');
+        signButton.dataset.name = sign.name;
+        signButton.dataset.reference = `ISO 7010 ${code}`;
+        signButton.dataset.description = `${sign.description} Configura el tipo en el panel derecho.`;
+        signButton.setAttribute('aria-label', `Señal de seguridad: ${sign.name}`);
+        selectSignValue(tool);
+        const preview = root.querySelector('.floor-sign-preview');
+        if (code !== renderedSignCode && typeof preview.animate === 'function' && (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+            preview.animate([{opacity: 0.35, transform: 'translateY(4px) scale(.98)'}, {opacity: 1, transform: 'translateY(0) scale(1)'}], {duration: 180, easing: 'ease-out'});
         }
-        if (!open) {
-            hideToolTooltip();
-            if (drawer.contains(document.activeElement)) toggle.focus();
+        renderedSignCode = code;
+    }
+
+    function normalizeSearch(value) {
+        return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+
+    function filterSignOptions() {
+        const input = root.querySelector('[data-sign-search]');
+        const category = root.querySelector('[data-sign-category]').value;
+        const query = normalizeSearch(input.value);
+        const fragment = document.createDocumentFragment();
+        let visible = 0;
+        signOptionGroups.forEach(originalGroup => {
+            if (category && originalGroup.dataset.category !== category) return;
+            const options = [...originalGroup.children].filter(option => !query || normalizeSearch(option.dataset.search).includes(query));
+            if (!options.length) return;
+            const group = originalGroup.cloneNode(false);
+            options.forEach(option => group.appendChild(option.cloneNode(true)));
+            fragment.appendChild(group);
+            visible += options.length;
+        });
+        if (!visible) {
+            const empty = document.createElement('option');
+            empty.disabled = true;
+            empty.textContent = 'Sin resultados';
+            fragment.appendChild(empty);
         }
+        signSelect.replaceChildren(fragment);
+        root.querySelector('[data-sign-count]').textContent = `${visible}`;
+        input.setAttribute('aria-label', query || category ? `${visible} señales encontradas` : 'Buscar entre las 332 señales');
+        selectSignValue(currentSignTool());
+    }
+
+    function chooseSign(tool) {
+        const code = signCodeForTool(tool);
+        if (!code || !tool.startsWith('iso_')) return;
+        pendingSignTool = tool;
+        const item = selected();
+        if (item && signCodeForTool(item.tool)) {
+            if (item.tool === tool) {
+                syncSignConfigurator(true);
+                return;
+            }
+            const before = snapshot();
+            const previousDefaultLabel = labels[item.tool];
+            item.tool = tool;
+            if (!item.label || item.label === previousDefaultLabel) item.label = labels[tool];
+            item.color = defaultColorForTool(tool);
+            pushHistory(before);
+            setTool('select');
+            setStatus(`Señal cambiada a ${labels[tool]}. Se conservaron posición, tamaño y rotación.`);
+            scheduleRender();
+            return;
+        }
+        setTool(tool);
+        syncSignConfigurator(true);
     }
 
     function hideToolTooltip() {
@@ -245,10 +327,9 @@
         const name = document.createElement('strong');
         name.textContent = target.dataset.name;
         tooltip.appendChild(name);
-        const sign = target.querySelector('[data-sign-icon]');
-        if (sign) {
+        if (target.dataset.reference) {
             const reference = document.createElement('span');
-            reference.textContent = `ISO 7010 ${sign.dataset.signIcon}`;
+            reference.textContent = target.dataset.reference;
             tooltip.appendChild(reference);
         }
         if (target.dataset.description) {
@@ -273,7 +354,7 @@
 
     function mountPaletteInteractions() {
         if (!palette) return;
-        const tooltipSelector = '[data-tool], [data-category-toggle], [data-catalog-toggle], [data-search-toggle], [data-catalog-close]';
+        const tooltipSelector = '[data-tool], [data-sign-tool]';
         palette.addEventListener('pointerover', event => {
             if (event.pointerType === 'touch') return;
             const target = event.target.closest(tooltipSelector);
@@ -291,61 +372,24 @@
             const target = event.target.closest(tooltipSelector);
             if (target && !target.contains(event.relatedTarget)) hideToolTooltip();
         });
-        palette.querySelector('[data-catalog-toggle]').addEventListener('click', () => {
-            setCatalogOpen(!palette.classList.contains('is-catalog-open'), catalogCategory);
+        root.querySelector('[data-sign-tool]').addEventListener('click', () => {
+            selectedId = null;
+            setTool(pendingSignTool);
+            render();
         });
-        palette.querySelector('[data-catalog-close]').addEventListener('click', () => setCatalogOpen(false));
-        palette.querySelector('[data-search-toggle]').addEventListener('click', () => {
-            setCatalogOpen(true, catalogCategory);
-            window.setTimeout(() => palette.querySelector('[data-tool-search]').focus(), 0);
-        });
-        palette.querySelectorAll('[data-category-toggle]').forEach(button => button.addEventListener('click', () => {
-            const key = button.dataset.categoryToggle;
-            const opening = !palette.classList.contains('is-catalog-open') || catalogCategory !== key;
-            const input = palette.querySelector('[data-tool-search]');
-            input.value = '';
-            filterTools();
-            setCatalogOpen(opening, key);
-        }));
-        setCatalogOpen(false);
-    }
-
-    function normalizeSearch(value) {
-        return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-    }
-
-    function filterTools() {
-        const input = root.querySelector('[data-tool-search]');
-        const query = normalizeSearch(input.value);
-        let visible = 0;
-        root.querySelectorAll('[data-tool-group]').forEach(group => {
-            let groupVisible = 0;
-            group.querySelectorAll('[data-tool]').forEach(button => {
-                const matches = !query || normalizeSearch(button.dataset.search).includes(query);
-                button.classList.toggle('hidden', !matches);
-                if (matches) groupVisible += 1;
-            });
-            group.classList.toggle('hidden', groupVisible === 0);
-            visible += groupVisible;
-            if (group.tagName === 'DETAILS') {
-                if (query) {
-                    if (!group.dataset.wasOpen) group.dataset.wasOpen = group.open ? '1' : '0';
-                    group.open = groupVisible > 0;
-                } else if (group.dataset.wasOpen) {
-                    group.open = group.dataset.wasOpen === '1';
-                    delete group.dataset.wasOpen;
-                }
+        signSelect.addEventListener('change', () => chooseSign(signSelect.value));
+        const search = root.querySelector('[data-sign-search]');
+        search.addEventListener('input', filterSignOptions);
+        search.addEventListener('keydown', event => {
+            if (event.key === 'Enter') event.preventDefault();
+            if (event.key === 'Escape') {
+                search.value = '';
+                root.querySelector('[data-sign-category]').value = '';
+                filterSignOptions();
             }
         });
-        root.querySelector('[data-tool-empty]').classList.toggle('hidden', visible !== 0);
-        root.querySelector('[data-search-count]').textContent = query ? `${visible}` : '';
-        const title = root.querySelector('[data-catalog-title]');
-        if (query) title.textContent = `Resultados · ${visible}`;
-        else {
-            const category = root.querySelector(`[data-category-toggle="${catalogCategory}"]`);
-            title.textContent = category?.dataset.name || 'Señalización';
-        }
-        input.setAttribute('aria-label', query ? `${visible} señales encontradas` : 'Buscar señal por nombre o código ISO');
+        root.querySelector('[data-sign-category]').addEventListener('change', filterSignOptions);
+        filterSignOptions();
     }
 
     function scheduleRender() {
@@ -512,14 +556,16 @@
             if (active) activeButton = button;
         });
         const code = signCodeForTool(tool);
-        const category = code ? signLibrary[code].category : null;
-        root.querySelectorAll('[data-category-toggle]').forEach(button => {
-            button.classList.toggle('has-active-tool', button.dataset.categoryToggle === category);
-        });
+        if (code && tool.startsWith('iso_')) pendingSignTool = tool;
+        const signButton = root.querySelector('[data-sign-tool]');
+        signButton.classList.toggle('is-active', Boolean(code));
+        signButton.setAttribute('aria-pressed', code ? 'true' : 'false');
         const name = activeButton?.dataset.name || labels[tool] || tool;
         const description = activeButton?.dataset.description || 'Selecciona y edita elementos del plano.';
-        root.querySelector('[data-active-tool-name]').textContent = name;
-        root.querySelector('[data-active-tool-description]').textContent = description;
+        const activeName = root.querySelector('[data-active-tool-name]');
+        const activeDescription = root.querySelector('[data-active-tool-description]');
+        if (activeName) activeName.textContent = name;
+        if (activeDescription) activeDescription.textContent = description;
         root.querySelector('[data-canvas-tool]').textContent = name;
         svg.style.cursor = tool === 'select' ? 'default' : 'crosshair';
         setStatus(tool === 'select' ? 'Haz clic y arrastra para mover. En muros y rutas, arrastra los puntos azules para cambiar sus extremos.' : `${name}: ${['wall', 'route'].includes(tool) ? 'arrastra sobre el lienzo para dibujar.' : 'haz clic sobre el lienzo para ubicarlo.'}`);
@@ -675,6 +721,7 @@
 
     function updateInspector() {
         const item = selected();
+        syncSignConfigurator();
         const empty = root.querySelector('[data-no-selection]');
         const properties = root.querySelector('[data-selection-properties]');
         empty.classList.toggle('hidden', Boolean(item));
@@ -835,16 +882,7 @@
         window.setTimeout(() => URL.revokeObjectURL(url), 2000);
     }
 
-    const toolSearch = root.querySelector('[data-tool-search]');
-    toolSearch.addEventListener('input', filterTools);
-    toolSearch.addEventListener('keydown', event => {
-        if (event.key === 'Enter') event.preventDefault();
-        if (event.key === 'Escape') { toolSearch.value = ''; filterTools(); }
-    });
-    root.querySelectorAll('[data-tool]').forEach(button => button.addEventListener('click', () => {
-        setTool(button.dataset.tool);
-        if (button.closest('.floor-tool-rail')) setCatalogOpen(false);
-    }));
+    root.querySelectorAll('[data-tool]').forEach(button => button.addEventListener('click', () => setTool(button.dataset.tool)));
     root.querySelector('[data-undo]').addEventListener('click', undo);
     root.querySelector('[data-redo]').addEventListener('click', redo);
     root.querySelector('[data-delete]').addEventListener('click', deleteSelected);
@@ -891,10 +929,6 @@
         if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
             event.preventDefault();
             if (form.querySelector('[data-save]')) form.requestSubmit();
-            return;
-        }
-        if (event.key === 'Escape' && palette?.classList.contains('is-catalog-open') && document.activeElement !== toolSearch) {
-            setCatalogOpen(false);
             return;
         }
         if (editing) return;

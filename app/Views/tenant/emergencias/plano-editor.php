@@ -45,14 +45,8 @@ $basicGlyphs = ['select' => '↖', 'wall' => '━', 'door' => '◜', 'route' => 
     </section>
 
     <div id="floor-plan-editor" class="floor-plan-workspace mt-5" data-design="<?= e($clientDesign) ?>" data-fallback-design="<?= e($encodedDesign) ?>" data-resumed="<?= $resumedDesign ? '1' : '0' ?>" data-export-url="<?= e($isNew ? '' : url('/planos-emergencia/' . $drawing['id'] . '/exportar-png')) ?>" data-can-export="<?= !$isNew && !$isHistorical ? '1' : '0' ?>" data-version="<?= (int) ($drawing['version'] ?? 0) ?>" data-plan="<?= e($plan['codigo'] . ' · ' . $plan['centro_trabajo']) ?>">
-<?php $categoryIcons = ['emergency' => 'E002', 'fire' => 'F001', 'mandatory' => 'M014', 'prohibition' => 'P002', 'warning' => 'W001']; ?>
-        <aside class="floor-palette" aria-label="Herramientas y señalización" data-floor-palette>
+        <aside class="floor-palette" aria-label="Herramientas del plano" data-floor-palette>
             <div class="floor-tool-rail">
-                <div class="floor-rail-actions">
-                    <button type="button" class="floor-rail-button" data-catalog-toggle data-name="Mostrar catálogo" data-description="Abre o cierra la biblioteca de 332 señales ISO 7010." aria-label="Mostrar u ocultar catálogo" aria-expanded="false"><?= icon('arrow-right', 'h-4 w-4') ?></button>
-                    <button type="button" class="floor-rail-button" data-search-toggle data-name="Buscar señales" data-description="Busca por nombre en español o código ISO, por ejemplo E001." aria-label="Buscar señales"><?= icon('search', 'h-4 w-4') ?></button>
-                </div>
-                <div class="floor-rail-divider"></div>
                 <div class="floor-rail-tools" aria-label="Dibujo y edición">
                     <?php foreach ($toolCatalog as $tool => $info): ?>
                         <?php if ($info['category'] !== 'draw') continue; ?>
@@ -61,54 +55,11 @@ $basicGlyphs = ['select' => '↖', 'wall' => '━', 'door' => '◜', 'route' => 
                             <span class="floor-tool-copy"><strong><?= e($info['name']) ?></strong><small><?= e($info['reference']) ?></small></span>
                         </button>
                     <?php endforeach; ?>
-                </div>
-                <div class="floor-rail-divider"></div>
-                <div class="floor-rail-categories" aria-label="Familias de señalización">
-                    <?php foreach ($toolCategories as $categoryKey => $category): ?>
-                        <button type="button" class="floor-rail-button floor-category-toggle" data-category-toggle="<?= e($categoryKey) ?>" data-name="<?= e($category['label']) ?>" data-description="Abre la familia <?= e($category['label']) ?> en el catálogo." aria-label="Abrir <?= e($category['label']) ?>" aria-expanded="false">
-                            <span class="floor-category-icon" data-category-icon="<?= e($categoryIcons[$categoryKey]) ?>" aria-hidden="true"><?= e($category['short']) ?></span>
-                            <span class="sr-only"><?= e($category['label']) ?></span>
-                        </button>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-
-            <div class="floor-palette-drawer" data-catalog-drawer>
-                <div class="floor-palette-heading">
-                    <div class="min-w-0"><span class="floor-drawer-kicker">Biblioteca ISO 7010</span><h2 data-catalog-title>Señalización</h2></div>
-                    <span class="floor-drawer-count">332</span>
-                    <button type="button" class="floor-rail-button h-8 w-8" data-catalog-close data-name="Cerrar catálogo" data-description="Oculta la biblioteca y mantiene la herramienta seleccionada." aria-label="Cerrar catálogo"><?= icon('x', 'h-3.5 w-3.5') ?></button>
-                </div>
-                <div class="floor-palette-search">
-                    <?= icon('search', 'h-4 w-4') ?>
-                    <label class="sr-only" for="floor-tool-search">Buscar señal por nombre o código ISO</label>
-                    <input id="floor-tool-search" type="search" placeholder="Buscar nombre o código…" autocomplete="off" data-tool-search>
-                    <span data-search-count aria-live="polite"></span>
-                </div>
-
-                <div class="floor-palette-groups" data-tool-groups>
-                    <?php $categoryIndex = 0; ?>
-                    <?php foreach ($toolCategories as $categoryKey => $category): ?>
-                        <?php $categoryIndex++; $categoryTools = array_filter($toolCatalog, static fn(array $info): bool => $info['category'] === $categoryKey); ?>
-                        <details class="floor-tool-section" data-tool-group="<?= e($categoryKey) ?>"<?= $categoryIndex === 1 ? ' open' : '' ?>>
-                            <summary><span><?= e($category['label']) ?></span><span><?= count($categoryTools) ?></span></summary>
-                            <div class="floor-tool-list">
-                                <?php foreach ($categoryTools as $tool => $info): ?>
-                                    <button type="button" class="floor-tool" data-tool="<?= e($tool) ?>" data-name="<?= e($info['name']) ?>" data-description="<?= e($info['description']) ?>" data-search="<?= e($info['name'] . ' ' . $info['reference'] . ' ' . $info['description']) ?>" aria-label="<?= e($info['name'] . ' · ISO 7010 ' . $info['reference']) ?>" aria-pressed="false">
-                                        <span class="floor-tool-icon floor-tool-icon--<?= e($categoryKey) ?>" data-sign-icon="<?= e($info['reference']) ?>" aria-hidden="true"><?= e($info['reference']) ?></span>
-                                        <span class="floor-tool-copy"><strong><?= e($info['name']) ?></strong><small>ISO 7010 <?= e($info['reference']) ?> · <?= e($category['short']) ?></small></span>
-                                    </button>
-                                <?php endforeach; ?>
-                            </div>
-                        </details>
-                    <?php endforeach; ?>
-                    <div class="hidden p-5 text-center text-xs leading-5 text-slate-400" data-tool-empty>No hay señales que coincidan. Prueba con “salida”, “incendio”, “casco” o un código como E001.</div>
-                </div>
-
-                <div class="floor-active-tool" aria-live="polite">
-                    <span>Herramienta activa</span>
-                    <strong data-active-tool-name>Seleccionar y mover</strong>
-                    <p data-active-tool-description>Selecciona, mueve o ajusta los extremos de muros y rutas.</p>
+                    <div class="floor-rail-divider"></div>
+                    <button type="button" class="floor-tool floor-sign-tool" data-sign-tool data-name="Señal de seguridad" data-description="Configura el tipo de señal en el panel derecho y haz clic sobre el lienzo para ubicarla." data-reference="ISO 7010 E002" aria-label="Configurar y ubicar señal de seguridad" aria-pressed="false">
+                        <span class="floor-tool-icon floor-sign-tool-icon" data-sign-tool-icon data-category-icon="E002" aria-hidden="true">E002</span>
+                        <span class="floor-tool-copy"><strong>Señal de seguridad</strong><small>ISO 7010</small></span>
+                    </button>
                 </div>
             </div>
         </aside>
@@ -131,10 +82,34 @@ $basicGlyphs = ['select' => '↖', 'wall' => '━', 'door' => '◜', 'route' => 
             <div class="floor-plan-scroll" id="floor-plan-scroll">
                 <svg id="floor-plan-canvas" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lienzo visual del plano de emergencia" tabindex="0"></svg>
             </div>
-            <div class="flex flex-col gap-2 border-t border-slate-100 px-4 py-3 text-[10px] leading-4 text-slate-400 sm:flex-row sm:items-center sm:justify-between"><p data-editor-status role="status">Selecciona una herramienta. Busca por nombre o código ISO y haz clic para ubicar la señal.</p><p class="shrink-0">Mayús: sin ajuste · Supr: eliminar · Ctrl+S: guardar</p></div>
+            <div class="flex flex-col gap-2 border-t border-slate-100 px-4 py-3 text-[10px] leading-4 text-slate-400 sm:flex-row sm:items-center sm:justify-between"><p data-editor-status role="status">Selecciona una herramienta. Para una señal, elige su tipo en el panel derecho y haz clic sobre el lienzo.</p><p class="shrink-0">Mayús: sin ajuste · Supr: eliminar · Ctrl+S: guardar</p></div>
         </section>
 
         <aside class="floor-plan-properties space-y-5">
+            <section class="ios-card floor-sign-configurator p-4" data-sign-configurator>
+                <div class="floor-sign-preview">
+                    <span class="floor-sign-preview-icon" data-sign-preview-icon data-category-icon="E002" aria-hidden="true">E002</span>
+                    <div class="min-w-0"><span>Objeto de señalización</span><h2 data-sign-preview-name><?= e($toolCatalog['iso_e002']['name']) ?></h2><small data-sign-preview-code>ISO 7010 E002</small></div>
+                </div>
+                <p class="floor-sign-description" data-sign-preview-description><?= e($toolCatalog['iso_e002']['description']) ?></p>
+                <div class="floor-sign-filters">
+                    <div class="floor-sign-search"><?= icon('search', 'h-3.5 w-3.5') ?><label class="sr-only" for="floor-sign-search">Buscar entre las 332 señales</label><input id="floor-sign-search" type="search" placeholder="Buscar código o nombre…" autocomplete="off" data-sign-search></div>
+                    <label class="sr-only" for="floor-sign-category">Filtrar por familia</label>
+                    <select id="floor-sign-category" data-sign-category aria-label="Filtrar por familia"><option value="">Todas</option><?php foreach ($toolCategories as $categoryKey => $category): ?><option value="<?= e($categoryKey) ?>"><?= e($category['short']) ?></option><?php endforeach; ?></select>
+                </div>
+                <div class="floor-sign-select-heading"><label for="floor-sign-type">Tipo de señal</label><span data-sign-count aria-live="polite">332</span></div>
+                <select id="floor-sign-type" class="floor-sign-options" size="5" data-sign-type aria-label="Tipo de señal ISO 7010">
+                    <?php foreach ($toolCategories as $categoryKey => $category): ?>
+                    <optgroup label="<?= e($category['label']) ?>" data-category="<?= e($categoryKey) ?>">
+                        <?php foreach ($toolCatalog as $tool => $info): ?>
+                            <?php if ($info['category'] !== $categoryKey) continue; ?>
+                            <option value="<?= e($tool) ?>" data-category="<?= e($categoryKey) ?>" data-search="<?= e($info['name'] . ' ' . $info['reference'] . ' ' . $info['description']) ?>"><?= e($info['reference'] . ' · ' . $info['name']) ?></option>
+                        <?php endforeach; ?>
+                    </optgroup>
+                    <?php endforeach; ?>
+                </select>
+                <p class="floor-sign-hint">Sin una señal seleccionada, define la próxima que ubicarás. Con una señal seleccionada, cambia su tipo conservando posición, tamaño y rotación.</p>
+            </section>
             <section class="ios-card p-4">
                 <h2 class="text-xs font-semibold text-slate-800">Propiedades del elemento</h2>
                 <div data-no-selection class="mt-3 rounded-xl bg-slate-50 p-3 text-[11px] leading-5 text-slate-400">Selecciona un elemento para cambiar su texto, tamaño u orientación.</div>

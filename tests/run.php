@@ -580,7 +580,8 @@ try {
         $tools = FloorPlan::tools();
         $catalog = FloorPlan::toolCatalog();
         expectSame(341, count($tools), 'Deben persistir 332 tipos ISO y 9 tipos base/heredados.');
-        expectSame(337, count($catalog), 'El panel debe mostrar 332 señales y 5 herramientas, sin alias duplicados.');
+        expectSame(337, count($catalog), 'El catálogo debe incluir 332 señales y 5 herramientas base, sin alias duplicados.');
+        expectTrue(str_contains(asset('css/app.css'), '?v='), 'Los assets deben versionarse para evitar CSS/JS obsoleto en hosting.');
         expectSame([73, 19, 72, 81, 87], array_map(
             static fn(string $category): int => count(array_filter($catalog, static fn(array $item): bool => $item['category'] === $category)),
             array_keys(FloorPlan::categories())

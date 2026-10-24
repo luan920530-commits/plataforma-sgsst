@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 return [
     'name' => 'Normia SST',
+    'asset_version' => '2026.10.24.1',
     'url' => rtrim(getenv('APP_URL') ?: '', '/'),
     'env' => getenv('APP_ENV') ?: 'local',
     'debug' => filter_var(getenv('APP_DEBUG') ?: 'false', FILTER_VALIDATE_BOOL),

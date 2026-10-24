@@ -54,7 +54,21 @@ function absolute_url(string $path = ''): string
 
 function asset(string $path): string
 {
-    return url('assets/' . ltrim($path, '/'));
+    $relative = 'assets/' . ltrim($path, '/');
+    $version = (string) ($GLOBALS['config']['asset_version'] ?? '1');
+    $candidates = [BASE_PATH . '/public/' . $relative];
+    if (!empty($_SERVER['DOCUMENT_ROOT'])) {
+        $candidates[] = rtrim((string) $_SERVER['DOCUMENT_ROOT'], '/') . '/' . $relative;
+    }
+    foreach ($candidates as $candidate) {
+        if (!is_file($candidate)) continue;
+        $modified = @filemtime($candidate);
+        if ($modified !== false) {
+            $version = (string) $modified;
+            break;
+        }
+    }
+    return url($relative) . '?v=' . rawurlencode($version);
 }
 
 function redirect(string $path): never
