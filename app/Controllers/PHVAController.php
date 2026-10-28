@@ -10,8 +10,10 @@ use App\Models\Peligro;
 use App\Models\PlanTrabajo;
 use App\Models\Tenant;
 use App\Support\Audit;
+use App\Support\Auth;
 use App\Support\Risk;
 use App\Support\Validator;
+use DomainException;
 
 final class PHVAController extends BaseController
 {
@@ -146,12 +148,15 @@ final class PHVAController extends BaseController
             'tenant_id' => $this->tenantId(), 'origen' => (string) $this->input('origen'),
             'descripcion' => (string) $this->input('descripcion'), 'accion_correctiva' => (string) $this->input('accion_correctiva'),
             'responsable' => (string) $this->input('responsable'), 'fecha_limite' => (string) $this->input('fecha_limite'),
+            'tipo_accion' => (string) $this->input('tipo_accion', 'Correctiva'), 'causa_raiz' => (string) $this->input('causa_raiz'),
+            'recursos' => (string) $this->input('recursos'),
         ];
         $validator = new Validator($data);
         $validator->required('origen', 'origen')->in('origen', 'origen', ['Auditoria', 'Inspeccion', 'Accidente', 'Reporte'])
             ->required('descripcion', 'descripción')->max('descripcion', 'descripción', 3000)
             ->required('accion_correctiva', 'acción correctiva')->max('accion_correctiva', 'acción correctiva', 3000)
-            ->required('responsable', 'responsable')->required('fecha_limite', 'fecha límite')->date('fecha_limite', 'fecha límite');
+            ->required('responsable', 'responsable')->required('fecha_limite', 'fecha límite')->date('fecha_limite', 'fecha límite')
+            ->in('tipo_accion', 'tipo de acción', ['Correctiva','Preventiva','Mejora'])->required('causa_raiz', 'causa raíz')->max('causa_raiz', 'causa raíz', 3000)->max('recursos', 'recursos', 2000);
         if ($validator->fails()) {
             fail_validation($validator->errors(), $data, '/hallazgos');
         }
@@ -176,16 +181,19 @@ final class PHVAController extends BaseController
         $data = [
             'origen' => (string) $this->input('origen'), 'descripcion' => (string) $this->input('descripcion'),
             'accion_correctiva' => (string) $this->input('accion_correctiva'), 'responsable' => (string) $this->input('responsable'),
-            'fecha_limite' => (string) $this->input('fecha_limite'),
+            'fecha_limite' => (string) $this->input('fecha_limite'), 'tipo_accion' => (string) $this->input('tipo_accion', 'Correctiva'),
+            'causa_raiz' => (string) $this->input('causa_raiz'), 'recursos' => (string) $this->input('recursos'),
         ];
         $validator = new Validator($data);
         $validator->required('origen', 'origen')->in('origen', 'origen', ['Auditoria', 'Inspeccion', 'Accidente', 'Reporte'])
             ->required('descripcion', 'descripción')->max('descripcion', 'descripción', 3000)
             ->required('accion_correctiva', 'acción correctiva')->max('accion_correctiva', 'acción correctiva', 3000)
             ->required('responsable', 'responsable')->max('responsable', 'responsable', 250)
-            ->required('fecha_limite', 'fecha límite')->date('fecha_limite', 'fecha límite');
+            ->required('fecha_limite', 'fecha límite')->date('fecha_limite', 'fecha límite')
+            ->in('tipo_accion', 'tipo de acción', ['Correctiva','Preventiva','Mejora'])->required('causa_raiz', 'causa raíz')->max('causa_raiz', 'causa raíz', 3000)->max('recursos', 'recursos', 2000);
         if ($validator->fails()) fail_validation($validator->errors(), $data, '/hallazgos/' . $id . '/editar');
-        Hallazgo::update($id, $tenantId, $data);
+        try { Hallazgo::update($id, $tenantId, $data); }
+        catch (DomainException $exception) { flash('error', $exception->getMessage()); redirect('/hallazgos/' . $id . '/editar'); }
         Audit::record('Hallazgo ACPA actualizado', 'Hallazgo', $id, ['antes' => $before, 'despues' => $data]);
         flash('success', 'Hallazgo actualizado. Su estado de apertura o cierre se conservó.');
         redirect('/hallazgos');
@@ -202,6 +210,13 @@ final class PHVAController extends BaseController
         redirect('/hallazgos');
     }
 
+    public function findingEfficacy(int $id): void
+    {
+        try { Hallazgo::verifyEfficacy($id, $this->tenantId(), $_POST, Auth::id()); Audit::record('Eficacia ACPA verificada', 'Hallazgo', $id, ['resultado' => (string) $this->input('eficacia_resultado')]); flash('success', 'Evaluación de eficacia registrada.'); }
+        catch (DomainException $exception) { flash('error', $exception->getMessage()); }
+        redirect('/hallazgos#hallazgo-' . $id);
+    }
+
     public function findingStatus(int $id): void
     {
         $tenantId = $this->tenantId();
@@ -212,7 +227,8 @@ final class PHVAController extends BaseController
         if (!in_array($status, ['Abierto', 'Cerrado'], true)) {
             $this->abort(403, 'Estado no válido.');
         }
-        Hallazgo::setStatus($id, $tenantId, $status);
+        try { Hallazgo::setStatus($id, $tenantId, $status); }
+        catch (DomainException $exception) { flash('error', $exception->getMessage()); redirect('/hallazgos#hallazgo-' . $id); }
         Audit::record('Estado de hallazgo actualizado', 'Hallazgo', $id, ['estado' => $status]);
         flash('success', $status === 'Cerrado' ? 'Hallazgo cerrado. Conserva las evidencias de eficacia de la acción.' : 'Hallazgo reabierto para seguimiento.');
         redirect('/hallazgos');
@@ -292,6 +308,13 @@ final class PHVAController extends BaseController
         redirect('/matriz-ipevr');
     }
 
+    public function hazardVerify(int $id): void
+    {
+        try { Peligro::verify($id, $this->tenantId(), Auth::id()); Audit::record('Evaluación IPEVR verificada', 'Peligro', $id); flash('success', 'Evaluación y soporte IPEVR verificados.'); }
+        catch (DomainException $exception) { flash('error', $exception->getMessage()); }
+        redirect('/matriz-ipevr#peligro-' . $id);
+    }
+
     public function hazardStatus(int $id): void
     {
         $tenantId = $this->tenantId();
@@ -303,7 +326,8 @@ final class PHVAController extends BaseController
         if (!in_array($status, ['Activo', 'Controlado'], true)) {
             $this->abort(403, 'Estado no válido.');
         }
-        Peligro::setStatus($id, $tenantId, $status);
+        try { Peligro::setStatus($id, $tenantId, $status); }
+        catch (DomainException $exception) { flash('error', $exception->getMessage()); redirect('/matriz-ipevr#peligro-' . $id); }
         Audit::record('Estado de peligro actualizado', 'Peligro', $id, ['estado' => $status]);
         flash('success', 'La matriz IPEVR fue actualizada.');
         redirect('/matriz-ipevr');
@@ -349,6 +373,9 @@ final class PHVAController extends BaseController
             'cargo' => (string) $this->input('cargo'), 'peligro' => (string) $this->input('peligro'),
             'clasificacion' => (string) $this->input('clasificacion'), 'efectos' => (string) $this->input('efectos'),
             'controles_existentes' => (string) $this->input('controles_existentes'), 'medidas_control' => (string) $this->input('medidas_control'),
+            'metodologia' => (string) $this->input('metodologia', 'GTC 45'), 'participantes' => (string) $this->input('participantes'),
+            'fecha_evaluacion' => (string) $this->input('fecha_evaluacion'), 'proxima_revision' => (string) $this->input('proxima_revision'),
+            'jerarquia_controles' => (string) $this->input('jerarquia_controles'),
             'nivel_deficiencia' => $this->nullableInt('nivel_deficiencia'),
             'nivel_exposicion' => $this->nullableInt('nivel_exposicion'),
             'nivel_consecuencia' => $this->nullableInt('nivel_consecuencia'),
@@ -363,6 +390,10 @@ final class PHVAController extends BaseController
             ->max('peligro', 'peligro', 500)->required('clasificacion', 'clasificación')
             ->in('clasificacion', 'clasificación', $this->classifications())
             ->required('efectos', 'efectos posibles')->required('medidas_control', 'medidas de control')
+            ->required('metodologia', 'metodología')->max('metodologia', 'metodología', 250)
+            ->required('participantes', 'participantes')->max('participantes', 'participantes', 3000)
+            ->required('fecha_evaluacion', 'fecha de evaluación')->date('fecha_evaluacion', 'fecha de evaluación')->date('proxima_revision', 'próxima revisión')
+            ->required('jerarquia_controles', 'jerarquía de controles')->max('jerarquia_controles', 'jerarquía de controles', 4000)
             ->in('nivel_riesgo', 'nivel de riesgo', ['Bajo', 'Medio', 'Alto', 'Critico'])
             ->integer('nivel_deficiencia', 'nivel de deficiencia', 0, 10)
             ->integer('nivel_exposicion', 'nivel de exposición', 1, 4)

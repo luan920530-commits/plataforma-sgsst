@@ -21,6 +21,7 @@
 - Formatos útiles de origen: 83 DOCX, 45 XLSX, 11 DOC, 9 XLS, 4 PPTX y 1 PDF.
 - Formularios: **94 hojas**, **15.918 celdas con contenido** y **2.337 fórmulas** preservadas.
 - Las plantillas previas no se reemplazaron. Cada elemento quedó relacionado con un módulo operativo y se genera como borrador independiente por tenant.
+- **Actualización normativa 2026:** cinco recursos con R2346/2007 o R1918/2009 quedaron marcados como históricos porque R1843/2025 derogó esas normas. La generación desde los documentos médicos identificados está bloqueada; la matriz histórica se puede consultar, pero no debe usarse como matriz vigente ni como evidencia precargada. El contenido convertido se conserva para trazabilidad y las plantillas nuevas están en el paquete de inicio 1.1.0.
 
 ## 3. Tratamiento por formato
 

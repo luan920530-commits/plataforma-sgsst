@@ -20,28 +20,37 @@ use App\Core\Database;
 use App\Core\View;
 use App\Models\AccesoReporte;
 use App\Models\Autoreporte;
+use App\Models\Autoevaluacion;
 use App\Models\BibliotecaRespuesta;
 use App\Models\Capacitacion;
+use App\Models\Comite;
+use App\Models\Convivencia;
 use App\Models\Documento;
 use App\Models\Empleado;
 use App\Models\EstandarMinimo;
+use App\Models\Evento;
 use App\Models\Evidencia;
 use App\Models\Hallazgo;
 use App\Models\Indicador;
 use App\Models\Induccion;
 use App\Models\IvcActa;
 use App\Models\IvcRequerimiento;
+use App\Models\Operation;
 use App\Models\Peligro;
+use App\Models\Permission;
 use App\Models\PermisoTrabajo;
 use App\Models\PlanEmergencia;
 use App\Models\PlanSaaS;
 use App\Models\PlanTrabajo;
 use App\Models\PlanoEmergencia;
+use App\Models\Psicosocial;
 use App\Models\ProgramaActividad;
 use App\Models\ProgramaPrevencion;
 use App\Models\RequisitoAccion;
 use App\Models\RequisitoSeguimiento;
+use App\Models\Salud;
 use App\Models\SanitarioRegistro;
+use App\Models\SoporteReservado;
 use App\Models\ActividadEconomica;
 use App\Models\SimulacroEmergencia;
 use App\Models\SoporteCumplimiento;
@@ -51,6 +60,7 @@ use App\Services\ClassificationService;
 use App\Services\ComplianceService;
 use App\Services\DocumentGenerator;
 use App\Services\DocumentPackageExporter;
+use App\Services\DocumentSignature;
 use App\Services\EvidenceLinker;
 use App\Services\EvidenceStorage;
 use App\Services\ExcelCalculator;
@@ -66,6 +76,7 @@ use App\Services\SanitaryCatalog;
 use App\Services\SchemaMigrator;
 use App\Services\StandardDocumentTemplate;
 use App\Services\ProcedureLibrary;
+use App\Services\RequirementCatalog;
 use App\Services\TenantModuleGenerator;
 use App\Support\Auth;
 use App\Support\Indicator;
@@ -166,9 +177,11 @@ try {
     $bakery = tenantByNit('901.552.019-8');
     $mainId = (int) $main['id'];
     $constructionId = (int) $construction['id'];
+    $mainAdminId = (int) Database::first("SELECT id FROM users WHERE tenant_id = ? AND rol = 'AdminEmpresa' ORDER BY id LIMIT 1", [$mainId])['id'];
+    $mainHseId = (int) Database::first("SELECT id FROM users WHERE tenant_id = ? AND rol = 'ResponsableSST' ORDER BY id LIMIT 1", [$mainId])['id'];
 
     $test('Esquema, claves foráneas y catálogos', static function (): void {
-        expectSame(33, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
+        expectSame(51, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
         expectSame(1, (int) Database::first('PRAGMA foreign_keys')['foreign_keys']);
         expectSame([], Database::query('PRAGMA foreign_key_check'));
         expectSame(21, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
@@ -284,12 +297,13 @@ try {
         expectSame(null, User::findForTenant((int) $report['user_id'], $constructionId));
     });
 
-    $test('CRUD y aislamiento de peligros IPEVR', static function () use ($mainId, $constructionId): void {
+    $test('CRUD y aislamiento de peligros IPEVR', static function () use ($mainId, $constructionId, $mainAdminId): void {
         $data = [
             'tenant_id' => $mainId, 'proceso' => 'Prueba', 'cargo' => 'Equipo', 'peligro' => 'Peligro temporal',
             'clasificacion' => 'Seguridad', 'efectos' => 'Lesión', 'controles_existentes' => 'Señalización',
             'nivel_deficiencia' => 10, 'nivel_exposicion' => 4, 'nivel_probabilidad' => 40,
             'nivel_consecuencia' => 10, 'nivel_riesgo' => 'Alto', 'medidas_control' => 'Eliminación',
+            'metodologia' => 'GTC 45', 'participantes' => 'Trabajadores y responsable SST de prueba', 'fecha_evaluacion' => '2026-10-20', 'proxima_revision' => '2027-01-20', 'jerarquia_controles' => 'Eliminación y control de ingeniería justificados para la prueba.',
         ];
         $id = Peligro::create($data);
         expectSame(null, Peligro::findForTenant($id, $constructionId));
@@ -300,11 +314,22 @@ try {
         expectSame('Peligro editado', $updated['peligro']);
         expectSame(4, (int) $updated['nivel_probabilidad']);
         expectSame('Medio', $updated['nivel_riesgo']);
+        $blocked = false; try { Peligro::setStatus($id, $mainId, 'Controlado'); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'Controlado exige verificación humana.');
+        $blocked = false; try { Peligro::verify($id, $mainId, $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'La verificación IPEVR exige soporte.');
+        Evidencia::create(['tenant_id' => $mainId, 'requisito_clave' => '', 'modulo' => 'sgsst', 'categoria' => 'Inspección', 'titulo' => 'Evaluación IPEVR de prueba', 'fecha_evidencia' => '2026-10-20', 'entidad_tipo' => 'peligro', 'entidad_id' => (string) $id, 'entidad_referencia' => 'IPEVR de prueba', 'nombre_original' => 'ipevr.pdf', 'nombre_almacenado' => 'ipevr-prueba.pdf', 'ruta_relativa' => 'uploads/tenant_'.$mainId.'/ipevr-prueba.pdf', 'mime' => 'application/pdf', 'extension' => 'pdf', 'tamano' => 68, 'hash_sha256' => hash('sha256', 'ipevr'), 'descripcion' => '', 'estado_revision' => 'Revisado', 'subido_por' => $mainAdminId]);
+        Peligro::verify($id, $mainId, $mainAdminId);
+        Peligro::setStatus($id, $mainId, 'Controlado');
+        expectSame('Controlado', Peligro::findForTenant($id, $mainId)['estado']);
+        Peligro::update($id, $mainId, $data);
+        expectSame('Activo', Peligro::findForTenant($id, $mainId)['estado']);
+        expectSame(null, Peligro::findForTenant($id, $mainId)['verificado_por']);
         Peligro::delete($id, $mainId);
         expectSame(null, Peligro::findForTenant($id, $mainId));
     });
 
-    $test('CRUD y aislamiento de capacitaciones', static function () use ($mainId, $constructionId): void {
+    $test('CRUD y aislamiento de capacitaciones', static function () use ($mainId, $constructionId, $mainAdminId): void {
         $data = ['tenant_id' => $mainId, 'tema' => 'Formación temporal', 'descripcion' => 'Prueba', 'responsable' => 'SST', 'fecha_programada' => '2026-12-15', 'duracion_horas' => 2, 'modalidad' => 'Virtual'];
         $id = Capacitacion::create($data);
         expectSame(null, Capacitacion::findForTenant($id, $constructionId));
@@ -312,8 +337,19 @@ try {
         Capacitacion::update($id, $mainId, $data);
         expectSame('Formación editada', Capacitacion::findForTenant($id, $mainId)['tema']);
         expectSame(3.0, (float) Capacitacion::findForTenant($id, $mainId)['duracion_horas']);
+        $blocked = false; try { Capacitacion::setStatus($id, $mainId, 'Realizada'); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'No debe realizarse sin asistencia.');
+        $employee = Empleado::forTenant($mainId)[0];
+        $attendeeId = Capacitacion::addAttendee($id, $mainId, ['empleado_id' => $employee['id']]);
+        expectSame(null, Capacitacion::attendee($attendeeId, $id, $constructionId));
+        Capacitacion::updateAttendee($attendeeId, $id, $mainId, ['asistio' => '1', 'evaluacion' => '4.5', 'eficacia' => 'Aplica lo aprendido en la prueba.']);
+        $blocked = false; try { Capacitacion::setStatus($id, $mainId, 'Realizada'); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'La asistencia no reemplaza la evidencia revisada.');
+        Evidencia::create(['tenant_id' => $mainId, 'requisito_clave' => '', 'modulo' => 'sgsst', 'categoria' => 'Lista de asistencia', 'titulo' => 'Asistencia de prueba', 'fecha_evidencia' => '2026-12-15', 'entidad_tipo' => 'capacitacion', 'entidad_id' => (string) $id, 'entidad_referencia' => 'Capacitación de prueba', 'nombre_original' => 'asistencia.pdf', 'nombre_almacenado' => 'asistencia-prueba.pdf', 'ruta_relativa' => 'uploads/tenant_'.$mainId.'/asistencia-prueba.pdf', 'mime' => 'application/pdf', 'extension' => 'pdf', 'tamano' => 68, 'hash_sha256' => hash('sha256', 'asistencia'), 'descripcion' => '', 'estado_revision' => 'Revisado', 'subido_por' => $mainAdminId]);
         Capacitacion::setStatus($id, $mainId, 'Realizada');
         expectSame('Realizada', Capacitacion::findForTenant($id, $mainId)['estado']);
+        Capacitacion::recordEfficacy($id, $mainId, 'Se verificó transferencia al puesto en la prueba.', '2026-12-30', $mainAdminId);
+        expectSame('Se verificó transferencia al puesto en la prueba.', Capacitacion::findForTenant($id, $mainId)['eficacia']);
         Capacitacion::delete($id, $mainId);
         expectSame(null, Capacitacion::findForTenant($id, $mainId));
     });
@@ -379,6 +415,20 @@ try {
         expectTrue(str_contains($html, 'Texto recuperado de prueba'), 'El valor digitado debe recuperarse después de validar.');
         expectTrue($sessionCleared, 'Los datos temporales de validación deben consumirse una sola vez.');
         expectTrue($globalsCleared, 'Los datos de la vista no deben permanecer en el ámbito global.');
+    });
+
+    $test('Resumen de validación disponible y escapado', static function (): void {
+        $previous = $GLOBALS['errors'] ?? null;
+        $GLOBALS['errors'] = ['general' => 'Dato inválido <script>alert(1)</script>'];
+        try {
+            $html = form_errors();
+        } finally {
+            if ($previous === null) unset($GLOBALS['errors']); else $GLOBALS['errors'] = $previous;
+        }
+        expectTrue(str_contains($html, 'role="alert"'));
+        expectTrue(str_contains($html, 'Dato inválido &lt;script&gt;alert(1)&lt;/script&gt;'));
+        expectTrue(!str_contains($html, '<script>'));
+        expectSame('', form_errors());
     });
 
     $test('Detalle de autoreporte con aislamiento', static function () use ($mainId, $constructionId): void {
@@ -529,6 +579,31 @@ try {
         expectTrue(count($versions) >= 1);
         expectSame($original, $versions[0]['contenido_html']);
         expectSame(null, Documento::findVersionForTenant((int) $versions[0]['id'], (int) $document['id'], $constructionId));
+    });
+
+    $test('Firma electrónica: consentimiento, versión, integridad y archivo', static function () use ($mainId): void {
+        $signerId = User::create(['tenant_id' => $mainId, 'nombre' => 'Firmante de prueba', 'email' => 'firmante@andina.co', 'password' => password_hash('Clave-Firma-2026!', PASSWORD_DEFAULT), 'rol' => 'ResponsableSST', 'licencia_sst' => 'LIC-PRUEBA']);
+        $documentId = Documento::createOperational(['tenant_id' => $mainId, 'codigo' => 'FIRMA-PRUEBA', 'nombre' => 'Documento de firma sintética', 'fase' => 'Hacer', 'contenido' => '<p>Contenido original para firma de prueba.</p>', 'tipo' => 'Procedimiento']);
+        $blocked = false; try { DocumentSignature::sign($documentId, $mainId, $signerId, 'Clave-Firma-2026!', '1'); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'Un borrador no debe firmarse como versión aprobada.');
+        Documento::approve($documentId, $mainId, $signerId);
+        $blocked = false; try { DocumentSignature::sign($documentId, $mainId, $signerId, 'incorrecta', '1'); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'La reautenticación debe verificar la contraseña.');
+        $blocked = false; try { DocumentSignature::sign($documentId, $mainId, $signerId, 'Clave-Firma-2026!', null); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'El consentimiento es obligatorio.');
+        $signatureId = DocumentSignature::sign($documentId, $mainId, $signerId, 'Clave-Firma-2026!', '1');
+        $signature = Database::first('SELECT * FROM documento_firmas WHERE id = ?', [$signatureId]);
+        expectSame('electronica', $signature['tipo']); expectSame('', $signature['certificado_emisor']);
+        expectTrue(DocumentSignature::verify($signatureId, $mainId)['valida']);
+        expectSame(null, Database::first('SELECT id FROM documento_firmas WHERE id = ? AND tenant_id = ?', [$signatureId, 999999]));
+        Documento::saveDraft($documentId, $mainId, '<p>Contenido editado después de firmar.</p>');
+        $archived = Documento::versions($documentId, $mainId)[0];
+        $signature = Database::first('SELECT * FROM documento_firmas WHERE id = ?', [$signatureId]);
+        expectSame((int) $archived['id'], (int) $signature['documento_version_id'], 'La firma debe quedar enlazada a la versión archivada.');
+        expectTrue(DocumentSignature::verify($signatureId, $mainId)['valida']);
+        expectSame([], DocumentSignature::forDocument($documentId, $mainId, 2), 'La versión nueva no hereda firmas.');
+        Database::execute('UPDATE documento_versiones SET contenido_html = ? WHERE id = ?', ['<p>Alteración de prueba</p>', $archived['id']]);
+        expectSame(false, DocumentSignature::verify($signatureId, $mainId)['valida'], 'Debe detectar contenido alterado.');
     });
 
     $test('Permisos de trabajo: edición, aprobación, cierre y revisión', static function () use ($mainId, $constructionId): void {
@@ -819,6 +894,57 @@ try {
             }
         }
         expectSame(11, $duplicates);
+    });
+
+    $test('Actualización normativa: paquete 1.1 y documentos generados', static function () use ($mainId): void {
+        $library = json_decode(file_get_contents(BASE_PATH . '/resources/starter-package/library.json'), true, 512, JSON_THROW_ON_ERROR);
+        $standards = json_decode(file_get_contents(BASE_PATH . '/resources/starter-package/standards.json'), true, 512, JSON_THROW_ON_ERROR);
+        expectSame('1.1.0', $library['version']);
+        expectSame('1.1.0', $standards['version']);
+        expectTrue(!isset($library['references']['R2346']) && !isset($library['references']['R1918']));
+        foreach (['R1843', 'D728', 'R2764', 'D1040', 'CIR027'] as $reference) {
+            expectTrue(isset($library['references'][$reference]['url']), 'Falta la fuente oficial ' . $reference);
+        }
+        foreach ($library['kits'] as $kit) {
+            foreach ($kit['documents'] as $document) {
+                foreach ($document['references'] as $reference) {
+                    expectTrue(isset($library['references'][$reference]), 'Referencia huérfana en ' . $document['code']);
+                }
+            }
+        }
+        $medical = Documento::findByCode('PR-SAL-01', $mainId)['contenido_html'];
+        foreach (['Resolución 1843 de 2025', 'postincapacidad', 'retorno laboral', 'seguimiento', 'tres años'] as $text) {
+            expectTrue(str_contains($medical, $text), 'Contenido médico actualizado ausente: ' . $text);
+        }
+        expectTrue(!str_contains($medical, '2346') && !str_contains($medical, '1918'));
+        $psychosocial = Documento::findByCode('PR-PSI-01', $mainId)['contenido_html'];
+        foreach (['Resolución 2764 de 2022', 'Decreto 728 de 2025', 'Decreto 1040 de 2026', 'sin alterar instrumentos', 'resultados agregados'] as $text) {
+            expectTrue(str_contains($psychosocial, $text), 'Contenido psicosocial actualizado ausente: ' . $text);
+        }
+        $committee = Documento::findByCode('PR-CCL-01', $mainId)['contenido_html'];
+        expectTrue(str_contains($committee, '65 días calendario') && str_contains($committee, 'Decreto 1040 de 2026'));
+        expectTrue(str_contains($committee, 'exactamente 5 o 20 trabajadores'));
+        $guide = Documento::findByCode('GUI-INI-01', $mainId)['contenido_html'];
+        expectTrue(str_contains($guide, 'Circular 027 de 2026') && str_contains($guide, 'autoevaluación anual'));
+        expectSame('Resolución 1843 de 2025 y Decreto 1072 de 2015.', $standards['topics']['medical_eval']['reference']);
+        expectTrue(str_contains(implode(' ', $standards['topics']['induction']['checks']), 'firma electrónica'));
+    });
+
+    $test('Fuentes históricas señaladas y referencia PESV actualizada', static function (): void {
+        foreach (['BIB-FD13ED44C01C', 'BIB-B9CF24140944', 'BIB-4A772E8F400E', 'BIB-1364C3547054', 'BIB-5C1EBA0A3EAF'] as $id) {
+            $item = SgsstLibrary::findById($id);
+            expectTrue($item !== null && !empty($item['legal_review']), 'Falta advertencia normativa en ' . $id);
+            expectTrue(str_contains($item['legal_review'], '1843 de 2025'));
+        }
+        $item = PesvLibrary::findById('PESV-7721AA56D741');
+        $form = PesvLibrary::form($item);
+        $cell = null;
+        foreach ($form['sheets'] as $sheet) {
+            if (isset($sheet['cells']['A28'])) $cell = $sheet['cells']['A28'];
+        }
+        expectTrue($cell !== null && str_contains($cell['v'], 'Resolución 1843 de 2025'));
+        expectTrue(!str_contains($cell['v'], '2346') && !str_contains($cell['v'], '1918'));
+        expectTrue(str_contains(implode(' ', $item['warnings']), 'no acredita aptitud'));
     });
 
     $test('Biblioteca documental: borrador aislado e idempotente', static function () use ($mainId, $constructionId): void {
@@ -1250,15 +1376,34 @@ try {
         $indicatorData['resultado'] = 20;
         expectTrue(Indicador::update($indicatorId, $mainId, $indicatorData));
         expectSame(20.0, (float) Indicador::findForTenant($indicatorId, $mainId)['resultado']);
+        $indicatorData['fuente_numerador'] = 'Eventos registrados en la prueba'; $indicatorData['fuente_denominador'] = 'Directorio de trabajadores de la prueba'; $indicatorData['responsable'] = 'Responsable de datos';
+        Indicador::update($indicatorId, $mainId, $indicatorData);
+        $blocked = false; try { Indicador::verify($indicatorId, $mainId, (int) $admin['id']); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'La verificación requiere soporte revisado.');
+        Evidencia::create(['tenant_id' => $mainId, 'requisito_clave' => '', 'modulo' => 'sgsst', 'categoria' => 'Reporte o informe', 'titulo' => 'Datos fuente de indicador de prueba', 'fecha_evidencia' => '2026-10-31', 'entidad_tipo' => 'indicador', 'entidad_id' => (string) $indicatorId, 'entidad_referencia' => 'Indicador de prueba', 'nombre_original' => 'fuente.pdf', 'nombre_almacenado' => 'fuente-indicador-prueba.pdf', 'ruta_relativa' => 'uploads/tenant_'.$mainId.'/fuente-indicador-prueba.pdf', 'mime' => 'application/pdf', 'extension' => 'pdf', 'tamano' => 68, 'hash_sha256' => hash('sha256', 'indicador'), 'descripcion' => '', 'estado_revision' => 'Revisado', 'subido_por' => $admin['id']]);
+        Indicador::verify($indicatorId, $mainId, (int) $admin['id']);
+        expectSame((int) $admin['id'], (int) Indicador::findForTenant($indicatorId, $mainId)['verificado_por']);
+        Indicador::update($indicatorId, $mainId, $indicatorData);
+        expectSame(null, Indicador::findForTenant($indicatorId, $mainId)['verificado_por'], 'Editar debe reiniciar la verificación.');
         expectTrue(Indicador::delete($indicatorId, $mainId));
 
-        $findingData = ['tenant_id' => $mainId, 'origen' => 'Inspeccion', 'descripcion' => 'Hallazgo CRUD', 'accion_correctiva' => 'Acción inicial', 'responsable' => 'Responsable', 'fecha_limite' => '2026-11-30'];
+        $findingData = ['tenant_id' => $mainId, 'origen' => 'Inspeccion', 'descripcion' => 'Hallazgo CRUD', 'accion_correctiva' => 'Acción inicial', 'responsable' => 'Responsable', 'fecha_limite' => '2026-11-30', 'tipo_accion' => 'Correctiva', 'causa_raiz' => 'Causa raíz de prueba', 'recursos' => 'Recursos de prueba'];
         $findingId = Hallazgo::create($findingData);
-        Hallazgo::setStatus($findingId, $mainId, 'Cerrado');
+        $blocked = false; try { Hallazgo::setStatus($findingId, $mainId, 'Cerrado'); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'ACPA no debe cerrarse sin eficacia.');
         $findingData['accion_correctiva'] = 'Acción actualizada';
         expectTrue(Hallazgo::update($findingId, $mainId, $findingData));
-        expectSame('Cerrado', Hallazgo::findForTenant($findingId, $mainId)['estado']);
+        expectSame('Abierto', Hallazgo::findForTenant($findingId, $mainId)['estado']);
         expectSame(null, Hallazgo::findForTenant($findingId, $constructionId));
+        Evidencia::create(['tenant_id' => $mainId, 'requisito_clave' => '', 'modulo' => 'sgsst', 'categoria' => 'Inspección', 'titulo' => 'Eficacia ACPA de prueba', 'fecha_evidencia' => '2026-11-20', 'entidad_tipo' => 'hallazgo', 'entidad_id' => (string) $findingId, 'entidad_referencia' => 'ACPA de prueba', 'nombre_original' => 'eficacia.pdf', 'nombre_almacenado' => 'eficacia-acpa-prueba.pdf', 'ruta_relativa' => 'uploads/tenant_'.$mainId.'/eficacia-acpa-prueba.pdf', 'mime' => 'application/pdf', 'extension' => 'pdf', 'tamano' => 68, 'hash_sha256' => hash('sha256', 'eficacia-acpa'), 'descripcion' => '', 'estado_revision' => 'Revisado', 'subido_por' => $admin['id']]);
+        Hallazgo::verifyEfficacy($findingId, $mainId, ['eficacia_resultado' => 'No eficaz', 'eficacia_fecha' => '2026-11-20'], (int) $admin['id']);
+        $blocked = false; try { Hallazgo::setStatus($findingId, $mainId, 'Cerrado'); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'Una acción no eficaz permanece abierta.');
+        Hallazgo::verifyEfficacy($findingId, $mainId, ['eficacia_resultado' => 'Eficaz', 'eficacia_fecha' => '2026-11-21'], (int) $admin['id']);
+        Hallazgo::setStatus($findingId, $mainId, 'Cerrado');
+        expectSame('Cerrado', Hallazgo::findForTenant($findingId, $mainId)['estado']);
+        $blocked = false; try { Hallazgo::update($findingId, $mainId, $findingData); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'Un hallazgo cerrado no debe editarse sin reapertura.');
         expectTrue(Hallazgo::delete($findingId, $mainId));
 
         $employeeData = ['tenant_id' => $mainId, 'nombre' => 'Persona CRUD', 'documento' => 'TEST-CRUD-' . $mainId, 'email' => 'crud@example.test', 'cargo' => 'Cargo', 'area' => 'Área', 'tipo_vinculacion' => 'Contratista', 'fecha_ingreso' => '2026-01-01', 'telefono' => '123'];
@@ -1401,10 +1546,194 @@ try {
         expectSame($before, (int) Database::first('SELECT COUNT(*) AS n FROM ivc_requerimientos WHERE tenant_id = ?', [$tenant['id']])['n']);
     });
 
+    $test('Catálogo de matriz: 60 ítems, 100 puntos y referencias separadas', static function (): void {
+        $items = RequirementCatalog::autoevaluation();
+        expectSame(60, count($items));
+        expectSame(60, count(array_unique(array_column($items, 'item_codigo'))));
+        expectSame(100.0, array_sum(array_column($items, 'puntaje_maximo')));
+        expectSame(16, count(RequirementCatalog::legal()));
+        expectSame(22, count(RequirementCatalog::iso()));
+        foreach (['Planear' => 25.0, 'Hacer' => 60.0, 'Verificar' => 5.0, 'Actuar' => 10.0] as $cycle => $weight) {
+            $actual = array_sum(array_map(static fn(array $row): float => $row['ciclo'] === $cycle ? (float) $row['puntaje_maximo'] : 0.0, $items));
+            expectSame($weight, $actual, 'Peso del ciclo ' . $cycle);
+        }
+        expectSame(21, count(RequirementCatalog::applicableCodes(21)));
+        expectSame(7, count(RequirementCatalog::applicableCodes(7)));
+        foreach (['3.3.1','3.3.6','4.2.1','4.2.6'] as $code) expectTrue(in_array($code, array_column($items, 'item_codigo'), true));
+        foreach (RequirementCatalog::iso() as $iso) expectSame(0.0, (float) $iso['puntaje_maximo']);
+    });
+
+    $test('Autoevaluación: aplicabilidad, evidencia y validación humana', static function () use ($mainId, $constructionId, $mainAdminId): void {
+        $year = 2026;
+        $evaluation = Autoevaluacion::initialize($mainId, $year, $mainAdminId);
+        $evaluationId = (int) $evaluation['id'];
+        expectSame(21, (int) $evaluation['grupo']);
+        expectSame(98, (int) Database::first('SELECT COUNT(*) AS n FROM requisitos_matriz WHERE autoevaluacion_id = ?', [$evaluationId])['n']);
+        expectSame(0.0, (float) $evaluation['puntaje']);
+        expectSame(60, (int) Database::first("SELECT COUNT(*) AS n FROM requisitos_matriz WHERE autoevaluacion_id = ? AND tipo = 'Autoevaluacion' AND evaluacion = 'Sin evaluar'", [$evaluationId])['n']);
+        Autoevaluacion::confirmApplicability($evaluationId, $mainId, $mainAdminId);
+        expectSame(39, (int) Database::first("SELECT COUNT(*) AS n FROM requisitos_matriz WHERE autoevaluacion_id = ? AND tipo = 'Autoevaluacion' AND evaluacion = 'No aplica' AND na_aprobado_por IS NOT NULL", [$evaluationId])['n']);
+        expectSame(21, (int) Database::first("SELECT COUNT(*) AS n FROM requisitos_matriz WHERE autoevaluacion_id = ? AND tipo = 'Autoevaluacion' AND evaluacion = 'Sin evaluar'", [$evaluationId])['n']);
+        $requirement = Database::first("SELECT * FROM requisitos_matriz WHERE autoevaluacion_id = ? AND item_codigo = '1.1.1'", [$evaluationId]);
+        $id = (int) $requirement['id'];
+        expectSame(null, Autoevaluacion::requirement($id, $constructionId), 'La matriz debe quedar aislada por tenant.');
+        $input = array_intersect_key($requirement, array_flip(['responsable','periodicidad','fecha_vencimiento','nivel_madurez','evaluacion','justificacion_na','nota_implementacion','fecha_implementacion','nota_verificacion','eficacia_resultado','eficacia_fecha','accion_mejora','recursos']));
+        $input['nivel_madurez'] = 'Documentado';
+        $errors = Autoevaluacion::updateRequirement($id, $mainId, $input, $mainAdminId, true);
+        expectTrue(isset($errors['nivel_madurez']), 'Documentado no puede declararse sin evidencia.');
+        $evidence = evidenceTestData($mainId, 'matriz-1.1.1', 'sgsst', $mainAdminId);
+        $evidence['entidad_tipo'] = 'matriz_requisito'; $evidence['entidad_id'] = (string) $id; $evidence['entidad_referencia'] = 'Matriz 1.1.1';
+        $evidenceId = Evidencia::create($evidence);
+        $input['nivel_madurez'] = 'Implementado'; $input['responsable'] = 'Responsable designado';
+        $input['nota_implementacion'] = 'Designación comunicada y verificada en el centro.'; $input['fecha_implementacion'] = '2026-10-20';
+        $errors = Autoevaluacion::updateRequirement($id, $mainId, $input, $mainAdminId, true);
+        expectTrue(isset($errors['nivel_madurez']), 'Implementado exige revisión humana de la evidencia.');
+        Evidencia::review($evidenceId, $mainId, 'Revisado', 'Evidencia pertinente revisada.', $mainAdminId);
+        $input['evaluacion'] = 'Cumple';
+        $errors = Autoevaluacion::updateRequirement($id, $mainId, $input, $mainAdminId, true);
+        expectTrue(isset($errors['evaluacion']), 'Cumple no puede derivarse directamente de Implementado.');
+        $input['nivel_madurez'] = 'Verificado'; $input['nota_verificacion'] = 'Se contrastó designación, curso y comunicación con la evidencia.';
+        expectSame([], Autoevaluacion::updateRequirement($id, $mainId, $input, $mainAdminId, true));
+        $updated = Autoevaluacion::requirement($id, $mainId);
+        expectSame(0.5, (float) $updated['puntaje_obtenido']);
+        expectSame($mainAdminId, (int) $updated['verificado_por']);
+        Autoevaluacion::updateHeader($evaluationId, $mainId, ['fecha_evaluacion' => '2026-12-01', 'responsable' => 'Equipo SG-SST', 'remitida_arl_at' => '', 'registrada_sgrl_at' => '', 'radicado' => '']);
+        expectTrue(Autoevaluacion::close($evaluationId, $mainId, $mainAdminId) !== [], 'El cierre debe bloquearse mientras existan ítems sin evaluar.');
+        expectSame('Borrador', Autoevaluacion::findForTenant($mainId, $year)['estado']);
+    });
+
+    $test('Permisos explícitos: concesión, revocación y tenant', static function () use ($mainId, $constructionId, $mainAdminId, $mainHseId): void {
+        expectTrue(Permission::has($mainAdminId, $mainId, Permission::MATRIX_VERIFY));
+        expectTrue(!Permission::has($mainHseId, $mainId, Permission::MATRIX_VERIFY));
+        Permission::grant($mainHseId, $mainId, Permission::MATRIX_VERIFY, $mainAdminId);
+        expectTrue(Permission::has($mainHseId, $mainId, Permission::MATRIX_VERIFY));
+        expectTrue(!Permission::has($mainHseId, $constructionId, Permission::MATRIX_VERIFY));
+        Permission::sync($mainHseId, $mainId, [], $mainAdminId);
+        expectTrue(!Permission::has($mainHseId, $mainId, Permission::MATRIX_VERIFY));
+    });
+
+    $test('Gestión operativa: ejecución, evidencia y verificación real', static function () use ($mainId, $constructionId, $mainAdminId): void {
+        $input = ['modulo' => 'responsables', 'tipo' => 'Designación', 'titulo' => 'Designación SG-SST de prueba', 'descripcion' => 'Registro controlado de prueba', 'responsable' => 'Responsable SST', 'recursos' => 'Tiempo y acceso', 'fecha_programada' => '2026-10-20', 'fecha_ejecucion' => '', 'fecha_vencimiento' => '2027-10-20', 'prioridad' => 'Alta', 'resultado' => '', 'requisito_clave' => '1.1.1', 'formacion' => 'Profesional con curso de 50 horas', 'licencia' => 'Licencia de prueba', 'curso_50h_fecha' => '2026-01-10', 'actualizacion_20h_fecha' => '', 'dedicacion' => 'Tiempo parcial con autoridad', 'centro' => 'Sede principal', 'evaluacion_competencia' => 'Pendiente de evaluación'];
+        $id = Operation::create($mainId, $input, $mainAdminId);
+        expectSame('Pendiente', Operation::findForTenant($id, $mainId)['estado']);
+        expectSame(null, Operation::findForTenant($id, $constructionId));
+        $blocked = false; try { Operation::setStatus($id, $mainId, 'Completado', $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'No debe completarse sin fecha y resultado.');
+        $input['fecha_ejecucion'] = '2026-10-21'; $input['resultado'] = 'Designación realizada y comunicada.';
+        Operation::update($id, $mainId, $input, $mainAdminId);
+        Operation::setStatus($id, $mainId, 'Completado', $mainAdminId);
+        $blocked = false; try { Operation::setStatus($id, $mainId, 'Verificado', $mainAdminId, 'Revisión de prueba'); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'Verificado exige evidencia revisada.');
+        $evidence = evidenceTestData($mainId, 'operacion-responsable', 'sgsst', $mainAdminId);
+        $evidence['entidad_tipo'] = 'operacion'; $evidence['entidad_id'] = (string) $id; $evidence['entidad_referencia'] = 'Designación SG-SST';
+        $evidenceId = Evidencia::create($evidence); Evidencia::review($evidenceId, $mainId, 'Revisado', 'Soporte revisado.', $mainAdminId);
+        Operation::setStatus($id, $mainId, 'Verificado', $mainAdminId, 'Se verificó identidad, contenido y fecha del soporte.');
+        $record = Operation::findForTenant($id, $mainId);
+        expectSame('Verificado', $record['estado']); expectSame($mainAdminId, (int) $record['verificado_por']);
+        $blocked = false; try { Operation::update($id, $mainId, $input, $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'Un registro verificado debe quedar inmutable.');
+        expectSame('/operacion-registros/' . $id . '/editar', EvidenceLinker::url(['entidad_tipo' => 'operacion', 'entidad_id' => (string) $id]));
+    });
+
+    $test('Salud reservada: conceptos, seguimiento y aislamiento', static function () use ($mainId, $constructionId, $mainAdminId): void {
+        $employee = Empleado::forTenant($mainId)[0];
+        $id = Salud::create($mainId, ['empleado_id' => $employee['id'], 'tipo' => 'Concepto medico-laboral', 'fecha' => '2026-10-20', 'proxima_fecha' => '2027-01-20', 'entidad' => 'Entidad de prueba', 'profesional' => 'Profesional de prueba', 'concepto' => 'Concepto sintético con adaptación laboral.', 'restricciones' => 'Restricción de prueba', 'recomendaciones' => 'Adaptación de puesto', 'seguimiento' => '', 'soporte_referencia' => 'SOP-RES-1'], $mainAdminId);
+        expectSame(null, Salud::findForTenant($id, $constructionId));
+        expectSame('En seguimiento', Salud::findForTenant($id, $mainId)['estado']);
+        $blocked = false; try { Salud::setStatus($id, $mainId, 'Cerrado', '', $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'No debe cerrarse sin seguimiento.');
+        Salud::setStatus($id, $mainId, 'Cerrado', 'Se verificó la adaptación y se cerró el seguimiento de prueba.', $mainAdminId);
+        expectSame('Cerrado', Salud::findForTenant($id, $mainId)['estado']);
+        $aggregate = Salud::aggregate($mainId); expectTrue($aggregate !== []);
+        expectSame(['tipo','estado','cantidad'], array_keys($aggregate[0]), 'La estadística no debe incluir personas ni conceptos.');
+    });
+
+    $test('Psicosocial: resultados agregados y eficacia con soporte reservado', static function () use ($mainId, $mainAdminId): void {
+        $id = Psicosocial::create($mainId, ['vigencia' => 2026, 'poblacion' => 'Grupo sintético de prueba', 'instrumento' => 'Bateria Resolucion 2764 de 2022 · estructura sin alteraciones', 'fecha_aplicacion' => '2026-10-15', 'profesional' => 'Profesional de prueba', 'plan_intervencion' => '', 'proxima_fecha' => ''], $mainAdminId);
+        expectSame('Planificada', Psicosocial::findForTenant($id, $mainId)['estado']); expectSame(0, (int) Psicosocial::findForTenant($id, $mainId)['participantes']);
+        Psicosocial::recordApplication($id, $mainId, ['participantes' => 12, 'resultado_intralaboral' => 'Resultado colectivo de prueba', 'resultado_extralaboral' => '', 'resultado_estres' => '', 'interpretacion_agregada' => 'Interpretación profesional agregada de prueba.', 'plan_intervencion' => 'Intervención organizacional de prueba.'], $mainAdminId);
+        Psicosocial::saveIntervention($id, $mainId, 'Ajustes organizacionales, sensibilización y canalización de prueba.', $mainAdminId);
+        $blocked = false; try { Psicosocial::evaluate($id, $mainId, 'Mejora agregada de prueba.', '2027-01-15', $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'La eficacia requiere soporte reservado revisado.');
+        $beforeGeneral = (int) Database::first('SELECT COUNT(*) AS n FROM soportes_cumplimiento')['n'];
+        Database::execute("INSERT INTO soportes_reservados (tenant_id,area,entidad_tipo,entidad_id,categoria,titulo,nombre_original,nombre_almacenado,ruta_relativa,mime,extension,tamano,hash_sha256,subido_por) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [$mainId,'salud','psicosocial',$id,'Informe agregado','Soporte sintético','agregado.pdf',str_repeat('a',32).'.pdf','reserved/tenant_'.$mainId.'/'.str_repeat('a',32).'.pdf','application/pdf','pdf',68,hash('sha256','psicosocial'),$mainAdminId]);
+        $supportId = Database::lastId();
+        expectSame($beforeGeneral, (int) Database::first('SELECT COUNT(*) AS n FROM soportes_cumplimiento')['n'], 'El soporte reservado no debe aparecer en la biblioteca general.');
+        expectSame(null, SoporteReservado::findForTenant($supportId, 999999));
+        SoporteReservado::review($supportId, $mainId, 'salud', $mainAdminId);
+        Psicosocial::evaluate($id, $mainId, 'Mejora agregada verificada en el grupo de prueba.', '2027-01-15', $mainAdminId);
+        Psicosocial::close($id, $mainId, $mainAdminId);
+        expectSame('Cerrada', Psicosocial::findForTenant($id, $mainId)['estado']);
+    });
+
+    $test('Convivencia reservada: medidas, CCL y estadística anónima', static function () use ($mainId, $constructionId, $mainAdminId): void {
+        $id = Convivencia::createCase($mainId, ['tipo' => 'Otra', 'fecha_recepcion' => '2026-10-20', 'canal' => 'Canal reservado de prueba', 'descripcion' => 'Caso sintético para validar confidencialidad.', 'personas_involucradas' => 'Persona A y Persona B', 'medidas_proteccion' => '', 'encaminamiento' => '', 'responsable_id' => $mainAdminId, 'fecha_compromiso' => '2026-10-25'], $mainAdminId);
+        expectSame(null, Convivencia::case($id, $constructionId));
+        $blocked = false; try { Convivencia::updateCase($id, $mainId, ['estado' => 'Medidas activas', 'medidas_proteccion' => '', 'encaminamiento' => '', 'responsable_id' => $mainAdminId, 'fecha_compromiso' => '2026-10-25', 'cierre_motivo' => ''], $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'Medidas activas exige medidas documentadas.');
+        Convivencia::updateCase($id, $mainId, ['estado' => 'Medidas activas', 'medidas_proteccion' => 'Medidas de protección y no revictimización de prueba.', 'encaminamiento' => '', 'responsable_id' => $mainAdminId, 'fecha_compromiso' => '2026-10-25', 'cierre_motivo' => ''], $mainAdminId);
+        $meeting = Convivencia::scheduleMeeting($mainId, ['tipo' => 'Ordinaria mensual', 'fecha' => '2026-10-25', 'participantes' => '', 'agenda' => 'Seguimiento general sin divulgar casos', 'proxima_fecha' => '2026-11-25'], $mainAdminId);
+        $outcome = ['estado' => 'Realizada', 'participantes' => 'Miembros CCL de prueba', 'compromisos' => 'Seguimiento trimestral de prueba.', 'acta_referencia' => 'CCL-ACTA-PRUEBA', 'proxima_fecha' => '2026-11-25'];
+        $blocked = false; try { Convivencia::recordMeeting($meeting, $mainId, $outcome, $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'El quórum CCL debe confirmarse.');
+        Convivencia::recordMeeting($meeting, $mainId, $outcome + ['quorum_verificado' => '1'], $mainAdminId);
+        expectSame('Realizada', Convivencia::meeting($meeting, $mainId)['estado']);
+        $aggregate = Convivencia::aggregate($mainId); expectTrue($aggregate !== []); expectSame(['tipo','estado','cantidad'], array_keys($aggregate[0]));
+    });
+
+    $test('COPASST: miembros, reunión y quórum confirmado', static function () use ($mainId, $constructionId, $mainAdminId): void {
+        $id = Comite::create($mainId, ['tipo' => 'COPASST', 'centro_trabajo' => 'Centro de prueba', 'fecha_constitucion' => '2026-01-15', 'periodo' => '2026-2028', 'quorum_minimo' => 51], $mainAdminId);
+        expectSame(null, Comite::findForTenant($id, $constructionId));
+        $employee = Empleado::forTenant($mainId)[0];
+        $member1 = Comite::addMember($id, $mainId, ['empleado_id' => $employee['id'], 'nombre' => '', 'documento' => '', 'representacion' => 'Trabajadores', 'condicion' => 'Principal', 'fecha_inicio' => '2026-01-15', 'fecha_fin' => '', 'capacitacion_horas' => 2], $mainAdminId);
+        $member2 = Comite::addMember($id, $mainId, ['empleado_id' => 0, 'nombre' => 'Representante empleador de prueba', 'documento' => 'E-1', 'representacion' => 'Empleador', 'condicion' => 'Principal', 'fecha_inicio' => '2026-01-15', 'fecha_fin' => '', 'capacitacion_horas' => 2], $mainAdminId);
+        expectSame(['empleador' => 1, 'trabajadores' => 1, 'activos' => 2], Comite::composition($id, $mainId));
+        $meeting = Comite::scheduleMeeting($id, $mainId, ['tipo' => 'Ordinaria', 'fecha' => '2026-10-25', 'lugar' => 'Sala de prueba', 'orden_dia' => 'Revisión de indicadores y compromisos', 'proxima_reunion' => '2026-11-25'], $mainAdminId);
+        expectSame('Programada', Comite::meeting($meeting, $id, $mainId)['estado']);
+        $outcome = ['estado' => 'Realizada', 'asistentes' => [$member1, $member2], 'desarrollo' => 'Se revisaron los temas del orden del día.', 'compromisos' => 'Control de prueba con responsable.', 'acta_referencia' => 'ACTA-PRUEBA-001', 'proxima_reunion' => '2026-11-25'];
+        $blocked = false; try { Comite::recordMeeting($meeting, $id, $mainId, $outcome, $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'La asistencia debe confirmarse humanamente.');
+        Comite::recordMeeting($meeting, $id, $mainId, $outcome + ['confirmar_asistencia' => '1'], $mainAdminId);
+        $recorded = Comite::meeting($meeting, $id, $mainId);
+        expectSame('Realizada', $recorded['estado']); expectSame(100.0, (float) $recorded['quorum_porcentaje']); expectSame(1, (int) $recorded['quorum_cumple']);
+        expectSame('/comites/' . $id . '#reunion-' . $meeting, EvidenceLinker::url(['entidad_tipo' => 'comite_reunion', 'entidad_id' => (string) $meeting, 'tenant_id' => $mainId]));
+    });
+
+    $test('Eventos SST: investigación, causas, testigos y eficacia separada', static function () use ($mainId, $constructionId, $mainAdminId): void {
+        $employee = Empleado::forTenant($mainId)[0];
+        $input = ['tipo' => 'Accidente de trabajo', 'fecha_evento' => '2026-10-20', 'fecha_reporte' => '2026-10-21', 'lugar' => 'Taller de prueba', 'proceso' => 'Mantenimiento', 'descripcion' => 'Evento sintético para validar el flujo de investigación.', 'lesion' => 'Lesión leve registrada para prueba', 'gravedad' => 'Leve', 'dias_perdidos' => 3, 'dias_cargados' => 0, 'reportado_arl_at' => '', 'reportado_eps_at' => '', 'reportado_mintrabajo_at' => '', 'radicados' => '', 'fecha_limite_investigacion' => '2026-11-05', 'responsable' => 'Responsable SST', 'afectado_empleado_id' => $employee['id'], 'afectado_nombre' => '', 'afectado_documento' => '', 'afectado_vinculacion' => ''];
+        $beforeFindings = (int) Database::first('SELECT COUNT(*) AS n FROM hallazgos_acpa WHERE tenant_id = ?', [$mainId])['n'];
+        $id = Evento::create($mainId, $input, $mainAdminId);
+        expectSame('Reportado', Evento::findForTenant($id, $mainId)['estado']);
+        expectSame(null, Evento::findForTenant($id, $constructionId));
+        expectSame($beforeFindings, (int) Database::first('SELECT COUNT(*) AS n FROM hallazgos_acpa WHERE tenant_id = ?', [$mainId])['n'], 'El evento no debe mezclarse con hallazgos ACPA.');
+        expectSame(1, count(Evento::people($id, $mainId)));
+        Evento::addPerson($id, $mainId, ['empleado_id' => 0, 'nombre' => 'Testigo de prueba', 'documento' => 'T-1', 'vinculacion' => 'Contratista', 'rol' => 'Testigo', 'declaracion' => 'Declaración sintética.'], $mainAdminId);
+        Evento::saveInvestigation($id, $mainId, ['metodologia' => 'Resolucion 1401 de 2007', 'equipo' => 'Responsable SST y COPASST', 'fecha_inicio' => '2026-10-22', 'causas_inmediatas' => 'Condición y acto identificados', 'causas_basicas' => 'Factores personales y de trabajo', 'causas_administrativas' => '', 'analisis' => 'Análisis de los hechos y controles.', 'conclusiones' => 'Se requieren controles del sistema.'], $mainAdminId);
+        $blocked = false; try { Evento::closeInvestigation($id, $mainId, $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'La investigación no debe cerrarse sin causas administrativas.');
+        Evento::saveInvestigation($id, $mainId, ['metodologia' => 'Resolucion 1401 de 2007', 'equipo' => 'Responsable SST y COPASST', 'fecha_inicio' => '2026-10-22', 'causas_inmediatas' => 'Condición y acto identificados', 'causas_basicas' => 'Factores personales y de trabajo', 'causas_administrativas' => 'Falta de verificación del control', 'analisis' => 'Análisis de los hechos y controles.', 'conclusiones' => 'Se requieren controles del sistema.'], $mainAdminId);
+        Evento::closeInvestigation($id, $mainId, $mainAdminId);
+        expectSame('Investigado', Evento::findForTenant($id, $mainId)['estado']);
+        $actionId = Evento::addAction($id, $mainId, ['tipo' => 'Correctiva', 'descripcion' => 'Implantar y verificar el control definido.', 'responsable' => 'Jefe de mantenimiento', 'recursos' => 'Horas y elementos técnicos', 'fecha_compromiso' => '2026-11-10'], $mainAdminId);
+        $blocked = false; try { Evento::setActionStatus($actionId, $id, $mainId, 'Implementada', [], $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'Implementada requiere fecha real.');
+        Evento::setActionStatus($actionId, $id, $mainId, 'Implementada', ['fecha_ejecucion' => '2026-11-08'], $mainAdminId);
+        $blocked = false; try { Evento::setActionStatus($actionId, $id, $mainId, 'Eficaz', ['eficacia_fecha' => '2026-11-20', 'eficacia_resultado' => 'Control verificado sin recurrencia.'], $mainAdminId); } catch (DomainException) { $blocked = true; }
+        expectTrue($blocked, 'La eficacia requiere evidencia revisada.');
+        $evidence = evidenceTestData($mainId, 'evento-accion', 'sgsst', $mainAdminId); $evidence['entidad_tipo'] = 'evento_accion'; $evidence['entidad_id'] = (string) $actionId; $evidence['entidad_referencia'] = 'Acción correctiva AT';
+        $evidenceId = Evidencia::create($evidence); Evidencia::review($evidenceId, $mainId, 'Revisado', 'Soporte de eficacia revisado.', $mainAdminId);
+        Evento::setActionStatus($actionId, $id, $mainId, 'Eficaz', ['eficacia_fecha' => '2026-11-20', 'eficacia_resultado' => 'Control verificado sin recurrencia.'], $mainAdminId);
+        Evento::close($id, $mainId, $mainAdminId);
+        expectSame('Cerrado', Evento::findForTenant($id, $mainId)['estado']);
+        expectSame(3, Evento::stats($mainId, 2026)['dias_perdidos']);
+        expectSame('/eventos/' . $id . '#acciones', EvidenceLinker::url(['entidad_tipo' => 'evento_accion', 'entidad_id' => (string) $actionId, 'tenant_id' => $mainId]));
+    });
+
     $test('Migración idempotente e integridad del esquema ampliado', static function (): void {
         Database::initialize();
         expectSame([], Database::query('PRAGMA foreign_key_check'));
-        expectSame(33, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
+        expectSame(51, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
         expectSame(21, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
         $reportColumns = array_column(Database::query('PRAGMA table_info(autoreportes)'), 'name');
         foreach (['acceso_reporte_id', 'origen', 'nombre_externo', 'contacto_externo', 'anonimo'] as $column) {
@@ -1420,7 +1749,7 @@ try {
         foreach (['modulo', 'categoria', 'titulo', 'fecha_evidencia', 'entidad_tipo', 'entidad_id', 'entidad_referencia', 'estado_revision', 'observaciones_revision', 'revisado_por', 'revisado_at', 'updated_at'] as $column) {
             expectTrue(in_array($column, $evidenceColumns, true), 'Falta la columna de evidencia ' . $column);
         }
-        expectSame(4, SchemaMigrator::VERSION);
+        expectSame(5, SchemaMigrator::VERSION);
         expectTrue(Database::first("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'planos_emergencia'") !== null);
         expectTrue(Database::first("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'planos_emergencia_versiones'") !== null);
     });
@@ -1615,6 +1944,6 @@ try {
     }
     exit($failed === 0 ? 0 : 1);
 } catch (Throwable $exception) {
-    fwrite(STDERR, "Error al preparar las pruebas: {$exception->getMessage()}\n{$exception->getTraceAsString()}\n");
+    file_put_contents('php://stderr', "Error al preparar las pruebas: {$exception->getMessage()}\n{$exception->getTraceAsString()}\n");
     exit(1);
 }

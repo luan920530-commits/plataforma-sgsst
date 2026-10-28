@@ -9,6 +9,7 @@ use App\Models\Auditoria;
 use App\Models\Documento;
 use App\Models\Hallazgo;
 use App\Models\Peligro;
+use App\Models\Permission;
 use App\Models\PlanSaaS;
 use App\Models\PlanTrabajo;
 use App\Models\Tenant;
@@ -124,6 +125,7 @@ final class TenantController extends BaseController
                     'password' => password_hash($data['password'], PASSWORD_DEFAULT),
                     'rol' => 'AdminEmpresa',
                 ]);
+                Permission::grantDefaults($adminId, $tenantId, Auth::id(), true);
                 $summary = TenantModuleGenerator::generate($tenantId);
                 Audit::record('Empresa creada y configurada', 'Tenant', $tenantId, [
                     'grupo_estandares' => $data['grupo_estandares'], 'admin_user_id' => $adminId, 'generacion' => $summary,

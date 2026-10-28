@@ -117,6 +117,20 @@ function field_error(string $key): string
     return '<p class="mt-1.5 flex items-center gap-1 text-xs font-medium text-rose-600">' . e($errors[$key]) . '</p>';
 }
 
+function form_errors(): string
+{
+    global $errors;
+    if (empty($errors)) {
+        return '';
+    }
+    $items = '';
+    foreach ($errors as $message) {
+        $items .= '<li>' . e((string) $message) . '</li>';
+    }
+    return '<div class="rounded-2xl bg-rose-50 p-4 text-xs leading-5 text-rose-700 ring-1 ring-rose-100" role="alert">'
+        . '<strong>Revisa la información antes de continuar.</strong><ul class="mt-2 list-disc space-y-1 pl-4">' . $items . '</ul></div>';
+}
+
 function selected(mixed $actual, mixed $expected): string
 {
     return (string) $actual === (string) $expected ? ' selected' : '';

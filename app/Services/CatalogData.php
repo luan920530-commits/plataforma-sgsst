@@ -44,7 +44,7 @@ final class CatalogData
         ];
     }
 
-    private static function fullStandards(): array
+    public static function fullStandards(): array
     {
         return [
             ['1.1.1', 'Asignación de una persona que diseñe e implemente el SG-SST', 'Planear'],
@@ -81,22 +81,22 @@ final class CatalogData
             ['3.2.1', 'Reporte de accidentes de trabajo y enfermedades laborales', 'Hacer'],
             ['3.2.2', 'Investigación de incidentes, accidentes de trabajo y enfermedades laborales', 'Hacer'],
             ['3.2.3', 'Registro y análisis estadístico de accidentes y enfermedades laborales', 'Hacer'],
-            ['3.2.4', 'Frecuencia de accidentalidad', 'Hacer'],
-            ['3.2.5', 'Severidad de accidentalidad', 'Hacer'],
-            ['3.2.6', 'Proporción de accidentes de trabajo mortales', 'Hacer'],
-            ['3.2.7', 'Prevalencia de la enfermedad laboral', 'Hacer'],
-            ['3.2.8', 'Incidencia de la enfermedad laboral', 'Hacer'],
-            ['3.2.9', 'Ausentismo por causa médica', 'Hacer'],
+            ['3.3.1', 'Medición de la frecuencia de la accidentalidad', 'Hacer'],
+            ['3.3.2', 'Medición de la severidad de la accidentalidad', 'Hacer'],
+            ['3.3.3', 'Medición de la mortalidad por accidentes de trabajo', 'Hacer'],
+            ['3.3.4', 'Medición de la prevalencia de enfermedad laboral', 'Hacer'],
+            ['3.3.5', 'Medición de la incidencia de enfermedad laboral', 'Hacer'],
+            ['3.3.6', 'Medición del ausentismo por causa médica', 'Hacer'],
             ['4.1.1', 'Metodología para identificación de peligros, evaluación y valoración de riesgos', 'Hacer'],
             ['4.1.2', 'Identificación de peligros y valoración de riesgos con participación de todos los niveles', 'Hacer'],
             ['4.1.3', 'Identificación de sustancias carcinógenas o con toxicidad aguda', 'Hacer'],
             ['4.1.4', 'Mediciones ambientales de los riesgos prioritarios', 'Hacer'],
-            ['4.1.5', 'Medidas de prevención y control frente a peligros y riesgos identificados', 'Hacer'],
-            ['4.2.1', 'Aplicación de medidas de prevención y control por parte de los trabajadores', 'Hacer'],
-            ['4.2.2', 'Procedimientos e instructivos internos de Seguridad y Salud en el Trabajo', 'Hacer'],
-            ['4.2.3', 'Inspecciones a instalaciones, maquinaria o equipos', 'Hacer'],
-            ['4.2.4', 'Mantenimiento periódico de instalaciones, equipos, máquinas y herramientas', 'Hacer'],
-            ['4.2.5', 'Entrega de elementos de protección personal y capacitación en uso adecuado', 'Hacer'],
+            ['4.2.1', 'Implementación de medidas de prevención y control frente a los peligros y riesgos identificados', 'Hacer'],
+            ['4.2.2', 'Verificación de la aplicación de las medidas de prevención y control por parte de los trabajadores', 'Hacer'],
+            ['4.2.3', 'Elaboración de procedimientos, instructivos, fichas y protocolos', 'Hacer'],
+            ['4.2.4', 'Inspecciones sistemáticas a instalaciones, maquinaria o equipos con participación del COPASST', 'Hacer'],
+            ['4.2.5', 'Mantenimiento periódico de instalaciones, equipos, máquinas y herramientas', 'Hacer'],
+            ['4.2.6', 'Entrega de elementos de protección personal (EPP), verificada también con contratistas', 'Hacer'],
             ['5.1.1', 'Plan de prevención, preparación y respuesta ante emergencias', 'Hacer'],
             ['5.1.2', 'Brigada de prevención, preparación y respuesta ante emergencias', 'Hacer'],
             ['6.1.1', 'Definición de indicadores del Sistema de Gestión de SST', 'Verificar'],

@@ -39,7 +39,7 @@ final class DocumentTemplate
             <h2>Convivencia y bienestar</h2>
             <p>Las quejas de acoso o comportamientos contrarios a la convivencia se tramitan por los canales definidos, con reserva y debido proceso. La prevención del consumo de alcohol y drogas se aborda con enfoque de promoción de la salud y confidencialidad.</p>
             <h2>Declaración de conocimiento</h2>
-            <p>Al firmar digitalmente, la persona declara que tuvo acceso a este contenido, que conoce los canales para resolver preguntas y que se compromete a cumplir los lineamientos. La firma no reemplaza la inducción específica del puesto ni las demás evidencias de formación requeridas.</p>
+            <p>Al registrar su firma electrónica de conocimiento, la persona declara que tuvo acceso a este contenido, que conoce los canales para resolver preguntas y que se compromete a cumplir los lineamientos. Esta firma electrónica no equivale a una firma digital certificada y no reemplaza la inducción específica del puesto ni las demás evidencias de formación requeridas.</p>
         HTML;
         return self::layout($tenant, 'IND-SST', 'Inducción general de Seguridad y Salud en el Trabajo', 'Hacer', $body, false);
     }
@@ -81,7 +81,7 @@ final class DocumentTemplate
             <ol><li><strong>Recepción:</strong> la persona presenta su relato por el canal designado. Se registra la solicitud con reserva y se informa la ruta.</li><li><strong>Orientación inicial:</strong> el comité verifica su competencia y adopta medidas de protección razonables cuando sean necesarias, evitando represalias y revictimización.</li><li><strong>Debido proceso:</strong> se escuchan las partes por separado, se preserva la confidencialidad y no se presume responsabilidad sin análisis.</li><li><strong>Acuerdos y seguimiento:</strong> cuando procede, se documentan compromisos y se verifica mensualmente su cumplimiento. Los casos fuera de competencia se remiten por los canales correspondientes.</li></ol>
             <h2>Reglas de protección y actualización</h2>
             <p>La conformación, el reglamento propio, el período de dos años, las reuniones ordinarias mensuales y el procedimiento preventivo se rigen por la <strong>Resolución 3461 de 2025</strong>, que derogó las Resoluciones 652 y 1356 de 2012. El procedimiento preventivo no puede superar <strong>65 días calendario</strong> desde la recepción de la queja formal y sus tiempos no son acumulativos.</p>
-            <p>En presunto acoso sexual o violencia por razones de género se activa la ruta especial definida por la empresa conforme a la Ley 2365 de 2024 y demás regulación aplicable; <strong>estas conductas no se concilian ante el Comité de Convivencia</strong>.</p>
+            <p>Las medidas de prevención, protección y atención frente a acoso, violencia y discriminación se articulan con el SG-SST y talento humano conforme al <strong>Decreto 1040 de 2026</strong>, con canales reservados, no revictimización y protección contra represalias. En presunto acoso sexual o violencia por razones de género se activa la ruta especial definida por la empresa conforme a la Ley 2365 de 2024 y demás regulación aplicable; <strong>estas conductas no se concilian ante el Comité de Convivencia</strong>.</p>
             <h2>Principios</h2>
             <p>Celeridad, eficacia, imparcialidad, confidencialidad, no discriminación, debido proceso y protección frente a represalias. Los registros sensibles se custodian con acceso restringido y no se publican en el portal general de trabajadores.</p>
         HTML;

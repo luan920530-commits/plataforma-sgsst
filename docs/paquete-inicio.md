@@ -98,6 +98,7 @@ El perfil real 4759 / 7 genera **40 borradores**: base de 39 más GUI-VIO-01. Co
 - No se crean capacitaciones realizadas, asistencias, firmas, aptitudes, certificados, resultados de mediciones, simulacros, investigaciones, entregas de EPP ni cierres.
 - FT-COB-01 separa disponibilidad, adaptación/aprobación e implementación/evidencia.
 - Las historias clínicas, diagnósticos y expedientes individuales de convivencia no pertenecen a la biblioteca general.
+- Las fuentes convertidas que conservan texto médico histórico quedan señaladas como **actualización normativa requerida**. Se pueden consultar para trazabilidad, pero el sistema bloquea la generación de nuevos borradores desde los documentos médicos históricos identificados; no se cambia el rótulo de artículos antiguos para hacerlos pasar por texto de 2025.
 - Los permisos operativos se gestionan en su módulo y por tarea; un procedimiento general no autoriza trabajo de alto riesgo.
 - Los módulos exclusivos PESVial y Emergencias/Vigilancia conservan su aislamiento; esta acción no les carga el SG-SST general.
 
@@ -125,7 +126,10 @@ Para contenido antiguo que ya fue aprobado o editado, la empresa debe revisar la
 
 - **Decreto 1072 de 2015 y Resolución 0312 de 2019:** PHVA, conservación documental y regímenes 7/21/60; riesgo IV/V con hasta 50 trabajadores usa estándares completos según la clasificación ya implementada.
 - **Resolución 1401 de 2007:** investigación de incidentes y accidentes, equipo, 15 días, causas inmediatas/básicas, acciones y remisión a ARL cuando corresponda. En accidente mortal se utiliza el formato de la ARL.
-- **Resoluciones 2346 de 2007 y 1918 de 2009:** evaluaciones por exposición, costo del empleador, conceptos funcionales y custodia clínica reservada.
+- **Resolución 1843 de 2025:** evaluaciones de preingreso, periódicas, cambio de ocupación, egreso, postincapacidad, retorno y seguimiento según corresponda; periodicidad justificada con límite de tres años para las periódicas, adaptación, conceptos funcionales y custodia clínica reservada. Derogó las Resoluciones 2346 de 2007 y 1918 de 2009, retiradas de las plantillas generadas.
+- **Decreto 728 de 2025 y Resolución 2764 de 2022:** promoción de salud mental, prevención del consumo de sustancias psicoactivas, intervención basada en evaluación, canalización, apoyo en crisis y seguimiento; batería, guía y protocolos psicosociales como mínimos, sin alterarlos ni precargar resultados.
+- **Decreto 1040 de 2026:** articulación de medidas frente a acoso, violencia y discriminación, canales reservados, no revictimización y rutas diferenciadas con SG-SST, talento humano y CCL.
+- **Circular 027 de 2026:** autoevaluación y Plan de Mejoramiento con responsables, recursos y seguimiento. El plazo especial de registro 2025 y plan hasta el 31/07/2026 estaba vencido en la fecha de esta revisión; no se presenta como una fecha futura ni se presume reporte realizado. La obligación anual y los plazos vigentes deben verificarse.
 - **Resolución 3461 de 2025:** CCL con reglamento propio, período de dos años, funciones preventivas, seguimiento mensual, informes trimestrales/anuales y procedimiento preventivo máximo de 65 días calendario no acumulativos. El CCL no determina si existe acoso. Acoso sexual y violencia por razones de género siguen la ruta especial y no conciliación.
 - El texto oficial del artículo 3 de la Resolución 3461 describe “menos de 5”, “más de 5 y menos de 20” y “más de 20”. No clasifica expresamente exactamente 5 o 20; el borrador exige revisión jurídica/oficial y no extrapola una regla.
 - **Resolución 4272 de 2021:** programa de prevención/protección contra caídas, roles, formación, sistemas, permiso y rescate.
@@ -134,14 +138,15 @@ Para contenido antiguo que ya fue aprobado o editado, la empresa debe revisar la
 - **Resolución 2674 de 2013:** higiene, saneamiento, manipuladores, proceso y requisitos sanitarios de alimentos.
 - **Leyes 2088 de 2021 y 2191 de 2022 y Decreto 1227 de 2022:** modalidades remotas y desconexión, sólo cuando resulten aplicables.
 
-Las referencias y URL oficiales están en los dos manifiestos. Antes de aprobar se debe comprobar vigencia, modificaciones y regulación sectorial adicional. No se usa la Resolución 666 de 2020 como protocolo permanente genérico.
+Las referencias y URL oficiales están en los dos manifiestos del paquete de inicio, actualizados a la versión **1.1.0**. Antes de aprobar se debe comprobar vigencia, modificaciones y regulación sectorial adicional. No se usa la Resolución 666 de 2020 como protocolo permanente genérico.
 
 ## 9. Verificación técnica
 
-- **57/57 pruebas exitosas**, incluida la suite histórica.
+- **70/70 pruebas exitosas**, incluida la suite histórica y las comprobaciones de actualización normativa.
 - **63/63 perfiles generados** y **4.680 documentos** verificados: códigos únicos, estándares exactos, anexos presentes/ausentes, estado Borrador y ausencia de verificaciones premarcadas.
 - Complementación probada: restaura faltantes, actualiza sólo el borrador automático permitido, protege contenido editado/aprobado y no repite otras tablas.
 - DOCX y ZIP abiertos como contenedores y XML válidos en una comprobación independiente; tabla anidada y `colspan` verificados.
 - Extintores SCM: **40 documentos, 0 aprobados**, con pendientes reales intactos.
+- Sintaxis de 242 archivos PHP, migración v4→v5 con 51 tablas y smoke HTTP de 16 vistas autenticadas sin errores 500.
 
 Estas pruebas verifican software y cobertura documental. No certifican que una empresa haya implementado su SG-SST.

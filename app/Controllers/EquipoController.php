@@ -6,6 +6,7 @@ namespace App\Controllers;
 use App\Core\Database;
 use App\Models\Empleado;
 use App\Models\PlanSaaS;
+use App\Models\Permission;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Services\ModuleAccess;
@@ -27,6 +28,7 @@ final class EquipoController extends BaseController
             'tenant' => Tenant::find($tenantId),
             'planModule' => ModuleAccess::forTenant($tenantId),
             'search' => $search,
+            'permissionDefinitions' => Permission::definitions(),
         ]);
     }
 
@@ -72,6 +74,7 @@ final class EquipoController extends BaseController
             'password' => (string) $this->input('password'), 'password_confirmation' => (string) $this->input('password_confirmation'),
             'empleado_id' => (int) $this->input('empleado_id', 0),
         ];
+        $data['permisos'] = $this->requestedPermissions($data['rol']);
         $validator = new Validator($data);
         $validator->required('nombre', 'nombre')->required('email', 'correo')->email('email')
             ->required('rol', 'rol')->in('rol', 'rol', ['ResponsableSST', 'Trabajador'])
@@ -98,8 +101,9 @@ final class EquipoController extends BaseController
         if ($errors !== []) {
             fail_validation($errors, $data, '/equipo');
         }
+        $permissions = $data['permisos'];
         try {
-            $userId = Database::transaction(static function () use ($data, $tenantId, $employee): int {
+            $userId = Database::transaction(static function () use ($data, $tenantId, $employee, $permissions): int {
                 $userId = User::create([
                     'tenant_id' => $tenantId, 'nombre' => $data['nombre'], 'email' => $data['email'], 'rol' => $data['rol'],
                     'licencia_sst' => $data['licencia_sst'], 'password' => password_hash($data['password'], PASSWORD_DEFAULT), 'must_change_password' => true,
@@ -107,6 +111,7 @@ final class EquipoController extends BaseController
                 if ($employee !== null) {
                     Empleado::linkUser((int) $employee['id'], $tenantId, $userId);
                 }
+                Permission::sync($userId, $tenantId, $permissions, Auth::id());
                 return $userId;
             });
         } catch (PDOException) {
@@ -174,7 +179,10 @@ final class EquipoController extends BaseController
         if ($account === null) {
             $this->notFound('La cuenta no existe o no pertenece a tu empresa.');
         }
-        $this->view('tenant/equipo/user-edit', ['title' => 'Editar acceso', 'account' => $account]);
+        $this->view('tenant/equipo/user-edit', [
+            'title' => 'Editar acceso', 'account' => $account,
+            'permissionDefinitions' => Permission::definitions(), 'accountPermissions' => Permission::forUser($id, $this->tenantId()),
+        ]);
     }
 
     public function updateUser(int $id): void
@@ -190,6 +198,8 @@ final class EquipoController extends BaseController
             'licencia_sst' => (string) $this->input('licencia_sst'),
             'password' => (string) $this->input('password'), 'password_confirmation' => (string) $this->input('password_confirmation'),
         ];
+        $data['permisos'] = $before['rol'] === 'Trabajador' ? [] : Permission::forUser($id, $tenantId);
+        if (array_key_exists('permisos', $_POST) || $before['rol'] === 'Trabajador') $data['permisos'] = $this->requestedPermissions($before['rol']);
         $validator = new Validator($data);
         $validator->required('nombre', 'nombre')->max('nombre', 'nombre', 180)
             ->required('email', 'correo')->email('email')->max('email', 'correo', 190)
@@ -204,12 +214,14 @@ final class EquipoController extends BaseController
         if ($errors !== []) {
             fail_validation($errors, $data, $target);
         }
+        $permissions = $data['permisos'];
         try {
-            Database::transaction(static function () use ($id, $tenantId, $data): void {
+            Database::transaction(static function () use ($id, $tenantId, $data, $permissions): void {
                 User::updateForTenant($id, $tenantId, $data);
                 if ($data['password'] !== '') {
                     User::resetPasswordForTenant($id, $tenantId, password_hash($data['password'], PASSWORD_DEFAULT));
                 }
+                Permission::sync($id, $tenantId, $permissions, Auth::id());
             });
         } catch (PDOException) {
             fail_validation(['email' => 'No fue posible actualizar la cuenta; verifica que el correo no esté duplicado.'], $data, $target);
@@ -241,5 +253,13 @@ final class EquipoController extends BaseController
         Audit::record('Estado de acceso actualizado', 'User', $id, ['activo' => $active]);
         flash('success', 'El estado del acceso fue actualizado.');
         redirect('/equipo');
+    }
+
+    private function requestedPermissions(string $role): array
+    {
+        if ($role !== 'ResponsableSST' && $role !== 'AdminEmpresa') return [];
+        $requested = $_POST['permisos'] ?? [];
+        if (!is_array($requested)) return [];
+        return array_values(array_intersect(array_keys(Permission::definitions()), array_filter($requested, 'is_string')));
     }
 }

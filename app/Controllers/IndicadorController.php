@@ -5,8 +5,10 @@ namespace App\Controllers;
 
 use App\Models\Indicador;
 use App\Support\Audit;
+use App\Support\Auth;
 use App\Support\Indicator;
 use App\Support\Validator;
+use DomainException;
 
 final class IndicadorController extends BaseController
 {
@@ -55,6 +57,13 @@ final class IndicadorController extends BaseController
         redirect('/indicadores');
     }
 
+    public function verify(int $id): void
+    {
+        try { Indicador::verify($id, $this->tenantId(), Auth::id()); Audit::record('Fuentes de indicador verificadas', 'Indicador', $id); flash('success', 'Fuentes y soporte verificados por un responsable.'); }
+        catch (DomainException $exception) { flash('error', $exception->getMessage()); }
+        redirect('/indicadores#indicador-' . $id);
+    }
+
     public function delete(int $id): void
     {
         $indicator = $this->indicator($id);
@@ -71,6 +80,10 @@ final class IndicadorController extends BaseController
             'periodo' => (string) $this->input('periodo'), 'numerador' => $this->input('numerador'),
             'denominador' => $this->input('denominador'), 'meta' => $this->input('meta'),
             'fecha_corte' => (string) $this->input('fecha_corte'),
+            'fuente_numerador' => (string) $this->input('fuente_numerador'),
+            'fuente_denominador' => (string) $this->input('fuente_denominador'),
+            'responsable' => (string) $this->input('responsable'),
+            'observaciones' => (string) $this->input('observaciones'),
         ];
         $validator = new Validator($data);
         $validator->required('tipo', 'tipo')->in('tipo', 'tipo', array_keys($this->definitions()))
@@ -78,7 +91,10 @@ final class IndicadorController extends BaseController
             ->required('periodo', 'periodo')->max('periodo', 'periodo', 30)
             ->required('numerador', 'numerador')->numeric('numerador', 'numerador')
             ->required('denominador', 'denominador')->numeric('denominador', 'denominador')
-            ->numeric('meta', 'meta')->required('fecha_corte', 'fecha de corte')->date('fecha_corte', 'fecha de corte');
+            ->numeric('meta', 'meta')->required('fecha_corte', 'fecha de corte')->date('fecha_corte', 'fecha de corte')
+            ->required('fuente_numerador', 'fuente del numerador')->max('fuente_numerador', 'fuente del numerador', 2000)
+            ->required('fuente_denominador', 'fuente del denominador')->max('fuente_denominador', 'fuente del denominador', 2000)
+            ->required('responsable', 'responsable')->max('responsable', 'responsable', 250)->max('observaciones', 'observaciones', 3000);
         $errors = $validator->errors();
         if (is_numeric($data['denominador']) && (float) $data['denominador'] <= 0) {
             $errors['denominador'] = 'El denominador debe ser mayor que cero para obtener un resultado interpretable.';

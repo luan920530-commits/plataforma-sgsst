@@ -126,6 +126,11 @@ final class Documento
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
                 [$tenantId, $id, (int) $current['version'], $current['contenido_html'], $current['estado'], $current['aprobado_por'], $current['aprobado_at'], Auth::id()]
             );
+            $archivedVersionId = Database::lastId();
+            Database::execute(
+                'UPDATE documento_firmas SET documento_version_id = ? WHERE tenant_id = ? AND documento_id = ? AND version = ? AND documento_version_id IS NULL',
+                [$archivedVersionId, $tenantId, $id, (int) $current['version']]
+            );
             Database::execute(
                 "UPDATE documentos_sgsst SET contenido_html = ?, estado = 'Borrador', version = version + 1,
                                                 aprobado_por = NULL, aprobado_at = NULL, updated_at = CURRENT_TIMESTAMP

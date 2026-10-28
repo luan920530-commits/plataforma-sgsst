@@ -40,6 +40,13 @@ abstract class BaseController
         return is_string($value) ? trim($value) : $value;
     }
 
+    protected function requirePermission(string $permission, string $message = 'Tu cuenta no tiene el permiso explícito requerido para esta función.'): void
+    {
+        if (!\App\Support\AccessControl::can($permission)) {
+            $this->abort(403, $message . ' Un administrador de empresa puede asignarlo desde Equipo y accesos.');
+        }
+    }
+
     protected function notFound(string $message = 'El registro solicitado no existe o no pertenece a tu empresa.'): never
     {
         $this->abort(404, $message);

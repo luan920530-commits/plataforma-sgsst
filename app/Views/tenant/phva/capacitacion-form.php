@@ -4,6 +4,10 @@
     <?= csrf_field() ?>
     <div class="sm:col-span-2"><label class="label" for="tema">Tema *</label><input id="tema" name="tema" class="input" value="<?= e($value('tema')) ?>" required><?= field_error('tema') ?></div>
     <div class="sm:col-span-2"><label class="label" for="descripcion">Descripción y población objetivo</label><textarea id="descripcion" name="descripcion" class="input min-h-32"><?= e($value('descripcion')) ?></textarea><?= field_error('descripcion') ?><p class="mt-2 text-[11px] text-slate-400">Incluye cargos, trabajadores, contratistas u otros grupos que deben participar.</p></div>
+    <div><label class="label">Público objetivo</label><input name="publico_objetivo" class="input" value="<?= e($value('publico_objetivo')) ?>"></div>
+    <div><label class="label">Competencia a desarrollar</label><input name="competencia" class="input" value="<?= e($value('competencia')) ?>"></div>
+    <div class="sm:col-span-2"><label class="label">Contenido y metodología</label><textarea name="contenido" class="input min-h-24"><?= e($value('contenido')) ?></textarea></div>
+    <div class="sm:col-span-2"><label class="label">Idoneidad del instructor y soporte</label><textarea name="idoneidad_instructor" class="input min-h-20"><?= e($value('idoneidad_instructor')) ?></textarea></div>
     <div><label class="label" for="responsable">Responsable / instructor *</label><input id="responsable" name="responsable" class="input" value="<?= e($value('responsable')) ?>" required><?= field_error('responsable') ?></div>
     <div><label class="label" for="fecha_programada">Fecha programada *</label><input id="fecha_programada" name="fecha_programada" type="date" class="input" value="<?= e($value('fecha_programada')) ?>" required><?= field_error('fecha_programada') ?></div>
     <div><label class="label" for="duracion_horas">Duración en horas *</label><input id="duracion_horas" name="duracion_horas" type="number" min="0.1" step="0.1" class="input" value="<?= e($value('duracion_horas')) ?>" required><?= field_error('duracion_horas') ?></div>

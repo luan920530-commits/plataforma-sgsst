@@ -82,6 +82,10 @@ final class BibliotecaController extends BaseController
         $library = $this->library();
         $template = $library::find($number);
         if ($template === null || $template['kind'] !== 'document') $this->notFound('La plantilla documental solicitada no existe.');
+        if (!empty($template['legal_review'])) {
+            flash('warning', 'Este recurso histórico contiene referencias derogadas y no puede originar un nuevo documento vigente. Usa las plantillas actualizadas y revisa la normativa aplicable.');
+            redirect($this->basePath() . '/' . $number);
+        }
         $content = Sanitizer::html($library::content($template));
         if (trim(strip_tags($content)) === '') $this->abort(500, 'La plantilla no tiene contenido editable; revisa la fuente y las notas de conversión.');
         $id = Documento::createOperationalIfMissing([

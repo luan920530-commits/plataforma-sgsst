@@ -6,6 +6,8 @@ El paquete `pesvial.7z` se analizó como insumo documental, sin ejecutar macros,
 
 La conversión produce borradores y formularios de trabajo. No determina por sí sola la aplicabilidad legal, no verifica evidencias y no equivale a aprobación, certificación o cumplimiento. Cada empresa debe contrastar el contenido con su operación, flota, desplazamientos, contratistas y requisitos vigentes.
 
+**Actualización normativa 2026:** en `PESV-7721AA56D741` se actualizó únicamente el valor de `APLICACION PRUEBAS !A28` para remitir las evaluaciones médicas a R1843/2025. El formato exige verificar idoneidad y soportes con el prestador competente y no acredita aptitud. Las demás celdas, fórmulas y estructura se conservaron.
+
 ## Inventario de la fuente actual
 
 | Dato | Resultado |

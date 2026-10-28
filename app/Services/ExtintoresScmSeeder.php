@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Core\Database;
 use App\Models\IvcActa;
 use App\Models\IvcRequerimiento;
+use App\Models\Permission;
 use App\Models\SanitarioRegistro;
 use App\Models\Tenant;
 use App\Models\User;
@@ -52,6 +53,7 @@ final class ExtintoresScmSeeder
                 'tenant_id' => $tenantId, 'nombre' => $admin['nombre'], 'email' => $admin['email'],
                 'password' => password_hash($password, PASSWORD_DEFAULT), 'rol' => 'AdminEmpresa', 'must_change_password' => 1,
             ]);
+            Permission::grantDefaults($userId, $tenantId, $userId, true);
 
             // Son borradores y actividades programadas: no se aprueban ni se marcan ejecutadas.
             $summary = DocumentGenerator::generate($tenantId);

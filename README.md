@@ -5,6 +5,8 @@ Plataforma SaaS multi-tenant para organizar el Sistema de Gestión de Seguridad 
 La interfaz separa la administración global del SaaS, la operación de cada empresa y el portal de trabajadores/contratistas. El diseño utiliza tarjetas, navegación responsiva, estados visuales y una estética inspirada en iOS; Tailwind se compila localmente y no se depende de un CDN en ejecución.
 
 > **Alcance jurídico:** la clasificación y los catálogos toman como referencia la Resolución 0312 de 2019 y el ciclo PHVA del Decreto 1072 de 2015, con una organización compatible con ISO 45001. Los documentos generados son **borradores técnicos editables**, no una certificación automática de cumplimiento. La empresa debe validarlos, adaptarlos a sus procesos, aprobarlos y conservar sus evidencias con profesionales competentes.
+>
+> La matriz de madurez, los módulos operativos, la reserva de datos, la firma electrónica y las fuentes 2025/2026 se detallan en [`docs/gestion-integral-y-firma.md`](docs/gestion-integral-y-firma.md).
 
 ## Funcionalidad
 
@@ -27,9 +29,14 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - **Biblioteca SG-SST por estándares:** 142 plantillas únicas recuperadas del ZIP suministrado, con 88 documentos editables, 54 formularios por empresa, 60 estándares, módulos relacionados y descarga privada opcional de los originales DOC/DOCX/XLS/XLSX/PPTX/PDF.
 - **PESV para transporte:** módulo propio con 24 pasos y 97 recursos únicos recuperados del paquete suministrado, índice editable generado automáticamente para actividades de transporte, formularios aislados por tenant, trazabilidad, versiones y aprobación humana.
 - Tablero PHVA y Plan Anual de Trabajo con consulta individual, creación, edición completa, avance, fecha real de ejecución y eliminación auditada.
-- Hallazgos y acciones correctivas ACPA.
-- CRUD de matriz IPEVR con cálculo orientativo `ND × NE × NC`, nivel de riesgo y controles.
-- CRUD de capacitaciones, cambio de estado e indicadores con fórmulas y datos fuente.
+- **Matriz única de autoevaluación y madurez:** 60 ítems/100 puntos, referencias legales e ISO 45001 separadas, responsable, evidencia, periodicidad, vencimiento, mejora y aplicabilidad 7/21/60. Documentado, Implementado, Verificado y Eficaz exigen controles diferentes; Cumple sólo tras validación humana y No aplica requiere justificación/aprobación.
+- **Operación SG-SST:** módulos para responsables/recursos, afiliaciones/alto riesgo, participación, adquisiciones, contratistas, cambios, higiene/residuos, mediciones/carcinógenos, inspecciones, mantenimiento, EPP, auditoría y revisión por la dirección, con evidencias y verificación humana.
+- **Eventos SST independientes de ACPA:** incidentes, accidentes y enfermedades laborales con personas, testigos, investigación, causas, días perdidos, acciones y estadística.
+- Hallazgos ACPA con causa raíz y cierre condicionado a eficacia verificada y soporte revisado; editar o reabrir invalida la comprobación anterior.
+- Matriz IPEVR participativa con metodología, fechas, jerarquía de controles, soporte revisado, verificación y reapertura al editar; conserva el cálculo orientativo `ND × NE × NC`.
+- Capacitaciones con asistencia confirmada y eficacia posterior; indicadores con fuentes, responsable y verificación reiniciable.
+- **Salud, psicosocial y convivencia reservados:** permisos de acceso mínimo, conceptos/recomendaciones sin historias clínicas completas, resultados agregados y soportes restringidos. COPASST/Vigía y CCL tienen gestión diferenciada.
+- **Firma electrónica documental:** aprobación previa, permiso, reautenticación, consentimiento, SHA-256, HMAC-SHA256, archivo de versiones, auditoría y verificación de integridad. No se presenta como firma digital certificada.
 - Permisos de trabajo con borrador, solicitud, aprobación, activación, cierre/cancelación, revisiones e impresión; campos específicos para alturas y espacios confinados.
 - Planes de emergencia por centro de trabajo con amenazas, contactos, brigada, recursos, evacuación, rescate, ayuda mutua, simulacros y documento versionado.
 - **Centro transversal de evidencias físicas:** cargas privadas PDF/JPG/PNG de listas de asistencia, reportes, formularios, inspecciones, simulacros, fotografías y otros soportes; vínculos con su módulo de origen, filtros, descarga íntegra y revisión humana con fecha, responsable y observaciones.
@@ -331,7 +338,7 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - CRUD y aislamiento IVC/sanitario, vínculos de evidencias, indicadores, hallazgos, personas, cuentas, simulacros, autoreportes, planos y catálogo CIIU.
 - Precarga Extintores SCM con 20 requerimientos, ocho brechas, siete validaciones, documentos borrador, 28 seguimientos pendientes e idempotencia. `tests/profile_install.php` repite el flujo desde una instalación limpia y comprueba el acceso temporal.
 
-La suite principal actual contiene **57 pruebas**, incluida la generación de 21 CIIU × 3 regímenes (4.680 documentos), complementación segura y exportación DOCX/ZIP. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
+La suite principal actual contiene **70 pruebas**, incluida la generación de 21 CIIU × 3 regímenes (4.680 documentos), complementación segura, exportación DOCX/ZIP, madurez, verificación humana, módulos reservados, firma electrónica y actualización normativa. La validación final también cubrió sintaxis de 242 archivos PHP, migración v4→v5, instalación Extintores y un smoke HTTP con login y 16 vistas autenticadas sin errores 500.
 
 ## Estilos
 
@@ -373,7 +380,7 @@ docs/biblioteca-sgsst.md Inventario, comparación y notas de importación
 scripts/install.php  Instalador de producción/demo
 scripts/migrate.php  Migración no destructiva de instalaciones existentes
 storage/uploads/     Evidencias privadas, fuera del DocumentRoot público
-tests/run.php        57 pruebas funcionales de dominio, persistencia, 63 perfiles y exportación
+tests/run.php        70 pruebas funcionales de dominio, persistencia, 63 perfiles y exportación
 tests/profile_install.php  Instalación limpia del perfil Extintores SCM
 ```
 

@@ -12,6 +12,16 @@ final class EvidenceStorage
 
     public static function store(array $file, int $tenantId): array
     {
+        return self::storeIn($file, $tenantId, false);
+    }
+
+    public static function storeReserved(array $file, int $tenantId): array
+    {
+        return self::storeIn($file, $tenantId, true);
+    }
+
+    private static function storeIn(array $file, int $tenantId, bool $reserved): array
+    {
         $error = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
         if ($error !== UPLOAD_ERR_OK) {
             throw new DomainException(self::uploadError($error));
@@ -45,7 +55,7 @@ final class EvidenceStorage
             throw new DomainException('La extensión del archivo no coincide con su contenido real.');
         }
         $stored = bin2hex(random_bytes(16)) . '.' . $detected;
-        $directory = self::directory($tenantId);
+        $directory = $reserved ? self::reservedDirectory($tenantId) : self::directory($tenantId);
         if (!is_dir($directory) && !mkdir($directory, 0775, true) && !is_dir($directory)) {
             throw new RuntimeException('No fue posible crear el directorio privado de evidencias. Revisa los permisos de storage.');
         }
@@ -62,7 +72,7 @@ final class EvidenceStorage
         return [
             'nombre_original' => $original,
             'nombre_almacenado' => $stored,
-            'ruta_relativa' => 'tenant_' . $tenantId . '/' . $stored,
+            'ruta_relativa' => ($reserved ? 'reserved/tenant_' : 'tenant_') . $tenantId . '/' . $stored,
             'mime' => self::mime($detected),
             'extension' => $detected,
             'tamano' => $size,
@@ -79,6 +89,18 @@ final class EvidenceStorage
         $path = self::directory($tenantId) . DIRECTORY_SEPARATOR . $storedName;
         if (!is_file($path)) {
             throw new RuntimeException('El archivo físico no está disponible.');
+        }
+        return $path;
+    }
+
+    public static function reservedPath(int $tenantId, string $storedName): string
+    {
+        if (!preg_match('/^[a-f0-9]{32}\.(pdf|jpg|png)$/', $storedName)) {
+            throw new DomainException('La ubicación del soporte reservado no es válida.');
+        }
+        $path = self::reservedDirectory($tenantId) . DIRECTORY_SEPARATOR . $storedName;
+        if (!is_file($path)) {
+            throw new RuntimeException('El archivo físico reservado no está disponible.');
         }
         return $path;
     }
@@ -121,6 +143,11 @@ final class EvidenceStorage
     private static function directory(int $tenantId): string
     {
         return BASE_PATH . '/storage/uploads/tenant_' . $tenantId;
+    }
+
+    private static function reservedDirectory(int $tenantId): string
+    {
+        return BASE_PATH . '/storage/reserved/tenant_' . $tenantId;
     }
 
     private static function uploadError(int $error): string

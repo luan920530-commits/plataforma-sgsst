@@ -35,16 +35,28 @@ final class EvidenciaController extends BaseController
         if (!in_array($filters['revision'], ['', 'Pendiente', 'Revisado'], true)) {
             $filters['revision'] = '';
         }
+        $selectedLink = text_substr((string) $this->query('vinculo'), 0, 80);
+        $linkGroups = EvidenceLinker::options($tenantId, $module);
+        if ($selectedLink !== '') {
+            try {
+                $selected = EvidenceLinker::resolve($selectedLink, $tenantId, $module);
+                array_unshift($linkGroups, ['label' => 'Vínculo seleccionado', 'options' => [[
+                    'value' => $selectedLink, 'label' => $selected['entidad_referencia'],
+                ]]]);
+            } catch (DomainException) {
+                $selectedLink = '';
+            }
+        }
         $this->view('tenant/evidencias/index', [
             'title' => 'Centro de evidencias',
             'evidences' => Evidencia::forTenant($tenantId, $module, $filters),
             'stats' => Evidencia::stats($tenantId, $module),
             'filters' => $filters,
             'categories' => Evidencia::categories(),
-            'linkGroups' => EvidenceLinker::options($tenantId, $module),
+            'linkGroups' => $linkGroups,
             'moduleOptions' => EvidenceLinker::moduleOptions($module),
             'planModule' => $module,
-            'selectedLink' => text_substr((string) $this->query('vinculo'), 0, 80),
+            'selectedLink' => $selectedLink,
         ]);
     }
 

@@ -4,14 +4,18 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\Documento;
+use App\Models\Permission;
 use App\Models\Tenant;
 use App\Services\DocumentGenerator;
+use App\Services\DocumentSignature;
 use App\Services\DocumentPackageExporter;
 use App\Services\ModuleAccess;
+use App\Support\AccessControl;
 use App\Support\Audit;
 use App\Support\Auth;
 use App\Support\Sanitizer;
 use App\Support\Validator;
+use DomainException;
 
 final class DocumentGeneratorController extends BaseController
 {
@@ -88,8 +92,24 @@ final class DocumentGeneratorController extends BaseController
             'title' => $document['nombre_documento'],
             'document' => $document,
             'versions' => Documento::versions($id, $tenantId),
+            'signatures' => DocumentSignature::forDocument($id, $tenantId),
+            'signatureConsent' => DocumentSignature::consentText(),
+            'currentContentHash' => DocumentSignature::contentHash($document),
+            'canSign' => AccessControl::can(Permission::DOCUMENT_SIGN),
             'tenant' => Tenant::find($tenantId),
         ]);
+    }
+
+    public function sign(int $id): void
+    {
+        $this->requirePermission(Permission::DOCUMENT_SIGN, 'Tu cuenta no tiene permiso para firmar documentos.');
+        try {
+            DocumentSignature::sign($id, $this->tenantId(), Auth::id(), (string) $this->input('password'), $this->input('consentimiento'));
+            flash('success', 'Firma electrónica registrada y vinculada a la versión aprobada.');
+        } catch (DomainException $exception) {
+            flash('error', $exception->getMessage());
+        }
+        redirect('/documentos/' . $id . '#firmas');
     }
 
     public function update(int $id): void
@@ -159,6 +179,7 @@ final class DocumentGeneratorController extends BaseController
             'title' => $document['nombre_documento'] . ' · v' . $version['version'],
             'document' => $document,
             'version' => $version,
+            'signatures' => DocumentSignature::forDocument($id, $tenantId, (int) $version['version']),
             'tenant' => Tenant::find($tenantId),
         ]);
     }
@@ -173,6 +194,7 @@ final class DocumentGeneratorController extends BaseController
         $this->view('tenant/documentos/print', [
             'title' => $document['nombre_documento'],
             'document' => $document,
+            'signatures' => DocumentSignature::forDocument($id, $tenantId, (int) $document['version']),
             'tenant' => Tenant::find($tenantId),
         ], 'layouts/print');
     }

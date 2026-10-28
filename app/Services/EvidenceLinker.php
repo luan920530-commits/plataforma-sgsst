@@ -4,11 +4,18 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Core\Database;
+use App\Models\Autoevaluacion;
 use App\Models\Autoreporte;
 use App\Models\BibliotecaRespuesta;
 use App\Models\Capacitacion;
+use App\Models\Comite;
 use App\Models\Documento;
+use App\Models\Evento;
+use App\Models\Hallazgo;
+use App\Models\Indicador;
 use App\Models\IvcRequerimiento;
+use App\Models\Operation;
+use App\Models\Peligro;
 use App\Models\PlanEmergencia;
 use App\Models\PlanoEmergencia;
 use App\Models\ProgramaPrevencion;
@@ -46,6 +53,15 @@ final class EvidenceLinker
                 'value' => 'capacitacion:' . $row['id'],
                 'label' => $row['tema'] . ' · ' . $row['fecha_programada'],
             ], Capacitacion::forTenant($tenantId)));
+            self::addGroup($groups, 'Hallazgos y acciones ACPA', array_map(static fn(array $row): array => [
+                'value' => 'hallazgo:' . $row['id'], 'label' => 'ACPA #' . $row['id'] . ' · ' . $row['origen'] . ' · ' . excerpt($row['descripcion'], 70),
+            ], Hallazgo::forTenant($tenantId)));
+            self::addGroup($groups, 'Indicadores y datos fuente', array_map(static fn(array $row): array => [
+                'value' => 'indicador:' . $row['id'], 'label' => $row['nombre'] . ' · ' . $row['periodo'],
+            ], Indicador::forTenant($tenantId)));
+            self::addGroup($groups, 'Evaluaciones IPEVR', array_map(static fn(array $row): array => [
+                'value' => 'peligro:' . $row['id'], 'label' => 'IPEVR #' . $row['id'] . ' · ' . $row['peligro'] . ' · ' . $row['cargo'],
+            ], Peligro::forTenant($tenantId)));
             self::addGroup($groups, 'Requerimientos y brechas IVC', array_map(static fn(array $row): array => [
                 'value' => 'ivc_requerimiento:' . $row['id'],
                 'label' => $row['codigo'] . ' · Acta ' . $row['numero_acta'] . ' · ' . excerpt($row['hallazgo'], 70),
@@ -54,6 +70,26 @@ final class EvidenceLinker
                 'value' => 'sanitario:' . $row['id'],
                 'label' => $row['titulo'] . ' · ' . $row['fecha_registro'],
             ], SanitarioRegistro::forTenant($tenantId)));
+            $operations = Database::query('SELECT id, modulo, titulo, tipo FROM operacion_registros WHERE tenant_id = ? ORDER BY id DESC', [$tenantId]);
+            self::addGroup($groups, 'Registros operativos', array_map(static fn(array $row): array => [
+                'value' => 'operacion:' . $row['id'], 'label' => $row['modulo'] . ' · ' . $row['tipo'] . ' · ' . $row['titulo'],
+            ], $operations));
+            $events = Evento::forTenant($tenantId, [], AccessControl::can(\App\Models\Permission::HEALTH));
+            self::addGroup($groups, 'Incidentes, AT y EL', array_map(static fn(array $row): array => [
+                'value' => 'evento:' . $row['id'], 'label' => $row['codigo'] . ' · ' . $row['tipo'] . ' · ' . $row['fecha_evento'],
+            ], $events));
+            $healthSql = AccessControl::can(\App\Models\Permission::HEALTH) ? '' : " AND e.tipo <> 'Enfermedad laboral'";
+            $eventActions = Database::query('SELECT a.id, a.tipo, e.id evento_id, e.codigo FROM evento_acciones a JOIN eventos_sst e ON e.id=a.evento_id WHERE a.tenant_id = ?' . $healthSql . ' ORDER BY a.id DESC', [$tenantId]);
+            self::addGroup($groups, 'Acciones derivadas de eventos', array_map(static fn(array $row): array => [
+                'value' => 'evento_accion:' . $row['id'], 'label' => $row['codigo'] . ' · Acción ' . $row['tipo'],
+            ], $eventActions));
+            self::addGroup($groups, 'COPASST y Vigía', array_map(static fn(array $row): array => [
+                'value' => 'comite:' . $row['id'], 'label' => $row['tipo'] . ' · ' . $row['centro_trabajo'] . ' · ' . $row['periodo'],
+            ], Comite::forTenant($tenantId)));
+            $committeeMeetings = Database::query('SELECT r.id, r.fecha, r.tipo, c.tipo comite_tipo FROM comite_reuniones r JOIN comites c ON c.id=r.comite_id WHERE r.tenant_id = ? ORDER BY r.fecha DESC', [$tenantId]);
+            self::addGroup($groups, 'Reuniones COPASST / Vigía', array_map(static fn(array $row): array => [
+                'value' => 'comite_reunion:' . $row['id'], 'label' => $row['comite_tipo'] . ' · ' . $row['tipo'] . ' · ' . $row['fecha'],
+            ], $committeeMeetings));
         }
 
         if (in_array($current, [ModuleAccess::SGST, ModuleAccess::PESV], true)) {
@@ -115,6 +151,38 @@ final class EvidenceLinker
         }
         $id = (int) $rawId;
         switch ($type) {
+            case 'matriz_requisito':
+                $row = Autoevaluacion::requirement($id, $tenantId);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, 'Matriz ' . $row['vigencia'] . ' · ' . $row['item_codigo'] . ' · ' . $row['estandar'], ModuleAccess::SGST);
+            case 'comite':
+                $row = Comite::findForTenant($id, $tenantId);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, $row['tipo'] . ' · ' . $row['centro_trabajo'], ModuleAccess::SGST);
+            case 'comite_reunion':
+                $row = Database::first('SELECT r.id, r.fecha, c.tipo FROM comite_reuniones r JOIN comites c ON c.id=r.comite_id WHERE r.id = ? AND r.tenant_id = ?', [$id, $tenantId]);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, $row['tipo'] . ' · Reunión ' . $row['fecha'], ModuleAccess::SGST);
+            case 'evento':
+                $row = Evento::findForTenant($id, $tenantId);
+                if ($row === null) break;
+                if ($row['tipo'] === 'Enfermedad laboral' && !AccessControl::can(\App\Models\Permission::HEALTH)) throw new DomainException('Este evento requiere acceso reservado de salud.');
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, $row['codigo'] . ' · ' . $row['tipo'], ModuleAccess::SGST);
+            case 'evento_accion':
+                $row = Database::first('SELECT a.id, a.tipo, e.tipo evento_tipo, e.codigo FROM evento_acciones a JOIN eventos_sst e ON e.id = a.evento_id WHERE a.id = ? AND a.tenant_id = ?', [$id, $tenantId]);
+                if ($row === null) break;
+                if ($row['evento_tipo'] === 'Enfermedad laboral' && !AccessControl::can(\App\Models\Permission::HEALTH)) throw new DomainException('Esta acción requiere acceso reservado de salud.');
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, $row['codigo'] . ' · Acción ' . $row['tipo'], ModuleAccess::SGST);
+            case 'operacion':
+                $row = Operation::findForTenant($id, $tenantId);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, 'Operación · ' . $row['modulo'] . ' · ' . $row['titulo'], ModuleAccess::SGST);
             case 'documento':
                 $row = Documento::findForTenant($id, $tenantId);
                 if ($row === null) break;
@@ -131,6 +199,21 @@ final class EvidenceLinker
                 if ($row === null) break;
                 self::authorize(ModuleAccess::SGST, $current);
                 return self::linked($type, $id, 'Capacitación · ' . $row['tema'] . ' · ' . $row['fecha_programada'], ModuleAccess::SGST);
+            case 'hallazgo':
+                $row = Hallazgo::findForTenant($id, $tenantId);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, 'ACPA #' . $id . ' · ' . $row['origen'], ModuleAccess::SGST);
+            case 'indicador':
+                $row = Indicador::findForTenant($id, $tenantId);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, 'Indicador · ' . $row['nombre'] . ' · ' . $row['periodo'], ModuleAccess::SGST);
+            case 'peligro':
+                $row = Peligro::findForTenant($id, $tenantId);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, 'IPEVR #' . $id . ' · ' . $row['peligro'], ModuleAccess::SGST);
             case 'ivc_requerimiento':
                 $row = IvcRequerimiento::findForTenant($id, $tenantId);
                 if ($row === null) break;
@@ -179,9 +262,18 @@ final class EvidenceLinker
             return null;
         }
         return match ($type) {
+            'matriz_requisito' => '/autoevaluacion/requisitos/' . rawurlencode($id) . '/editar',
+            'comite' => '/comites/' . rawurlencode($id),
+            'comite_reunion' => self::committeeMeetingUrl($evidence),
+            'evento' => '/eventos/' . rawurlencode($id),
+            'evento_accion' => self::eventActionUrl($evidence),
+            'operacion' => '/operacion-registros/' . rawurlencode($id) . '/editar',
             'documento' => '/documentos/' . rawurlencode($id),
             'autoreporte' => '/autoreportes/' . rawurlencode($id),
-            'capacitacion' => '/capacitaciones/' . rawurlencode($id) . '/editar',
+            'capacitacion' => '/capacitaciones/' . rawurlencode($id),
+            'hallazgo' => '/hallazgos#hallazgo-' . rawurlencode($id),
+            'indicador' => '/indicadores#indicador-' . rawurlencode($id),
+            'peligro' => '/matriz-ipevr#peligro-' . rawurlencode($id),
             'ivc_requerimiento' => self::ivcRequirementUrl($evidence),
             'sanitario' => '/sanitario/registros/' . rawurlencode($id),
             'formulario' => (($evidence['modulo'] ?? '') === ModuleAccess::PESV ? '/pesv/respuestas/' : '/biblioteca-sgsst/respuestas/') . rawurlencode($id),
@@ -192,6 +284,18 @@ final class EvidenceLinker
             'requisito' => '/cumplimiento-documental?requisito=' . rawurlencode($id) . '#soportes',
             default => null,
         };
+    }
+
+    private static function committeeMeetingUrl(array $evidence): ?string
+    {
+        $row = Database::first('SELECT comite_id FROM comite_reuniones WHERE id = ? AND tenant_id = ?', [(int) $evidence['entidad_id'], (int) $evidence['tenant_id']]);
+        return $row === null ? null : '/comites/' . $row['comite_id'] . '#reunion-' . $evidence['entidad_id'];
+    }
+
+    private static function eventActionUrl(array $evidence): ?string
+    {
+        $row = Database::first('SELECT evento_id FROM evento_acciones WHERE id = ? AND tenant_id = ?', [(int) $evidence['entidad_id'], (int) $evidence['tenant_id']]);
+        return $row === null ? null : '/eventos/' . $row['evento_id'] . '#acciones';
     }
 
     private static function ivcRequirementUrl(array $evidence): ?string

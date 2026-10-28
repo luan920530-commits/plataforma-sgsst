@@ -727,7 +727,8 @@
       "status": "revisado",
       "number": 18,
       "phase": "Planear",
-      "document_type": "Matriz"
+      "document_type": "Matriz",
+      "legal_review": "Recurso histórico: contiene artículos y afirmaciones heredadas de las Resoluciones 2346 de 2007 y 1918 de 2009, derogadas por la Resolución 1843 de 2025. No usar como matriz legal vigente ni como evidencia precargada; construir y validar la matriz en el módulo de cumplimiento."
     },
     {
       "id": "BIB-BC6DB1D9C25C",
@@ -1394,7 +1395,8 @@
       "status": "revisado",
       "number": 36,
       "phase": "Hacer",
-      "document_type": "Programa"
+      "document_type": "Programa",
+      "legal_review": "Recurso histórico con referencias a las Resoluciones 2346 de 2007 y 1918 de 2009, derogadas por la Resolución 1843 de 2025. No generar una versión vigente desde esta fuente; adaptar el programa actualizado con revisión competente."
     },
     {
       "id": "BIB-7C86C60364A7",
@@ -1466,7 +1468,8 @@
       "status": "revisado",
       "number": 38,
       "phase": "Hacer",
-      "document_type": "Procedimiento"
+      "document_type": "Procedimiento",
+      "legal_review": "Recurso histórico con referencia a la Resolución 1918 de 2009, derogada por la Resolución 1843 de 2025. No generar una versión vigente desde esta fuente; utilizar el programa y control no clínico actualizados."
     },
     {
       "id": "BIB-B3E463103814",
@@ -2751,7 +2754,8 @@
       "status": "revisado",
       "number": 72,
       "phase": "Hacer",
-      "document_type": "Estandar"
+      "document_type": "Estandar",
+      "legal_review": "Recurso histórico con referencias a la Resolución 2346 de 2007, derogada por la Resolución 1843 de 2025. Revisar todo el manual y sus demás fuentes antes de cualquier uso; no generar una versión vigente desde esta fuente."
     },
     {
       "id": "BIB-DCE300CEB67A",
@@ -3038,7 +3042,8 @@
       "status": "revisado",
       "number": 80,
       "phase": "Hacer",
-      "document_type": "Procedimiento"
+      "document_type": "Procedimiento",
+      "legal_review": "Recurso histórico con referencia a la Resolución 1918 de 2009, derogada por la Resolución 1843 de 2025. No generar una versión vigente desde esta fuente; utilizar el programa y control no clínico actualizados."
     },
     {
       "id": "BIB-0EAFED100BFF",

@@ -76,6 +76,14 @@ final class Evidencia
         )['total'] ?? 0);
     }
 
+    public static function reviewedCountForEntity(int $tenantId, string $type, string $entityId): int
+    {
+        return (int) (Database::first(
+            "SELECT COUNT(*) AS total FROM soportes_cumplimiento WHERE tenant_id = ? AND entidad_tipo = ? AND entidad_id = ? AND estado_revision = 'Revisado'",
+            [$tenantId, $type, (string) $entityId]
+        )['total'] ?? 0);
+    }
+
     public static function create(array $data): int
     {
         Database::execute(

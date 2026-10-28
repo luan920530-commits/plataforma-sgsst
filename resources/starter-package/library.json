@@ -1,6 +1,6 @@
 {
   "name": "Paquete de inicio SG-SST por régimen, actividad y peligros",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "reviewed_at": "2026-10-28",
   "legal_notice": "Selección orientativa de borradores. La empresa debe confirmar aplicabilidad, adaptar, aprobar, ejecutar y conservar evidencias. La creación documental no equivale a cumplimiento ni certificación.",
   "references": {
@@ -16,13 +16,9 @@
       "title": "Resolución 1401 de 2007 · Investigación de incidentes y accidentes",
       "url": "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=53497"
     },
-    "R2346": {
-      "title": "Resolución 2346 de 2007 · Evaluaciones médicas ocupacionales",
-      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=85863"
-    },
-    "R1918": {
-      "title": "Resolución 1918 de 2009 · Costos y custodia de evaluaciones e historias",
-      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=36469"
+    "R1843": {
+      "title": "Resolución 1843 de 2025 · Evaluaciones médicas ocupacionales",
+      "url": "https://cancilleria.gov.co/normograma/compilacion/docs/resolucion_mtra_1843_2025.htm"
     },
     "R3461": {
       "title": "Resolución 3461 de 2025 · Comité de Convivencia Laboral",
@@ -75,6 +71,22 @@
     "L2365": {
       "title": "Ley 2365 de 2024 · Prevención, protección y atención del acoso sexual",
       "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=244636"
+    },
+    "D728": {
+      "title": "Decreto 728 de 2025 · Salud mental y prevención del consumo de sustancias psicoactivas en el trabajo",
+      "url": "https://normograma.mintic.gov.co/mintic/compilacion/docs/decreto_0728_2025.htm"
+    },
+    "R2764": {
+      "title": "Resolución 2764 de 2022 · Batería de instrumentos y protocolos para el riesgo psicosocial",
+      "url": "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=127124"
+    },
+    "D1040": {
+      "title": "Decreto 1040 de 2026 · Acoso, violencia y discriminación en el ámbito laboral",
+      "url": "https://normograma.mintic.gov.co/mintic/compilacion/docs/decreto_1040_2026.htm"
+    },
+    "CIR027": {
+      "title": "Circular 027 de 2026 · Autoevaluación de estándares mínimos y Plan de Mejoramiento",
+      "url": "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=192912&dt=S"
     }
   },
   "kits": [
@@ -104,7 +116,8 @@
           "records": [],
           "references": [
             "D1072",
-            "R0312"
+            "R0312",
+            "CIR027"
           ],
           "template": "start_guide"
         },
@@ -443,7 +456,9 @@
           "controls": [],
           "records": [],
           "references": [
-            "D1072"
+            "D1072",
+            "R0312",
+            "CIR027"
           ],
           "form": {
             "identification": [
@@ -453,7 +468,8 @@
               "Responsable"
             ],
             "instructions": [
-              "El estado y la fecha de ejecución se completan sólo con soportes reales."
+              "El estado y la fecha de ejecución se completan sólo con soportes reales.",
+              "Articule la autoevaluación anual, el Plan Anual de Trabajo y el Plan de Mejoramiento con responsables, recursos, plazos e indicadores; verifique los plazos de reporte vigentes antes de programarlos."
             ],
             "tables": [
               {
@@ -568,7 +584,7 @@
           "objective": "Organizar el diagnóstico de condiciones de salud, las evaluaciones ocupacionales y la implementación de recomendaciones, protegiendo la reserva clínica.",
           "steps": [
             "Elaborar perfiles de exposición por cargo y centro con base en la IPEVR y en las tareas reales.",
-            "Definir con el prestador o profesional competente los contenidos y la frecuencia de evaluaciones de preingreso, periódicas, cambio de ocupación y egreso.",
+            "Definir con el prestador o profesional competente los contenidos y la frecuencia justificada de evaluaciones de preingreso, periódicas, cambio de ocupación, egreso, postincapacidad, retorno laboral y seguimiento, según corresponda; la periodicidad de las evaluaciones periódicas no puede exceder tres años.",
             "Programar y costear las evaluaciones; registrar únicamente datos administrativos necesarios para controlar cobertura.",
             "Recibir conceptos y recomendaciones funcionales, definir adecuaciones y verificar su implementación sin solicitar diagnósticos innecesarios.",
             "Formalizar custodia de historias clínicas por el prestador o médico competente y canales legítimos de acceso.",
@@ -577,7 +593,8 @@
           "controls": [
             "No almacenar historias clínicas ni resultados diagnósticos en el repositorio general.",
             "No generar conceptos de aptitud ni restricciones desde esta plantilla.",
-            "Las pruebas complementarias dependen de exposición y criterio profesional, no de una lista idéntica para todos."
+            "Las pruebas complementarias dependen de exposición y criterio profesional, no de una lista idéntica para todos.",
+            "No usar evaluaciones o conceptos con fines discriminatorios; las adaptaciones se definen a partir de recomendaciones funcionales y del puesto real."
           ],
           "records": [
             "Perfiles de exposición y programación.",
@@ -586,8 +603,7 @@
             "Acta o contrato de custodia y acciones de adecuación."
           ],
           "references": [
-            "R2346",
-            "R1918",
+            "R1843",
             "D1072"
           ]
         },
@@ -601,8 +617,7 @@
           "controls": [],
           "records": [],
           "references": [
-            "R2346",
-            "R1918"
+            "R1843"
           ],
           "form": {
             "identification": [
@@ -612,7 +627,9 @@
               "Responsable"
             ],
             "instructions": [
-              "No escriba diagnósticos, resultados de pruebas ni historias clínicas en este formato."
+              "No escriba diagnósticos, resultados de pruebas ni historias clínicas en este formato.",
+              "Tipo de evaluación: preingreso, periódica, cambio de ocupación, egreso, postincapacidad, retorno laboral o seguimiento, según necesidad real y criterio competente.",
+              "Documente la justificación de periodicidad con el responsable competente; las evaluaciones periódicas no deben exceder tres años."
             ],
             "tables": [
               {
@@ -672,15 +689,17 @@
           "objective": "Prevenir y gestionar factores psicosociales del diseño y organización del trabajo, con canales de apoyo y evaluación por personal competente.",
           "steps": [
             "Caracterizar demandas, control, apoyo, liderazgo, jornadas, recompensa, relaciones y cambios por grupos de trabajo.",
-            "Definir con profesionales competentes la estrategia de evaluación, los instrumentos autorizados y el tratamiento confidencial de resultados.",
+            "Definir con profesionales competentes la estrategia de evaluación, utilizando como mínimo la batería, guía y protocolos adoptados por la Resolución 2764 de 2022, sin alterar instrumentos ni precargar resultados, y con tratamiento confidencial.",
             "Priorizar medidas organizacionales sobre carga, recursos, roles, horarios, comunicación, participación y apoyo.",
-            "Articular convivencia, desconexión, prevención de violencias y respuesta ante crisis sin revictimización.",
+            "Articular promoción de salud mental, prevención del consumo de sustancias psicoactivas, sensibilización, canalización, asistencia, respuesta en crisis o primeros auxilios psicológicos y seguimiento conforme al Decreto 728 de 2025.",
+            "Articular convivencia, desconexión y prevención de acoso, violencia y discriminación con rutas diferenciadas, confidencialidad y no revictimización.",
             "Evaluar resultados agregados, eficacia de acciones y necesidades de intervención individual por canales privados."
           ],
           "controls": [
             "No incluir ni aplicar una batería psicosocial improvisada como si fuera diagnóstico.",
             "No publicar resultados individuales ni utilizarlos para discriminar.",
-            "Las campañas de bienestar no reemplazan cambios en la organización del trabajo."
+            "Las campañas de bienestar no reemplazan cambios en la organización del trabajo.",
+            "Las respuestas individuales y los resultados clínicos permanecen bajo custodia y acceso restringido; en el SG-SST se usan resultados agregados."
           ],
           "records": [
             "Diagnóstico agregado y plan de intervención.",
@@ -689,7 +708,10 @@
           ],
           "references": [
             "R2646",
-            "D1072"
+            "D1072",
+            "D728",
+            "R2764",
+            "D1040"
           ]
         },
         {
@@ -702,7 +724,9 @@
           "controls": [],
           "records": [],
           "references": [
-            "D1072"
+            "D1072",
+            "D728",
+            "R2764"
           ],
           "form": {
             "identification": [
@@ -712,7 +736,8 @@
               "Responsable"
             ],
             "instructions": [
-              "No incluya respuestas individuales, resultados de baterías ni información clínica."
+              "No incluya respuestas individuales, resultados de baterías ni información clínica.",
+              "Use únicamente resultados agregados y acciones derivadas de una evaluación real; no precargue factores, puntajes ni eficacia."
             ],
             "tables": [
               {
@@ -891,10 +916,11 @@
           "references": [
             "R3461",
             "D1072",
-            "L2365"
+            "L2365",
+            "D1040"
           ],
           "template": "convivencia",
-          "warning": "El procedimiento no autoriza a publicar expedientes de quejas en la biblioteca general. El acoso sexual no es conciliable y sigue la ruta especial aplicable."
+          "warning": "El procedimiento no autoriza a publicar expedientes de quejas en la biblioteca general. El acoso sexual no es conciliable y sigue la ruta especial aplicable. Articule las rutas de acoso, violencia y discriminación conforme al Decreto 1040 de 2026, sin trasladar al Comité competencias que no le corresponden."
         },
         {
           "code": "FT-CCL-01",
@@ -906,7 +932,8 @@
           "controls": [],
           "records": [],
           "references": [
-            "R3461"
+            "R3461",
+            "D1040"
           ],
           "form": {
             "identification": [

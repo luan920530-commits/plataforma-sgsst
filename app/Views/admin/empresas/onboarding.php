@@ -133,7 +133,7 @@ foreach ($plans as $planOption) {
                         <div class="p-6">
                             <div class="flex items-center gap-4 rounded-2xl bg-blue-50 p-4"><strong class="text-4xl tracking-tight text-blue-600" data-summary-group>—</strong><div><p class="text-xs font-semibold text-blue-900">estándares mínimos</p><p class="mt-1 text-[10px] text-blue-600" data-summary-company>Empresa por identificar</p></div></div>
                             <?php $generationFeatures = [
-                                'sgsst' => [['documents', 'Documentos y políticas obligatorias'], ['calendar', 'Plan Anual de Trabajo'], ['cap', 'Cronograma de capacitaciones'], ['grid', 'Matriz IPEVR base y perfiles'], ['signature', 'Inducción para firma digital']],
+                                'sgsst' => [['documents', 'Documentos y políticas obligatorias'], ['calendar', 'Plan Anual de Trabajo'], ['cap', 'Cronograma de capacitaciones'], ['grid', 'Matriz IPEVR base y perfiles'], ['signature', 'Inducción para firma electrónica']],
                                 'pesv' => [['shield-plain', 'Índice PESV de 24 pasos en borrador'], ['grid', 'Biblioteca de 97 recursos únicos'], ['edit', 'Formularios y editor visual'], ['documents', 'Versiones y control documental PESV'], ['check-circle', 'Revisión y aprobación humana']],
                                 'emergencias' => [['shield', 'Plan de emergencias en borrador'], ['activity', 'Programa de vigilancia en borrador'], ['calendar', 'Gestión de simulacros'], ['documents', 'Documentos y evidencias del módulo'], ['check-circle', 'Revisión y aprobación humana']],
                             ]; ?>

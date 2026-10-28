@@ -16,6 +16,11 @@ $value = static fn(string $key, $default = '') => old($key, $hazard[$key] ?? $de
         <div><label class="label" for="efectos">Efectos posibles *</label><input id="efectos" name="efectos" class="input" value="<?= e($value('efectos')) ?>" required><?= field_error('efectos') ?></div>
         <div class="sm:col-span-2"><label class="label" for="controles_existentes">Controles existentes</label><textarea id="controles_existentes" name="controles_existentes" class="input min-h-24"><?= e($value('controles_existentes')) ?></textarea></div>
         <div class="sm:col-span-2"><label class="label" for="medidas_control">Medidas de prevención y control *</label><textarea id="medidas_control" name="medidas_control" class="input min-h-28" required><?= e($value('medidas_control')) ?></textarea><?= field_error('medidas_control') ?><p class="mt-2 text-[11px] text-slate-400">Prioriza eliminación, sustitución e ingeniería antes de controles administrativos y EPP.</p></div>
+        <div><label class="label">Metodología *</label><input name="metodologia" class="input" required value="<?= e($value('metodologia','GTC 45')) ?>"></div>
+        <div><label class="label">Fecha de evaluación *</label><input type="date" name="fecha_evaluacion" class="input" required value="<?= e($value('fecha_evaluacion')) ?>"></div>
+        <div><label class="label">Próxima revisión</label><input type="date" name="proxima_revision" class="input" value="<?= e($value('proxima_revision')) ?>"></div>
+        <div><label class="label">Participantes *</label><input name="participantes" class="input" required value="<?= e($value('participantes')) ?>"></div>
+        <div class="sm:col-span-2"><label class="label">Jerarquía de controles y justificación *</label><textarea name="jerarquia_controles" class="input min-h-24" required><?= e($value('jerarquia_controles')) ?></textarea></div>
     </div>
     <div class="mt-6 rounded-2xl bg-slate-50 p-4">
         <h2 class="text-sm font-semibold text-slate-700">Valoración cuantitativa</h2><p class="mt-1 text-[11px] text-slate-400">Completa los tres valores para calcular NP = ND × NE y NR = NP × NC, o deja todos vacíos para conservar una valoración manual.</p>

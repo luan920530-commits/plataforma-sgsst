@@ -2746,7 +2746,8 @@
       "warnings": [
         "El original contiene vínculos externos heredados; se excluyeron sus relaciones y cachés. No se resuelven ni actualizan.",
         "Los nombres definidos vinculados a archivos externos fueron excluidos; no se copiaron sus referencias ni resultados en caché.",
-        "Se excluyeron 2730 celdas vacías de formato residual fuera del área útil; todos los valores y fórmulas se conservaron."
+        "Se excluyeron 2730 celdas vacías de formato residual fuera del área útil; todos los valores y fórmulas se conservaron.",
+        "Se actualizó puntualmente la referencia de evaluaciones médicas a la Resolución 1843 de 2025. Verificar idoneidad, alcance y soportes con el prestador competente; el formato no acredita aptitud."
       ],
       "stats": {
         "sheets": 2,

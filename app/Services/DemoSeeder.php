@@ -13,6 +13,7 @@ use App\Models\Indicador;
 use App\Models\PlanEmergencia;
 use App\Models\PlanoEmergencia;
 use App\Models\PlanTrabajo;
+use App\Models\Permission;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Support\Indicator;
@@ -99,10 +100,9 @@ final class DemoSeeder
             PlanTrabajo::updateStatus((int) $activityItem['id'], $mainId, 'En Proceso');
         }
 
-        Hallazgo::create(['tenant_id' => $mainId, 'origen' => 'Inspeccion', 'descripcion' => 'Dos puestos del área de tecnología no tienen ajuste ergonómico documentado.', 'accion_correctiva' => 'Evaluar puestos, ajustar apoyos lumbares y registrar pausas activas con los equipos.', 'responsable' => 'Camilo Andrés Mora', 'fecha_limite' => date('Y-m-d', strtotime('+12 days'))]);
-        Hallazgo::create(['tenant_id' => $mainId, 'origen' => 'Reporte', 'descripcion' => 'Reporte de fatiga visual al finalizar jornadas con reuniones continuas.', 'accion_correctiva' => 'Revisar programación de reuniones y socializar pautas de descanso visual.', 'responsable' => 'Natalia Cifuentes', 'fecha_limite' => date('Y-m-d', strtotime('+20 days'))]);
-        $closedFinding = Hallazgo::create(['tenant_id' => $mainId, 'origen' => 'Auditoria', 'descripcion' => 'La matriz legal no tenía evidencia de revisión trimestral.', 'accion_correctiva' => 'Actualizar matriz y asignar responsable de verificación de cambios.', 'responsable' => 'Camilo Andrés Mora', 'fecha_limite' => date('Y-m-d', strtotime('-10 days'))]);
-        Hallazgo::setStatus($closedFinding, $mainId, 'Cerrado');
+        Hallazgo::create(['tenant_id' => $mainId, 'origen' => 'Inspeccion', 'descripcion' => 'Dos puestos del área de tecnología no tienen ajuste ergonómico documentado.', 'accion_correctiva' => 'Evaluar puestos, ajustar apoyos lumbares y registrar pausas activas con los equipos.', 'responsable' => 'Camilo Andrés Mora', 'fecha_limite' => date('Y-m-d', strtotime('+12 days')), 'causa_raiz' => 'Pendiente de análisis con los puestos y las personas afectadas.']);
+        Hallazgo::create(['tenant_id' => $mainId, 'origen' => 'Reporte', 'descripcion' => 'Reporte de fatiga visual al finalizar jornadas con reuniones continuas.', 'accion_correctiva' => 'Revisar programación de reuniones y socializar pautas de descanso visual.', 'responsable' => 'Natalia Cifuentes', 'fecha_limite' => date('Y-m-d', strtotime('+20 days')), 'causa_raiz' => 'Pendiente de análisis de la organización de las reuniones.']);
+        Hallazgo::create(['tenant_id' => $mainId, 'origen' => 'Auditoria', 'descripcion' => 'La matriz legal no tenía evidencia de revisión trimestral.', 'accion_correctiva' => 'Actualizar matriz y asignar responsable de verificación de cambios.', 'responsable' => 'Camilo Andrés Mora', 'fecha_limite' => date('Y-m-d', strtotime('-10 days')), 'causa_raiz' => 'Pendiente de confirmar en la revisión del ciclo documental.']);
 
         foreach ([
             ['Frecuencia', 'Frecuencia de accidentalidad', '2026-09', 0, 5040, 240000, 0],
@@ -183,9 +183,13 @@ final class DemoSeeder
         if ($existing !== null) {
             return (int) $existing['id'];
         }
-        return User::create([
+        $userId = User::create([
             'tenant_id' => $tenantId, 'nombre' => $name, 'email' => $email,
             'password' => password_hash('Normia2026!', PASSWORD_DEFAULT), 'rol' => $role, 'licencia_sst' => $license,
         ]);
+        if ($tenantId !== null && in_array($role, ['AdminEmpresa', 'ResponsableSST'], true)) {
+            Permission::grantDefaults($userId, $tenantId, $userId, $role === 'AdminEmpresa');
+        }
+        return $userId;
     }
 }

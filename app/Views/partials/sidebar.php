@@ -76,6 +76,8 @@ if ($role === 'SuperAdmin') {
             ['Cumplimiento IVC', '/ivc', 'clipboard'],
             ['Gestión sanitaria', '/sanitario', 'shield'],
             ['Ciclo PHVA', '/phva', 'phva', true],
+            ['Matriz y autoevaluación', '/autoevaluacion', 'clipboard'],
+            ['Gestión operativa', '/operacion/responsables', 'settings'],
             ['Plan Anual de Trabajo', '/plan-anual', 'calendar'],
             ['Matriz IPEVR', '/matriz-ipevr', 'grid'],
             ['Programas de prevención', '/programas-prevencion', 'activity'],
@@ -87,10 +89,18 @@ if ($role === 'SuperAdmin') {
         ['label' => 'MEJORA Y PERSONAS', 'items' => [
             ['Hallazgos y ACPA', '/hallazgos', 'clipboard'],
             ['Autoreportes', '/autoreportes', 'activity'],
+            ['Incidentes, AT y EL', '/eventos', 'alert'],
+            ['COPASST y Vigía', '/comites', 'users'],
             ['Enlaces y QR de reportes', '/autoreportes/accesos', 'shield-plain'],
             ['Equipo y accesos', '/equipo', 'users'],
         ]],
     ];
+    }
+    if ($planModule === App\Services\ModuleAccess::SGST) {
+        $reservedItems = [];
+        if (App\Support\AccessControl::can('salud.reservada')) $reservedItems[] = ['Salud reservada', '/salud', 'heart'];
+        if (App\Support\AccessControl::can('convivencia.reservada')) $reservedItems[] = ['Convivencia y CCL', '/convivencia', 'lock'];
+        if ($reservedItems !== []) $navigation[] = ['label' => 'EXPEDIENTES RESERVADOS', 'items' => $reservedItems];
     }
     if ($role === 'AdminEmpresa') {
         $navigation[] = ['label' => 'ADMINISTRACIÓN', 'items' => [
