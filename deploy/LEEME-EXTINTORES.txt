@@ -19,9 +19,12 @@ NORMIA SST · EXTINTORES SCM · INSTALACIÓN EN HOSTING
 QUÉ SE INSTALA
 --------------
 - Extintores SCM · NIT 39626936-8 · Soacha · teléfono 3212944603.
-- Configuración inicial de 7 estándares y 16 documentos en estado Borrador,
-  incluidos el programa PR-LD-01 y los formatos FT-LD-01 y FT-LD-02 de
-  programación, ejecución y verificación de limpieza y desinfección.
+- Configuración inicial de 7 estándares y 40 documentos en estado Borrador:
+  estándares, políticas, guía de inicio, Manual SG-SST, matriz de cobertura,
+  salud, psicosocial, ergonomía, convivencia, emergencias, EPP, atención al
+  público, actividad, AST y el programa PR-LD-01 con FT-LD-01 y FT-LD-02.
+- Descarga individual DOCX editable y paquete ZIP con cobertura CSV. Estas
+  descargas no acreditan implementación ni incluyen ejecuciones precargadas.
 - Acta IVC 028-050164-26: 20 requerimientos y 8 brechas documentales.
 - Siete fichas de datos por validar, incluidas direcciones, plantilla, CIIU/ARL,
   local referencial y asesoría externa.
@@ -51,3 +54,6 @@ Descarga primero una copia privada de normia-sst/database y normia-sst/storage.
 Extrae el ZIP nuevo aceptando reemplazar el código. El paquete no contiene la
 base, por lo que no la sobrescribe. Las migraciones se aplican al arrancar.
 La precarga es idempotente y no duplica una empresa con el mismo NIT.
+En una instalación existente use Documentos > Complementar paquete: agrega los
+faltantes y sólo actualiza borradores automáticos de versión 1. Conserva los
+documentos editados o aprobados y no repite planes, peligros ni capacitaciones.

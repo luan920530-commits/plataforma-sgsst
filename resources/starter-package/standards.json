@@ -1,0 +1,1247 @@
+{
+  "name": "Contenido específico de estándares mínimos SG-SST",
+  "version": "1.0.0",
+  "reviewed_at": "2026-10-28",
+  "topics": {
+    "assignment": {
+      "focus": "Designar formalmente a la persona que diseña, administra o lidera el SG-SST, verificando que su perfil, dedicación y autoridad sean coherentes con el tamaño y los riesgos de la empresa.",
+      "actions": [
+        "Levantar funciones, dedicación, formación y experiencia requeridas sin asumir que un título ya está soportado.",
+        "Evaluar al candidato y documentar la designación, la fecha de inicio y los recursos asignados.",
+        "Comunicar la designación a trabajadores, contratistas y partes interesadas pertinentes.",
+        "Revisar la idoneidad y las brechas de competencia al menos anualmente o ante cambios de estructura."
+      ],
+      "evidence": [
+        "Acta o comunicación de designación pendiente de firma.",
+        "Hoja de vida, certificados y soportes de formación aportados por la empresa.",
+        "Registro de evaluación de competencias y plan de formación.",
+        "Evidencia de divulgación y tiempo efectivamente asignado."
+      ],
+      "checks": [
+        "La persona designada conoce sus funciones y tiene acceso a la alta dirección.",
+        "Las funciones no se limitan a elaborar documentos: incluyen seguimiento a controles y resultados."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "responsibilities": {
+      "focus": "Asignar responsabilidades SST en todos los niveles sin trasladar al trabajador las obligaciones del empleador.",
+      "actions": [
+        "Identificar procesos, cargos, modalidades de vinculación y centros de trabajo.",
+        "Definir funciones de alta dirección, responsable SG-SST, líderes, trabajadores, COPASST o vigía y contratistas.",
+        "Integrar las funciones a perfiles de cargo, contratos y mecanismos de evaluación cuando corresponda.",
+        "Comunicar las responsabilidades y verificar su comprensión y cumplimiento."
+      ],
+      "evidence": [
+        "Matriz o documento de responsabilidades aprobado.",
+        "Perfiles de cargo y comunicaciones.",
+        "Registros de evaluación y seguimiento."
+      ],
+      "checks": [
+        "No existen áreas o turnos sin responsable operativo.",
+        "Las responsabilidades de contratistas están coordinadas y documentadas."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "resources": {
+      "focus": "Planear y asignar recursos humanos, técnicos, financieros y tecnológicos suficientes para implementar el SG-SST.",
+      "actions": [
+        "Estimar necesidades desde la evaluación inicial, la IPEVR, el plan anual y los programas prioritarios.",
+        "Definir presupuesto, dedicación, compras y apoyo especializado con criterios de prioridad.",
+        "Aprobar los recursos y registrar su disponibilidad real durante la ejecución.",
+        "Comparar lo planeado con lo ejecutado y resolver brechas que impidan controlar riesgos."
+      ],
+      "evidence": [
+        "Presupuesto aprobado y soportes de ejecución.",
+        "Asignación de tiempo y responsables.",
+        "Contratos o conceptos de apoyo especializado.",
+        "Análisis de brechas de recursos."
+      ],
+      "checks": [
+        "Las actividades críticas no quedan sin financiación ni responsable.",
+        "Los recursos se revisan cuando cambian los riesgos o la operación."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "affiliation": {
+      "focus": "Verificar la afiliación y los aportes al Sistema de Seguridad Social Integral de toda la población cubierta, incluidas las modalidades que correspondan.",
+      "actions": [
+        "Depurar el censo de trabajadores, aprendices, independientes y contratistas según su situación real.",
+        "Contrastar afiliación a salud, pensión y ARL, clase de riesgo y novedades de ingreso o retiro.",
+        "Conservar soportes y corregir oportunamente inconsistencias con las entidades competentes.",
+        "Revisar periódicamente la cobertura sin registrar datos clínicos en este expediente."
+      ],
+      "evidence": [
+        "Comprobantes de afiliación y aportes aportados por la empresa.",
+        "Censo de población y novedades.",
+        "Soportes de correcciones y comunicaciones con entidades."
+      ],
+      "checks": [
+        "La clase de riesgo registrada se contrasta con RUT, actividad real y ARL.",
+        "No se marca una afiliación como verificada por la sola creación del formato."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "high_risk": {
+      "focus": "Identificar si alguna labor coincide con las actividades de alto riesgo legalmente definidas y gestionar los soportes de cotización especial cuando resulte aplicable.",
+      "actions": [
+        "Describir tareas reales, agentes, frecuencia y condiciones de exposición por cargo.",
+        "Comparar con el régimen especial aplicable y solicitar concepto competente ante dudas.",
+        "Documentar qué cargos aplican o no aplican y las razones técnicas.",
+        "Gestionar afiliación, reporte y seguimiento sin presumir un beneficio pensional."
+      ],
+      "evidence": [
+        "Caracterización de cargos y exposiciones.",
+        "Concepto técnico o jurídico cuando se requiera.",
+        "Soportes de reporte y cotización cuando aplique."
+      ],
+      "checks": [
+        "La clasificación CIIU por sí sola no demuestra una actividad de alto riesgo.",
+        "No se crean certificaciones ni conceptos desde la plantilla."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "copasst": {
+      "focus": "Conformar y hacer funcionar el COPASST, o el mecanismo que legalmente corresponda, con representación paritaria y participación efectiva.",
+      "actions": [
+        "Definir el mecanismo aplicable según población y estructura; realizar convocatoria, elección y designación.",
+        "Formalizar integrantes, suplentes, período, reglas de reunión y canales de comunicación.",
+        "Adoptar orden del día, actas, inspecciones y seguimiento a recomendaciones.",
+        "Verificar asistencia, capacitación y cumplimiento de funciones sin precargar reuniones."
+      ],
+      "evidence": [
+        "Convocatoria, elección, designación y acta de conformación.",
+        "Actas reales de reuniones e inspecciones.",
+        "Plan de acción y soportes de seguimiento.",
+        "Registro de asistencia a formación."
+      ],
+      "checks": [
+        "La representación y frecuencia se validan con la regulación aplicable.",
+        "Cada acta corresponde a una sesión efectivamente realizada."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "copasst_training": {
+      "focus": "Garantizar que los integrantes del COPASST reciban formación pertinente para ejercer sus funciones.",
+      "actions": [
+        "Identificar necesidades de formación según funciones, peligros y experiencia del comité.",
+        "Programar formación con contenidos de SG-SST, investigación, inspecciones y participación.",
+        "Verificar asistencia, aprovechamiento y aplicación en las actividades del comité.",
+        "Actualizar la formación ante cambios de integrantes o responsabilidades."
+      ],
+      "evidence": [
+        "Programa y contenidos de formación.",
+        "Listas de asistencia y certificados reales.",
+        "Evaluación de aplicación en inspecciones o investigaciones."
+      ],
+      "checks": [
+        "La certificación se verifica con el proveedor y el alcance exigido.",
+        "No se precargan cursos ni aprobaciones."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "coexistence": {
+      "focus": "Conformar el Comité de Convivencia Laboral y operar su reglamento, procedimiento preventivo y reserva documental conforme al régimen vigente.",
+      "actions": [
+        "Definir representantes y suplentes según población, elección y designación; formalizar un período de dos años.",
+        "Adoptar el reglamento propio, canales, reuniones ordinarias mensuales y roles de presidencia y secretaría.",
+        "Aplicar el procedimiento preventivo con debido proceso y un máximo de 65 días calendario, sin tiempos acumulativos.",
+        "Remitir los casos fuera de competencia y custodiar la información sensible con acceso restringido."
+      ],
+      "evidence": [
+        "Convocatoria, elección, designación y reglamento.",
+        "Actas ordinarias sin detalles innecesarios de casos.",
+        "Expedientes reservados fuera del repositorio general.",
+        "Informes trimestrales y anual con estadísticas agregadas."
+      ],
+      "checks": [
+        "El comité previene, orienta, concilia y canaliza; no declara si existió acoso laboral.",
+        "El acoso sexual no se concilia y sigue la ruta especial aplicable."
+      ],
+      "reference": "Resolución 3461 de 2025; Ley 1010 de 2006; Ley 2365 de 2024 cuando aplique."
+    },
+    "training": {
+      "focus": "Planear y ejecutar formación en promoción y prevención basada en peligros, cargos, competencias y resultados esperados.",
+      "actions": [
+        "Diagnosticar necesidades por población, tarea, nivel de riesgo, cambios y eventos.",
+        "Definir programa anual con contenidos, responsables, modalidad, recursos, cronograma y evaluación.",
+        "Verificar idoneidad de instructores y adaptar la formación a la población.",
+        "Evaluar aprendizaje y aplicación; conservar evidencias reales y gestionar brechas."
+      ],
+      "evidence": [
+        "Diagnóstico de necesidades y programa anual.",
+        "Contenidos, listas de asistencia y evaluaciones.",
+        "Certificados y soportes de idoneidad del instructor.",
+        "Evaluación de eficacia y acciones de mejora."
+      ],
+      "checks": [
+        "La programación no equivale a capacitación realizada.",
+        "Toda asistencia y aprobación debe provenir de una actividad efectiva."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "induction": {
+      "focus": "Realizar inducción antes de iniciar labores y reinducción cuando cambien los riesgos, el puesto o los lineamientos.",
+      "actions": [
+        "Preparar contenido general y específico por cargo, centro, peligros, procedimientos y emergencias.",
+        "Entregar la inducción a personal nuevo, contratistas y personas que cambian de funciones.",
+        "Comprobar comprensión y resolver preguntas antes de autorizar tareas críticas.",
+        "Programar reinducción periódica y después de cambios o eventos relevantes."
+      ],
+      "evidence": [
+        "Contenido general y específico.",
+        "Registro de realización, participante, fecha y responsable.",
+        "Evaluación de comprensión y compromisos."
+      ],
+      "checks": [
+        "La firma digital no reemplaza la inducción específica del puesto.",
+        "No se habilitan tareas de alto riesgo sólo con la inducción general."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "course50": {
+      "focus": "Gestionar el curso virtual de 50 horas para la persona responsable del SG-SST cuando este requisito resulte aplicable.",
+      "actions": [
+        "Verificar quién debe realizar el curso y las condiciones del proveedor.",
+        "Registrar matrícula, avance y finalización con soportes auténticos.",
+        "Contrastar contenidos y certificado con la exigencia aplicable.",
+        "Integrar las necesidades adicionales de formación práctica y sectorial."
+      ],
+      "evidence": [
+        "Matrícula y certificado real del responsable.",
+        "Soporte del proveedor y contenido del curso.",
+        "Plan de formación complementaria."
+      ],
+      "checks": [
+        "El curso no se considera realizado por tener un documento en el repositorio.",
+        "La formación virtual no sustituye competencias prácticas exigidas para tareas específicas."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "objectives": {
+      "focus": "Definir objetivos SST medibles, coherentes con los peligros prioritarios y con recursos y responsables asignados.",
+      "actions": [
+        "Analizar evaluación inicial, IPEVR, condiciones de salud, incidentes y requisitos legales.",
+        "Formular objetivos y metas con línea base, período, indicador, responsable y recursos.",
+        "Comunicar los objetivos y articularlos con el plan anual.",
+        "Revisar resultados, desviaciones y oportunidades al menos anualmente."
+      ],
+      "evidence": [
+        "Matriz de objetivos aprobada.",
+        "Fichas de indicadores y línea base.",
+        "Seguimiento periódico y decisiones de dirección."
+      ],
+      "checks": [
+        "Cada meta tiene fuente de datos y método de cálculo.",
+        "No se reportan metas cumplidas sin soporte."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "initial_eval": {
+      "focus": "Establecer una línea base del SG-SST para priorizar la implementación y el mejoramiento.",
+      "actions": [
+        "Definir alcance, fecha, equipo y criterios de evaluación según el régimen aplicable.",
+        "Contrastar documentos, condiciones reales, entrevistas y evidencias disponibles.",
+        "Registrar brechas, fortalezas, nivel de avance y necesidades de recursos.",
+        "Derivar un plan de mejoramiento con responsables, fechas y seguimiento."
+      ],
+      "evidence": [
+        "Evaluación inicial fechada y firmada por quienes participaron.",
+        "Matriz de brechas y soportes revisados.",
+        "Plan de mejoramiento priorizado."
+      ],
+      "checks": [
+        "La ausencia de evidencia se registra como tal, no como cumplimiento.",
+        "La evaluación se actualiza cuando cambia significativamente la organización."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "annual_plan": {
+      "focus": "Convertir los objetivos y brechas en un Plan Anual de Trabajo ejecutable y verificable.",
+      "actions": [
+        "Priorizar actividades por riesgo, requisito y brecha, evitando una lista meramente administrativa.",
+        "Asignar responsable, cronograma, recursos, indicador y evidencia esperada para cada actividad.",
+        "Aprobar y comunicar el plan; registrar ejecución real y desviaciones.",
+        "Revisar avance periódicamente y reprogramar con justificación sin ocultar incumplimientos."
+      ],
+      "evidence": [
+        "Plan anual aprobado y cronograma.",
+        "Soportes de ejecución por actividad.",
+        "Seguimiento, reprogramaciones y cierre de acciones."
+      ],
+      "checks": [
+        "Una actividad programada permanece pendiente hasta que exista evidencia.",
+        "El presupuesto y los responsables se contrastan con la operación."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "retention": {
+      "focus": "Controlar documentos y registros para que sean legibles, identificables, trazables, accesibles y conservados durante el tiempo aplicable.",
+      "actions": [
+        "Crear inventario maestro con código, versión, responsable, ubicación y estado.",
+        "Definir reglas de aprobación, cambios, obsolescencia, acceso, respaldo y disposición.",
+        "Asignar tiempos de retención según norma y naturaleza de cada registro, sin aplicar un plazo genérico a todo.",
+        "Proteger información personal, clínica y casos de convivencia con acceso restringido."
+      ],
+      "evidence": [
+        "Inventario maestro y tabla de retención.",
+        "Historial de versiones y aprobaciones.",
+        "Registros de acceso, respaldo, recuperación y disposición."
+      ],
+      "checks": [
+        "Las copias impresas se contrastan con la versión vigente.",
+        "Historias clínicas y expedientes sensibles no se publican en el repositorio general."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "accountability": {
+      "focus": "Presentar una rendición de cuentas comprensible sobre gestión, resultados y recursos del SG-SST.",
+      "actions": [
+        "Consolidar objetivos, indicadores, accidentalidad, enfermedad laboral, avances y brechas del período.",
+        "Definir audiencia, responsable, medio y frecuencia de rendición.",
+        "Presentar resultados con fuentes y decisiones, incluyendo asuntos pendientes.",
+        "Registrar preguntas, compromisos y seguimiento de las partes interesadas."
+      ],
+      "evidence": [
+        "Informe o acta de rendición de cuentas.",
+        "Soportes de indicadores y ejecución.",
+        "Registro de compromisos y respuestas."
+      ],
+      "checks": [
+        "La rendición incluye resultados adversos y pendientes, no sólo actividades.",
+        "Los datos personales se presentan de forma agregada."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "legal_matrix": {
+      "focus": "Identificar requisitos legales y otros compromisos aplicables y evaluar periódicamente su cumplimiento real.",
+      "actions": [
+        "Construir la matriz por actividad, peligros, productos, ubicación, contratación y población.",
+        "Registrar norma, artículo, exigencia, evidencia, responsable, vigencia y estado de cumplimiento.",
+        "Verificar cambios con fuentes oficiales y actualizar los documentos afectados.",
+        "Gestionar brechas mediante acciones con fechas y verificación de eficacia."
+      ],
+      "evidence": [
+        "Matriz legal actualizada con fuentes oficiales.",
+        "Evaluaciones de cumplimiento y soportes.",
+        "Acciones de mejora y control de cambios normativos."
+      ],
+      "checks": [
+        "La existencia de una norma en la matriz no demuestra cumplimiento.",
+        "Las referencias se validan frente a texto vigente y modificaciones."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "communication": {
+      "focus": "Establecer comunicación interna y externa oportuna, accesible y trazable para el SG-SST.",
+      "actions": [
+        "Identificar qué comunicar, a quién, por qué medio, con qué frecuencia y quién responde.",
+        "Incluir peligros, controles, emergencias, consultas, autoreportes y comunicación con ARL y autoridades.",
+        "Proteger la reserva de datos personales y definir canales alternativos para toda la población.",
+        "Evaluar recepción, comprensión y respuesta, corrigiendo barreras."
+      ],
+      "evidence": [
+        "Matriz de comunicaciones y piezas emitidas.",
+        "Registros de consultas, respuestas y autoreportes.",
+        "Evidencias de socialización y evaluación de comprensión."
+      ],
+      "checks": [
+        "La publicación de un documento no demuestra comprensión.",
+        "Los canales de emergencia se mantienen disponibles en todos los turnos."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "procurement": {
+      "focus": "Incorporar criterios SST antes de adquirir bienes y servicios para evitar introducir peligros o controles inadecuados.",
+      "actions": [
+        "Definir requisitos técnicos, legales, FDS, certificaciones, ergonomía, instalación y mantenimiento según la compra.",
+        "Evaluar la idoneidad antes de ordenar o recibir, con participación de SST y usuarios.",
+        "Verificar conformidad en la recepción y gestionar desviaciones antes del uso.",
+        "Conservar especificaciones, garantías, manuales y capacitación requerida."
+      ],
+      "evidence": [
+        "Formato de requisitos y evaluación de compra.",
+        "Fichas técnicas, FDS, certificados y manuales.",
+        "Registro de recepción, no conformidades y aceptación."
+      ],
+      "checks": [
+        "No se selecciona únicamente por precio cuando existen riesgos críticos.",
+        "Un EPP o equipo no se usa hasta verificar su idoneidad para la exposición."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "contractors": {
+      "focus": "Seleccionar, coordinar y evaluar proveedores y contratistas considerando sus riesgos y los de la empresa.",
+      "actions": [
+        "Definir requisitos de selección, afiliación, competencias, procedimientos, equipos y evidencias según el servicio.",
+        "Intercambiar información de peligros, controles, emergencias y responsabilidades antes del inicio.",
+        "Realizar inducción, coordinación y supervisión proporcional al riesgo durante la ejecución.",
+        "Evaluar desempeño, incidentes y cierre; gestionar incumplimientos sin trasladar obligaciones del empleador."
+      ],
+      "evidence": [
+        "Evaluación de selección y documentos del contratista.",
+        "Actas de coordinación, inducción y permisos.",
+        "Inspecciones, evaluación final y acciones correctivas."
+      ],
+      "checks": [
+        "La subcontratación queda identificada y coordinada.",
+        "Los soportes se validan; no se aceptan declaraciones sin verificación proporcional."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "change": {
+      "focus": "Evaluar y controlar los riesgos de cambios temporales o permanentes antes de implementarlos.",
+      "actions": [
+        "Describir el cambio de proceso, tecnología, personal, instalaciones, productos o normativa.",
+        "Analizar impactos en peligros, salud, competencias, documentos, emergencias, contratistas y requisitos legales.",
+        "Definir controles, responsables, formación y criterios de autorización previa.",
+        "Verificar después del cambio y actualizar IPEVR, procedimientos, plan de emergencias y registros."
+      ],
+      "evidence": [
+        "Formato de gestión del cambio y aprobaciones.",
+        "IPEVR y documentos actualizados.",
+        "Registros de formación, pruebas y verificación posterior."
+      ],
+      "checks": [
+        "Los cambios de emergencia también se documentan y revisan posteriormente.",
+        "No se inicia el cambio con riesgos graves sin control."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "sociodemo": {
+      "focus": "Caracterizar la población y diagnosticar condiciones de salud de forma agregada para orientar prevención y vigilancia.",
+      "actions": [
+        "Levantar variables sociodemográficas y laborales pertinentes con criterios de privacidad y minimización.",
+        "Analizar ausentismo, morbilidad agregada, exposiciones y necesidades por grupos de trabajo.",
+        "Contrastar la información con evaluaciones ocupacionales y sistemas de vigilancia bajo competencia profesional.",
+        "Definir prioridades y actualizar la caracterización periódicamente."
+      ],
+      "evidence": [
+        "Perfil sociodemográfico y diagnóstico agregado.",
+        "Fuentes, fecha de corte y criterios de análisis.",
+        "Programas de intervención y seguimiento."
+      ],
+      "checks": [
+        "No se publican historias clínicas ni diagnósticos individuales.",
+        "Las conclusiones médicas corresponden a profesionales competentes."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "health_promotion": {
+      "focus": "Ejecutar actividades de medicina del trabajo, prevención y promoción de la salud basadas en diagnóstico y exposición.",
+      "actions": [
+        "Priorizar necesidades de salud y peligros con participación de trabajadores y profesionales competentes.",
+        "Diseñar actividades con población, objetivo, contenido, responsable, recursos y cronograma.",
+        "Implementar jornadas, vigilancia y acciones de entorno saludable sin sustituir controles de riesgo.",
+        "Evaluar cobertura, cambios y eficacia, evitando indicadores limitados al número de charlas."
+      ],
+      "evidence": [
+        "Programa de actividades y soportes reales.",
+        "Registros de participación y materiales utilizados.",
+        "Evaluación de resultados y recomendaciones profesionales."
+      ],
+      "checks": [
+        "Las campañas de bienestar no sustituyen la intervención de peligros.",
+        "Los datos clínicos permanecen bajo custodia competente."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "job_profiles": {
+      "focus": "Documentar perfiles de cargo con funciones, competencias y condiciones de exposición reales.",
+      "actions": [
+        "Identificar cargos, centros, tareas rutinarias y no rutinarias y modalidades de vinculación.",
+        "Describir funciones, requisitos de competencia, peligros, controles, EPP y restricciones aplicables.",
+        "Validar el perfil con líderes y trabajadores, sin incorporar diagnósticos individuales.",
+        "Actualizar por cambios de proceso y usarlo en selección, inducción y evaluaciones ocupacionales."
+      ],
+      "evidence": [
+        "Perfiles de cargo aprobados por centro o proceso.",
+        "Matriz cargo–peligro–exposición.",
+        "Registros de validación y actualización."
+      ],
+      "checks": [
+        "El perfil describe trabajo real, no sólo el nombre del cargo.",
+        "Las restricciones se gestionan sin revelar información clínica."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "medical_eval": {
+      "focus": "Realizar evaluaciones médicas ocupacionales de preingreso, periódicas, por cambio de ocupación y egreso según exposición y criterio profesional.",
+      "actions": [
+        "Definir perfiles de exposición y contenido de evaluaciones con el profesional o prestador competente.",
+        "Programar y financiar las evaluaciones sin trasladar costos al trabajador.",
+        "Gestionar conceptos, restricciones y recomendaciones laborales preservando la reserva clínica.",
+        "Verificar cobertura y seguimiento sin almacenar historias clínicas en el repositorio general."
+      ],
+      "evidence": [
+        "Programación y registros administrativos de cobertura.",
+        "Conceptos ocupacionales y recomendaciones no clínicas.",
+        "Soportes de custodia por prestador o médico competente.",
+        "Acciones de adecuación del puesto cuando proceda."
+      ],
+      "checks": [
+        "Los contenidos y frecuencias dependen de peligros, exposición y criterio de salud ocupacional.",
+        "No se inventan conceptos ni resultados médicos."
+      ],
+      "reference": "Resoluciones 2346 de 2007 y 1918 de 2009; Decreto 1072 de 2015."
+    },
+    "custody": {
+      "focus": "Garantizar que las historias clínicas ocupacionales permanezcan bajo custodia del prestador o médico competente, con reserva y disponibilidad legítima.",
+      "actions": [
+        "Identificar custodio, medio, ubicación controlada y responsables de acceso.",
+        "Definir acuerdos de custodia, confidencialidad, respaldo, entrega y retención según regulación aplicable.",
+        "Separar en el SG-SST los conceptos administrativos de la información clínica privada.",
+        "Verificar periódicamente la custodia y el procedimiento de acceso autorizado."
+      ],
+      "evidence": [
+        "Contrato o acta de custodia y declaración del responsable.",
+        "Registro restringido de accesos o entregas.",
+        "Evidencia de respaldo y protección de información."
+      ],
+      "checks": [
+        "El repositorio general no contiene historias clínicas.",
+        "El empleador gestiona recomendaciones laborales sin exigir diagnósticos innecesarios."
+      ],
+      "reference": "Resoluciones 2346 de 2007 y 1918 de 2009."
+    },
+    "restrictions": {
+      "focus": "Implementar restricciones y recomendaciones médico-laborales mediante ajustes del trabajo y seguimiento confidencial.",
+      "actions": [
+        "Recibir el concepto ocupacional sin solicitar detalles clínicos innecesarios.",
+        "Analizar con el trabajador y los responsables las restricciones funcionales y los riesgos del puesto.",
+        "Definir adaptaciones, reubicación, vigilancia o controles con responsables y fechas.",
+        "Verificar eficacia y actualizar la intervención ante nuevos conceptos."
+      ],
+      "evidence": [
+        "Concepto de aptitud o restricciones bajo acceso controlado.",
+        "Plan de adecuaciones y seguimiento.",
+        "Soportes de implementación y comunicación funcional."
+      ],
+      "checks": [
+        "No se registran diagnósticos en formatos generales.",
+        "La recomendación se implementa; no se archiva como única acción."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "healthy_lifestyles": {
+      "focus": "Promover estilos de vida y entornos saludables con acciones pertinentes a la población y al diagnóstico.",
+      "actions": [
+        "Identificar prioridades como actividad física, alimentación, sueño, consumo problemático y salud mental.",
+        "Diseñar un plan con acciones individuales y organizacionales, recursos y participación voluntaria cuando corresponda.",
+        "Integrar pausas, organización del trabajo y entorno, sin responsabilizar al individuo por riesgos de la empresa.",
+        "Evaluar participación y resultados respetando privacidad y no discriminación."
+      ],
+      "evidence": [
+        "Plan y materiales de promoción.",
+        "Registros agregados de participación.",
+        "Evaluación de resultados y ajustes."
+      ],
+      "checks": [
+        "No se sustituyen controles ergonomía o psicosociales por campañas de hábitos.",
+        "No se recopilan datos de salud innecesarios."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "hygiene": {
+      "focus": "Mantener servicios e instalaciones de higiene adecuados, limpios y disponibles para toda la población.",
+      "actions": [
+        "Inspeccionar agua, sanitarios, lavamanos, duchas, vestieres, comedores y condiciones locativas según la actividad.",
+        "Definir programación, responsables, productos, diluciones y controles de limpieza y desinfección.",
+        "Gestionar plagas, residuos, mantenimiento y reposición de insumos.",
+        "Registrar verificaciones y corregir desviaciones con prioridad sanitaria."
+      ],
+      "evidence": [
+        "Programa y registros reales de limpieza y desinfección.",
+        "Inspecciones de servicios higiénicos.",
+        "Mantenimientos, control de plagas y acciones correctivas."
+      ],
+      "checks": [
+        "Las concentraciones y tiempos se toman de FDS y ficha técnica, no se improvisan.",
+        "Un formato firmado sin ejecución no demuestra saneamiento."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "waste": {
+      "focus": "Gestionar residuos desde su generación hasta la entrega a gestores autorizados cuando corresponda.",
+      "actions": [
+        "Caracterizar residuos ordinarios, reciclables, peligrosos, biológicos o especiales según la operación.",
+        "Definir separación, envases, etiquetado, almacenamiento, cantidades, tiempos y controles de derrames.",
+        "Capacitar al personal y coordinar recolección, transporte y disposición con gestores competentes.",
+        "Conservar registros y verificar destinos sin asumir certificados inexistentes."
+      ],
+      "evidence": [
+        "Inventario o plan de manejo de residuos.",
+        "Registros de generación, almacenamiento y entrega.",
+        "Manifiestos, certificados y soportes de gestores.",
+        "Inspecciones y acciones por derrames."
+      ],
+      "checks": [
+        "Los residuos peligrosos o biosanitarios siguen requisitos específicos.",
+        "No se mezclan residuos incompatibles ni se improvisan disposiciones."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "event_report": {
+      "focus": "Reportar oportunamente incidentes, accidentes y enfermedades laborales a los canales internos, ARL y demás entidades aplicables.",
+      "actions": [
+        "Definir canales disponibles en todos los turnos y responsables de recibir y escalar eventos.",
+        "Brindar atención inicial, proteger el sitio cuando sea seguro y registrar hechos sin alterar evidencias.",
+        "Realizar reportes dentro de los plazos y formatos de ARL, EPS y autoridades que correspondan.",
+        "Informar al trabajador y coordinar investigación, seguimiento y preservación documental."
+      ],
+      "evidence": [
+        "Autoreportes, reportes a ARL y demás radicados.",
+        "Registro de atención y notificaciones.",
+        "Cronología y soportes de envío."
+      ],
+      "checks": [
+        "El reporte no se retrasa esperando la investigación completa.",
+        "No se alteran fechas ni se clasifica el evento sin soporte."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "investigation": {
+      "focus": "Investigar todos los incidentes y accidentes con una metodología que identifique causas y prevenga recurrencia.",
+      "actions": [
+        "Conformar el equipo investigador con jefe inmediato, representante COPASST o vigía y responsable SG-SST; ampliar competencias en accidentes graves o mortales.",
+        "Recolectar evidencias, inspeccionar el sitio y escuchar versiones con objetividad.",
+        "Analizar hechos, causas inmediatas y básicas, actos y condiciones, sin buscar culpables.",
+        "Definir acciones, responsables, cronograma, seguimiento e indicadores de eficacia.",
+        "Investigar dentro de los quince días siguientes y remitir a la ARL los informes de accidentes graves o mortales en los términos aplicables."
+      ],
+      "evidence": [
+        "Informe de investigación y anexos de evidencia.",
+        "Acta del equipo y análisis causal.",
+        "Plan de acciones y soportes de implementación.",
+        "Radicados de remisión a ARL cuando corresponda."
+      ],
+      "checks": [
+        "En accidente mortal se utiliza el formato obligatorio de la ARL.",
+        "Las investigaciones y correctivos se conservan a disposición de la autoridad."
+      ],
+      "reference": "Resolución 1401 de 2007; Decreto 1072 de 2015."
+    },
+    "event_statistics": {
+      "focus": "Consolidar y analizar estadísticas de accidentalidad y enfermedad laboral con fuentes y criterios consistentes.",
+      "actions": [
+        "Definir base de trabajadores, horas-hombre, días cargados, eventos y período de análisis.",
+        "Depurar registros y conciliar con reportes, investigaciones, incapacidades y nómina.",
+        "Calcular indicadores y analizar tendencias por proceso, cargo, agente y consecuencia.",
+        "Presentar resultados al COPASST y alta dirección y derivar acciones priorizadas."
+      ],
+      "evidence": [
+        "Base estadística y fichas de cálculo.",
+        "Informes de tendencia y análisis.",
+        "Actas de presentación y planes de acción."
+      ],
+      "checks": [
+        "Un denominador cero se trata como dato no calculable, no como desempeño favorable.",
+        "Las cifras se trazan a registros fuente."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "frequency": {
+      "focus": "Medir la frecuencia de accidentalidad como accidentes de trabajo por 240.000 horas-hombre trabajadas.",
+      "actions": [
+        "Consolidar accidentes del período y horas-hombre reales de la población considerada.",
+        "Calcular AT × 240.000 ÷ HHT con una ficha que conserve fuente y período.",
+        "Comparar tendencias y composición de eventos sin ocultar cambios de denominador.",
+        "Definir acciones según el análisis y verificar su efecto."
+      ],
+      "evidence": [
+        "Registro de accidentes y cálculo de HHT.",
+        "Ficha del indicador con numerador, denominador y resultado.",
+        "Análisis y seguimiento de acciones."
+      ],
+      "checks": [
+        "El alcance de trabajadores y horas es consistente entre períodos.",
+        "Si HHT no está disponible o es cero, se reporta la limitación."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "severity": {
+      "focus": "Medir la severidad mediante días de incapacidad y días cargados por 240.000 horas-hombre trabajadas.",
+      "actions": [
+        "Consolidar días de incapacidad y días cargados con soportes y reglas de inclusión.",
+        "Calcular días × 240.000 ÷ HHT y documentar la fuente.",
+        "Analizar eventos de mayor consecuencia y días pendientes de cierre.",
+        "Priorizar acciones y revisar la actualización del indicador."
+      ],
+      "evidence": [
+        "Registro de incapacidades y días cargados.",
+        "Ficha del indicador y HHT.",
+        "Análisis de casos y acciones."
+      ],
+      "checks": [
+        "No se cierran valores con días estimados sin identificarlos.",
+        "El indicador se actualiza cuando cambian soportes del evento."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "fatality_rate": {
+      "focus": "Calcular la proporción de accidentes mortales como accidentes mortales × 100 ÷ total de accidentes de trabajo.",
+      "actions": [
+        "Verificar los accidentes mortales y el total de accidentes del período.",
+        "Calcular y contextualizar el resultado sin usarlo como única medida de desempeño.",
+        "Analizar cada evento mortal con el procedimiento reforzado y las remisiones aplicables.",
+        "Definir acciones preventivas y seguimiento de alta dirección."
+      ],
+      "evidence": [
+        "Base de accidentes y ficha del indicador.",
+        "Investigaciones y soportes de reporte.",
+        "Decisiones y acciones de prevención."
+      ],
+      "checks": [
+        "Un valor cero no elimina la necesidad de controlar riesgos fatales potenciales.",
+        "Los datos se concilian con investigaciones y reportes."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "prevalence": {
+      "focus": "Medir la prevalencia de enfermedad laboral existente por 100.000 trabajadores, con diagnósticos y custodia profesional.",
+      "actions": [
+        "Definir casos existentes calificados como enfermedad laboral y promedio de trabajadores del período.",
+        "Calcular casos × 100.000 ÷ promedio de trabajadores sin exponer historias clínicas.",
+        "Analizar por agente, proceso y exposición con apoyo profesional.",
+        "Integrar resultados a vigilancia epidemiológica y controles."
+      ],
+      "evidence": [
+        "Consolidado agregado de casos y población.",
+        "Ficha del indicador y análisis.",
+        "Programas de vigilancia y acciones."
+      ],
+      "checks": [
+        "No se usan sospechas o enfermedades comunes como si fueran calificaciones laborales.",
+        "El acceso a soportes clínicos permanece restringido."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "incidence": {
+      "focus": "Medir la incidencia de enfermedad laboral nueva por 100.000 trabajadores durante el período.",
+      "actions": [
+        "Identificar casos nuevos calificados en el período y el promedio de trabajadores.",
+        "Calcular casos nuevos × 100.000 ÷ promedio de trabajadores.",
+        "Comparar con prevalencia, exposición y cambios en vigilancia.",
+        "Derivar investigaciones y acciones preventivas según corresponda."
+      ],
+      "evidence": [
+        "Consolidado agregado de casos nuevos.",
+        "Ficha del indicador y fuentes.",
+        "Acciones de vigilancia y prevención."
+      ],
+      "checks": [
+        "La fecha y calificación del caso se verifican con el soporte competente.",
+        "No se divulgan diagnósticos individuales."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "absenteeism": {
+      "focus": "Analizar ausentismo por causa médica como días de ausencia por incapacidad × 100 ÷ días de trabajo programados.",
+      "actions": [
+        "Definir días de ausencia incluidos y días programados con criterios consistentes.",
+        "Conciliar registros de incapacidad, nómina y calendario sin copiar diagnósticos al repositorio general.",
+        "Calcular y analizar tendencias por causa agregada, proceso y período.",
+        "Coordinar acciones de prevención y seguimiento con salud ocupacional."
+      ],
+      "evidence": [
+        "Base agregada de incapacidades y días programados.",
+        "Ficha del indicador y análisis.",
+        "Planes de intervención y seguimiento."
+      ],
+      "checks": [
+        "Se distingue ausentismo médico de otras ausencias.",
+        "Se evita identificar personas en informes generales."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "ipevr_method": {
+      "focus": "Adoptar una metodología para identificar peligros, evaluar y valorar riesgos y determinar controles, considerando actividades rutinarias y no rutinarias.",
+      "actions": [
+        "Definir alcance, procesos, cargos, población, fuentes de peligro y criterios de probabilidad, consecuencia y aceptabilidad.",
+        "Levantar peligros con observación, entrevistas, documentos, mediciones y experiencia de los trabajadores.",
+        "Valorar riesgos con criterios consistentes y documentar supuestos, controles existentes y riesgo residual.",
+        "Priorizar controles por jerarquía y actualizar ante cambios, incidentes o nueva información."
+      ],
+      "evidence": [
+        "Metodología aprobada y matriz IPEVR vigente.",
+        "Registros de participación y fuentes utilizadas.",
+        "Plan de controles y evaluación de eficacia."
+      ],
+      "checks": [
+        "Los valores orientativos de ND, NE y NC se validan con la metodología adoptada.",
+        "La matriz incluye contratistas, visitantes y condiciones no rutinarias cuando corresponda."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "ipevr_participation": {
+      "focus": "Aplicar la IPEVR con participación de todos los niveles y convertir sus resultados en decisiones de control.",
+      "actions": [
+        "Organizar talleres y observaciones por proceso, turno, cargo y centro.",
+        "Contrastar peligros base con tareas reales, cambios, incidentes, salud y percepción de trabajadores.",
+        "Revisar resultados con responsables y trabajadores expuestos, documentando desacuerdos y supuestos.",
+        "Actualizar procedimientos, capacitación, emergencias, EPP y plan anual según prioridades."
+      ],
+      "evidence": [
+        "Matriz validada y registros de participación.",
+        "Listas de asistencia y notas de validación.",
+        "Planes y documentos actualizados."
+      ],
+      "checks": [
+        "La matriz no se limita a copiar peligros del catálogo CIIU.",
+        "Los riesgos altos o críticos tienen tratamiento priorizado."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "carcinogens": {
+      "focus": "Identificar sustancias carcinógenas o con toxicidad aguda y priorizar su eliminación, sustitución y control.",
+      "actions": [
+        "Depurar inventario de productos y mezclas con FDS y clasificación SGA del proveedor.",
+        "Identificar agentes y exposiciones con fuentes técnicas confiables y apoyo competente.",
+        "Evaluar vías de exposición, cantidades, frecuencia, controles y población susceptible.",
+        "Implementar jerarquía de controles, vigilancia y comunicación específica sin inventar clasificaciones."
+      ],
+      "evidence": [
+        "Inventario y FDS vigentes.",
+        "Evaluación de exposición y fuentes de clasificación.",
+        "Plan de sustitución o controles y seguimiento."
+      ],
+      "checks": [
+        "No se declara ausencia de sustancias sin inventario y revisión documentada.",
+        "La FDS y la etiqueta se mantienen accesibles y coherentes."
+      ],
+      "reference": "Decreto 1496 de 2018, Resolución 773 de 2021 y Decreto 1072 de 2015."
+    },
+    "measurements": {
+      "focus": "Planear y realizar mediciones ambientales de riesgos prioritarios con métodos, competencia y trazabilidad adecuados.",
+      "actions": [
+        "Definir agentes, puestos, escenarios y periodos a partir de la IPEVR y sistemas de vigilancia.",
+        "Establecer método, laboratorio o profesional competente, equipos, calibración y criterios de comparación aplicables.",
+        "Ejecutar mediciones representativas y registrar condiciones de operación y exposición.",
+        "Interpretar resultados con apoyo competente, comunicar y gestionar controles y repeticiones."
+      ],
+      "evidence": [
+        "Plan de mediciones y justificación técnica.",
+        "Informes, certificados de calibración y cadena de custodia cuando aplique.",
+        "Evaluación de resultados y plan de acción."
+      ],
+      "checks": [
+        "No se inventan resultados ni límites de referencia.",
+        "Una medición puntual se interpreta dentro de su alcance y condiciones."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "controls": {
+      "focus": "Implementar medidas de prevención y control priorizadas según la IPEVR y verificar su eficacia en la operación.",
+      "actions": [
+        "Priorizar eliminación y sustitución antes que controles administrativos o EPP.",
+        "Diseñar controles de ingeniería, administrativos y EPP complementario con responsables y recursos.",
+        "Implementar y comunicar controles, actualizando procedimientos y formación.",
+        "Verificar uso, mantenimiento y eficacia; escalar desviaciones y riesgos residuales."
+      ],
+      "evidence": [
+        "Plan de intervención y soportes de controles.",
+        "Inspecciones, mediciones y evaluaciones de eficacia.",
+        "Registros de mantenimiento y acciones correctivas."
+      ],
+      "checks": [
+        "El EPP no se usa como sustituto automático de controles superiores.",
+        "Los riesgos graves sin control suspenden o restringen la tarea."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "worker_controls": {
+      "focus": "Verificar que trabajadores y contratistas conozcan y apliquen las medidas de prevención y control definidas.",
+      "actions": [
+        "Comunicar controles en lenguaje y medios accesibles para cada cargo.",
+        "Realizar entrenamiento práctico y observación de tareas según el riesgo.",
+        "Habilitar reporte de desviaciones y derecho a detener tareas ante peligro grave.",
+        "Retroalimentar, corregir condiciones y evaluar eficacia sin prácticas de culpabilización."
+      ],
+      "evidence": [
+        "Registros de formación y entrenamiento.",
+        "Observaciones, inspecciones y autoreportes.",
+        "Acciones correctivas y seguimiento."
+      ],
+      "checks": [
+        "La firma de asistencia no demuestra por sí sola aplicación competente.",
+        "Se resuelven barreras de equipos, tiempo y supervisión."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "procedures": {
+      "focus": "Desarrollar procedimientos e instructivos para tareas cuyos riesgos requieran controles documentados y consistentes.",
+      "actions": [
+        "Priorizar tareas por IPEVR, requisitos legales, cambios e incidentes.",
+        "Describir secuencia, competencias, controles, permisos, equipos, emergencias y criterios de parada.",
+        "Validar el contenido con quienes ejecutan y supervisan la tarea.",
+        "Aprobar, divulgar, entrenar y revisar periódicamente los documentos."
+      ],
+      "evidence": [
+        "Procedimientos e instructivos vigentes.",
+        "Registros de validación, capacitación y acceso en el puesto.",
+        "Permisos y verificaciones de aplicación."
+      ],
+      "checks": [
+        "Un procedimiento general no reemplaza permisos de tareas críticas.",
+        "Las instrucciones del fabricante y FDS se integran cuando aplican."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "inspections": {
+      "focus": "Realizar inspecciones planificadas a instalaciones, maquinaria, equipos y condiciones de trabajo.",
+      "actions": [
+        "Definir alcance, criterios, frecuencia y equipo inspector según riesgos y fabricantes.",
+        "Inspeccionar condiciones reales, registrar hallazgos y clasificar su prioridad.",
+        "Aislar o retirar de servicio condiciones graves y asignar acciones con fechas.",
+        "Verificar cierres y analizar hallazgos repetitivos."
+      ],
+      "evidence": [
+        "Listas de chequeo y reportes fechados.",
+        "Evidencias de hallazgos y retiro de servicio.",
+        "Acciones y verificación de eficacia."
+      ],
+      "checks": [
+        "No se precargan resultados conformes.",
+        "La frecuencia se ajusta al riesgo, uso, cambios y desempeño."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "maintenance": {
+      "focus": "Mantener instalaciones, máquinas, equipos y herramientas en condiciones seguras según riesgo y especificaciones técnicas.",
+      "actions": [
+        "Crear inventario con identificación, ubicación, criticidad, fabricante y requisitos.",
+        "Definir plan preventivo, predictivo y correctivo, repuestos, competencias y bloqueo de energías.",
+        "Ejecutar mantenimiento con autorización, protección y registros de pruebas antes de devolver el equipo.",
+        "Analizar fallas, repetitividad, backlog y cumplimiento del plan."
+      ],
+      "evidence": [
+        "Hojas de vida, inventario y plan anual.",
+        "Órdenes, informes, calibraciones y certificados.",
+        "Registros de pruebas, repuestos y liberación."
+      ],
+      "checks": [
+        "No se opera equipo con guardas o sistemas de seguridad inhabilitados.",
+        "El mantenimiento se coordina con permisos y contratistas."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "epp": {
+      "focus": "Seleccionar, entregar, mantener y verificar EPP idóneo como complemento de los demás controles, sin costo para el trabajador.",
+      "actions": [
+        "Definir EPP por peligro, tarea, talla, compatibilidad y limitaciones con criterio técnico.",
+        "Verificar certificaciones y especificaciones aplicables; entregar con registro y formación práctica.",
+        "Establecer uso, higiene, almacenamiento, inspección, mantenimiento y reposición.",
+        "Verificar ajuste y uso real, atender barreras y retirar elementos vencidos o dañados."
+      ],
+      "evidence": [
+        "Matriz de selección y soportes técnicos.",
+        "Registros de entrega, cambio y formación.",
+        "Inspecciones y reposiciones."
+      ],
+      "checks": [
+        "No se selecciona un respirador o protección especial sin evaluación de idoneidad.",
+        "La entrega registrada no demuestra uso correcto permanente."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "emergency_plan": {
+      "focus": "Preparar la prevención y respuesta ante emergencias por centro de trabajo, con base en amenazas y vulnerabilidad.",
+      "actions": [
+        "Identificar amenazas internas y externas, población, turnos, recursos y vulnerabilidad.",
+        "Definir alarma, comando, comunicaciones, evacuación, refugio, rescate, primeros auxilios y ayuda mutua.",
+        "Mantener planos, rutas, puntos de encuentro, contactos y recursos inspeccionados.",
+        "Capacitar a toda la población, realizar al menos un simulacro anual y gestionar mejoras."
+      ],
+      "evidence": [
+        "Plan por centro, análisis de amenazas y vulnerabilidad.",
+        "Planos, directorio, inspecciones y formación.",
+        "Evaluación de simulacros y acciones de mejora."
+      ],
+      "checks": [
+        "El plan se valida en sitio y considera personas con necesidades de apoyo.",
+        "La alarma, rutas y contactos se verifican; no se presumen operativos."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "brigade": {
+      "focus": "Conformar y capacitar la brigada de emergencias con cobertura, competencias y dotación según amenazas y turnos.",
+      "actions": [
+        "Dimensionar integrantes y roles por centro, turno, ocupación y escenarios.",
+        "Formalizar brigadistas y funciones de evacuación, primeros auxilios, incendio y apoyo según competencia.",
+        "Entrenar, dotar y realizar prácticas sin exponer a los participantes.",
+        "Evaluar disponibilidad, renovación de competencias y lecciones de simulacros o emergencias."
+      ],
+      "evidence": [
+        "Acta de conformación y directorio por turno.",
+        "Registros de formación y entrenamiento.",
+        "Inventario e inspección de dotación.",
+        "Evaluaciones de desempeño."
+      ],
+      "checks": [
+        "La brigada no sustituye a organismos de socorro ni realiza rescates para los que no está preparada.",
+        "No se asignan brigadistas sin aceptación y formación real."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "indicators": {
+      "focus": "Definir indicadores de estructura, proceso y resultado con fichas técnicas y fuentes verificables.",
+      "actions": [
+        "Seleccionar indicadores alineados con objetivos, riesgos y requisitos.",
+        "Definir nombre, fórmula, numerador, denominador, fuente, frecuencia, responsable, meta y línea base.",
+        "Consolidar datos, validar calidad y analizar tendencias y limitaciones.",
+        "Presentar resultados y vincular decisiones de mejora."
+      ],
+      "evidence": [
+        "Fichas técnicas y bases de datos.",
+        "Mediciones periódicas y análisis.",
+        "Actas de presentación y decisiones."
+      ],
+      "checks": [
+        "No se usan metas cumplidas sin evidencia de numerador y denominador.",
+        "Los cambios de fórmula o alcance quedan documentados."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "audit": {
+      "focus": "Realizar una auditoría anual que evalúe implementación y eficacia del SG-SST con criterios de objetividad e independencia.",
+      "actions": [
+        "Definir programa, alcance, criterios, métodos, fechas y auditor competente.",
+        "Revisar documentos, entrevistas, observación y evidencias de todos los ciclos PHVA.",
+        "Registrar hallazgos objetivos, fortalezas y no conformidades con trazabilidad.",
+        "Comunicar resultados y derivar acciones con seguimiento de eficacia."
+      ],
+      "evidence": [
+        "Programa e informe de auditoría.",
+        "Listas de chequeo, evidencias y notas.",
+        "Plan de acciones y verificación de cierre."
+      ],
+      "checks": [
+        "El auditor no evalúa exclusivamente su propio trabajo cuando compromete objetividad.",
+        "La auditoría documental se complementa con verificación de implementación."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "management_review": {
+      "focus": "Revisar el SG-SST por la alta dirección para decidir recursos, cambios y mejoras con base en resultados.",
+      "actions": [
+        "Preparar entradas: avance, indicadores, auditorías, incidentes, salud, cumplimiento, participación, riesgos y acciones pendientes.",
+        "Realizar la reunión con la alta dirección y analizar suficiencia, adecuación y eficacia.",
+        "Documentar decisiones, responsables, recursos y fechas.",
+        "Hacer seguimiento a compromisos y comunicar resultados pertinentes."
+      ],
+      "evidence": [
+        "Agenda, presentación y acta de revisión.",
+        "Decisiones, presupuesto y plan de mejora.",
+        "Soportes de seguimiento."
+      ],
+      "checks": [
+        "La revisión no se sustituye por una firma sin análisis.",
+        "Las decisiones abordan brechas y riesgos relevantes."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "audit_planning": {
+      "focus": "Planificar la auditoría y comunicar sus resultados al COPASST y a las partes pertinentes.",
+      "actions": [
+        "Programar fechas, alcance, criterios y participantes evitando conflictos de interés.",
+        "Coordinar acceso a procesos, centros, trabajadores y evidencias.",
+        "Presentar hallazgos y alcance al COPASST, respondiendo observaciones.",
+        "Integrar conclusiones a revisión por la dirección y acciones de mejora."
+      ],
+      "evidence": [
+        "Programa y comunicaciones de auditoría.",
+        "Acta o evidencia de presentación al COPASST.",
+        "Acciones derivadas y seguimiento."
+      ],
+      "checks": [
+        "La comunicación incluye alcance y limitaciones, no sólo el porcentaje.",
+        "Los hallazgos quedan disponibles para seguimiento."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "corrective_actions": {
+      "focus": "Gestionar no conformidades y acciones preventivas o correctivas eliminando causas y verificando eficacia.",
+      "actions": [
+        "Registrar hallazgo, fuente, requisito y evidencia objetiva.",
+        "Aplicar corrección inmediata cuando proceda y analizar la causa raíz.",
+        "Definir acción, responsable, recursos, fecha y criterio de eficacia.",
+        "Verificar implementación y resultado; reabrir o escalar acciones ineficaces."
+      ],
+      "evidence": [
+        "Registro ACPA y análisis causal.",
+        "Soportes de implementación.",
+        "Verificación de eficacia y cierre autorizado."
+      ],
+      "checks": [
+        "Una acción no se cierra sólo por vencer su fecha.",
+        "Se controlan riesgos mientras se implementa la solución definitiva."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "management_improvement": {
+      "focus": "Implementar las acciones de mejora decididas por la alta dirección y demostrar su resultado.",
+      "actions": [
+        "Convertir cada decisión de revisión en acciones con responsable, recursos y plazo.",
+        "Actualizar objetivos, documentos y controles afectados.",
+        "Revisar avance con la alta dirección y resolver restricciones.",
+        "Evaluar eficacia y conservar evidencia del cambio."
+      ],
+      "evidence": [
+        "Plan derivado de revisión por la dirección.",
+        "Actas, soportes de ejecución y documentos actualizados.",
+        "Evaluación de eficacia."
+      ],
+      "checks": [
+        "Las acciones se vinculan con la decisión que les dio origen.",
+        "No se confunde aprobación presupuestal con implementación."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "investigation_improvement": {
+      "focus": "Convertir las causas y recomendaciones de investigaciones en mejoras verificables del SG-SST.",
+      "actions": [
+        "Consolidar acciones de incidentes, accidentes y enfermedades laborales.",
+        "Priorizar controles sobre causas básicas y condiciones del sistema de trabajo.",
+        "Asignar recursos, responsables y seguimiento en PAT o plan de mejora.",
+        "Verificar que la acción reduce recurrencia y actualizar IPEVR y procedimientos."
+      ],
+      "evidence": [
+        "Planes derivados de investigaciones.",
+        "Soportes de controles implementados.",
+        "Indicadores de eficacia y análisis de recurrencia."
+      ],
+      "checks": [
+        "No se limitan las acciones a recomendar más cuidado o capacitación.",
+        "Se incluyen contratistas y otras empresas cuando comparten responsabilidades."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "authority_improvement": {
+      "focus": "Atender requerimientos de autoridades y ARL mediante un plan de mejoramiento trazable y soportado.",
+      "actions": [
+        "Registrar cada requerimiento, fuente, fecha, alcance y plazo sin alterar su contenido.",
+        "Analizar brecha y definir acciones, responsables, recursos y evidencias de cierre.",
+        "Radicar respuestas en los términos exigidos y conservar soportes.",
+        "Verificar eficacia y evitar cerrar requerimientos con documentos no implementados."
+      ],
+      "evidence": [
+        "Requerimiento original y plan de mejoramiento.",
+        "Soportes de ejecución y radicados.",
+        "Verificación interna y respuesta de la entidad cuando exista."
+      ],
+      "checks": [
+        "El cierre administrativo en la plataforma no equivale a aceptación de la autoridad o ARL.",
+        "Los incumplimientos y prórrogas se documentan con transparencia."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    },
+    "sst_policy": {
+      "focus": "Formalizar el compromiso de la alta dirección con prevención, cumplimiento, participación y mejora continua.",
+      "actions": [
+        "Contextualizar la política a la actividad, tamaño y peligros de la organización.",
+        "Aprobarla y firmarla por la alta dirección con fecha y versión.",
+        "Comunicarla a trabajadores, contratistas y partes interesadas pertinentes.",
+        "Revisarla al menos anualmente y ante cambios significativos."
+      ],
+      "evidence": [
+        "Política aprobada y firmada.",
+        "Registros de divulgación y comprensión.",
+        "Revisiones y versiones vigentes."
+      ],
+      "checks": [
+        "La política se diferencia de objetivos y plan anual.",
+        "No transfiere obligaciones del empleador a los trabajadores."
+      ],
+      "reference": "Decreto 1072 de 2015 y Resolución 0312 de 2019, según aplicabilidad."
+    }
+  },
+  "standard_map": {
+    "M7-01": "assignment",
+    "M7-02": "affiliation",
+    "M7-03": "training",
+    "M7-04": "annual_plan",
+    "M7-05": "medical_eval",
+    "M7-06": "ipevr_method",
+    "M7-07": "controls",
+    "M21-01": "assignment",
+    "M21-02": "resources",
+    "M21-03": "affiliation",
+    "M21-04": "copasst",
+    "M21-05": "coexistence",
+    "M21-06": "training",
+    "M21-07": "sst_policy",
+    "M21-08": "annual_plan",
+    "M21-09": "retention",
+    "M21-10": "sociodemo",
+    "M21-11": "health_promotion",
+    "M21-12": "medical_eval",
+    "M21-13": "restrictions",
+    "M21-14": "event_report",
+    "M21-15": "investigation",
+    "M21-16": "ipevr_participation",
+    "M21-17": "maintenance",
+    "M21-18": "epp",
+    "M21-19": "emergency_plan",
+    "M21-20": "brigade",
+    "M21-21": "management_review",
+    "1.1.1": "assignment",
+    "1.1.2": "responsibilities",
+    "1.1.3": "resources",
+    "1.1.4": "affiliation",
+    "1.1.5": "high_risk",
+    "1.1.6": "copasst",
+    "1.1.7": "copasst_training",
+    "1.1.8": "coexistence",
+    "1.2.1": "training",
+    "1.2.2": "induction",
+    "1.2.3": "course50",
+    "2.1.1": "sst_policy",
+    "2.2.1": "objectives",
+    "2.3.1": "initial_eval",
+    "2.4.1": "annual_plan",
+    "2.5.1": "retention",
+    "2.6.1": "accountability",
+    "2.7.1": "legal_matrix",
+    "2.8.1": "communication",
+    "2.9.1": "procurement",
+    "2.10.1": "contractors",
+    "2.11.1": "change",
+    "3.1.1": "sociodemo",
+    "3.1.2": "health_promotion",
+    "3.1.3": "job_profiles",
+    "3.1.4": "medical_eval",
+    "3.1.5": "custody",
+    "3.1.6": "restrictions",
+    "3.1.7": "healthy_lifestyles",
+    "3.1.8": "hygiene",
+    "3.1.9": "waste",
+    "3.2.1": "event_report",
+    "3.2.2": "investigation",
+    "3.2.3": "event_statistics",
+    "3.2.4": "frequency",
+    "3.2.5": "severity",
+    "3.2.6": "fatality_rate",
+    "3.2.7": "prevalence",
+    "3.2.8": "incidence",
+    "3.2.9": "absenteeism",
+    "4.1.1": "ipevr_method",
+    "4.1.2": "ipevr_participation",
+    "4.1.3": "carcinogens",
+    "4.1.4": "measurements",
+    "4.1.5": "controls",
+    "4.2.1": "worker_controls",
+    "4.2.2": "procedures",
+    "4.2.3": "inspections",
+    "4.2.4": "maintenance",
+    "4.2.5": "epp",
+    "5.1.1": "emergency_plan",
+    "5.1.2": "brigade",
+    "6.1.1": "indicators",
+    "6.1.2": "audit",
+    "6.1.3": "management_review",
+    "6.1.4": "audit_planning",
+    "7.1.1": "corrective_actions",
+    "7.1.2": "management_improvement",
+    "7.1.3": "investigation_improvement",
+    "7.1.4": "authority_improvement"
+  }
+}

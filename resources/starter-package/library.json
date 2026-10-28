@@ -1,0 +1,4675 @@
+{
+  "name": "Paquete de inicio SG-SST por régimen, actividad y peligros",
+  "version": "1.0.0",
+  "reviewed_at": "2026-10-28",
+  "legal_notice": "Selección orientativa de borradores. La empresa debe confirmar aplicabilidad, adaptar, aprobar, ejecutar y conservar evidencias. La creación documental no equivale a cumplimiento ni certificación.",
+  "references": {
+    "D1072": {
+      "title": "Decreto 1072 de 2015 · SG-SST",
+      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=72173"
+    },
+    "R0312": {
+      "title": "Resolución 0312 de 2019 · Estándares mínimos",
+      "url": "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=82666"
+    },
+    "R1401": {
+      "title": "Resolución 1401 de 2007 · Investigación de incidentes y accidentes",
+      "url": "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=53497"
+    },
+    "R2346": {
+      "title": "Resolución 2346 de 2007 · Evaluaciones médicas ocupacionales",
+      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=85863"
+    },
+    "R1918": {
+      "title": "Resolución 1918 de 2009 · Costos y custodia de evaluaciones e historias",
+      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=36469"
+    },
+    "R3461": {
+      "title": "Resolución 3461 de 2025 · Comité de Convivencia Laboral",
+      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=262916"
+    },
+    "R4272": {
+      "title": "Resolución 4272 de 2021 · Trabajo en alturas",
+      "url": "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=120880"
+    },
+    "R0491": {
+      "title": "Resolución 0491 de 2020 · Espacios confinados",
+      "url": "https://www.alcaldiabogota.gov.co/sisjur/normas/Norma1.jsp?i=90906"
+    },
+    "R0773": {
+      "title": "Resolución 773 de 2021 · SGA en lugares de trabajo",
+      "url": "https://www.icbf.gov.co/cargues/avance/compilacion/docs/resolucion_mtra_0773_2021.htm"
+    },
+    "D1496": {
+      "title": "Decreto 1496 de 2018 · Sistema Globalmente Armonizado",
+      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=87910"
+    },
+    "D1630": {
+      "title": "Decreto 1630 de 2021 · Gestión integral de sustancias químicas",
+      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=173879"
+    },
+    "R2674": {
+      "title": "Resolución 2674 de 2013 · Requisitos sanitarios de alimentos",
+      "url": "https://www1.funcionpublica.gov.co/documents/418537/604808/1962.pdf/abe38fb4-e74d-4dcc-b812-52776a9787f6"
+    },
+    "L2088": {
+      "title": "Ley 2088 de 2021 · Trabajo en casa",
+      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=162970"
+    },
+    "D1227": {
+      "title": "Decreto 1227 de 2022 · Teletrabajo",
+      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=190935"
+    },
+    "L2191": {
+      "title": "Ley 2191 de 2022 · Desconexión laboral",
+      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=177586"
+    },
+    "BIO": {
+      "title": "Minsalud · Manual de medidas básicas para el control de infecciones",
+      "url": "https://www.minsalud.gov.co/sites/rid/Lists/BibliotecaDigital/RIDE/VS/PP/PAI/manual-prevencion-iaas.pdf"
+    },
+    "R2646": {
+      "title": "Resolución 2646 de 2008 · Riesgo psicosocial en el trabajo",
+      "url": "https://www.icbf.gov.co/cargues/avance/compilacion/docs/resolucion_minsaludps_2646_2008.htm"
+    },
+    "L2365": {
+      "title": "Ley 2365 de 2024 · Prevención, protección y atención del acoso sexual",
+      "url": "https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=244636"
+    }
+  },
+  "kits": [
+    {
+      "key": "inicio",
+      "name": "Guía, manual y matriz de cobertura",
+      "description": "Ruta de implementación, manual integrado y matriz que separa disponibilidad documental de adaptación, aprobación y evidencia.",
+      "applicability": "Todas las empresas SG-SST; el contenido se ajusta al régimen, actividad y anexos seleccionados.",
+      "related_route": "/cumplimiento-documental",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "GUI-INI-01",
+          "name": "Guía de inicio e implementación del paquete SG-SST",
+          "type": "Guia",
+          "phase": "Planear",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072",
+            "R0312"
+          ],
+          "template": "start_guide"
+        },
+        {
+          "code": "MAN-SST-01",
+          "name": "Manual del Sistema de Gestión de Seguridad y Salud en el Trabajo",
+          "type": "Manual",
+          "phase": "Planear",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072",
+            "R0312"
+          ],
+          "template": "system_manual"
+        },
+        {
+          "code": "FT-COB-01",
+          "name": "Matriz de cobertura documental y brechas de implementación",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072",
+            "R0312"
+          ],
+          "warning": "La matriz nace con documentos disponibles, no con requisitos implementados. Complete los campos de adaptación, aprobación y evidencia con soportes reales.",
+          "form": {
+            "identification": [
+              "Fecha de corte",
+              "Centro / alcance",
+              "Revisó",
+              "Próxima revisión"
+            ],
+            "instructions": [],
+            "tables": [],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          },
+          "template": "coverage"
+        }
+      ]
+    },
+    {
+      "key": "gestion",
+      "name": "Formatos transversales de gestión",
+      "description": "Designación, afiliación, capacitación, plan anual e IPEVR para convertir los estándares en registros de trabajo.",
+      "applicability": "Todas las empresas SG-SST; complementan los estándares sin reemplazar los módulos operativos.",
+      "related_route": "/plan-anual",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "FT-RES-01",
+          "name": "Acta de designación y matriz de responsabilidades y recursos SG-SST",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No firme ni asigne competencias sin verificar los soportes de la persona designada."
+            ],
+            "tables": [
+              {
+                "title": "Designación por validar",
+                "headers": [
+                  "Rol",
+                  "Nombre y documento",
+                  "Perfil / dedicación requerida",
+                  "Fecha de inicio",
+                  "Firma"
+                ],
+                "rows": [
+                  [
+                    "Responsable que diseña y administra el SG-SST",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Representante de la alta dirección",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Responsabilidades y recursos",
+                "headers": [
+                  "Proceso / rol",
+                  "Responsabilidad concreta",
+                  "Tiempo / presupuesto / recurso",
+                  "Evidencia de cumplimiento",
+                  "Seguimiento"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-AFI-01",
+          "name": "Lista de verificación de afiliación y cobertura al Sistema de Seguridad Social",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Use datos mínimos necesarios y conserve los soportes con acceso controlado."
+            ],
+            "tables": [
+              {
+                "title": "Población y cobertura",
+                "headers": [
+                  "Persona / cargo / vínculo",
+                  "Fecha ingreso o novedad",
+                  "Salud",
+                  "Pensión",
+                  "ARL / clase de riesgo",
+                  "Soporte y observación"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Verificación administrativa",
+                "headers": [
+                  "Criterio",
+                  "Resultado",
+                  "Soporte / acción"
+                ],
+                "rows": [
+                  [
+                    "Censo depurado y coherente con nómina y contratistas",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Novedades de ingreso, retiro y clase de riesgo gestionadas",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "CIIU y riesgo contrastados con RUT, actividad real y ARL",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-CAP-01",
+          "name": "Diagnóstico de necesidades y programa anual de capacitación SG-SST",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Una actividad aquí programada permanece pendiente hasta que se realice y tenga evidencia."
+            ],
+            "tables": [
+              {
+                "title": "Necesidades por población",
+                "headers": [
+                  "Cargo / población",
+                  "Peligro o brecha",
+                  "Competencia esperada",
+                  "Fuente de la necesidad",
+                  "Prioridad"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              },
+              {
+                "title": "Programa anual",
+                "headers": [
+                  "Tema / contenido",
+                  "Población",
+                  "Responsable e idoneidad",
+                  "Fecha / duración / modalidad",
+                  "Evaluación y evidencia"
+                ],
+                "rows": [],
+                "blank_rows": 7
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-CAP-02",
+          "name": "Registro de capacitación, evaluación y aplicación en el puesto",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No registre asistencia, calificaciones o firmas de personas que no participaron."
+            ],
+            "tables": [
+              {
+                "title": "Identificación de la actividad",
+                "headers": [
+                  "Tema",
+                  "Fecha y duración",
+                  "Instructor e idoneidad",
+                  "Contenido / versión"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Participantes y evaluación",
+                "headers": [
+                  "Nombre / documento",
+                  "Cargo",
+                  "Asistencia real",
+                  "Resultado de evaluación",
+                  "Firma / soporte"
+                ],
+                "rows": [],
+                "blank_rows": 7
+              },
+              {
+                "title": "Verificación de aplicación",
+                "headers": [
+                  "Fecha de seguimiento",
+                  "Cambio observado en la tarea",
+                  "Brecha y acción",
+                  "Responsable"
+                ],
+                "rows": [],
+                "blank_rows": 3
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-PAT-01",
+          "name": "Formato de Plan Anual de Trabajo y seguimiento",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "El estado y la fecha de ejecución se completan sólo con soportes reales."
+            ],
+            "tables": [
+              {
+                "title": "Objetivos y actividades",
+                "headers": [
+                  "Objetivo / brecha",
+                  "Actividad",
+                  "Responsable",
+                  "Fecha",
+                  "Presupuesto",
+                  "Indicador / evidencia esperada"
+                ],
+                "rows": [],
+                "blank_rows": 8
+              },
+              {
+                "title": "Seguimiento real",
+                "headers": [
+                  "Actividad",
+                  "Avance y evidencia",
+                  "Estado justificado",
+                  "Desviación / reprogramación",
+                  "Verificó"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-IPEVR-01",
+          "name": "Matriz de identificación de peligros, evaluación, valoración y controles",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Valide la metodología y los valores ND, NE y NC con trabajadores y personal competente; no copie los peligros base sin observar la operación."
+            ],
+            "tables": [
+              {
+                "title": "Caracterización y valoración",
+                "headers": [
+                  "Proceso / tarea / cargo",
+                  "Peligro y clasificación",
+                  "Efectos / expuestos",
+                  "Controles existentes",
+                  "ND / NE / NP / NC / NR",
+                  "Nivel y aceptabilidad"
+                ],
+                "rows": [],
+                "blank_rows": 7
+              },
+              {
+                "title": "Intervención y riesgo residual",
+                "headers": [
+                  "Peligro / tarea",
+                  "Eliminación / sustitución / ingeniería",
+                  "Administrativos / EPP",
+                  "Responsable y fecha",
+                  "Riesgo residual y eficacia"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "salud",
+      "name": "Salud ocupacional, psicosocial y ergonomía",
+      "description": "Programa de evaluaciones y recomendaciones no clínicas, prevención psicosocial y análisis ergonómico.",
+      "applicability": "Todas las empresas; la evaluación clínica y la batería psicosocial corresponden a profesionales competentes.",
+      "related_route": "/programas-prevencion",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "PR-SAL-01",
+          "name": "Programa de salud ocupacional y evaluaciones médicas",
+          "type": "Programa",
+          "phase": "Hacer",
+          "objective": "Organizar el diagnóstico de condiciones de salud, las evaluaciones ocupacionales y la implementación de recomendaciones, protegiendo la reserva clínica.",
+          "steps": [
+            "Elaborar perfiles de exposición por cargo y centro con base en la IPEVR y en las tareas reales.",
+            "Definir con el prestador o profesional competente los contenidos y la frecuencia de evaluaciones de preingreso, periódicas, cambio de ocupación y egreso.",
+            "Programar y costear las evaluaciones; registrar únicamente datos administrativos necesarios para controlar cobertura.",
+            "Recibir conceptos y recomendaciones funcionales, definir adecuaciones y verificar su implementación sin solicitar diagnósticos innecesarios.",
+            "Formalizar custodia de historias clínicas por el prestador o médico competente y canales legítimos de acceso.",
+            "Analizar resultados agregados y articular vigilancia epidemiológica, promoción y controles."
+          ],
+          "controls": [
+            "No almacenar historias clínicas ni resultados diagnósticos en el repositorio general.",
+            "No generar conceptos de aptitud ni restricciones desde esta plantilla.",
+            "Las pruebas complementarias dependen de exposición y criterio profesional, no de una lista idéntica para todos."
+          ],
+          "records": [
+            "Perfiles de exposición y programación.",
+            "Control administrativo de evaluaciones y cobertura.",
+            "Conceptos y recomendaciones bajo acceso restringido.",
+            "Acta o contrato de custodia y acciones de adecuación."
+          ],
+          "references": [
+            "R2346",
+            "R1918",
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-SAL-01",
+          "name": "Control no clínico de evaluaciones ocupacionales y recomendaciones",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "R2346",
+            "R1918"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No escriba diagnósticos, resultados de pruebas ni historias clínicas en este formato."
+            ],
+            "tables": [
+              {
+                "title": "Programación y cobertura",
+                "headers": [
+                  "Trabajador / cargo",
+                  "Perfil de exposición",
+                  "Tipo de evaluación",
+                  "Fecha programada",
+                  "Fecha realizada / soporte"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Recomendaciones funcionales",
+                "headers": [
+                  "Trabajador / código de concepto",
+                  "Restricción o recomendación funcional",
+                  "Adecuación requerida",
+                  "Responsable / fecha",
+                  "Verificación"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              },
+              {
+                "title": "Custodia",
+                "headers": [
+                  "Prestador o médico custodio",
+                  "Medio y ubicación controlada",
+                  "Acuerdo / vigencia",
+                  "Verificación de acceso y respaldo"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "PR-PSI-01",
+          "name": "Programa de prevención e intervención del riesgo psicosocial",
+          "type": "Programa",
+          "phase": "Hacer",
+          "objective": "Prevenir y gestionar factores psicosociales del diseño y organización del trabajo, con canales de apoyo y evaluación por personal competente.",
+          "steps": [
+            "Caracterizar demandas, control, apoyo, liderazgo, jornadas, recompensa, relaciones y cambios por grupos de trabajo.",
+            "Definir con profesionales competentes la estrategia de evaluación, los instrumentos autorizados y el tratamiento confidencial de resultados.",
+            "Priorizar medidas organizacionales sobre carga, recursos, roles, horarios, comunicación, participación y apoyo.",
+            "Articular convivencia, desconexión, prevención de violencias y respuesta ante crisis sin revictimización.",
+            "Evaluar resultados agregados, eficacia de acciones y necesidades de intervención individual por canales privados."
+          ],
+          "controls": [
+            "No incluir ni aplicar una batería psicosocial improvisada como si fuera diagnóstico.",
+            "No publicar resultados individuales ni utilizarlos para discriminar.",
+            "Las campañas de bienestar no reemplazan cambios en la organización del trabajo."
+          ],
+          "records": [
+            "Diagnóstico agregado y plan de intervención.",
+            "Informes profesionales bajo custodia adecuada.",
+            "Acciones organizacionales, seguimiento y evaluación de eficacia."
+          ],
+          "references": [
+            "R2646",
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-PSI-01",
+          "name": "Plan de intervención psicosocial y seguimiento agregado",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No incluya respuestas individuales, resultados de baterías ni información clínica."
+            ],
+            "tables": [
+              {
+                "title": "Priorización por grupo de trabajo",
+                "headers": [
+                  "Grupo / proceso",
+                  "Factor y fuente de identificación",
+                  "Efecto posible",
+                  "Medida organizacional",
+                  "Responsable / fecha"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Seguimiento y eficacia",
+                "headers": [
+                  "Acción",
+                  "Indicador y fuente agregada",
+                  "Resultado",
+                  "Ajuste requerido",
+                  "Verificó"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "PR-ERG-01",
+          "name": "Programa de ergonomía y prevención de desórdenes musculoesqueléticos",
+          "type": "Programa",
+          "phase": "Hacer",
+          "objective": "Identificar y controlar exigencias biomecánicas del puesto mediante rediseño, ayudas, organización y participación de los trabajadores.",
+          "steps": [
+            "Identificar tareas con manipulación de carga, repetición, posturas mantenidas o forzadas, pantallas, vibración y trabajo de pie.",
+            "Realizar análisis del puesto con trabajadores y seleccionar el método de evaluación según la tarea y competencia disponible.",
+            "Priorizar rediseño, ayudas mecánicas, ajuste de puestos, rotación, pausas y organización de la carga.",
+            "Capacitar en uso de ayudas y condiciones del puesto sin limitar la intervención a higiene postural.",
+            "Verificar molestias agregadas, uso de controles y eficacia; articular vigilancia y evaluaciones ocupacionales."
+          ],
+          "controls": [
+            "No asignar cargas máximas universales sin evaluar las condiciones reales.",
+            "Evitar compras de mobiliario sin evaluación de ajuste y compatibilidad.",
+            "Las pausas no sustituyen el rediseño cuando existe una exigencia excesiva."
+          ],
+          "records": [
+            "Análisis de puestos y tareas.",
+            "Plan de intervención, compras justificadas y capacitación.",
+            "Seguimiento de eficacia y recomendaciones profesionales."
+          ],
+          "references": [
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-ERG-01",
+          "name": "Análisis ergonómico básico del puesto y plan de ajuste",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Este formato es tamizaje inicial; no reemplaza una evaluación ergonómica especializada cuando el riesgo lo requiera."
+            ],
+            "tables": [
+              {
+                "title": "Condiciones observadas",
+                "headers": [
+                  "Puesto / tarea",
+                  "Exigencia observada",
+                  "Tiempo / frecuencia / carga",
+                  "Comentario del trabajador",
+                  "Prioridad"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Evaluación del puesto",
+                "headers": [
+                  "Criterio",
+                  "Condición encontrada",
+                  "Ajuste requerido",
+                  "Responsable"
+                ],
+                "rows": [
+                  [
+                    "Silla, superficie y apoyos ajustables a la persona",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Pantalla, alcance y postura de trabajo",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Manipulación, ayudas y espacio de movimiento",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Pausas, rotación y ritmo",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Verificación posterior",
+                "headers": [
+                  "Ajuste implementado",
+                  "Fecha",
+                  "Uso y eficacia observados",
+                  "Pendiente"
+                ],
+                "rows": [],
+                "blank_rows": 3
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "convivencia",
+      "name": "Comité de Convivencia Laboral",
+      "description": "Procedimiento actualizado a Resolución 3461 de 2025 y formatos con separación de información reservada.",
+      "applicability": "Todas las empresas; adaptar composición por población y centros de trabajo.",
+      "related_route": "/documentos",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "PR-CCL-01",
+          "name": "Reglamento y procedimiento preventivo del Comité de Convivencia Laboral",
+          "type": "Procedimiento",
+          "phase": "Planear",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "R3461",
+            "D1072",
+            "L2365"
+          ],
+          "template": "convivencia",
+          "warning": "El procedimiento no autoriza a publicar expedientes de quejas en la biblioteca general. El acoso sexual no es conciliable y sigue la ruta especial aplicable."
+        },
+        {
+          "code": "FT-CCL-01",
+          "name": "Acta ordinaria del Comité de Convivencia y control agregado de gestión",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "R3461"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No incluya nombres de denunciantes, relatos, pruebas ni detalles de casos. Esos expedientes se custodian por separado y con acceso restringido."
+            ],
+            "tables": [
+              {
+                "title": "Sesión ordinaria",
+                "headers": [
+                  "Fecha / hora / medio",
+                  "Orden del día",
+                  "Asistentes y roles",
+                  "Próxima sesión"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Temas preventivos y compromisos",
+                "headers": [
+                  "Tema preventivo o recomendación",
+                  "Responsable",
+                  "Fecha",
+                  "Seguimiento mensual"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              },
+              {
+                "title": "Estadística agregada, sin relatos ni identidades",
+                "headers": [
+                  "Período",
+                  "Quejas recibidas",
+                  "En trámite",
+                  "Remitidas / cerradas",
+                  "Compromisos en seguimiento"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Presidente o secretario",
+              "Revisión de alta dirección cuando corresponda"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "emergencia_documental",
+      "name": "Plan y registros de emergencias",
+      "description": "Plan documental, análisis de amenazas y evaluación de simulacros, conectados al módulo operativo.",
+      "applicability": "Todas las empresas; se debe adaptar por centro, turno, amenaza y población.",
+      "related_route": "/emergencias",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "PR-EME-01",
+          "name": "Plan de prevención, preparación y respuesta ante emergencias",
+          "type": "Plan",
+          "phase": "Hacer",
+          "objective": "Establecer cómo prevenir, preparar y responder a emergencias en cada centro de trabajo sin sustituir el levantamiento en sitio.",
+          "steps": [
+            "Identificar amenazas internas y externas, escenarios, población expuesta, turnos y personas que requieren apoyo.",
+            "Evaluar vulnerabilidad de personas, instalaciones, procesos, recursos y entorno; priorizar medidas de prevención y preparación.",
+            "Definir alarma, dirección, comunicaciones, evacuación, refugio, primeros auxilios, rescate, recuperación y ayuda mutua.",
+            "Levantar planos con rutas, salidas, puntos de encuentro, equipos y señalización; verificar condiciones en sitio.",
+            "Conformar brigada por turnos, entrenar a la población, inspeccionar recursos y mantener contactos actualizados.",
+            "Realizar al menos un simulacro anual con participación de todos los trabajadores y ejecutar acciones de mejora."
+          ],
+          "controls": [
+            "Los números de emergencia y ayuda mutua se confirman antes de publicar el plan.",
+            "Los brigadistas sólo actúan dentro de su formación y no sustituyen organismos de socorro.",
+            "Las rutas y equipos no se consideran disponibles sin inspección real."
+          ],
+          "records": [
+            "Plan por centro, análisis de amenazas y vulnerabilidad.",
+            "Planos, directorio, brigada e inspecciones.",
+            "Registros de capacitación, simulacros y mejoras."
+          ],
+          "references": [
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-EME-01",
+          "name": "Análisis de amenazas, vulnerabilidad, brigada y recursos de emergencia",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No marque recursos como operativos ni contactos como verificados sin comprobarlos."
+            ],
+            "tables": [
+              {
+                "title": "Amenazas y vulnerabilidad",
+                "headers": [
+                  "Amenaza / escenario",
+                  "Probabilidad e impacto",
+                  "Personas / procesos vulnerables",
+                  "Controles y preparación requerida",
+                  "Responsable"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Brigada y directorio por validar",
+                "headers": [
+                  "Nombre / entidad",
+                  "Rol o tipo de apoyo",
+                  "Turno / cobertura",
+                  "Contacto verificado",
+                  "Formación / vigencia"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              },
+              {
+                "title": "Recursos y planos",
+                "headers": [
+                  "Recurso / plano",
+                  "Ubicación",
+                  "Cantidad / versión",
+                  "Inspección pendiente o soporte",
+                  "Novedad / acción"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-EME-02",
+          "name": "Programación y evaluación de simulacro o emergencia real",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Programe primero; después de realizar el ejercicio complete resultados con observaciones y evidencias, sin precargar tiempos ni éxitos."
+            ],
+            "tables": [
+              {
+                "title": "Diseño del ejercicio",
+                "headers": [
+                  "Fecha / centro / turno",
+                  "Escenario y objetivo",
+                  "Participantes y observadores",
+                  "Criterios de evaluación"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Resultados observados",
+                "headers": [
+                  "Criterio",
+                  "Resultado observado",
+                  "Tiempo / evidencia",
+                  "Brecha"
+                ],
+                "rows": [
+                  [
+                    "Alarma y comunicaciones",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Evacuación, conteo y punto de encuentro",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Actuación de brigada y primeros auxilios",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Apoyo a personas y coordinación externa",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Acciones de mejora",
+                "headers": [
+                  "Acción",
+                  "Responsable",
+                  "Fecha",
+                  "Verificación de eficacia"
+                ],
+                "rows": [],
+                "blank_rows": 4
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "epp",
+      "name": "Elementos de protección personal",
+      "description": "Selección, matriz, entrega, formación e inspección de EPP como control complementario.",
+      "applicability": "Todas las empresas; la selección final depende de peligro, tarea, persona y compatibilidad.",
+      "related_route": "/matriz-ipevr",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "PR-EPP-01",
+          "name": "Procedimiento para selección, entrega, uso y mantenimiento de EPP",
+          "type": "Procedimiento",
+          "phase": "Hacer",
+          "objective": "Asegurar que el EPP sea idóneo, compatible, entregado sin costo y utilizado correctamente como complemento de controles superiores.",
+          "steps": [
+            "Definir EPP por peligro y tarea con base en IPEVR, FDS, mediciones y especificaciones del fabricante.",
+            "Evaluar talla, ajuste, compatibilidad, limitaciones y certificaciones aplicables antes de comprar.",
+            "Entregar con registro, instrucción práctica, prueba de ajuste cuando corresponda y verificación de comprensión.",
+            "Definir almacenamiento, higiene, inspección, mantenimiento, vida útil y reposición.",
+            "Observar el uso real y resolver barreras; retirar de servicio elementos dañados, vencidos o no idóneos."
+          ],
+          "controls": [
+            "El EPP no reemplaza eliminación, sustitución, ingeniería o controles administrativos viables.",
+            "Protección respiratoria, dieléctrica, contra caídas y otros EPP críticos requieren selección y formación específica.",
+            "No se precargan entregas, tallas, certificados ni aceptaciones."
+          ],
+          "records": [
+            "Matriz de selección y soportes técnicos.",
+            "Registros de entrega, reposición y formación.",
+            "Inspecciones, mantenimiento y retiro de servicio."
+          ],
+          "references": [
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-EPP-01",
+          "name": "Matriz de selección y compatibilidad de EPP",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No elija EPP sólo por nombre comercial; registre la especificación y la evaluación que justifica su idoneidad."
+            ],
+            "tables": [
+              {
+                "title": "Selección por tarea",
+                "headers": [
+                  "Proceso / tarea",
+                  "Peligro / vía de exposición",
+                  "Control superior existente",
+                  "EPP y especificación requerida",
+                  "Justificación / fabricante"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Compatibilidad y limitaciones",
+                "headers": [
+                  "Trabajador / grupo",
+                  "Talla / ajuste",
+                  "EPP usados en conjunto",
+                  "Limitaciones y restricciones",
+                  "Verificó"
+                ],
+                "rows": [],
+                "blank_rows": 4
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-EPP-02",
+          "name": "Registro de entrega, formación, inspección y reposición de EPP",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "La firma se obtiene al entregar y formar; no se precargan aceptaciones ni inspecciones conformes."
+            ],
+            "tables": [
+              {
+                "title": "Entrega y formación",
+                "headers": [
+                  "Trabajador / cargo",
+                  "EPP / serial / talla",
+                  "Fecha y estado",
+                  "Contenido de formación y ajuste",
+                  "Firma / soporte"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Inspección y reposición",
+                "headers": [
+                  "EPP / identificación",
+                  "Fecha de inspección",
+                  "Condición observada",
+                  "Acción / reposición",
+                  "Responsable"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "regimen21",
+      "name": "Formatos de gestión intermedia",
+      "description": "COPASST, archivo, eventos, mantenimiento, inspecciones y revisión por la dirección.",
+      "applicability": "Empresas de 21 y 60 estándares; algunos formatos también pueden usarse voluntariamente en otras empresas.",
+      "related_route": "/cumplimiento-documental",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "FT-COP-01",
+          "name": "Acta de reunión, inspección y seguimiento COPASST o vigía",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            21,
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No genere actas de reuniones que no se han realizado."
+            ],
+            "tables": [
+              {
+                "title": "Reunión efectivamente realizada",
+                "headers": [
+                  "Fecha / medio",
+                  "Convocatoria y orden del día",
+                  "Asistentes principales / suplentes",
+                  "Próxima reunión"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Temas y recomendaciones",
+                "headers": [
+                  "Tema / evidencia revisada",
+                  "Recomendación",
+                  "Responsable / fecha",
+                  "Estado y soporte"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Inspección del comité",
+                "headers": [
+                  "Lugar / fecha",
+                  "Condición observada",
+                  "Riesgo / prioridad",
+                  "Acción y verificación"
+                ],
+                "rows": [],
+                "blank_rows": 4
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-DOC-01",
+          "name": "Inventario maestro y tabla de retención documental",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            21,
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Defina el plazo por tipo de registro y fundamento; no aplique una duración genérica a toda la documentación."
+            ],
+            "tables": [
+              {
+                "title": "Control de documentos",
+                "headers": [
+                  "Código / nombre",
+                  "Versión / fecha",
+                  "Responsable / aprobación",
+                  "Ubicación / acceso",
+                  "Estado"
+                ],
+                "rows": [],
+                "blank_rows": 7
+              },
+              {
+                "title": "Retención y disposición",
+                "headers": [
+                  "Registro / serie",
+                  "Fundamento del plazo",
+                  "Tiempo y fecha de corte",
+                  "Resguardo / acceso",
+                  "Disposición autorizada"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-INC-01",
+          "name": "Reporte interno de incidente, accidente o enfermedad laboral",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            21,
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "El reporte inicial no reemplaza el reporte a ARL ni la investigación. Registre hechos, no conclusiones sin soporte."
+            ],
+            "tables": [
+              {
+                "title": "Evento y personas",
+                "headers": [
+                  "Tipo de evento",
+                  "Fecha / hora / lugar",
+                  "Persona(s) y cargo",
+                  "Jefe / reportante"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Relato inicial y atención",
+                "headers": [
+                  "Qué ocurrió / tarea",
+                  "Atención inmediata",
+                  "Reportes y radicados",
+                  "Evidencias preservadas"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Clasificación por confirmar",
+                "headers": [
+                  "Agente / mecanismo",
+                  "Lesión o daño reportado",
+                  "Investigación requerida",
+                  "Responsable y plazo"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-INC-02",
+          "name": "Informe de investigación de incidentes y accidentes de trabajo",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "R1401",
+            "D1072"
+          ],
+          "regimes": [
+            21,
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Investigue dentro de los 15 días siguientes. En accidente mortal use el formato de la ARL. No atribuya causas sin evidencia."
+            ],
+            "tables": [
+              {
+                "title": "Equipo y cronología",
+                "headers": [
+                  "Evento / fecha",
+                  "Equipo investigador y roles",
+                  "Fecha límite / fecha de informe",
+                  "Remisión ARL cuando aplique"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Evidencias y descripción",
+                "headers": [
+                  "Fuente / evidencia",
+                  "Descripción objetiva",
+                  "Validación / anexo",
+                  "Responsable"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              },
+              {
+                "title": "Análisis de causas",
+                "headers": [
+                  "Nivel",
+                  "Actos / condiciones / factores",
+                  "Evidencia que lo sustenta",
+                  "Control requerido"
+                ],
+                "rows": [
+                  [
+                    "Inmediata",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Básica o del sistema",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Plan de intervención y eficacia",
+                "headers": [
+                  "Acción",
+                  "Responsable / recursos",
+                  "Fecha",
+                  "Verificación de eficacia"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-MTO-01",
+          "name": "Inventario, hoja de vida y plan de mantenimiento seguro",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            21,
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No devuelva equipos al servicio sin verificar guardas, pruebas y condiciones seguras."
+            ],
+            "tables": [
+              {
+                "title": "Inventario y criticidad",
+                "headers": [
+                  "Equipo / instalación / ID",
+                  "Ubicación / fabricante",
+                  "Riesgo y criticidad",
+                  "Manual / certificado"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Plan de mantenimiento",
+                "headers": [
+                  "Equipo / ID",
+                  "Actividad / frecuencia",
+                  "Responsable / competencia",
+                  "Bloqueo y permisos",
+                  "Fecha / evidencia"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Ejecución y liberación",
+                "headers": [
+                  "Orden / fecha",
+                  "Fallas y trabajo realizado",
+                  "Pruebas y guardas restablecidas",
+                  "Liberó / pendiente"
+                ],
+                "rows": [],
+                "blank_rows": 4
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-INS-01",
+          "name": "Inspección planificada de instalaciones, equipos y condiciones de trabajo",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            21,
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Marque los resultados sólo durante la inspección y retire de servicio condiciones graves cuando corresponda."
+            ],
+            "tables": [
+              {
+                "title": "Condiciones observadas",
+                "headers": [
+                  "Área / equipo",
+                  "Criterio inspeccionado",
+                  "Condición real",
+                  "Prioridad / acción inmediata"
+                ],
+                "rows": [],
+                "blank_rows": 8
+              },
+              {
+                "title": "Seguimiento",
+                "headers": [
+                  "Hallazgo",
+                  "Responsable / fecha",
+                  "Soporte de corrección",
+                  "Verificación de eficacia"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-RAD-01",
+          "name": "Acta de revisión por la alta dirección",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            21,
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "El acta se completa con la reunión real, sus participantes, análisis y decisiones; no es una firma automática."
+            ],
+            "tables": [
+              {
+                "title": "Entradas revisadas",
+                "headers": [
+                  "Tema",
+                  "Resultado y fuente",
+                  "Brecha / riesgo",
+                  "Decisión requerida"
+                ],
+                "rows": [
+                  [
+                    "Objetivos e indicadores",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Auditoría, cumplimiento e IVC",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Incidentes, salud e IPEVR",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Recursos, cambios y participación",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Decisiones y seguimiento",
+                "headers": [
+                  "Decisión / acción",
+                  "Responsable / recursos",
+                  "Fecha",
+                  "Verificación posterior"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "regimen60",
+      "name": "Formatos del régimen integral",
+      "description": "Matriz legal, objetivos, comunicaciones, compras, contratistas, cambios, perfiles, residuos, mediciones, auditoría y mejora.",
+      "applicability": "Empresas de 60 estándares; seleccionar además los anexos sectoriales y de peligro que correspondan.",
+      "related_route": "/indicadores",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "FT-LEG-01",
+          "name": "Matriz de requisitos legales y evaluación de cumplimiento",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Confirme vigencia y modificaciones en fuentes oficiales. No marque cumplimiento por disponer de una plantilla."
+            ],
+            "tables": [
+              {
+                "title": "Requisitos aplicables",
+                "headers": [
+                  "Norma / artículo / fuente oficial",
+                  "Exigencia y alcance",
+                  "Proceso / responsable",
+                  "Evidencia requerida",
+                  "Vigencia / cambio"
+                ],
+                "rows": [],
+                "blank_rows": 8
+              },
+              {
+                "title": "Evaluación de cumplimiento",
+                "headers": [
+                  "Requisito",
+                  "Estado justificado",
+                  "Brecha / acción",
+                  "Responsable / fecha",
+                  "Verificación"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-OBJ-01",
+          "name": "Matriz de objetivos y fichas técnicas de indicadores",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Conserve consistencia de fuentes y períodos; no convierta falta de datos en resultado cero."
+            ],
+            "tables": [
+              {
+                "title": "Objetivos",
+                "headers": [
+                  "Objetivo / riesgo",
+                  "Meta / línea base",
+                  "Responsable / recursos",
+                  "Período",
+                  "Seguimiento"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              },
+              {
+                "title": "Ficha por indicador",
+                "headers": [
+                  "Nombre / tipo",
+                  "Fórmula y unidad",
+                  "Fuente numerador / denominador",
+                  "Frecuencia / responsable",
+                  "Meta y análisis"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-INC-03",
+          "name": "Consolidado estadístico de accidentalidad, enfermedad y ausentismo",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Use datos agregados y trazables; no incluya diagnósticos personales ni trate denominadores cero como buen desempeño."
+            ],
+            "tables": [
+              {
+                "title": "Base del período",
+                "headers": [
+                  "Período / población",
+                  "Accidentes / mortales",
+                  "HHT / días cargados",
+                  "Casos EL / promedio trabajadores",
+                  "Días ausencia / programados"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Indicadores calculados",
+                "headers": [
+                  "Indicador",
+                  "Numerador / denominador",
+                  "Resultado",
+                  "Análisis / acción"
+                ],
+                "rows": [
+                  [
+                    "Frecuencia: AT × 240.000 ÷ HHT",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Severidad: días × 240.000 ÷ HHT",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Mortalidad: AT mortales × 100 ÷ total AT",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Prevalencia e incidencia EL × 100.000 ÷ promedio trabajadores",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Ausentismo médico × 100 ÷ días programados",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-COM-01",
+          "name": "Matriz de comunicación y rendición de cuentas SG-SST",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Proteja datos personales y registre también resultados adversos y pendientes."
+            ],
+            "tables": [
+              {
+                "title": "Comunicaciones",
+                "headers": [
+                  "Público / necesidad",
+                  "Mensaje / contenido",
+                  "Medio / frecuencia",
+                  "Responsable",
+                  "Evidencia / comprensión"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Rendición de cuentas",
+                "headers": [
+                  "Período / audiencia",
+                  "Resultados y fuentes",
+                  "Fecha / medio",
+                  "Compromisos y seguimiento"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-CON-01",
+          "name": "Evaluación de selección, coordinación y desempeño de contratistas",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Verifique los soportes antes del inicio y coordine también subcontratistas cuando existan."
+            ],
+            "tables": [
+              {
+                "title": "Selección",
+                "headers": [
+                  "Contratista / servicio",
+                  "Riesgos / competencias",
+                  "Afiliación y soportes",
+                  "Criterio de aceptación"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              },
+              {
+                "title": "Coordinación y ejecución",
+                "headers": [
+                  "Peligros compartidos",
+                  "Controles / permisos / inducción",
+                  "Supervisión / hallazgos",
+                  "Acción"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              },
+              {
+                "title": "Evaluación final",
+                "headers": [
+                  "Período",
+                  "Desempeño y evidencias",
+                  "Incidentes / incumplimientos",
+                  "Decisión y seguimiento"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-CON-02",
+          "name": "Requisitos SST para adquisición de bienes y servicios",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No autorice el uso de un bien o servicio con requisitos críticos incumplidos."
+            ],
+            "tables": [
+              {
+                "title": "Especificación previa",
+                "headers": [
+                  "Bien / servicio",
+                  "Uso y peligro",
+                  "Requisito técnico / legal / FDS",
+                  "Criterio de recepción"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Recepción y aceptación",
+                "headers": [
+                  "Ítem",
+                  "Conformidad y soportes",
+                  "Desviación / acción",
+                  "Autorización de uso"
+                ],
+                "rows": [],
+                "blank_rows": 4
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-CAM-01",
+          "name": "Evaluación y autorización de gestión del cambio",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No implemente el cambio con riesgos graves sin control ni omita la actualización de la IPEVR."
+            ],
+            "tables": [
+              {
+                "title": "Descripción del cambio",
+                "headers": [
+                  "Cambio / motivo",
+                  "Temporal o permanente / fechas",
+                  "Procesos y personas afectadas",
+                  "Responsable"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Evaluación de impactos",
+                "headers": [
+                  "Aspecto",
+                  "Peligro / impacto",
+                  "Control y documento a actualizar",
+                  "Responsable"
+                ],
+                "rows": [
+                  [
+                    "IPEVR y controles",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Competencias y dotación",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Emergencias y contratistas",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Legal, salud y comunicaciones",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Autorización y verificación posterior",
+                "headers": [
+                  "Criterio de inicio",
+                  "Autorizaciones pendientes",
+                  "Resultado posterior",
+                  "Cierre"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-PERFIL-01",
+          "name": "Perfil de cargo y matriz cargo–peligro–exposición",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Valide el perfil con el trabajador y el líder. No escriba restricciones o diagnósticos individuales."
+            ],
+            "tables": [
+              {
+                "title": "Perfil del cargo",
+                "headers": [
+                  "Cargo / centro",
+                  "Funciones y tareas",
+                  "Competencias requeridas",
+                  "Modalidad / jornada"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Exposición y controles",
+                "headers": [
+                  "Tarea",
+                  "Peligro / vía / frecuencia",
+                  "Controles y EPP",
+                  "Evaluación médica sugerida para validar"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-RESID-01",
+          "name": "Caracterización y control de residuos",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No improvise clasificación, mezcla o disposición. Los residuos peligrosos y biosanitarios requieren gestión específica."
+            ],
+            "tables": [
+              {
+                "title": "Inventario",
+                "headers": [
+                  "Proceso / residuo",
+                  "Clasificación por validar",
+                  "Cantidad / frecuencia",
+                  "Envase / almacenamiento / compatibilidad"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Salidas y gestores",
+                "headers": [
+                  "Fecha / residuo",
+                  "Cantidad",
+                  "Gestor y soporte",
+                  "Destino / observación"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              },
+              {
+                "title": "Inspección y derrames",
+                "headers": [
+                  "Fecha / área",
+                  "Condición / evento",
+                  "Acción y residuo generado",
+                  "Verificación"
+                ],
+                "rows": [],
+                "blank_rows": 3
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-CAR-01",
+          "name": "Inventario de carcinógenos y sustancias de toxicidad aguda",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "R0773",
+            "D1496",
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No declare ausencia de agentes sin inventario y revisión. Use FDS y fuentes técnicas; no invente clasificaciones."
+            ],
+            "tables": [
+              {
+                "title": "Identificación con FDS y fuentes",
+                "headers": [
+                  "Producto / proceso",
+                  "Agente y clasificación SGA / fuente",
+                  "Vía / población / frecuencia",
+                  "Controles y vigilancia"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Prioridad de intervención",
+                "headers": [
+                  "Agente / proceso",
+                  "Sustitución o control prioritario",
+                  "Responsable / fecha",
+                  "Eficacia"
+                ],
+                "rows": [],
+                "blank_rows": 4
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-MED-01",
+          "name": "Plan de mediciones ambientales y seguimiento de resultados",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No escriba resultados anticipados ni límites sin verificar el método y la regulación aplicable."
+            ],
+            "tables": [
+              {
+                "title": "Planificación",
+                "headers": [
+                  "Agente / puesto / escenario",
+                  "Justificación IPEVR",
+                  "Método / profesional / equipo",
+                  "Fecha y condiciones a registrar"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              },
+              {
+                "title": "Resultados y acciones",
+                "headers": [
+                  "Informe / fecha",
+                  "Resultado y condiciones de operación",
+                  "Criterio de comparación / interpretación competente",
+                  "Acción / seguimiento"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-AUD-01",
+          "name": "Programa, lista de chequeo e informe de auditoría SG-SST",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "La auditoría debe contrastar implementación, no sólo existencia de documentos."
+            ],
+            "tables": [
+              {
+                "title": "Programa y alcance",
+                "headers": [
+                  "Fecha / procesos / centros",
+                  "Criterios / método",
+                  "Auditor e independencia",
+                  "Evidencias / participantes"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Hallazgos",
+                "headers": [
+                  "Requisito / criterio",
+                  "Evidencia objetiva",
+                  "Resultado / no conformidad",
+                  "Riesgo / acción"
+                ],
+                "rows": [],
+                "blank_rows": 7
+              },
+              {
+                "title": "Informe y comunicación",
+                "headers": [
+                  "Alcance y limitaciones",
+                  "Fortalezas / conclusiones",
+                  "Presentación COPASST / dirección",
+                  "Seguimiento"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-MEJ-01",
+          "name": "Plan de mejoramiento y acciones preventivas o correctivas",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "regimes": [
+            60
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No cierre una acción por vencer su fecha ni un requerimiento externo por cargar un documento."
+            ],
+            "tables": [
+              {
+                "title": "Hallazgos y causas",
+                "headers": [
+                  "Fuente / requerimiento",
+                  "Evidencia de la brecha",
+                  "Causa / análisis",
+                  "Riesgo mientras se corrige"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Acciones y eficacia",
+                "headers": [
+                  "Acción / responsable / recursos",
+                  "Fecha compromiso",
+                  "Soporte de implementación",
+                  "Verificación de eficacia / cierre"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "quimicos",
+      "name": "Seguridad química y SGA",
+      "description": "Inventario, FDS, etiquetado, almacenamiento y respuesta a derrames según productos reales.",
+      "applicability": "Actividades cuyo perfil base identifica peligro químico; confirmar productos y exposición en sitio.",
+      "related_route": "/sanitario/registros/nuevo?tipo=quimicos",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [],
+      "hazard_classes": [
+        "Quimico"
+      ],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "PR-QUI-01",
+          "name": "Programa de seguridad química y comunicación de peligros SGA",
+          "type": "Programa",
+          "phase": "Hacer",
+          "objective": "Controlar la selección, uso, almacenamiento y disposición de productos químicos con información FDS y clasificación SGA verificable.",
+          "steps": [
+            "Levantar inventario real por proceso, producto, cantidad, uso, proveedor y ubicación.",
+            "Obtener y revisar FDS y etiquetas en español; conservar versión vigente y facilitar acceso permanente a trabajadores.",
+            "Evaluar peligros, incompatibilidades, vías de exposición y controles; priorizar sustitución y controles de ingeniería.",
+            "Definir dosificación, trasvase, etiquetado, ventilación, EPP, higiene, almacenamiento y manejo de residuos.",
+            "Capacitar al menos con la periodicidad aplicable y cuando cambien productos o información significativa.",
+            "Preparar respuesta a derrames y exposiciones con FDS, equipos y rutas de atención; registrar y aprender de eventos."
+          ],
+          "controls": [
+            "No mezclar productos salvo instrucción expresa y compatible del fabricante.",
+            "No inventar pictogramas, concentraciones, clasificaciones ni tiempos de contacto.",
+            "Las FDS no se sustituyen por el nombre comercial ni por una etiqueta genérica."
+          ],
+          "records": [
+            "Inventario, FDS y etiquetas.",
+            "Inspecciones, capacitación y evaluación de exposición.",
+            "Registros de derrames, residuos y acciones correctivas."
+          ],
+          "references": [
+            "R0773",
+            "D1496",
+            "D1630",
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-QUI-01",
+          "name": "Inventario de productos químicos, FDS y compatibilidad",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "R0773",
+            "D1496"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Transcriba la clasificación de la FDS vigente; no la deduzca por color u olor."
+            ],
+            "tables": [
+              {
+                "title": "Inventario real",
+                "headers": [
+                  "Producto / fabricante",
+                  "Uso / cantidad / ubicación",
+                  "Clasificación SGA según FDS",
+                  "FDS versión / acceso"
+                ],
+                "rows": [],
+                "blank_rows": 7
+              },
+              {
+                "title": "Almacenamiento y compatibilidad",
+                "headers": [
+                  "Producto / grupo",
+                  "Incompatibilidades",
+                  "Controles / segregación",
+                  "EPP y respuesta FDS"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-QUI-02",
+          "name": "Inspección de almacenamiento, etiquetado y preparación de químicos",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "R0773"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Retire de uso envases sin identificar o condiciones inseguras hasta evaluarlos."
+            ],
+            "tables": [
+              {
+                "title": "Verificación",
+                "headers": [
+                  "Criterio",
+                  "Resultado",
+                  "Observación / acción"
+                ],
+                "rows": [
+                  [
+                    "Inventario y FDS disponibles y vigentes",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Etiquetas legibles y coherentes con FDS",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Envases íntegros, cerrados y segregados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Ventilación, contención y derrames disponibles",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Dosificación y EPP definidos por producto",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Novedades y cierre",
+                "headers": [
+                  "Producto / área",
+                  "Desviación",
+                  "Acción / responsable / fecha",
+                  "Verificación"
+                ],
+                "rows": [],
+                "blank_rows": 4
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "biologico",
+      "name": "Bioseguridad y exposición biológica",
+      "description": "Precauciones estándar y cortopunzantes en salud; zoonosis y manejo animal en ganadería.",
+      "applicability": "CIIU 0141, 8610 y 8621; adaptar a agentes, procedimientos y protocolos sectoriales reales.",
+      "related_route": "/programas-prevencion",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "0141",
+        "8610",
+        "8621"
+      ],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "PR-BIO-01",
+          "name": "Programa de bioseguridad, precauciones estándar y exposición a cortopunzantes",
+          "type": "Programa",
+          "phase": "Hacer",
+          "objective": "Prevenir exposición a agentes biológicos en atención en salud mediante controles de ingeniería, prácticas seguras y respuesta postexposición.",
+          "steps": [
+            "Identificar procedimientos, agentes, vías de exposición y poblaciones con apoyo de profesionales competentes.",
+            "Aplicar precauciones estándar, higiene de manos, EPP según tarea, ventilación, limpieza y manejo seguro de textiles y residuos.",
+            "Utilizar dispositivos seguros y recipientes rígidos; evitar reencauchar, doblar o transportar cortopunzantes sin protección.",
+            "Definir inmunización y vigilancia según perfil con el servicio de salud ocupacional, preservando confidencialidad.",
+            "Establecer ruta inmediata postexposición: lavado o irrigación según corresponda, reporte, atención profesional y seguimiento.",
+            "Auditar prácticas y analizar eventos para rediseñar procedimientos y controles."
+          ],
+          "controls": [
+            "No reutilizar recipientes de cortopunzantes ni compactarlos con las manos.",
+            "No incluir protocolos clínicos de tratamiento sin aprobación de profesionales competentes.",
+            "El contenido institucional de aislamiento y atención se adapta a cada servicio."
+          ],
+          "records": [
+            "Evaluación de procedimientos y riesgo biológico.",
+            "Registros de formación, inspecciones e inmunización bajo custodia.",
+            "Reportes de exposición y seguimiento profesional restringido."
+          ],
+          "references": [
+            "BIO",
+            "D1072"
+          ],
+          "activities": [
+            "8610",
+            "8621"
+          ]
+        },
+        {
+          "code": "FT-BIO-01",
+          "name": "Reporte y seguimiento administrativo de exposición biológica",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "BIO"
+          ],
+          "activities": [
+            "8610",
+            "8621"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Active atención profesional inmediata. No registre diagnósticos ni resultados clínicos en este formato general."
+            ],
+            "tables": [
+              {
+                "title": "Evento y atención inmediata",
+                "headers": [
+                  "Fecha / área / tarea",
+                  "Tipo de exposición sin detalles clínicos innecesarios",
+                  "Acción inmediata realizada",
+                  "Atención profesional / hora"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Análisis de causas y controles",
+                "headers": [
+                  "Dispositivo / procedimiento",
+                  "Condición que favoreció el evento",
+                  "Control correctivo",
+                  "Responsable / fecha"
+                ],
+                "rows": [],
+                "blank_rows": 4
+              },
+              {
+                "title": "Seguimiento restringido",
+                "headers": [
+                  "Código de caso",
+                  "Prestador / custodio",
+                  "Seguimiento pendiente",
+                  "Cierre administrativo"
+                ],
+                "rows": [],
+                "blank_rows": 3
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "PR-ZOO-01",
+          "name": "Programa de prevención de zoonosis y manejo seguro de animales",
+          "type": "Programa",
+          "phase": "Hacer",
+          "objective": "Reducir exposición a agentes biológicos y traumas durante el manejo de bovinos y búfalos.",
+          "steps": [
+            "Caracterizar animales, instalaciones, tareas, agentes y vías de contacto con apoyo veterinario y SST.",
+            "Definir rutas de aproximación, contención, mangueo y trabajo en equipo según comportamiento animal.",
+            "Implementar higiene de manos, lavado de ropa, manejo de secreciones, vectores, agua y residuos.",
+            "Coordinar inmunización y vigilancia de trabajadores y animales con profesionales competentes.",
+            "Establecer respuesta a heridas, mordeduras, salpicaduras y enfermedades sospechosas con reporte inmediato."
+          ],
+          "controls": [
+            "No ingresar a corrales o espacios de contención sin ruta de escape y apoyo definido.",
+            "No improvisar vacunación humana ni tratamiento veterinario desde este documento.",
+            "Aislar y reportar condiciones según instrucciones de profesionales competentes."
+          ],
+          "records": [
+            "Protocolos de manejo y registros de capacitación.",
+            "Inspecciones de instalaciones y eventos.",
+            "Soportes de vigilancia y atención profesional."
+          ],
+          "references": [
+            "D1072"
+          ],
+          "activities": [
+            "0141"
+          ]
+        },
+        {
+          "code": "FT-ZOO-01",
+          "name": "Verificación de manejo animal y prevención de zoonosis",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "activities": [
+            "0141"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No ingrese si el comportamiento animal o las instalaciones impiden controlar la tarea."
+            ],
+            "tables": [
+              {
+                "title": "Condiciones de la tarea",
+                "headers": [
+                  "Fecha / lote / tarea",
+                  "Instalación y contención",
+                  "Personal y apoyo",
+                  "Peligro identificado"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Verificación",
+                "headers": [
+                  "Criterio",
+                  "Resultado",
+                  "Acción"
+                ],
+                "rows": [
+                  [
+                    "Ruta de escape y comunicación disponibles",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Higiene, EPP y manejo de residuos definidos",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Estado de animales e instalaciones revisado",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Protocolo de heridas o exposición conocido",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "agentes_fisicos",
+      "name": "Agentes físicos y ambiente de trabajo",
+      "description": "Prevención de ruido, vibración, radiación, polvo y estrés térmico según peligros del perfil.",
+      "applicability": "Perfiles con agentes físicos o términos asociados; el programa final depende de mediciones y evaluación.",
+      "related_route": "/matriz-ipevr",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "2220"
+      ],
+      "hazard_classes": [
+        "Fisico"
+      ],
+      "hazard_terms": [
+        "ruido",
+        "vibración",
+        "radiación",
+        "sílice"
+      ],
+      "documents": [
+        {
+          "code": "PR-AGF-01",
+          "name": "Programa de prevención y vigilancia de agentes físicos y ambiente laboral",
+          "type": "Programa",
+          "phase": "Hacer",
+          "objective": "Controlar los agentes físicos y ambientales identificados en la actividad, sin asumir exposiciones ni resultados no medidos.",
+          "steps": [
+            "Confirmar agentes, fuentes, puestos, duración y condiciones de exposición mediante IPEVR y observación.",
+            "Definir qué mediciones o evaluaciones requiere cada agente, con métodos y profesionales competentes.",
+            "Priorizar eliminación, sustitución, aislamiento, encapsulamiento, ventilación, mantenimiento y organización de turnos.",
+            "Comunicar resultados y definir vigilancia de la salud y EPP específico cuando sea necesario.",
+            "Verificar eficacia con mediciones, inspecciones y resultados agregados de salud."
+          ],
+          "controls": [
+            "No asignar límites de exposición ni interpretar mediciones sin el criterio técnico aplicable.",
+            "No usar protector auditivo o EPP como única medida cuando hay controles de fuente viables.",
+            "En estrés térmico, adaptar hidratación, sombra, pausas y aclimatación a condiciones reales."
+          ],
+          "records": [
+            "Inventario de fuentes y plan de mediciones.",
+            "Informes técnicos y controles implementados.",
+            "Vigilancia y evaluación de eficacia."
+          ],
+          "references": [
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-AGF-01",
+          "name": "Inventario de fuentes y plan de control de agentes físicos",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Seleccione sólo los agentes confirmados; no complete resultados de medición por anticipado."
+            ],
+            "tables": [
+              {
+                "title": "Fuentes y exposición",
+                "headers": [
+                  "Agente / fuente / puesto",
+                  "Tiempo y condición de exposición",
+                  "Medición requerida",
+                  "Control de fuente / medio"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Seguimiento",
+                "headers": [
+                  "Acción / medición",
+                  "Responsable / fecha",
+                  "Resultado con soporte",
+                  "Ajuste"
+                ],
+                "rows": [],
+                "blank_rows": 4
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "maquinaria",
+      "name": "Maquinaria, equipos y bloqueo de energías",
+      "description": "Guardas, inspección, operación competente y control de energías peligrosas.",
+      "applicability": "Actividades con maquinaria o puntos de atrapamiento en el perfil; validar inventario real.",
+      "related_route": "/sanitario/registros/nuevo?tipo=mantenimiento",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "0141",
+        "1071",
+        "1410",
+        "2220",
+        "2511",
+        "4100",
+        "4210",
+        "5210"
+      ],
+      "hazard_classes": [],
+      "hazard_terms": [
+        "maquinaria",
+        "montacargas"
+      ],
+      "documents": [
+        {
+          "code": "PR-MAQ-01",
+          "name": "Procedimiento de seguridad de maquinaria y control de energías peligrosas",
+          "type": "Procedimiento",
+          "phase": "Hacer",
+          "objective": "Prevenir atrapamientos, cortes, impactos y energización inesperada durante operación, limpieza, ajuste y mantenimiento.",
+          "steps": [
+            "Inventariar máquinas, energías, guardas, paradas de emergencia y tareas de intervención.",
+            "Verificar guardas y dispositivos antes de operar; sólo personal autorizado y entrenado utiliza cada equipo.",
+            "Establecer secuencia de parada, aislamiento, bloqueo, etiquetado, disipación y verificación de energía cero por personas autorizadas.",
+            "Controlar llaves, candados y cambios de turno; prohibir puentes o anulación de dispositivos de seguridad.",
+            "Probar el equipo de forma controlada, restablecer guardas y liberar el área antes de devolverlo al servicio."
+          ],
+          "controls": [
+            "Nunca introducir partes del cuerpo en zonas de peligro con energía disponible.",
+            "No improvisar bloqueos ni depender únicamente del botón de parada.",
+            "Los procedimientos específicos del fabricante y la tarea prevalecen para definir puntos de aislamiento."
+          ],
+          "records": [
+            "Inventario, inspecciones y hojas de vida.",
+            "Procedimientos y registros de bloqueo.",
+            "Autorizaciones, mantenimiento y liberación."
+          ],
+          "references": [
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-MAQ-01",
+          "name": "Inspección de maquinaria y verificación de bloqueo de energías",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Si no puede verificar aislamiento o energía cero, no intervenga el equipo."
+            ],
+            "tables": [
+              {
+                "title": "Equipo y energías",
+                "headers": [
+                  "Equipo / ID",
+                  "Energías y puntos de aislamiento",
+                  "Tarea / personal autorizado",
+                  "Procedimiento relacionado"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Verificación",
+                "headers": [
+                  "Criterio",
+                  "Resultado",
+                  "Acción"
+                ],
+                "rows": [
+                  [
+                    "Guardas, enclavamientos y paradas disponibles",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Aislamiento, bloqueo y etiquetado aplicados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Energía residual disipada y verificación realizada",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Liberación, pruebas y retiro de personas controlados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "electrico",
+      "name": "Seguridad eléctrica",
+      "description": "Trabajo desenergizado, bloqueo, verificación, competencias y permisos eléctricos.",
+      "applicability": "CIIU 4321 u otros perfiles que identifiquen contacto eléctrico o arco eléctrico.",
+      "related_route": "/permisos-trabajo",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [],
+      "hazard_classes": [],
+      "hazard_terms": [
+        "eléctrica",
+        "arco eléctrico"
+      ],
+      "documents": [
+        {
+          "code": "PR-ELE-01",
+          "name": "Procedimiento de seguridad para trabajos eléctricos",
+          "type": "Procedimiento",
+          "phase": "Hacer",
+          "objective": "Prevenir contacto eléctrico, arco, quemaduras y energización inesperada mediante planificación y trabajo desenergizado.",
+          "steps": [
+            "Definir alcance, diagramas, tensión, peligros y personal competente antes de intervenir.",
+            "Priorizar desenergización, aislamiento, bloqueo, etiquetado y verificación de ausencia de tensión con instrumento adecuado.",
+            "Delimitar el área, controlar acceso y utilizar herramientas, equipos y EPP seleccionados para el riesgo.",
+            "Si se propone trabajo energizado, detener y someterlo a justificación, análisis y autorización específica; esta plantilla no lo habilita.",
+            "Restablecer la instalación mediante inspección, retiro de personal y bloqueos, pruebas y autorización de cierre."
+          ],
+          "controls": [
+            "No asumir que un circuito está desenergizado por posición de un interruptor.",
+            "No trabajar en condiciones de humedad, acceso o iluminación que impidan el control.",
+            "Rescate y primeros auxilios se planifican sin exponer a otras personas."
+          ],
+          "records": [
+            "Análisis de trabajo y permiso.",
+            "Verificación de competencias, equipos y ausencia de tensión.",
+            "Registro de bloqueo, pruebas y cierre."
+          ],
+          "references": [
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-ELE-01",
+          "name": "Permiso y verificación previa de trabajo eléctrico",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "El permiso se diligencia por tarea y turno; no es una autorización permanente ni habilita trabajo energizado."
+            ],
+            "tables": [
+              {
+                "title": "Identificación",
+                "headers": [
+                  "Tarea / ubicación",
+                  "Circuito / tensión",
+                  "Responsable y ejecutantes",
+                  "Vigencia del permiso"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Verificación",
+                "headers": [
+                  "Criterio",
+                  "Resultado / hora",
+                  "Responsable / observación"
+                ],
+                "rows": [
+                  [
+                    "Desenergización, aislamiento y bloqueo",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Verificación de ausencia de tensión",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Delimitación, herramientas y EPP",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Emergencia y rescate definidos",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Cierre, pruebas y restablecimiento",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "izajes",
+      "name": "Izaje y manipulación de cargas",
+      "description": "Plan de izaje, accesorios, señalero, exclusión y verificación previa.",
+      "applicability": "Perfiles con izaje, maquinaria pesada o almacenamiento con manipulación de carga; validar operación real.",
+      "related_route": "/permisos-trabajo",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "2511",
+        "4100",
+        "4210",
+        "5210"
+      ],
+      "hazard_classes": [],
+      "hazard_terms": [
+        "izaje"
+      ],
+      "documents": [
+        {
+          "code": "PR-IZA-01",
+          "name": "Procedimiento para planificación y ejecución segura de izajes",
+          "type": "Procedimiento",
+          "phase": "Hacer",
+          "objective": "Controlar caída de carga, atrapamientos y golpes durante izaje y manipulación de piezas o bultos.",
+          "steps": [
+            "Definir peso, centro de gravedad, recorrido, capacidad del equipo y accesorios con información verificable.",
+            "Elaborar plan de izaje proporcional a criticidad, con roles, señalero, comunicación y criterios de suspensión.",
+            "Inspeccionar equipo, eslingas, ganchos, puntos de izaje y área; retirar accesorios no conformes.",
+            "Delimitar exclusión, evitar personas bajo carga y realizar prueba controlada antes del desplazamiento.",
+            "Depositar y estabilizar la carga, retirar accesorios y cerrar el permiso o registro."
+          ],
+          "controls": [
+            "No exceder capacidades ni improvisar accesorios o puntos de anclaje.",
+            "No ubicarse entre carga suspendida y superficies que puedan atrapar.",
+            "Suspender por pérdida de comunicación, visibilidad, estabilidad o condiciones ambientales inseguras."
+          ],
+          "records": [
+            "Plan de izaje y cálculos o datos de carga.",
+            "Inspecciones, certificados y competencias.",
+            "Permisos y cierres de operación."
+          ],
+          "references": [
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-IZA-01",
+          "name": "Plan y verificación de izaje",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No inicie si peso, capacidad, accesorios o recorrido no están confirmados."
+            ],
+            "tables": [
+              {
+                "title": "Carga y operación",
+                "headers": [
+                  "Carga / peso verificado",
+                  "Equipo / capacidad",
+                  "Recorrido / destino",
+                  "Responsable / señalero"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Verificación",
+                "headers": [
+                  "Criterio",
+                  "Resultado",
+                  "Observación / acción"
+                ],
+                "rows": [
+                  [
+                    "Accesorios identificados e inspeccionados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Área de exclusión y recorrido despejado",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Comunicación y señales acordadas",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Prueba de estabilidad y cierre definidos",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "caliente",
+      "name": "Soldadura y trabajos en caliente",
+      "description": "Permiso, control de inflamables, ventilación, vigilancia y cierre contra incendio.",
+      "applicability": "CIIU 2511 y tareas con soldadura identificadas; no autoriza trabajos sin evaluación del sitio.",
+      "related_route": "/permisos-trabajo",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "2511"
+      ],
+      "hazard_classes": [],
+      "hazard_terms": [
+        "soldadura"
+      ],
+      "documents": [
+        {
+          "code": "PR-SOL-01",
+          "name": "Procedimiento para soldadura y trabajos en caliente",
+          "type": "Procedimiento",
+          "phase": "Hacer",
+          "objective": "Prevenir incendios, exposición a humos, radiación, quemaduras y daños durante corte y soldadura.",
+          "steps": [
+            "Evaluar alternativas de trabajo en frío y retirar o proteger materiales combustibles del área y niveles adyacentes.",
+            "Revisar ventilación, humos, gases, cilindros, mangueras, conexiones, puesta a tierra y equipos.",
+            "Expedir permiso por tarea, delimitar, asignar vigilancia y disponer medios de extinción apropiados.",
+            "Utilizar pantallas y EPP según radiación, humos y tarea; proteger a personas cercanas.",
+            "Cerrar energías y gases, inspeccionar el área durante el período definido por la evaluación y registrar el cierre."
+          ],
+          "controls": [
+            "No soldar recipientes que hayan contenido inflamables sin procedimiento especializado y autorización.",
+            "No depender sólo de extintores: controlar fuentes de ignición y combustibles.",
+            "No habilitar espacios confinados o alturas con este documento; se requieren sus permisos y programas."
+          ],
+          "records": [
+            "Permiso de trabajo en caliente.",
+            "Inspecciones de equipos, cilindros y ventilación.",
+            "Vigilancia y cierre del área."
+          ],
+          "references": [
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-SOL-01",
+          "name": "Permiso de trabajo en caliente y verificación de cierre",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No use este formato para recipientes con inflamables, espacios confinados o tareas energizadas sin los controles especializados correspondientes."
+            ],
+            "tables": [
+              {
+                "title": "Tarea y vigencia",
+                "headers": [
+                  "Lugar / tarea",
+                  "Equipo / gases",
+                  "Ejecutantes / vigilante",
+                  "Inicio / fin de permiso"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Controles previos",
+                "headers": [
+                  "Criterio",
+                  "Resultado",
+                  "Observación"
+                ],
+                "rows": [
+                  [
+                    "Combustibles retirados o protegidos",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Ventilación, cilindros y conexiones verificados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Pantallas, EPP y medios de extinción disponibles",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Otros permisos críticos identificados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Cierre",
+                "headers": [
+                  "Hora de inspección final",
+                  "Condición del área",
+                  "Novedades",
+                  "Firma de cierre"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "alimentos",
+      "name": "Higiene e inocuidad de alimentos",
+      "description": "BPM, higiene de manipuladores, contaminación cruzada, temperaturas y trazabilidad sanitaria.",
+      "applicability": "CIIU 1071 y 5610; complementar requisitos de producto, registro y autoridad sanitaria según operación.",
+      "related_route": "/sanitario",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "1071",
+        "5610"
+      ],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "PR-ALM-01",
+          "name": "Programa de higiene, buenas prácticas y prevención de contaminación de alimentos",
+          "type": "Programa",
+          "phase": "Hacer",
+          "objective": "Mantener condiciones sanitarias durante recepción, almacenamiento, preparación, servicio y distribución de alimentos.",
+          "steps": [
+            "Describir productos, procesos, flujos, áreas, equipos y controles de inocuidad aplicables.",
+            "Verificar diseño sanitario, agua, superficies, utensilios, plagas, residuos, limpieza y separación de actividades.",
+            "Aplicar higiene y vestimenta de manipuladores; gestionar condiciones que puedan contaminar alimentos con criterio responsable.",
+            "Controlar recepción, proveedores, alérgenos, contaminación cruzada, materiales extraños y trazabilidad.",
+            "Definir y registrar temperaturas u otros parámetros según producto y proceso; gestionar desviaciones y producto afectado.",
+            "Verificar requisitos de registro, permiso o notificación sanitaria cuando correspondan, sin presumir que ya existen."
+          ],
+          "controls": [
+            "No mezclar requisitos SST con una certificación de inocuidad o BPM no obtenida.",
+            "No inventar límites de temperatura para productos que requieren criterio específico; usar la regulación y el proceso validado.",
+            "El personal con condiciones que puedan comprometer inocuidad se gestiona por los canales responsables y con reserva."
+          ],
+          "records": [
+            "Plan de saneamiento y registros reales.",
+            "Controles de recepción, temperatura y trazabilidad.",
+            "Capacitación de manipuladores y soportes sanitarios."
+          ],
+          "references": [
+            "R2674",
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-ALM-01",
+          "name": "Inspección de higiene y buenas prácticas de manipulación",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "R2674"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "La inspección no reemplaza análisis de peligros propios del producto ni requisitos sanitarios de la autoridad."
+            ],
+            "tables": [
+              {
+                "title": "Verificación",
+                "headers": [
+                  "Criterio",
+                  "Resultado",
+                  "Desviación / acción"
+                ],
+                "rows": [
+                  [
+                    "Higiene personal, vestimenta y lavado de manos",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Áreas, superficies y utensilios en condición sanitaria",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Separación y prevención de contaminación cruzada",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Control de plagas, residuos y materiales extraños",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Productos identificados y trazabilidad disponible",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "FT-ALM-02",
+          "name": "Control de recepción, conservación y temperaturas de alimentos",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "R2674"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Defina antes los parámetros y criterios propios del alimento y proceso. Registre resultados reales y acciones sobre producto afectado."
+            ],
+            "tables": [
+              {
+                "title": "Recepción y almacenamiento",
+                "headers": [
+                  "Fecha / proveedor / producto",
+                  "Lote / cantidad",
+                  "Condición de recepción",
+                  "Ubicación / destino"
+                ],
+                "rows": [],
+                "blank_rows": 6
+              },
+              {
+                "title": "Mediciones de proceso",
+                "headers": [
+                  "Fecha / hora",
+                  "Equipo / producto / punto",
+                  "Parámetro y criterio definido",
+                  "Resultado / desviación y acción"
+                ],
+                "rows": [],
+                "blank_rows": 7
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "agro",
+      "name": "Trabajo agrícola y de campo",
+      "description": "Planificación de tareas rurales, clima, comunicaciones, herramientas y agroquímicos cuando apliquen.",
+      "applicability": "CIIU 0113 y 0141; adaptar a predio, clima, cultivos, animales y acceso a ayuda.",
+      "related_route": "/matriz-ipevr",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "0113",
+        "0141"
+      ],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "PR-AGR-01",
+          "name": "Procedimiento de seguridad para labores agrícolas y de campo",
+          "type": "Procedimiento",
+          "phase": "Hacer",
+          "objective": "Planificar labores rurales considerando clima, aislamiento, terreno, animales, herramientas, agua y acceso a emergencias.",
+          "steps": [
+            "Levantar el frente de trabajo, terreno, acceso, clima, cobertura de comunicación y tiempo de desplazamiento a atención.",
+            "Definir hidratación, sombra, pausas, ropa, protección solar y criterios de suspensión por condiciones ambientales.",
+            "Inspeccionar herramientas, maquinaria, instalaciones y caminos; delimitar zonas de riesgo y controlar visitantes.",
+            "Para plaguicidas o fertilizantes, aplicar PR-QUI-01, FDS, época de reingreso y controles definidos por el producto.",
+            "Organizar transporte de personas y cargas de forma autorizada y segura; no improvisar desplazamientos en equipos de trabajo.",
+            "Cerrar la jornada con higiene, residuos, herramientas y reporte de eventos o síntomas."
+          ],
+          "controls": [
+            "No programar tareas críticas en solitario sin evaluación y medios de ayuda.",
+            "No usar vehículos o maquinaria agrícola para transporte de personas salvo diseño y autorización adecuados.",
+            "No aplicar agroquímicos sin competencia, etiqueta, FDS y condiciones ambientales adecuadas."
+          ],
+          "records": [
+            "Planificación e inspección de labores.",
+            "Registros de productos, clima, formación y mantenimiento.",
+            "Eventos, exposiciones y acciones correctivas."
+          ],
+          "references": [
+            "D1072",
+            "R0773"
+          ]
+        },
+        {
+          "code": "FT-AGR-01",
+          "name": "Plan diario de labor rural y control de exposición",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Complete el plan antes de la jornada y suspenda ante cambios de clima, salud, terreno o comunicación que superen los controles."
+            ],
+            "tables": [
+              {
+                "title": "Planificación",
+                "headers": [
+                  "Fecha / predio / labor",
+                  "Personal / comunicación",
+                  "Clima y terreno",
+                  "Ayuda / transporte"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Controles y cierre",
+                "headers": [
+                  "Peligro / control",
+                  "Producto o equipo si aplica",
+                  "Novedad / síntoma",
+                  "Acción y responsable"
+                ],
+                "rows": [],
+                "blank_rows": 5
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "educacion",
+      "name": "Seguridad en instituciones de educación superior",
+      "description": "Inspección de campus, laboratorios, eventos, contratistas y preparación de comunidad educativa.",
+      "applicability": "CIIU 8530; adaptar a sedes, laboratorios, población y actividades reales.",
+      "related_route": "/emergencias",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "8530"
+      ],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "PR-EDU-01",
+          "name": "Procedimiento de seguridad y preparación para campus de educación superior",
+          "type": "Procedimiento",
+          "phase": "Hacer",
+          "objective": "Coordinar condiciones seguras para trabajadores, estudiantes, contratistas y visitantes en sedes y actividades académicas.",
+          "steps": [
+            "Caracterizar sedes, ocupación, laboratorios, talleres, eventos, desplazamientos y población que requiera apoyo.",
+            "Coordinar IPEVR laboral con controles para estudiantes y visitantes sin confundir sus coberturas o responsabilidades.",
+            "Inspeccionar rutas, aforos, instalaciones, equipos, laboratorios y actividades no rutinarias.",
+            "Definir comunicación y roles de docentes y personal ante evacuación, emergencias, violencias y reporte de condiciones.",
+            "Gestionar contratistas, mantenimiento y eventos con permisos y coordinación previa.",
+            "Practicar evacuación y revisar lecciones aprendidas con la comunidad pertinente."
+          ],
+          "controls": [
+            "Los laboratorios o talleres requieren procedimientos específicos por agente y equipo.",
+            "No usar la inducción laboral como única orientación a estudiantes o visitantes.",
+            "Las actividades externas se evalúan antes de autorizarse."
+          ],
+          "records": [
+            "Inspecciones por sede y planes de emergencia.",
+            "Registros de formación, eventos y contratistas.",
+            "Simulacros y acciones de mejora."
+          ],
+          "references": [
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-EDU-01",
+          "name": "Inspección de seguridad y preparación de sede educativa",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Identifique por separado los controles de trabajadores y los dirigidos a estudiantes o visitantes."
+            ],
+            "tables": [
+              {
+                "title": "Sede y actividad",
+                "headers": [
+                  "Sede / área",
+                  "Actividad / ocupación",
+                  "Fecha / responsable",
+                  "Población con apoyo"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Verificación",
+                "headers": [
+                  "Criterio",
+                  "Resultado",
+                  "Acción / responsable"
+                ],
+                "rows": [
+                  [
+                    "Rutas, salidas, señalización y aforo controlados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Laboratorios, talleres y equipos con procedimientos",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Comunicación y roles ante emergencias conocidos",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Contratistas y eventos coordinados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "teletrabajo",
+      "name": "Teletrabajo, trabajo en casa y desconexión",
+      "description": "Autoevaluación del puesto remoto, acuerdos, equipos, riesgos y política de desconexión.",
+      "applicability": "CIIU 6201, 7020 y 8530 o perfiles con trabajo remoto; aplicar sólo si la modalidad existe.",
+      "related_route": "/capacitaciones",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "6201",
+        "7020",
+        "8530"
+      ],
+      "hazard_classes": [],
+      "hazard_terms": [
+        "trabajo remoto"
+      ],
+      "documents": [
+        {
+          "code": "PR-TEC-01",
+          "name": "Procedimiento de teletrabajo, trabajo en casa y desconexión laboral",
+          "type": "Procedimiento",
+          "phase": "Hacer",
+          "objective": "Gestionar condiciones seguras, acuerdos y desconexión cuando el trabajo se realiza fuera de las instalaciones.",
+          "steps": [
+            "Identificar modalidad real: teletrabajo, trabajo en casa u otra, y formalizar acuerdos, lugar, jornada, funciones y reversibilidad cuando corresponda.",
+            "Evaluar riesgos del puesto remoto, equipos, ergonomía, electricidad, conectividad, privacidad y comunicaciones sin imponer barreras no requeridas.",
+            "Suministrar o acordar equipos y herramientas, formación, soporte, auxilio y mantenimiento según la modalidad aplicable.",
+            "Definir reporte de incidentes, atención de emergencias, cambios de lugar y seguimiento de condiciones de salud.",
+            "Adoptar política de desconexión con canales de queja, horarios, uso de TIC y tratamiento de excepciones legales.",
+            "Evaluar periódicamente condiciones y acuerdos con participación del trabajador."
+          ],
+          "controls": [
+            "No exigir diagnósticos ni imágenes de la vivienda como mecanismo rutinario de control.",
+            "No contactar fuera de jornada salvo las excepciones legalmente aplicables y documentadas.",
+            "La autoevaluación no transfiere al trabajador la responsabilidad de controlar todos los riesgos."
+          ],
+          "records": [
+            "Acuerdos, evaluación del puesto y entrega de equipos.",
+            "Política de desconexión y comunicaciones.",
+            "Reportes, seguimiento y acciones de ajuste."
+          ],
+          "references": [
+            "L2088",
+            "D1227",
+            "L2191",
+            "D1072"
+          ]
+        },
+        {
+          "code": "FT-TEC-01",
+          "name": "Autoevaluación orientativa del puesto remoto y plan de ajuste",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "L2088",
+            "D1227",
+            "L2191"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No marque condiciones sin revisarlas con el trabajador. La evaluación no sustituye acuerdos ni controles del empleador."
+            ],
+            "tables": [
+              {
+                "title": "Condiciones declaradas por el trabajador",
+                "headers": [
+                  "Aspecto",
+                  "Condición observada",
+                  "Ajuste requerido",
+                  "Apoyo de la empresa"
+                ],
+                "rows": [
+                  [
+                    "Silla, superficie, pantalla y postura",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Iluminación, ruido, ventilación y electricidad",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Conectividad, privacidad y seguridad de la información",
+                    "",
+                    "",
+                    ""
+                  ],
+                  [
+                    "Jornada, pausas, comunicación y desconexión",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Revisión conjunta",
+                "headers": [
+                  "Acuerdo / equipo / recurso",
+                  "Responsable / fecha",
+                  "Verificación",
+                  "Estado"
+                ],
+                "rows": [],
+                "blank_rows": 4
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "desplazamientos",
+      "name": "Desplazamientos y trabajo en vía",
+      "description": "Conducción y visitas seguras; plan de manejo de tránsito para obra vial.",
+      "applicability": "CIIU 7020 para visitas y 4210 para trabajo en vía; transporte conserva su PESV separado.",
+      "related_route": "/matriz-ipevr",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "7020",
+        "4210"
+      ],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "PR-VIA-01",
+          "name": "Procedimiento para desplazamientos laborales y visitas a clientes",
+          "type": "Procedimiento",
+          "phase": "Hacer",
+          "objective": "Planificar desplazamientos y visitas considerando tránsito, fatiga, comunicación y condiciones del sitio receptor.",
+          "steps": [
+            "Definir necesidad, ruta, medio, horario, conductor y condiciones del viaje antes de desplazarse.",
+            "Verificar licencia, documentos, estado del vehículo y descanso según el medio y la regulación aplicable.",
+            "Coordinar inducción, peligros, accesos, EPP y contactos del sitio de cliente antes de la visita.",
+            "Evitar uso de dispositivos durante conducción y reprogramar ante fatiga, clima o condiciones inseguras.",
+            "Mantener comunicación y reporte de incidentes; cerrar la visita con novedades y aprendizajes."
+          ],
+          "controls": [
+            "Este documento no reemplaza el PESV cuando éste resulta aplicable.",
+            "No exigir cumplimiento de horarios que incentive velocidad o conducción con fatiga.",
+            "No ingresar a áreas del cliente sin autorización e inducción."
+          ],
+          "records": [
+            "Planificación de viaje y verificación de vehículo o conductor.",
+            "Coordinación con clientes y reportes de novedad.",
+            "Acciones derivadas de incidentes o desplazamientos."
+          ],
+          "references": [
+            "D1072"
+          ],
+          "activities": [
+            "7020"
+          ]
+        },
+        {
+          "code": "FT-VIA-01",
+          "name": "Lista de verificación de desplazamiento y visita a cliente",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "activities": [
+            "7020"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "No registre una verificación de vehículo o licencia que no se haya realizado."
+            ],
+            "tables": [
+              {
+                "title": "Planificación",
+                "headers": [
+                  "Destino / fecha",
+                  "Medio / conductor",
+                  "Horario / descanso",
+                  "Contacto / emergencia"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Verificación",
+                "headers": [
+                  "Criterio",
+                  "Resultado",
+                  "Novedad / acción"
+                ],
+                "rows": [
+                  [
+                    "Vehículo, documentos y licencia verificados según aplique",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Ruta, clima y fatiga evaluados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Inducción, acceso y EPP del sitio coordinados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Comunicación y reporte definidos",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        },
+        {
+          "code": "PR-PMT-01",
+          "name": "Procedimiento de plan de manejo de tránsito para frentes de obra en vía",
+          "type": "Procedimiento",
+          "phase": "Hacer",
+          "objective": "Proteger a trabajadores y usuarios de la vía mediante cierres, señalización, barreras y secuencia de trabajo coordinada.",
+          "steps": [
+            "Levantar geometría, velocidades, volúmenes, visibilidad, horarios, actores y autoridades o administradores de la vía.",
+            "Diseñar el esquema de señalización, aproximación, transición, actividad y terminación según requisitos aplicables.",
+            "Definir roles de señaleros, comunicación, barreras, iluminación y separación de maquinaria y peatones.",
+            "Instalar y verificar el esquema antes de ocupar la vía; inspeccionar cambios durante el turno.",
+            "Suspender ante pérdida de señalización, incidentes o cambios de tránsito no controlados y retirar el frente en secuencia segura."
+          ],
+          "controls": [
+            "El diseño y las autorizaciones se validan con el administrador de la vía y la normativa técnica aplicable.",
+            "No improvisar cierres ni ubicar señaleros en trayectorias de vehículos sin protección.",
+            "El plan de cada frente es específico; esta plantilla no lo sustituye."
+          ],
+          "records": [
+            "Plan de manejo de tránsito aprobado cuando aplique.",
+            "Inspecciones por turno y cambios del frente.",
+            "Formación de señaleros y reportes de eventos."
+          ],
+          "references": [
+            "D1072"
+          ],
+          "activities": [
+            "4210"
+          ]
+        },
+        {
+          "code": "FT-PMT-01",
+          "name": "Verificación por turno del plan de manejo de tránsito",
+          "type": "Registro",
+          "phase": "Hacer",
+          "objective": "",
+          "steps": [],
+          "controls": [],
+          "records": [],
+          "references": [
+            "D1072"
+          ],
+          "activities": [
+            "4210"
+          ],
+          "form": {
+            "identification": [
+              "Fecha",
+              "Centro / área",
+              "Proceso",
+              "Responsable"
+            ],
+            "instructions": [
+              "Suspenda el frente si el esquema real difiere del autorizado o se pierden controles críticos."
+            ],
+            "tables": [
+              {
+                "title": "Frente y configuración",
+                "headers": [
+                  "Fecha / tramo / turno",
+                  "Esquema / versión autorizada",
+                  "Responsable / señaleros",
+                  "Condiciones de tránsito y clima"
+                ],
+                "rows": [
+                  [
+                    "",
+                    "",
+                    "",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              },
+              {
+                "title": "Verificación",
+                "headers": [
+                  "Criterio",
+                  "Resultado",
+                  "Acción inmediata"
+                ],
+                "rows": [
+                  [
+                    "Señalización y dispositivos completos y visibles",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Cierres, barreras y separación peatonal instalados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Señaleros, comunicación y maquinaria coordinados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ],
+                  [
+                    "Cambios del frente evaluados y autorizados",
+                    "☐ Sí ☐ No ☐ N.A.",
+                    ""
+                  ]
+                ],
+                "blank_rows": 0
+              }
+            ],
+            "signatures": [
+              "Elaboró",
+              "Revisó"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "key": "publico",
+      "name": "Atención al público y prevención de violencias de terceros",
+      "description": "Protocolo preventivo de agresiones, hurtos, atención de crisis y apoyo posterior.",
+      "applicability": "Comercio, hotelería, restaurantes, educación y salud; adaptar a horarios, efectivo, ubicación y contacto con público.",
+      "related_route": "/autoreportes",
+      "regimes": [
+        7,
+        21,
+        60
+      ],
+      "activities": [
+        "4711",
+        "4759",
+        "5511",
+        "5610",
+        "8530",
+        "8610",
+        "8621"
+      ],
+      "hazard_classes": [],
+      "hazard_terms": [],
+      "documents": [
+        {
+          "code": "GUI-VIO-01",
+          "name": "Guía de prevención y respuesta ante violencias de terceros en atención al público",
+          "type": "Guia",
+          "phase": "Hacer",
+          "objective": "Reducir exposición a agresiones o hurtos y establecer respuesta que priorice la vida, el apoyo y el reporte.",
+          "steps": [
+            "Evaluar horarios, manejo de efectivo, accesos, iluminación, zonas aisladas, comunicación y antecedentes del entorno.",
+            "Definir medidas de ingeniería y organización: visibilidad, acompañamiento, botones de alerta, efectivo limitado y turnos seguros.",
+            "Capacitar en trato, desescalamiento y criterios de retirada sin exigir confrontación ni persecución.",
+            "Establecer alarma, contacto con apoyo, atención de primeros auxilios y preservación de evidencias cuando sea seguro.",
+            "Activar apoyo psicosocial y seguimiento posterior, protegiendo confidencialidad y evitando revictimización.",
+            "Analizar eventos y ajustar medidas de seguridad y organización del trabajo."
+          ],
+          "controls": [
+            "La prioridad es la vida: no se instruye forcejear, perseguir o retener objetos durante una agresión.",
+            "Las medidas de seguridad no sustituyen el deber de denuncia y atención cuando corresponda.",
+            "Los casos de acoso sexual o violencia de género siguen rutas especiales y no conciliación."
+          ],
+          "records": [
+            "Evaluación del entorno y protocolo de respuesta.",
+            "Registros de formación, alertas y eventos.",
+            "Acciones de mejora y apoyo posterior."
+          ],
+          "references": [
+            "D1072",
+            "R3461"
+          ]
+        }
+      ]
+    }
+  ]
+}

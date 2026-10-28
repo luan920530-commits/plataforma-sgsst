@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Core\Database;
 use App\Models\Capacitacion;
+use App\Models\Documento;
 use App\Models\EstandarMinimo;
 use App\Models\Induccion;
 use App\Models\Peligro;
@@ -36,23 +37,16 @@ final class DocumentGenerator
                 'INSERT INTO documentos_sgsst (tenant_id, codigo_estandar, nombre_documento, fase_phva, contenido_html, tipo)
                  VALUES (?, ?, ?, ?, ?, ?)'
             );
-            $hasSstPolicy = false;
             foreach ($standards as $standard) {
                 $lowerName = text_lower($standard['nombre']);
                 $type = self::documentType($lowerName);
-                $hasSstPolicy = $hasSstPolicy || str_contains($lowerName, 'política de seguridad y salud');
                 $documentStatement->execute([
                     $tenantId, $standard['codigo'], $standard['nombre'], $standard['fase_phva'],
                     DocumentTemplate::standard($templateTenant, $standard), $type,
                 ]);
             }
 
-            $mandatoryPolicies = [];
-            if (!$hasSstPolicy) {
-                $mandatoryPolicies[] = ['POL-SST', 'Política de Seguridad y Salud en el Trabajo', 'Planear', 'sst'];
-            }
-            $mandatoryPolicies[] = ['POL-AD', 'Política de prevención de consumo de alcohol y drogas', 'Hacer', 'alcohol'];
-            $mandatoryPolicies[] = ['POL-CCL', 'Política y ruta del Comité de Convivencia Laboral', 'Planear', 'convivencia'];
+            $mandatoryPolicies = self::mandatoryPolicies($standards);
             foreach ($mandatoryPolicies as [$code, $name, $phase, $type]) {
                 $documentStatement->execute([$tenantId, $code, $name, $phase, DocumentTemplate::policy($templateTenant, $type, $code), 'Politica']);
             }
@@ -104,6 +98,88 @@ final class DocumentGenerator
                 'peligros' => $hazardCount,
             ];
         });
+    }
+
+    /** Sincroniza sólo documentos de una empresa existente; no repite peligros, perfiles, planes ni capacitaciones. */
+    public static function complement(int $tenantId): array
+    {
+        return Database::transaction(static function () use ($tenantId): array {
+            $tenant = Tenant::find($tenantId);
+            if ($tenant === null) {
+                throw new RuntimeException('La empresa no existe.');
+            }
+            $standards = EstandarMinimo::byGroup((int) $tenant['grupo_estandares']);
+            if (count($standards) !== (int) $tenant['grupo_estandares']) {
+                throw new RuntimeException('El catálogo de estándares está incompleto. Ejecute nuevamente el instalador.');
+            }
+            $prepared = DocumentTemplate::prepareTenant($tenant);
+            $created = 0;
+            $updated = 0;
+            foreach ($standards as $standard) {
+                $result = self::upsertGeneratedDocument([
+                    'tenant_id' => $tenantId, 'codigo' => $standard['codigo'], 'nombre' => $standard['nombre'],
+                    'fase' => $standard['fase_phva'], 'contenido' => DocumentTemplate::standard($prepared, $standard),
+                    'tipo' => self::documentType(text_lower($standard['nombre'])),
+                ]);
+                $created += $result[0];
+                $updated += $result[1];
+            }
+            foreach (self::mandatoryPolicies($standards) as [$code, $name, $phase, $type]) {
+                $result = self::upsertGeneratedDocument([
+                    'tenant_id' => $tenantId, 'codigo' => $code, 'nombre' => $name, 'fase' => $phase,
+                    'contenido' => DocumentTemplate::policy($prepared, $type, $code), 'tipo' => 'Politica',
+                ]);
+                $created += $result[0];
+                $updated += $result[1];
+            }
+            $procedures = ProcedureLibrary::complement($tenantId);
+            return [
+                'created' => $created + $procedures['created'],
+                'updated' => $updated + $procedures['updated'],
+                'standards' => count($standards),
+                'kits' => $procedures['kits'],
+            ];
+        });
+    }
+
+    /** @return array{0:int,1:int} creados y actualizados */
+    private static function upsertGeneratedDocument(array $data): array
+    {
+        $id = Documento::createOperationalIfMissing($data);
+        if ($id !== null) {
+            return [1, 0];
+        }
+        $existing = Documento::findByCode($data['codigo'], (int) $data['tenant_id']);
+        if ($existing === null || $existing['estado'] !== 'Borrador' || (int) $existing['version'] !== 1
+            || !str_contains($existing['contenido_html'], 'documento base generado a partir de la clasificación registrada')) {
+            return [0, 0];
+        }
+        if (self::normalizedContent($existing['contenido_html']) === self::normalizedContent($data['contenido'])) {
+            return [0, 0];
+        }
+        Documento::saveDraft((int) $existing['id'], (int) $data['tenant_id'], $data['contenido']);
+        return [0, 1];
+    }
+
+    private static function normalizedContent(string $content): string
+    {
+        $content = preg_replace('~<span><strong>Fecha:</strong>\s*\d{2}/\d{2}/\d{4}</span>~', '<span><strong>Fecha:</strong></span>', $content) ?? $content;
+        return trim(preg_replace('/\s+/', ' ', $content) ?? $content);
+    }
+
+    private static function mandatoryPolicies(array $standards): array
+    {
+        $hasSstPolicy = false;
+        foreach ($standards as $standard) {
+            $hasSstPolicy = $hasSstPolicy || str_contains(text_lower($standard['nombre']), 'política de seguridad y salud');
+        }
+        $policies = [];
+        if (!$hasSstPolicy) {
+            $policies[] = ['POL-SST', 'Política de Seguridad y Salud en el Trabajo', 'Planear', 'sst'];
+        }
+        $policies[] = ['POL-AD', 'Política de prevención de consumo de alcohol y drogas', 'Hacer', 'alcohol'];
+        $policies[] = ['POL-CCL', 'Política y ruta del Comité de Convivencia Laboral', 'Planear', 'convivencia'];
+        return $policies;
     }
 
     private static function generateHazards(array $tenant): int

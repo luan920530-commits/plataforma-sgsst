@@ -12,34 +12,7 @@ final class DocumentTemplate
             return self::policy($tenant, 'sst', $standard['codigo']);
         }
 
-        $title = e($standard['nombre']);
-        $body = <<<HTML
-            <h2>1. Objeto</h2>
-            <p>Establecer los lineamientos para implementar y mantener <strong>{$title}</strong> en {$tenant['razonsocial_html']}, con responsables definidos, participación de los trabajadores y evidencias verificables.</p>
-            <h2>2. Alcance</h2>
-            <p>Aplica a todos los centros de trabajo, procesos, jornadas y trabajadores, independientemente de su forma de vinculación o contratación. Cuando existan contratistas, se articularán las responsabilidades sin transferir las obligaciones del empleador.</p>
-            <h2>3. Referentes de gestión</h2>
-            <ul>
-                <li>Decreto 1072 de 2015, especialmente el marco del Sistema de Gestión de Seguridad y Salud en el Trabajo.</li>
-                <li>Resolución 0312 de 2019, en los estándares que resultan aplicables a la empresa.</li>
-                <li>Requisitos legales y técnicos identificados en la matriz legal y en la matriz IPEVR.</li>
-                <li>Principios de mejora continua y participación de ISO 45001, cuando la organización los adopte como referencia voluntaria.</li>
-            </ul>
-            <h2>4. Responsabilidades</h2>
-            <p>La alta dirección asigna recursos y verifica el resultado. El responsable del SG-SST programa, acompaña y consolida las evidencias. Los líderes de proceso ejecutan los controles en sus equipos. Trabajadores y contratistas participan, reportan condiciones de riesgo y cumplen los lineamientos aplicables.</p>
-            <h2>5. Desarrollo y control</h2>
-            <ol>
-                <li>Realizar un diagnóstico de la situación actual y registrar las brechas frente a este estándar.</li>
-                <li>Definir acciones, responsables, recursos y fechas en el Plan Anual de Trabajo o en el plan de mejoramiento.</li>
-                <li>Socializar el lineamiento con las personas involucradas y ejecutar las acciones priorizadas según la IPEVR.</li>
-                <li>Conservar soportes fechados, revisar su eficacia y gestionar las desviaciones mediante acciones preventivas o correctivas.</li>
-            </ol>
-            <h2>6. Evidencias mínimas</h2>
-            <p>Según corresponda: acta o documento de asignación, registros de socialización, listas de asistencia, informes, matrices, conceptos, inspecciones, certificados, soportes de ejecución y seguimiento. Los documentos clínicos privados no se incorporan a este repositorio general.</p>
-            <h2>7. Revisión</h2>
-            <p>Revisar al menos una vez al año, cuando cambien los procesos o la normatividad aplicable, y después de accidentes o eventos que evidencien la necesidad de ajustar los controles.</p>
-        HTML;
-        return self::layout($tenant, (string) $standard['codigo'], (string) $standard['nombre'], (string) $standard['fase_phva'], $body);
+        return StandardDocumentTemplate::render($tenant, $standard);
     }
 
     public static function policy(array $tenant, string $type, string $code = ''): string
@@ -103,11 +76,14 @@ final class DocumentTemplate
     private static function convivenciaBody(array $tenant): string
     {
         return <<<HTML
-            <p>{$tenant['razonsocial_html']} promueve relaciones basadas en el respeto, la dignidad y el trato equitativo. El Comité de Convivencia Laboral es un mecanismo preventivo y de mejora, con actuación confidencial y sin sustituir las competencias de las autoridades.</p>
+            <p>{$tenant['razonsocial_html']} promueve relaciones basadas en el respeto, la dignidad y el trato equitativo. El Comité de Convivencia Laboral es una instancia preventiva, orientadora, conciliadora y canalizadora; <strong>no determina si existió acoso laboral</strong> ni sustituye las competencias de las autoridades.</p>
             <h2>Ruta general de actuación</h2>
-            <ol><li><strong>Recepción:</strong> la persona presenta su relato por el canal designado. Se registra la solicitud con reserva y se informa la ruta.</li><li><strong>Orientación inicial:</strong> el comité verifica su competencia y adopta medidas de protección razonables cuando sean necesarias, evitando represalias.</li><li><strong>Debido proceso:</strong> se escuchan las partes por separado, se preserva la confidencialidad y no se presume responsabilidad sin análisis.</li><li><strong>Acuerdos y seguimiento:</strong> cuando procede, se documentan compromisos y se verifica su cumplimiento. Los casos fuera de competencia se remiten por los canales correspondientes.</li></ol>
+            <ol><li><strong>Recepción:</strong> la persona presenta su relato por el canal designado. Se registra la solicitud con reserva y se informa la ruta.</li><li><strong>Orientación inicial:</strong> el comité verifica su competencia y adopta medidas de protección razonables cuando sean necesarias, evitando represalias y revictimización.</li><li><strong>Debido proceso:</strong> se escuchan las partes por separado, se preserva la confidencialidad y no se presume responsabilidad sin análisis.</li><li><strong>Acuerdos y seguimiento:</strong> cuando procede, se documentan compromisos y se verifica mensualmente su cumplimiento. Los casos fuera de competencia se remiten por los canales correspondientes.</li></ol>
+            <h2>Reglas de protección y actualización</h2>
+            <p>La conformación, el reglamento propio, el período de dos años, las reuniones ordinarias mensuales y el procedimiento preventivo se rigen por la <strong>Resolución 3461 de 2025</strong>, que derogó las Resoluciones 652 y 1356 de 2012. El procedimiento preventivo no puede superar <strong>65 días calendario</strong> desde la recepción de la queja formal y sus tiempos no son acumulativos.</p>
+            <p>En presunto acoso sexual o violencia por razones de género se activa la ruta especial definida por la empresa conforme a la Ley 2365 de 2024 y demás regulación aplicable; <strong>estas conductas no se concilian ante el Comité de Convivencia</strong>.</p>
             <h2>Principios</h2>
-            <p>Imparcialidad, buena fe, reserva, proporcionalidad, participación voluntaria en los acuerdos y protección frente a represalias. Los registros sensibles tendrán acceso restringido y no se publicarán en el portal general de trabajadores.</p>
+            <p>Celeridad, eficacia, imparcialidad, confidencialidad, no discriminación, debido proceso y protección frente a represalias. Los registros sensibles se custodian con acceso restringido y no se publican en el portal general de trabajadores.</p>
         HTML;
     }
 

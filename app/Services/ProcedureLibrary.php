@@ -5,6 +5,7 @@ namespace App\Services;
 
 use App\Core\Database;
 use App\Models\Documento;
+use App\Models\EstandarMinimo;
 use App\Models\Tenant;
 use InvalidArgumentException;
 use RuntimeException;
@@ -52,7 +53,7 @@ final class ProcedureLibrary
                 'nombre' => 'Trabajo en alturas',
                 'descripcion' => 'Procedimiento y lista de verificación para planificación, competencias, protección contra caídas, permiso y rescate.',
                 'aplicabilidad' => 'Generar cuando exista riesgo de caída de personas u objetos. No reemplaza el permiso de cada tarea.',
-                'recomendado' => self::riskDetected($activity, ['altura', 'techo', 'andamio']),
+                'recomendado' => self::riskDetected($activity, ['trabajo en alturas', 'techo', 'andamio', 'escaleras']),
                 'documentos' => [
                     ['codigo' => 'PR-ALT-01', 'nombre' => 'Procedimiento para trabajo en alturas', 'tipo' => 'Procedimiento', 'contenido' => ProcedureTemplate::heights($prepared, 'PR-ALT-01')],
                     ['codigo' => 'FT-ALT-01', 'nombre' => 'Formato de verificación previa para trabajo en alturas', 'tipo' => 'Registro', 'contenido' => ProcedureTemplate::heightsFormat($prepared, 'FT-ALT-01')],
@@ -79,6 +80,8 @@ final class ProcedureLibrary
                 ],
             ],
         ];
+
+        $groups = array_merge($groups, StarterPackage::groups($prepared, $activity, self::expectedBaseDocuments($tenant, $groups)));
 
         $existing = [];
         foreach (Documento::forTenant($tenantId) as $document) {
@@ -115,8 +118,29 @@ final class ProcedureLibrary
                 throw new InvalidArgumentException('El kit documental solicitado no existe.');
             }
         }
-        return Database::transaction(static function () use ($tenantId, $catalog, $keys): int {
+        return self::persist($tenantId, $catalog, $keys, false)['created'];
+    }
+
+    /** Complementa empresas instaladas y sólo actualiza borradores automáticos de versión 1. */
+    public static function complement(int $tenantId): array
+    {
+        $catalog = self::catalogWithoutExisting($tenantId);
+        $keys = [];
+        foreach ($catalog as $key => $group) {
+            if (!empty($group['recomendado'])) {
+                $keys[] = $key;
+            }
+        }
+        $result = self::persist($tenantId, $catalog, $keys, true);
+        $result['kits'] = count($keys);
+        return $result;
+    }
+
+    private static function persist(int $tenantId, array $catalog, array $keys, bool $refresh): array
+    {
+        return Database::transaction(static function () use ($tenantId, $catalog, $keys, $refresh): array {
             $created = 0;
+            $updated = 0;
             foreach (array_unique($keys) as $key) {
                 foreach ($catalog[$key]['documentos'] as $document) {
                     $id = Documento::createOperationalIfMissing([
@@ -124,11 +148,36 @@ final class ProcedureLibrary
                         'fase' => $document['fase'] ?? 'Hacer', 'contenido' => $document['contenido'], 'tipo' => $document['tipo'],
                         'biblioteca_id' => $document['biblioteca_id'] ?? null,
                     ]);
-                    $created += $id !== null ? 1 : 0;
+                    if ($id !== null) {
+                        $created++;
+                        continue;
+                    }
+                    $existing = Documento::findByCode($document['codigo'], $tenantId);
+                    if (!$refresh || $key === 'pesv' || $existing === null || !self::isGeneratedDraft($existing)) {
+                        continue;
+                    }
+                    if (self::normalizedContent($existing['contenido_html']) === self::normalizedContent($document['contenido'])) {
+                        continue;
+                    }
+                    Documento::saveDraft((int) $existing['id'], $tenantId, $document['contenido']);
+                    $updated++;
                 }
             }
-            return $created;
+            return ['created' => $created, 'updated' => $updated];
         });
+    }
+
+    private static function isGeneratedDraft(array $document): bool
+    {
+        return $document['estado'] === 'Borrador' && (int) $document['version'] === 1
+            && str_contains($document['contenido_html'], 'class="sst-document"')
+            && str_contains($document['contenido_html'], 'documento base generado a partir de la clasificación registrada');
+    }
+
+    private static function normalizedContent(string $content): string
+    {
+        $content = preg_replace('~<span><strong>Fecha:</strong>\s*\d{2}/\d{2}/\d{4}</span>~', '<span><strong>Fecha:</strong></span>', $content) ?? $content;
+        return trim(preg_replace('/\s+/', ' ', $content) ?? $content);
     }
 
     private static function catalogWithoutExisting(int $tenantId): array
@@ -141,7 +190,7 @@ final class ProcedureLibrary
         $activity = self::activity($tenant);
         $prepared = DocumentTemplate::prepareTenant($tenant);
         $code = $activity['codigo_ciuu'];
-        return [
+        $groups = [
             'actividad' => ['recomendado' => true, 'documentos' => [
                 ['codigo' => 'PR-ACT-' . $code, 'nombre' => 'Procedimiento de trabajo seguro · ' . $activity['descripcion'], 'tipo' => 'Procedimiento', 'contenido' => ProcedureTemplate::activity($prepared, $activity, 'PR-ACT-' . $code)],
                 ['codigo' => 'FT-ACT-' . $code, 'nombre' => 'Formato de verificación de actividad · CIIU ' . $code, 'tipo' => 'Registro', 'contenido' => ProcedureTemplate::activityFormat($prepared, $activity, 'FT-ACT-' . $code)],
@@ -150,7 +199,7 @@ final class ProcedureLibrary
                 ['codigo' => 'FT-AST-01', 'nombre' => 'Formato de Análisis Seguro de Trabajo (AST)', 'tipo' => 'Registro', 'contenido' => ProcedureTemplate::ast($prepared, 'FT-AST-01')],
             ]],
             'limpieza' => ['recomendado' => true, 'documentos' => CleaningProgramTemplate::kit($prepared)],
-            'alturas' => ['recomendado' => self::riskDetected($activity, ['altura', 'techo', 'andamio']), 'documentos' => [
+            'alturas' => ['recomendado' => self::riskDetected($activity, ['trabajo en alturas', 'techo', 'andamio', 'escaleras']), 'documentos' => [
                 ['codigo' => 'PR-ALT-01', 'nombre' => 'Procedimiento para trabajo en alturas', 'tipo' => 'Procedimiento', 'contenido' => ProcedureTemplate::heights($prepared, 'PR-ALT-01')],
                 ['codigo' => 'FT-ALT-01', 'nombre' => 'Formato de verificación previa para trabajo en alturas', 'tipo' => 'Registro', 'contenido' => ProcedureTemplate::heightsFormat($prepared, 'FT-ALT-01')],
             ]],
@@ -162,6 +211,35 @@ final class ProcedureLibrary
                 ['codigo' => 'FT-EC-01', 'nombre' => 'Formato de verificación y medición para espacios confinados', 'tipo' => 'Registro', 'contenido' => ProcedureTemplate::confinedFormat($prepared, 'FT-EC-01')],
             ]],
         ];
+        return array_merge($groups, StarterPackage::groups($prepared, $activity, self::expectedBaseDocuments($tenant, $groups)));
+    }
+
+    private static function expectedBaseDocuments(array $tenant, array $groups): array
+    {
+        $documents = [];
+        $hasSstPolicy = false;
+        foreach (EstandarMinimo::byGroup((int) $tenant['grupo_estandares']) as $standard) {
+            $hasSstPolicy = $hasSstPolicy || str_contains(text_lower($standard['nombre']), 'política de seguridad y salud');
+            $documents[] = [
+                'code' => $standard['codigo'], 'name' => $standard['nombre'], 'type' => 'Estandar',
+                'origen' => 'Estándares mínimos · Resolución 0312 de 2019',
+            ];
+        }
+        foreach ([['POL-SST', 'Política de Seguridad y Salud en el Trabajo'], ['POL-AD', 'Política de prevención de consumo de alcohol y drogas'], ['POL-CCL', 'Política y ruta del Comité de Convivencia Laboral']] as [$code, $name]) {
+            if ($code === 'POL-SST' && $hasSstPolicy) {
+                continue;
+            }
+            $documents[] = ['code' => $code, 'name' => $name, 'type' => 'Politica', 'origen' => 'Políticas transversales'];
+        }
+        foreach ($groups as $group) {
+            foreach ($group['documentos'] as $document) {
+                $documents[] = [
+                    'code' => $document['codigo'], 'name' => $document['nombre'], 'type' => $document['tipo'],
+                    'origen' => $group['nombre'] ?? 'Procedimientos y formatos base',
+                ];
+            }
+        }
+        return $documents;
     }
 
     private static function activity(array $tenant): array

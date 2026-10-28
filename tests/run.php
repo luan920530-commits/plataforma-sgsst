@@ -24,6 +24,7 @@ use App\Models\BibliotecaRespuesta;
 use App\Models\Capacitacion;
 use App\Models\Documento;
 use App\Models\Empleado;
+use App\Models\EstandarMinimo;
 use App\Models\Evidencia;
 use App\Models\Hallazgo;
 use App\Models\Indicador;
@@ -49,6 +50,7 @@ use App\Models\User;
 use App\Services\ClassificationService;
 use App\Services\ComplianceService;
 use App\Services\DocumentGenerator;
+use App\Services\DocumentPackageExporter;
 use App\Services\EvidenceLinker;
 use App\Services\EvidenceStorage;
 use App\Services\ExcelCalculator;
@@ -62,6 +64,7 @@ use App\Services\PesvLibrary;
 use App\Services\SgsstLibrary;
 use App\Services\SanitaryCatalog;
 use App\Services\SchemaMigrator;
+use App\Services\StandardDocumentTemplate;
 use App\Services\ProcedureLibrary;
 use App\Services\TenantModuleGenerator;
 use App\Support\Auth;
@@ -1343,12 +1346,18 @@ try {
         expectSame(1, (int) Database::first('SELECT COUNT(*) AS n FROM users WHERE tenant_id = ?', [$tenant['id']])['n'], 'No se deben inventar accesos para Felipe u otras personas.');
         $documentStats = Database::first("SELECT COUNT(*) AS total, SUM(CASE WHEN estado = 'Aprobado' THEN 1 ELSE 0 END) AS aprobados FROM documentos_sgsst WHERE tenant_id = ?", [$tenant['id']]);
         expectSame($result['documents'], (int) $documentStats['total']);
-        expectSame(16, (int) $documentStats['total'], 'El perfil debe incluir los tres documentos del programa de limpieza.');
+        expectSame(40, (int) $documentStats['total'], 'El perfil debe incluir el paquete de inicio ampliado y los tres documentos de limpieza.');
         expectSame(0, (int) $documentStats['aprobados']);
         foreach (['PR-LD-01', 'FT-LD-01', 'FT-LD-02'] as $code) {
             $cleaningDocument = Documento::findByCode($code, (int) $tenant['id']);
             expectTrue($cleaningDocument !== null && $cleaningDocument['estado'] === 'Borrador', 'Falta el borrador ' . $code . ' en Extintores SCM.');
         }
+        foreach (['GUI-INI-01', 'MAN-SST-01', 'FT-COB-01', 'PR-SAL-01', 'PR-PSI-01', 'PR-ERG-01', 'PR-CCL-01', 'PR-EME-01', 'PR-EPP-01', 'GUI-VIO-01'] as $code) {
+            $starterDocument = Documento::findByCode($code, (int) $tenant['id']);
+            expectTrue($starterDocument !== null && $starterDocument['estado'] === 'Borrador', 'Falta el documento de inicio ' . $code . ' en Extintores SCM.');
+        }
+        expectSame(null, Documento::findByCode('PR-MAQ-01', (int) $tenant['id']), 'La caída de objetos en estanterías no debe activar un programa de maquinaria.');
+        expectTrue(str_contains(Documento::findByCode('PR-CCL-01', (int) $tenant['id'])['contenido_html'], '65 días calendario'));
         $acta = IvcActa::findForTenant((int) $result['acta_id'], (int) $tenant['id']);
         expectSame('028-050164-26', $acta['numero_acta']);
         expectSame('2026-10-09', $acta['fecha_limite']);
@@ -1447,6 +1456,137 @@ try {
         } catch (PDOException) { $duplicateBlocked = true; }
         expectTrue($duplicateBlocked);
         expectSame(1, Induccion::signatureCount($mainId, (int) $induction['id']));
+    });
+
+    $test('Complementación de empresa existente: actualiza sólo lo automático y es idempotente', static function (): void {
+        $tenant = tenantByNit('39626936-8');
+        $tenantId = (int) $tenant['id'];
+        $codes = array_column(EstandarMinimo::byGroup(7), 'codigo');
+        [$legacyCode, $editedCode, $approvedCode] = [$codes[1], $codes[2], $codes[3]];
+        $notice = 'documento base generado a partir de la clasificación registrada';
+        Database::execute("UPDATE documentos_sgsst SET contenido_html = ?, estado = 'Borrador', version = 1 WHERE tenant_id = ? AND codigo_estandar = ?", ['<article class="sst-document"><p>Contenido genérico histórico.</p><p>' . $notice . '</p></article>', $tenantId, $legacyCode]);
+        Database::execute("UPDATE documentos_sgsst SET contenido_html = ?, estado = 'Borrador', version = 2 WHERE tenant_id = ? AND codigo_estandar = ?", ['<article class="sst-document"><p>Edición protegida del usuario.</p><p>' . $notice . '</p></article>', $tenantId, $editedCode]);
+        Database::execute("UPDATE documentos_sgsst SET contenido_html = ?, estado = 'Aprobado', version = 1 WHERE tenant_id = ? AND codigo_estandar = ?", ['<article class="sst-document"><p>Aprobación protegida del usuario.</p><p>' . $notice . '</p></article>', $tenantId, $approvedCode]);
+        $guide = Documento::findByCode('GUI-INI-01', $tenantId);
+        Documento::deleteForTenant((int) $guide['id'], $tenantId);
+        $otherCounts = [];
+        foreach (['plan_trabajo', 'capacitaciones', 'peligros_ipevr', 'perfiles_riesgo'] as $table) {
+            $otherCounts[$table] = (int) Database::first("SELECT COUNT(*) AS n FROM {$table} WHERE tenant_id = ?", [$tenantId])['n'];
+        }
+        $result = DocumentGenerator::complement($tenantId);
+        expectSame(1, $result['created'], 'Debe restaurar únicamente la guía faltante.');
+        expectSame(1, $result['updated'], 'Sólo el borrador automático histórico debe actualizarse.');
+        expectSame(40, count(Documento::forTenant($tenantId)));
+        expectTrue(str_contains(Documento::findByCode($legacyCode, $tenantId)['contenido_html'], 'Procedimiento de implementación'));
+        expectSame(2, (int) Documento::findByCode($legacyCode, $tenantId)['version']);
+        expectTrue(str_contains(Documento::findByCode($editedCode, $tenantId)['contenido_html'], 'Edición protegida del usuario.'));
+        expectTrue(str_contains(Documento::findByCode($approvedCode, $tenantId)['contenido_html'], 'Aprobación protegida del usuario.'));
+        expectSame('Aprobado', Documento::findByCode($approvedCode, $tenantId)['estado']);
+        foreach ($otherCounts as $table => $count) {
+            expectSame($count, (int) Database::first("SELECT COUNT(*) AS n FROM {$table} WHERE tenant_id = ?", [$tenantId])['n'], 'La complementación no debe repetir registros de ' . $table);
+        }
+        $versions = (int) Database::first('SELECT COUNT(*) AS n FROM documento_versiones WHERE tenant_id = ?', [$tenantId])['n'];
+        expectSame(['created' => 0, 'updated' => 0], array_intersect_key(DocumentGenerator::complement($tenantId), ['created' => 1, 'updated' => 1]));
+        expectSame($versions, (int) Database::first('SELECT COUNT(*) AS n FROM documento_versiones WHERE tenant_id = ?', [$tenantId])['n']);
+    });
+
+    $test('Exportación editable: DOCX y paquete ZIP sin ZipArchive', static function () use ($mainId): void {
+        $document = Documento::findByCode('FT-IPEVR-01', $mainId);
+        $download = DocumentPackageExporter::document($document);
+        if ($download['format'] === 'docx') {
+            expectTrue(str_starts_with($download['content'], "PK\x03\x04"), 'El DOCX debe ser un contenedor OOXML válido.');
+            expectSame('application/vnd.openxmlformats-officedocument.wordprocessingml.document', $download['mime']);
+        } else {
+            expectTrue(str_contains($download['content'], '<table>'), 'La alternativa HTML debe conservar las tablas.');
+        }
+        $package = DocumentPackageExporter::package(Tenant::find($mainId), [$document]);
+        expectTrue(str_starts_with($package['content'], "PK\x03\x04"));
+        expectTrue(strlen($package['content']) > 2000);
+        expectSame('zip', $package['format']);
+    });
+
+    $test('Paquete de inicio: auditoría de 21 actividades por 3 regímenes', static function (): void {
+        $required = ['GUI-INI-01', 'MAN-SST-01', 'FT-COB-01', 'FT-RES-01', 'FT-AFI-01', 'FT-CAP-01', 'FT-CAP-02', 'FT-PAT-01', 'FT-IPEVR-01', 'PR-SAL-01', 'FT-SAL-01', 'PR-PSI-01', 'FT-PSI-01', 'PR-ERG-01', 'FT-ERG-01', 'PR-CCL-01', 'FT-CCL-01', 'PR-EME-01', 'FT-EME-01', 'FT-EME-02', 'PR-EPP-01', 'FT-EPP-01', 'FT-EPP-02', 'FT-AST-01', 'PR-LD-01', 'FT-LD-01', 'FT-LD-02'];
+        $conditional = [
+            '0113' => [['PR-QUI-01', 'PR-AGR-01', 'PR-AGF-01'], ['PR-BIO-01', 'PR-ZOO-01']],
+            '0141' => [['PR-ZOO-01', 'PR-AGR-01', 'PR-MAQ-01'], ['PR-BIO-01']],
+            '1071' => [['PR-QUI-01', 'PR-ALM-01', 'PR-MAQ-01'], ['PR-BIO-01']],
+            '1410' => [['PR-AGF-01', 'PR-MAQ-01'], ['PR-QUI-01']],
+            '2220' => [['PR-QUI-01', 'PR-AGF-01', 'PR-MAQ-01'], ['PR-BIO-01']],
+            '2511' => [['PR-QUI-01', 'PR-AGF-01', 'PR-MAQ-01', 'PR-IZA-01', 'PR-SOL-01'], ['PR-BIO-01']],
+            '4100' => [['PR-ALT-01', 'PR-AGF-01', 'PR-MAQ-01', 'PR-IZA-01'], ['PR-PMT-01', 'PR-QUI-01']],
+            '4210' => [['PR-PMT-01', 'PR-MAQ-01', 'PR-IZA-01'], ['PR-VIA-01']],
+            '4321' => [['PR-ELE-01', 'PR-ALT-01'], ['PR-MAQ-01']],
+            '4711' => [['GUI-VIO-01'], ['PR-QUI-01', 'PR-MAQ-01']],
+            '4759' => [['GUI-VIO-01'], ['PR-MAQ-01', 'PR-TEC-01']],
+            '4923' => [[PesvLibrary::PLAN_CODE], ['PR-MAQ-01', 'PR-QUI-01']],
+            '5210' => [['PR-MAQ-01', 'PR-IZA-01'], ['PR-ALT-01']],
+            '5511' => [['PR-QUI-01', 'GUI-VIO-01'], ['PR-ALM-01']],
+            '5610' => [['PR-ALM-01', 'GUI-VIO-01'], ['PR-QUI-01']],
+            '6201' => [['PR-TEC-01'], ['PR-QUI-01', 'GUI-VIO-01']],
+            '7020' => [['PR-TEC-01', 'PR-VIA-01'], ['PR-PMT-01']],
+            '8530' => [['PR-TEC-01', 'PR-EDU-01', 'GUI-VIO-01'], ['PR-QUI-01']],
+            '8621' => [['PR-BIO-01', 'GUI-VIO-01'], ['PR-ZOO-01']],
+            '8610' => [['PR-BIO-01', 'GUI-VIO-01'], ['PR-ZOO-01']],
+            '8121' => [['PR-QUI-01'], ['PR-MAQ-01', 'GUI-VIO-01']],
+        ];
+        $activities = ActividadEconomica::all(true);
+        expectSame(21, count($activities));
+        expectSame(array_keys($conditional), array_values(array_intersect(array_keys($conditional), array_column($activities, 'codigo_ciuu'))));
+        $generatedTotal = 0;
+        $profiles = 0;
+        $standardResource = StandardDocumentTemplate::resource();
+        foreach ($activities as $activity) {
+            $ciiu = $activity['codigo_ciuu'];
+            foreach ([7, 21, 60] as $group) {
+                $tenantId = Tenant::create([
+                    'razonsocial' => 'Auditoría ' . $ciiu . ' / ' . $group,
+                    'nit' => '8' . str_pad((string) $activity['id'], 3, '0', STR_PAD_LEFT) . $group,
+                    'sector_economico' => $activity['sector'], 'actividad_economica_id' => (int) $activity['id'],
+                    'numero_trabajadores' => match ($group) { 7 => 10, 21 => 30, default => 60 },
+                    'nivel_riesgo' => match ($group) { 7 => 'II', 21 => 'III', default => 'V' },
+                    'grupo_estandares' => $group, 'metodo_configuracion' => 'Combinado', 'plan_id' => null,
+                    'representante_legal' => 'Responsable de prueba', 'correo_contacto' => 'auditoria@example.com',
+                    'telefono' => '', 'ciudad' => 'Bogotá', 'direccion' => '',
+                ]);
+                $result = DocumentGenerator::generate($tenantId);
+                $documents = Documento::forTenant($tenantId);
+                $codes = array_column($documents, 'codigo_estandar');
+                expectSame(count($codes), count(array_unique($codes)), 'Códigos duplicados en CIIU ' . $ciiu . ' / ' . $group);
+                expectSame($result['documentos'], count($documents));
+                expectSame($group, (int) Database::first('SELECT COUNT(*) AS n FROM documentos_sgsst d WHERE d.tenant_id = ? AND EXISTS (SELECT 1 FROM estandares_minimos e WHERE e.codigo = d.codigo_estandar AND e.grupo = ?)', [$tenantId, $group])['n']);
+                if ($profiles < 3) {
+                    foreach (EstandarMinimo::byGroup($group) as $standard) {
+                        $code = $standard['codigo'];
+                        if (in_array($code, ['M21-07', '2.1.1'], true)) continue;
+                        $topic = $standardResource['topics'][$standardResource['standard_map'][$code]];
+                        $standardDocument = Documento::findByCode($code, $tenantId);
+                        expectTrue(str_contains($standardDocument['contenido_html'], e($topic['focus'])), 'Estándar sin tema específico: ' . $code);
+                        expectTrue(!str_contains($standardDocument['contenido_html'], 'Desarrollo y control del proceso'), 'Estándar genérico persistente: ' . $code);
+                    }
+                }
+                foreach (array_merge($required, ['PR-ACT-' . $ciiu, 'FT-ACT-' . $ciiu]) as $code) {
+                    expectTrue(in_array($code, $codes, true), 'Falta ' . $code . ' en CIIU ' . $ciiu . ' / ' . $group);
+                }
+                expectSame($group >= 21, in_array('FT-INC-02', $codes, true), 'Alcance incorrecto del formato de investigación.');
+                expectSame($group === 60, in_array('FT-AUD-01', $codes, true), 'Alcance incorrecto del formato de auditoría.');
+                foreach ($conditional[$ciiu][0] as $code) expectTrue(in_array($code, $codes, true), 'Falta anexo ' . $code . ' en CIIU ' . $ciiu);
+                foreach ($conditional[$ciiu][1] as $code) expectTrue(!in_array($code, $codes, true), 'Anexo inaplicable ' . $code . ' en CIIU ' . $ciiu);
+                foreach ($documents as $document) {
+                    expectSame('Borrador', $document['estado']);
+                    expectTrue(str_contains($document['contenido_html'], '<article class="sst-document">'), 'Documento no visual: ' . $document['codigo_estandar']);
+                    expectTrue(!str_contains($document['contenido_html'], 'checked='), 'No se deben precargar verificaciones.');
+                }
+                $coverage = Documento::findByCode('FT-COB-01', $tenantId);
+                expectTrue(str_contains($coverage['contenido_html'], '☐ Ejecutado') && str_contains($coverage['contenido_html'], '☐ Adaptado'));
+                expectTrue(str_contains(Documento::findByCode('PR-CCL-01', $tenantId)['contenido_html'], '65 días calendario'));
+                if ($group >= 21) expectTrue(str_contains(Documento::findByCode('FT-INC-02', $tenantId)['contenido_html'], '15 días'));
+                $generatedTotal += count($documents);
+                $profiles++;
+            }
+        }
+        expectSame(63, $profiles);
+        expectTrue($generatedTotal > 4000, 'La cobertura total debe superar 4.000 documentos contextualizados.');
     });
 
     $test('Contraseñas demo con password_hash y verificación', static function (): void {

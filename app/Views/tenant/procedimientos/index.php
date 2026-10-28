@@ -1,6 +1,6 @@
 <div class="page-heading">
     <div><span class="eyebrow">Control operacional</span><h1>Procedimientos y formatos</h1><p>Kits para la actividad económica, programas operativos y tareas de alto riesgo, conectados con la biblioteca y los permisos de trabajo.</p></div>
-    <a href="<?= e(url('/documentos')) ?>" class="btn-secondary"><?= icon('documents', 'h-4 w-4') ?> Biblioteca documental</a>
+    <div class="flex flex-wrap gap-2"><a href="<?= e(url('/documentos/paquete/descargar')) ?>" class="btn-secondary"><?= icon('download', 'h-4 w-4') ?> Descargar paquete</a><form method="post" action="<?= e(url('/documentos/complementar')) ?>" data-confirm="Se agregarán los documentos faltantes sin duplicar ni sobrescribir contenido editado o aprobado. ¿Continuar?"><?= csrf_field() ?><input type="hidden" name="return" value="/procedimientos"><button class="btn-primary" type="submit"><?= icon('plus', 'h-4 w-4') ?> Complementar paquete</button></form><a href="<?= e(url('/documentos')) ?>" class="btn-secondary"><?= icon('documents', 'h-4 w-4') ?> Biblioteca documental</a></div>
 </div>
 <div class="mt-5 rounded-2xl bg-blue-50 p-4 text-[11px] leading-5 text-blue-800 ring-1 ring-blue-100"><div class="flex gap-2"><?= icon('info', 'mt-0.5 h-4 w-4 shrink-0') ?><p><strong>Actividad seleccionada:</strong> <?= e($activity['descripcion']) ?> · CIIU <?= e($activity['codigo_ciuu']) ?>. Los kits sugeridos usan el perfil base registrado; confirma su aplicabilidad con la IPEVR y las tareas reales.</p></div></div>
 <div class="mt-6 grid gap-5 lg:grid-cols-2">

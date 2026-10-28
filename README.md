@@ -22,6 +22,8 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - Configuración de contacto y consulta de la clasificación aplicada.
 - Biblioteca documental con filtros, **editor visual** para títulos, párrafos, listas y tablas, saneamiento en servidor, historial de versiones, aprobación, obsolescencia e impresión.
 - Biblioteca de **procedimientos y formatos** por actividad CIIU, AST, trabajo en alturas y espacios confinados. Los kits se generan como borradores sin duplicados y se diferencian de los permisos de cada tarea.
+- **Paquete de inicio por régimen, CIIU y peligros:** 60 temas técnicos para las 88 filas de estándares, 74 programas/procedimientos/formatos/manuales/guías en 21 kits, matriz de cobertura y anexos condicionados. La auditoría genera 63 perfiles y 4.680 borradores; la cobertura por actividad está en `docs/paquete-inicio.md`.
+- **Complementación idempotente de empresas existentes:** agrega faltantes y actualiza sólo borradores automáticos de versión 1, sin sobrescribir contenido editado/aprobado ni PESV. Descarga individual DOCX editable y paquete ZIP con cobertura CSV, construidos en PHP puro sin depender de `ZipArchive`.
 - **Biblioteca SG-SST por estándares:** 142 plantillas únicas recuperadas del ZIP suministrado, con 88 documentos editables, 54 formularios por empresa, 60 estándares, módulos relacionados y descarga privada opcional de los originales DOC/DOCX/XLS/XLSX/PPTX/PDF.
 - **PESV para transporte:** módulo propio con 24 pasos y 97 recursos únicos recuperados del paquete suministrado, índice editable generado automáticamente para actividades de transporte, formularios aislados por tenant, trazabilidad, versiones y aprobación humana.
 - Tablero PHVA y Plan Anual de Trabajo con consulta individual, creación, edición completa, avance, fecha real de ejecución y eliminación auditada.
@@ -204,7 +206,7 @@ La variante con el perfil real se genera de forma independiente:
 python3 scripts/build_hosting_zip.py --extintores
 ```
 
-Crea `dist/extintores-scm-normia-hosting.zip`. Al abrir el instalador se configuran el SuperAdmin y, en la misma transacción, Extintores SCM —NIT 39626936-8, Soacha—, **16 documentos en borrador** del grupo de siete estándares y los kits operativos —incluidos PR-LD-01, FT-LD-01 y FT-LD-02—, el acta IVC 028-050164-26, 20 requerimientos, ocho brechas documentales y siete fichas de validación. Los 28 seguimientos inician **Pendiente**, sin fecha compromiso, evidencia de ejecución ni verificación; los documentos permanecen en borrador.
+Crea `dist/extintores-scm-normia-hosting.zip`. Al abrir el instalador se configuran el SuperAdmin y, en la misma transacción, Extintores SCM —NIT 39626936-8, Soacha—, **40 documentos en borrador** del grupo de siete estándares, su paquete de inicio y la guía de atención al público y los kits operativos —incluidos PR-LD-01, FT-LD-01 y FT-LD-02—, el acta IVC 028-050164-26, 20 requerimientos, ocho brechas documentales y siete fichas de validación. Los 28 seguimientos inician **Pendiente**, sin fecha compromiso, evidencia de ejecución ni verificación; los documentos permanecen en borrador.
 
 La pantalla final muestra una sola vez el acceso temporal empresarial y exige cambiarlo antes de abrir los demás módulos. El paquete no contiene el PDF privado del acta, SQLite, WAL/SHM, sesiones, registros ni credenciales; conserva la referencia SHA-256 para cargar posteriormente la copia controlada. CIIU 4759 y riesgo II están sujetos a RUT/ARL. Las direcciones Cra. 4 No. 13-65 y KR 4 60 17, el local referencial de 6 × 4 m, Felipe Cartaya/Felipe Martínez y la asesoría de Luis Antonio Aguilar permanecen como datos por contrastar, sin unificarlos ni darlos por verificados.
 
@@ -329,7 +331,7 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - CRUD y aislamiento IVC/sanitario, vínculos de evidencias, indicadores, hallazgos, personas, cuentas, simulacros, autoreportes, planos y catálogo CIIU.
 - Precarga Extintores SCM con 20 requerimientos, ocho brechas, siete validaciones, documentos borrador, 28 seguimientos pendientes e idempotencia. `tests/profile_install.php` repite el flujo desde una instalación limpia y comprueba el acceso temporal.
 
-La suite principal actual contiene **54 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
+La suite principal actual contiene **57 pruebas**, incluida la generación de 21 CIIU × 3 regímenes (4.680 documentos), complementación segura y exportación DOCX/ZIP. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
 
 ## Estilos
 
@@ -371,7 +373,7 @@ docs/biblioteca-sgsst.md Inventario, comparación y notas de importación
 scripts/install.php  Instalador de producción/demo
 scripts/migrate.php  Migración no destructiva de instalaciones existentes
 storage/uploads/     Evidencias privadas, fuera del DocumentRoot público
-tests/run.php        54 pruebas funcionales de dominio y persistencia
+tests/run.php        57 pruebas funcionales de dominio, persistencia, 63 perfiles y exportación
 tests/profile_install.php  Instalación limpia del perfil Extintores SCM
 ```
 

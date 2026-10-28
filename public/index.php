@@ -95,6 +95,9 @@ $router->get('/evidencias/{id}/descargar', [EvidenciaController::class, 'downloa
 $router->post('/evidencias/{id}/revision', [EvidenciaController::class, 'review'], $tenantManagers, 'compartido');
 $router->post('/evidencias/{id}/eliminar', [EvidenciaController::class, 'delete'], $tenantManagers, 'compartido');
 $router->get('/documentos', [DocumentGeneratorController::class, 'index'], $tenantManagers, 'documentos');
+$router->post('/documentos/complementar', [DocumentGeneratorController::class, 'complement'], $tenantManagers, 'documentos');
+$router->get('/documentos/paquete/descargar', [DocumentGeneratorController::class, 'downloadPackage'], $tenantManagers, 'documentos');
+$router->get('/documentos/{id}/descargar', [DocumentGeneratorController::class, 'download'], $tenantManagers, 'documentos');
 $router->get('/documentos/{id}', [DocumentGeneratorController::class, 'show'], $tenantManagers, 'documentos');
 $router->post('/documentos/{id}', [DocumentGeneratorController::class, 'update'], $tenantManagers, 'documentos');
 $router->post('/documentos/{id}/aprobar', [DocumentGeneratorController::class, 'approve'], $tenantManagers, 'documentos');

@@ -53,6 +53,7 @@ add_tree("config", "normia-sst/config")
 add_tree("resources/sgsst-library", "normia-sst/resources/sgsst-library")
 add_tree("resources/pesv-library", "normia-sst/resources/pesv-library")
 add_tree("resources/cleaning-program", "normia-sst/resources/cleaning-program")
+add_tree("resources/starter-package", "normia-sst/resources/starter-package")
 add_file("resources/iso7010-catalog.json", "normia-sst/resources/iso7010-catalog.json")
 add_file("resources/cad-objects.json", "normia-sst/resources/cad-objects.json")
 if EXTINTORES:

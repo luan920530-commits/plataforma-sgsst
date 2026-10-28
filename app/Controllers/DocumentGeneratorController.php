@@ -5,6 +5,8 @@ namespace App\Controllers;
 
 use App\Models\Documento;
 use App\Models\Tenant;
+use App\Services\DocumentGenerator;
+use App\Services\DocumentPackageExporter;
 use App\Services\ModuleAccess;
 use App\Support\Audit;
 use App\Support\Auth;
@@ -30,6 +32,49 @@ final class DocumentGeneratorController extends BaseController
             'filters' => $filters,
             'tenant' => Tenant::find($tenantId),
         ]);
+    }
+
+    public function complement(): void
+    {
+        if (ModuleAccess::current() !== 'sgsst') {
+            $this->abort(403, 'El paquete de inicio SG-SST no se carga en un plan exclusivo de otro módulo.');
+        }
+        $tenantId = $this->tenantId();
+        $result = DocumentGenerator::complement($tenantId);
+        Audit::record('Paquete documental SG-SST complementado', 'Documento', null, $result);
+        $changes = (int) $result['created'] + (int) $result['updated'];
+        flash($changes > 0 ? 'success' : 'warning', $changes > 0
+            ? $result['created'] . ' documento(s) nuevo(s) y ' . $result['updated'] . ' borrador(es) automático(s) actualizado(s). Los documentos editados o aprobados se conservaron.'
+            : 'El paquete ya estaba sincronizado; no se duplicaron documentos ni se modificaron versiones.');
+        $return = (string) $this->input('return', '/documentos');
+        redirect(in_array($return, ['/documentos', '/procedimientos'], true) ? $return : '/documentos');
+    }
+
+    public function downloadPackage(): void
+    {
+        if (ModuleAccess::current() !== 'sgsst') {
+            $this->abort(403, 'La descarga consolidada del paquete de inicio pertenece al módulo SG-SST.');
+        }
+        $tenantId = $this->tenantId();
+        $module = ModuleAccess::current();
+        $download = DocumentPackageExporter::package(
+            Tenant::find($tenantId),
+            Documento::forTenant($tenantId, ['modulo' => $module])
+        );
+        Audit::record('Paquete documental descargado', 'Documento', null, ['modulo' => $module, 'formato' => $download['format']]);
+        $this->sendDownload($download);
+    }
+
+    public function download(int $id): void
+    {
+        $tenantId = $this->tenantId();
+        $document = Documento::findForTenant($id, $tenantId, ModuleAccess::current());
+        if ($document === null) {
+            $this->notFound();
+        }
+        $download = DocumentPackageExporter::document($document);
+        Audit::record('Documento editable descargado', 'Documento', $id, ['formato' => $download['format']]);
+        $this->sendDownload($download);
     }
 
     public function show(int $id): void
@@ -130,5 +175,16 @@ final class DocumentGeneratorController extends BaseController
             'document' => $document,
             'tenant' => Tenant::find($tenantId),
         ], 'layouts/print');
+    }
+
+    private function sendDownload(array $download): never
+    {
+        header('Content-Type: ' . $download['mime']);
+        header('Content-Disposition: attachment; filename="' . $download['filename'] . '"');
+        header('Content-Length: ' . strlen($download['content']));
+        header('Cache-Control: no-store, private');
+        header('X-Normia-Formato: ' . $download['format']);
+        echo $download['content'];
+        exit;
     }
 }
