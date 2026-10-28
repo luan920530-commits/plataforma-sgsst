@@ -274,14 +274,21 @@
     const customFactor = $('[data-indicator-factor]', indicatorForm);
     const formula = $('[data-indicator-formula]', indicatorForm);
     const result = $('[data-indicator-result]', indicatorForm);
+    const numeratorHelp = $('[data-indicator-numerator-help]', indicatorForm);
+    const denominatorHelp = $('[data-indicator-denominator-help]', indicatorForm);
     const calculate = () => {
       const definition = definitions[type?.value] || { factor: 1, formula: '' };
       const factor = type?.value === 'Personalizado' ? Number(customFactor?.value || 1) : Number(definition.factor || 1);
       const num = Number(numerator?.value || 0);
       const den = Number(denominator?.value || 0);
-      const value = den > 0 ? (num * factor) / den : 0;
+      const presentism = type?.value === 'Presentismo';
+      if (numeratorHelp) numeratorHelp.textContent = presentism ? 'Días de ausencia en el mismo periodo.' : 'Eventos, días o casos, según corresponda.';
+      if (denominatorHelp) denominatorHelp.textContent = presentism ? 'Días de trabajo programados en el mismo periodo.' : 'HHT, trabajadores, eventos o días programados.';
+      const validPresentism = !presentism || (num >= 0 && num <= den);
+      const effectiveNumerator = presentism ? den - num : num;
+      const value = den > 0 && validPresentism ? (effectiveNumerator * factor) / den : 0;
       if (formula) formula.textContent = definition.formula || '';
-      if (result) result.textContent = `${value.toLocaleString('es-CO', { maximumFractionDigits: 2 })} ${definition.unidad || ''}`.trim();
+      if (result) result.textContent = validPresentism ? `${value.toLocaleString('es-CO', { maximumFractionDigits: 2 })} ${definition.unidad || ''}`.trim() : 'Las ausencias no pueden superar los días programados.';
     };
     const changeType = () => {
       const personalized = type?.value === 'Personalizado';
@@ -432,7 +439,7 @@
       }
       const image = new Image();
       image.src = source;
-      image.alt = 'Código QR del enlace de autoreportes';
+      image.alt = container.dataset.qrAlt || 'Código QR del enlace de autoreportes';
       image.className = 'h-48 w-48 max-w-full';
       image.style.imageRendering = 'pixelated';
       container.replaceChildren(image);

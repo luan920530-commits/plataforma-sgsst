@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Support;
 
-use App\Core\Database;
 use App\Models\User;
 
 final class Auth
@@ -13,119 +12,106 @@ final class Auth
     public static function init(): void
     {
         self::$user = null;
-        if (empty($_SESSION['user_id'])) {
-            return;
-        }
-
+        if (empty($_SESSION['user_id'])) return;
         $lastActivity = (int) ($_SESSION['_last_activity'] ?? time());
         $lifetime = (int) ($GLOBALS['config']['session']['lifetime'] ?? 7200);
         if (time() - $lastActivity > $lifetime) {
-            self::clearSession();
-            flash('warning', 'Tu sesión venció por inactividad. Inicia sesión nuevamente.');
-            return;
+            self::clearSession();flash('warning', 'Tu sesión venció por inactividad. Inicia sesión nuevamente.');return;
         }
-
         $user = User::findActive((int) $_SESSION['user_id']);
         if ($user === null) {
-            self::clearSession();
-            flash('error', 'La cuenta o la empresa ya no se encuentra activa.');
-            return;
+            self::clearSession();flash('error', 'La cuenta o la empresa ya no se encuentra activa.');return;
         }
-
-        self::$user = $user;
-        $_SESSION['_last_activity'] = time();
+        self::$user = $user;$_SESSION['_last_activity'] = time();
     }
 
     public static function attempt(string $email, string $password): bool
     {
-        if (self::lockedSeconds() > 0) {
-            return false;
-        }
-
+        if (self::lockedSeconds() > 0) return false;
         $user = User::findForAuthentication(text_lower(trim($email)));
         if ($user === null || !password_verify($password, $user['password'])) {
             $_SESSION['_login_attempts'] = (int) ($_SESSION['_login_attempts'] ?? 0) + 1;
             if ($_SESSION['_login_attempts'] >= 5) {
-                $_SESSION['_login_locked_until'] = time() + 300;
-                $_SESSION['_login_attempts'] = 0;
+                $_SESSION['_login_locked_until'] = time() + 300;$_SESSION['_login_attempts'] = 0;
             }
             return false;
         }
-
-        session_regenerate_id(true);
-        $intended = $_SESSION['_intended'] ?? null;
-        $_SESSION = [];
-        if ($intended !== null) {
-            $_SESSION['_intended'] = $intended;
+        if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) User::rehashPassword((int) $user['id'], password_hash($password, PASSWORD_DEFAULT));
+        if (!empty($user['totp_enabled'])) {
+            self::resetSession();
+            $_SESSION['_2fa_pending'] = ['user_id' => (int) $user['id'], 'expires' => time() + 300, 'attempts' => 0];
+            return true;
         }
-        $_SESSION['user_id'] = (int) $user['id'];
-        $_SESSION['_last_activity'] = time();
-        unset($_SESSION['_login_attempts'], $_SESSION['_login_locked_until']);
-
-        if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
-            User::rehashPassword((int) $user['id'], password_hash($password, PASSWORD_DEFAULT));
-        }
-        User::markLogin((int) $user['id']);
-        self::$user = User::findActive((int) $user['id']);
+        self::establishSession($user);
         return true;
+    }
+
+    public static function pendingTwoFactor(): bool
+    {
+        $pending = $_SESSION['_2fa_pending'] ?? null;
+        if (!is_array($pending) || empty($pending['user_id'])) return false;
+        if ((int) ($pending['expires'] ?? 0) < time()) { unset($_SESSION['_2fa_pending']); return false; }
+        return true;
+    }
+
+    public static function completeTwoFactor(string $code): bool
+    {
+        if (!self::pendingTwoFactor()) return false;
+        $pending = $_SESSION['_2fa_pending'];
+        $user = User::findActive((int) $pending['user_id']);
+        if ($user === null || empty($user['totp_enabled'])) { unset($_SESSION['_2fa_pending']); return false; }
+        $valid = Totp::verify(SecretBox::decrypt((string) $user['totp_secret']), $code);
+        if (!$valid && trim($code) !== '') $valid = User::consumeRecoveryCode((int) $user['id'], $code);
+        if ($valid) { self::establishSession($user); return true; }
+        $pending['attempts'] = (int) $pending['attempts'] + 1;
+        if ($pending['attempts'] >= 5) {
+            unset($_SESSION['_2fa_pending']);$_SESSION['_login_locked_until'] = time() + 300;
+        } else $_SESSION['_2fa_pending'] = $pending;
+        return false;
+    }
+
+    public static function cancelTwoFactor(): void
+    {
+        unset($_SESSION['_2fa_pending']);
+    }
+
+    private static function establishSession(array $user): void
+    {
+        self::resetSession();
+        $_SESSION['user_id'] = (int) $user['id'];$_SESSION['_last_activity'] = time();
+        unset($_SESSION['_login_attempts'], $_SESSION['_login_locked_until'], $_SESSION['_2fa_pending']);
+        User::markLogin((int) $user['id']);self::$user = User::findActive((int) $user['id']);
+    }
+
+    private static function resetSession(): void
+    {
+        session_regenerate_id(true);$intended = $_SESSION['_intended'] ?? null;$_SESSION = [];
+        if ($intended !== null) $_SESSION['_intended'] = $intended;
     }
 
     public static function lockedSeconds(): int
     {
         $lockedUntil = (int) ($_SESSION['_login_locked_until'] ?? 0);
-        if ($lockedUntil <= time()) {
-            unset($_SESSION['_login_locked_until']);
-            return 0;
-        }
+        if ($lockedUntil <= time()) { unset($_SESSION['_login_locked_until']); return 0; }
         return $lockedUntil - time();
     }
 
-    public static function check(): bool
-    {
-        return self::$user !== null;
-    }
-
-    public static function user(): ?array
-    {
-        return self::$user;
-    }
-
-    public static function id(): ?int
-    {
-        return self::$user['id'] ?? null;
-    }
-
-    public static function tenantId(): ?int
-    {
-        return isset(self::$user['tenant_id']) ? (int) self::$user['tenant_id'] : null;
-    }
-
-    public static function role(): ?string
-    {
-        return self::$user['rol'] ?? null;
-    }
-
-    public static function hasRole(array|string $roles): bool
-    {
-        return self::check() && in_array(self::role(), (array) $roles, true);
-    }
-
-    public static function canManageTenant(): bool
-    {
-        return self::hasRole(['AdminEmpresa', 'ResponsableSST']);
-    }
+    public static function check(): bool { return self::$user !== null; }
+    public static function user(): ?array { return self::$user; }
+    public static function id(): ?int { return self::$user['id'] ?? null; }
+    public static function tenantId(): ?int { return isset(self::$user['tenant_id']) ? (int) self::$user['tenant_id'] : null; }
+    public static function role(): ?string { return self::$user['rol'] ?? null; }
+    public static function hasRole(array|string $roles): bool { return self::check() && in_array(self::role(), (array) $roles, true); }
+    public static function canManageTenant(): bool { return self::hasRole(['AdminEmpresa', 'ResponsableSST']); }
 
     public static function logout(): void
     {
-        self::clearSession();
-        self::$user = null;
+        self::clearSession();self::$user = null;
     }
 
     private static function clearSession(): void
     {
         $_SESSION = [];
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            session_regenerate_id(true);
-        }
+        if (session_status() === PHP_SESSION_ACTIVE) session_regenerate_id(true);
     }
 }

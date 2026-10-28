@@ -103,6 +103,35 @@ final class User
         Database::execute('UPDATE users SET activo = ? WHERE id = ? AND tenant_id = ?', [$active ? 1 : 0, $id, $tenantId]);
     }
 
+    public static function prepareTotp(int $id, string $encryptedSecret, array $recoveryHashes): void
+    {
+        Database::execute('UPDATE users SET totp_secret=?,totp_recovery_codes=?,totp_enabled=0,totp_confirmed_at=NULL WHERE id=?', [$encryptedSecret, json_encode(array_values($recoveryHashes), JSON_THROW_ON_ERROR), $id]);
+    }
+
+    public static function enableTotp(int $id): void
+    {
+        Database::execute('UPDATE users SET totp_enabled=1,totp_confirmed_at=CURRENT_TIMESTAMP WHERE id=? AND totp_secret<>\'\'', [$id]);
+    }
+
+    public static function disableTotp(int $id): void
+    {
+        Database::execute("UPDATE users SET totp_secret='',totp_recovery_codes='[]',totp_enabled=0,totp_confirmed_at=NULL WHERE id=?", [$id]);
+    }
+
+    public static function consumeRecoveryCode(int $id, string $code): bool
+    {
+        $user = self::find($id);if (!$user) return false;
+        $hashes = json_decode((string) $user['totp_recovery_codes'], true);if (!is_array($hashes)) return false;
+        $normalized = strtoupper(trim($code));
+        foreach ($hashes as $index => $hash) {
+            if (!is_string($hash) || !password_verify($normalized, $hash)) continue;
+            unset($hashes[$index]);
+            Database::execute('UPDATE users SET totp_recovery_codes=? WHERE id=?', [json_encode(array_values($hashes), JSON_THROW_ON_ERROR), $id]);
+            return true;
+        }
+        return false;
+    }
+
     public static function countByTenant(int $tenantId): int
     {
         return (int) (Database::first('SELECT COUNT(*) AS total FROM users WHERE tenant_id = ? AND activo = 1', [$tenantId])['total'] ?? 0);

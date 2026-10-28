@@ -179,6 +179,7 @@ final class DocumentGenerator
         }
         $policies[] = ['POL-AD', 'Política de prevención de consumo de alcohol y drogas', 'Hacer', 'alcohol'];
         $policies[] = ['POL-CCL', 'Política y ruta del Comité de Convivencia Laboral', 'Planear', 'convivencia'];
+        $policies[] = ['POL-DP', 'Política de tratamiento y protección de datos personales', 'Planear', 'datos'];
         return $policies;
     }
 

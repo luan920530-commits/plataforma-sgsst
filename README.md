@@ -30,15 +30,18 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - **PESV para transporte:** módulo propio con 24 pasos y 97 recursos únicos recuperados del paquete suministrado, índice editable generado automáticamente para actividades de transporte, formularios aislados por tenant, trazabilidad, versiones y aprobación humana.
 - Tablero PHVA y Plan Anual de Trabajo con consulta individual, creación, edición completa, avance, fecha real de ejecución y eliminación auditada.
 - **Matriz única de autoevaluación y madurez:** 60 ítems/100 puntos, referencias legales e ISO 45001 separadas, responsable, evidencia, periodicidad, vencimiento, mejora y aplicabilidad 7/21/60. Documentado, Implementado, Verificado y Eficaz exigen controles diferentes; Cumple sólo tras validación humana y No aplica requiere justificación/aprobación.
-- **Operación SG-SST:** módulos para responsables/recursos, afiliaciones/alto riesgo, participación, adquisiciones, contratistas, cambios, higiene/residuos, mediciones/carcinógenos, inspecciones, mantenimiento, EPP, auditoría y revisión por la dirección, con evidencias y verificación humana.
-- **Eventos SST independientes de ACPA:** incidentes, accidentes y enfermedades laborales con personas, testigos, investigación, causas, días perdidos, acciones y estadística.
+- **Operación SG-SST:** módulos para responsables/recursos, afiliaciones/alto riesgo, participación, adquisiciones, contratistas, cambios, higiene/residuos, mediciones/carcinógenos, inspecciones, mantenimiento, EPP, auditorías internas/externas y revisión por la dirección. Inspecciones y auditorías incluyen listas/criterios, hallazgos y cierre; `Verificado` exige cierre documentado, fecha, evidencia revisada y autorización.
+- **Eventos SST independientes de ACPA:** incidentes, accidentes y enfermedades laborales con fecha/hora, personas/testigos, parte corporal, agente, investigación, causas, cinco por qué, árbol, días perdidos, acciones y eficacia. Las estadísticas de frecuencia, severidad, lesiones incapacitantes y accidentalidad usan periodos y denominadores verificables; los reportes externos no se simulan.
 - Hallazgos ACPA con causa raíz y cierre condicionado a eficacia verificada y soporte revisado; editar o reabrir invalida la comprobación anterior.
-- Matriz IPEVR participativa con metodología, fechas, jerarquía de controles, soporte revisado, verificación y reapertura al editar; conserva el cálculo orientativo `ND × NE × NC`.
-- Capacitaciones con asistencia confirmada y eficacia posterior; indicadores con fuentes, responsable y verificación reiniciable.
-- **Salud, psicosocial y convivencia reservados:** permisos de acceso mínimo, conceptos/recomendaciones sin historias clínicas completas, resultados agregados y soportes restringidos. COPASST/Vigía y CCL tienen gestión diferenciada.
+- Matriz IPEVR participativa con proceso/cargo/ubicación, valoración, metodología, fechas, alertas, jerarquía de controles y acciones con responsables, recursos, avance, hitos, evidencia y eficacia; conserva el cálculo orientativo `ND × NE × NC` y la reapertura al editar.
+- **Formación SG-SST:** inducción general/específica, necesidades, contenidos, asistencia, evaluación, eficacia y constancias históricas con SHA-256. La matriz de cobertura por puesto cruza directorio y participaciones sin inventar requisitos ni competencias.
+- **Indicadores y comparativas:** fuentes, responsable, soporte, corte anterior, variación y benchmarking con fuente/periodo. Presentismo usa `(días programados − ausencias) × 100 ÷ días programados`, validado igual en cliente y servidor; editar reinicia la verificación.
+- **Salud, psicosocial y convivencia reservados:** evaluaciones de ingreso/periódicas/egreso/cambio y otros conceptos, vigilancia, mediciones y seguimiento con permisos mínimos, sin historias clínicas completas ni resultados externos inventados. COPASST/Vigía y CCL tienen gestión diferenciada.
+- **COPASST y Vigía:** miembros, reuniones, asistencia/quórum, actas, recomendaciones y compromisos con responsable, recursos, plazo, avance y cierre verificado.
 - **Firma electrónica documental:** aprobación previa, permiso, reautenticación, consentimiento, SHA-256, HMAC-SHA256, archivo de versiones, auditoría y verificación de integridad. No se presenta como firma digital certificada.
+- **Integraciones y seguridad de cuenta:** conectores ARL/nómina/medicina con HTTPS, destinos permitidos, credenciales cifradas y trazabilidad técnica sin afirmar acuses o resultados externos; validación humana con soporte. Segundo factor TOTP y recuperación de un solo uso, permisos extendidos y política de datos en borrador para empresas nuevas.
 - Permisos de trabajo con borrador, solicitud, aprobación, activación, cierre/cancelación, revisiones e impresión; campos específicos para alturas y espacios confinados.
-- Planes de emergencia por centro de trabajo con amenazas, contactos, brigada, recursos, evacuación, rescate, ayuda mutua, simulacros y documento versionado.
+- Planes de emergencia por centro de trabajo con amenazas, contactos, brigada, recursos, evacuación, rescate, ayuda mutua y documento versionado. Los simulacros realizados exigen detalle de participantes, resultado, evaluación y lecciones aprendidas, sin cerrar automáticamente las mejoras.
 - **Centro transversal de evidencias físicas:** cargas privadas PDF/JPG/PNG de listas de asistencia, reportes, formularios, inspecciones, simulacros, fotografías y otros soportes; vínculos con su módulo de origen, filtros, descarga íntegra y revisión humana con fecha, responsable y observaciones.
 - **Microapp visual de planos de emergencia:** rail oscuro de iconos con un único objeto de señalización y un único objeto de equipamiento CAD, ambos configurables desde el panel derecho. Incluye buscador, familias y vista previa; 332 pictogramas ISO 7010 en español —73 de emergencia, 19 de incendio, 72 de obligación, 81 de prohibición y 87 de advertencia— y 32 representaciones CAD en seis familias: mobiliario, baños, cocinas, equipos industriales, vehículos/maquinaria y conexiones entre pisos. Conserva muros, puertas, rutas y textos, colores CAD editables, escalado, rotación, historial inmutable, control de versiones concurrentes y exportación PNG como evidencia pendiente de revisión.
 - Programas de promoción de la salud, prevención de accidentes/enfermedad laboral y vigilancia, con diagnóstico, objetivos, metas, presupuesto, actividades y evidencias.
@@ -54,9 +57,9 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 ### Portal Trabajador / Contratista
 
 - Políticas aprobadas por su propia empresa.
-- Próximas capacitaciones e inducción general.
+- Capacitaciones programadas/realizadas con contenido SG-SST, participación propia y descarga de constancia cuando se cumplen los soportes; no expone asistencia de otras personas.
 - Consulta y firma de inducción con contraseña actual, fecha, IP, user-agent y hash de evidencia.
-- Creación de autoreportes y consulta de las respuestas recibidas.
+- Creación de autoreportes, condiciones inseguras y consultas SG-SST —dentro del tipo histórico `Sugerencia`— con respuestas visibles en el portal.
 - Cambio de contraseña disponible también para los demás roles.
 - El portal general de trabajadores pertenece al SG-SST integral. Los planes PESVial y Emergencias y Vigilancia no lo cargan ni permiten crear ese rol; una cuenta heredada solo ve el aviso de alcance y la seguridad de su cuenta.
 
@@ -213,7 +216,7 @@ La variante con el perfil real se genera de forma independiente:
 python3 scripts/build_hosting_zip.py --extintores
 ```
 
-Crea `dist/extintores-scm-normia-hosting.zip`. Al abrir el instalador se configuran el SuperAdmin y, en la misma transacción, Extintores SCM —NIT 39626936-8, Soacha—, **40 documentos en borrador** del grupo de siete estándares, su paquete de inicio y la guía de atención al público y los kits operativos —incluidos PR-LD-01, FT-LD-01 y FT-LD-02—, el acta IVC 028-050164-26, 20 requerimientos, ocho brechas documentales y siete fichas de validación. Los 28 seguimientos inician **Pendiente**, sin fecha compromiso, evidencia de ejecución ni verificación; los documentos permanecen en borrador.
+Crea `dist/extintores-scm-normia-hosting.zip`. Al abrir el instalador se configuran el SuperAdmin y, en la misma transacción, Extintores SCM —NIT 39626936-8, Soacha—, **41 documentos en borrador** del grupo de siete estándares, incluida la política de datos `POL-DP`, su paquete de inicio y la guía de atención al público y los kits operativos —incluidos PR-LD-01, FT-LD-01 y FT-LD-02—, el acta IVC 028-050164-26, 20 requerimientos, ocho brechas documentales y siete fichas de validación. Los 28 seguimientos inician **Pendiente**, sin fecha compromiso, evidencia de ejecución ni verificación; los documentos permanecen en borrador.
 
 La pantalla final muestra una sola vez el acceso temporal empresarial y exige cambiarlo antes de abrir los demás módulos. El paquete no contiene el PDF privado del acta, SQLite, WAL/SHM, sesiones, registros ni credenciales; conserva la referencia SHA-256 para cargar posteriormente la copia controlada. CIIU 4759 y riesgo II están sujetos a RUT/ARL. Las direcciones Cra. 4 No. 13-65 y KR 4 60 17, el local referencial de 6 × 4 m, Felipe Cartaya/Felipe Martínez y la asesoría de Luis Antonio Aguilar permanecen como datos por contrastar, sin unificarlos ni darlos por verificados.
 
@@ -255,7 +258,7 @@ Haz primero una copia de seguridad de la base y de `storage/uploads/`. Después,
 php scripts/migrate.php
 ```
 
-La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, agrega de forma idempotente las columnas de autoreportes, evidencias y alcance de módulos, crea respuestas de biblioteca, planos y sus versiones, incorpora actas/requerimientos IVC, registros sanitarios y renovación obligatoria de contraseña, completa los metadatos de soportes heredados y termina con `PRAGMA foreign_key_check`. La versión actual del esquema es **4**. Conserva los registros y archivos existentes, no borra la base ni crea datos demo. El arranque web la aplica automáticamente cuando `PRAGMA user_version` es anterior a la versión del código; el comando anterior queda como alternativa administrativa. Los procedimientos no se imponen masivamente durante la migración: cada empresa decide qué kits generar desde su módulo.
+La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, agrega columnas de forma idempotente y termina con `PRAGMA foreign_key_check`. La versión actual es **6**, con **58 tablas**: incorpora la gestión ampliada, controles IPEVR, eventos/estadísticas, salud reservada, formación, compromisos, integraciones y 2FA, además de hora de eventos, detalle de simulacros y fórmula de presentismo. Los `CHECK` históricos se respetan mediante metadatos/tablas aditivas, sin reconstruir tablas ni perder registros. El arranque web aplica la migración cuando `PRAGMA user_version` es anterior; `scripts/migrate.php` queda como alternativa administrativa. No borra la base, no crea datos demo ni impone procedimientos masivamente: cada empresa decide qué kits generar.
 
 ### XAMPP en macOS
 
@@ -323,7 +326,8 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - Aislamiento de documentos, autoreportes, usuarios, IPEVR, capacitaciones, permisos, emergencias, programas y soportes entre tenants.
 - Centro de evidencias por módulo, revisión humana, borrado condicional y conservación de soportes revisados.
 - Editor de planos con 332 señales ISO 7010, 32 objetos CAD en seis familias, 373 tipos persistidos compatibles, 337 entradas en el catálogo servidor ISO/base, historial inmutable, aislamiento por empresa/plan y rechazo de guardados obsoletos o códigos desconocidos.
-- CRUD, historial de versiones, aprobación/cierre de permisos y simulacros.
+- CRUD, historial de versiones, aprobación/cierre de permisos y simulacros, incluidos participantes, evaluación, lecciones y conservación al cambiar estado.
+- Fecha/hora de eventos, investigación y eficacia; matriz de cobertura por puesto, aislamiento del portal formativo, cierre de inspecciones con hallazgos y presentismo compatible con el `CHECK` histórico.
 - Generación y escape de documentos operativos, actividades preventivas y evidencias.
 - Procedimientos/formatos CIIU, alturas y espacios confinados sin duplicados.
 - Programa PR-LD-01 y formatos FT-LD-01/02: contenido, generación automática, idempotencia, borradores, aislamiento y ausencia de ejecuciones sanitarias automáticas.
@@ -338,7 +342,7 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - CRUD y aislamiento IVC/sanitario, vínculos de evidencias, indicadores, hallazgos, personas, cuentas, simulacros, autoreportes, planos y catálogo CIIU.
 - Precarga Extintores SCM con 20 requerimientos, ocho brechas, siete validaciones, documentos borrador, 28 seguimientos pendientes e idempotencia. `tests/profile_install.php` repite el flujo desde una instalación limpia y comprueba el acceso temporal.
 
-La suite principal actual contiene **70 pruebas**, incluida la generación de 21 CIIU × 3 regímenes (4.680 documentos), complementación segura, exportación DOCX/ZIP, madurez, verificación humana, módulos reservados, firma electrónica y actualización normativa. La validación final también cubrió sintaxis de 242 archivos PHP, migración v4→v5, instalación Extintores y un smoke HTTP con login y 16 vistas autenticadas sin errores 500.
+La suite principal actual contiene **79 pruebas**, incluida la generación de 21 CIIU × 3 regímenes (4.680 documentos), complementación segura, exportación DOCX/ZIP, madurez, verificación humana, módulos reservados, firma electrónica, integraciones, 2FA y actualización normativa. La validación final cubrió sintaxis de **259 archivos PHP**, migración v4→v6 con **58 tablas**, instalación Extintores y smoke HTTP en PHP-WASM/MEMFS con login, CSRF, eventos con hora, presentismo 99 %, simulacros, matriz y portal formativo sin respuestas 500.
 
 ## Estilos
 
@@ -380,7 +384,7 @@ docs/biblioteca-sgsst.md Inventario, comparación y notas de importación
 scripts/install.php  Instalador de producción/demo
 scripts/migrate.php  Migración no destructiva de instalaciones existentes
 storage/uploads/     Evidencias privadas, fuera del DocumentRoot público
-tests/run.php        70 pruebas funcionales de dominio, persistencia, 63 perfiles y exportación
+tests/run.php        79 pruebas funcionales de dominio, persistencia, 63 perfiles y exportación
 tests/profile_install.php  Instalación limpia del perfil Extintores SCM
 ```
 
@@ -390,6 +394,7 @@ tests/profile_install.php  Instalación limpia del perfil Extintores SCM
 - `tenant_id` obligatorio en los registros operativos y filtros por empresa en las consultas.
 - Autorización por rol y módulo de plan en el router, validación de pertenencia antes de operar un registro y comprobación de alcance en documentos, requisitos, acciones y evidencias compartidas.
 - Contraseñas con `password_hash()` y `password_verify()`, regeneración de sesión y bloqueo temporal por intentos. Los accesos temporales de instalación, creación o restablecimiento exigen cambio antes de usar los módulos; el rehash automático no desactiva esa obligación.
+- Segundo factor TOTP opcional con confirmación y códigos de recuperación de un solo uso. Credenciales de integración cifradas, endpoints HTTPS permitidos, bloqueo SSRF y validación externa únicamente con soporte humano; no se almacenan cuerpos sensibles de solicitudes/respuestas.
 - Tokens CSRF en formularios, incluido el formulario público, cookies HttpOnly/SameSite y sesiones con expiración por inactividad.
 - Enlaces externos de 256 bits, almacenamiento del hash SHA-256 y no del token, consumo atómico del límite de usos, vencimiento, revocación, controles de frecuencia y campo trampa. El acceso público solo crea reportes; nunca lista información.
 - Saneamiento del HTML documental y escape de datos en vistas.

@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Support\Audit;
 use App\Support\Auth;
 use App\Support\Validator;
+use DomainException;
 use PDOException;
 
 final class TrabajadorController extends BaseController
@@ -20,15 +21,16 @@ final class TrabajadorController extends BaseController
     public function portal(): void
     {
         $tenantId = $this->tenantId();
+        $employee = $this->employee();
         $induction = Induccion::current($tenantId);
         $signature = $induction !== null ? Induccion::signature((int) $induction['id'], $tenantId, Auth::id()) : null;
         $this->view('trabajador/portal', [
             'title' => 'Mi portal de seguridad y salud',
             'tenant' => Tenant::find($tenantId),
-            'employee' => Empleado::findByUser(Auth::id(), $tenantId),
+            'employee' => $employee,
             'policies' => Documento::approvedPolicies($tenantId),
             'reports' => Autoreporte::forUser($tenantId, Auth::id()),
-            'trainings' => Capacitacion::upcoming($tenantId, 3),
+            'trainings' => Capacitacion::forPortal($tenantId, (int) $employee['id']),
             'induction' => $induction,
             'signature' => $signature,
         ]);
@@ -46,6 +48,29 @@ final class TrabajadorController extends BaseController
             'document' => $document,
             'tenant' => Tenant::find($tenantId),
         ]);
+    }
+
+    public function training(int $id): void
+    {
+        $employee = $this->employee();
+        $training = Capacitacion::findForPortal($id, $this->tenantId(), (int) $employee['id']);
+        if (!$training) $this->notFound();
+        $this->view('trabajador/capacitacion', ['title' => $training['tema'], 'training' => $training]);
+    }
+
+    public function trainingCertificate(int $id): void
+    {
+        $employee = $this->employee();
+        $attendee = Capacitacion::attendeeForEmployee($id, (int) $employee['id'], $this->tenantId());
+        if (!$attendee) $this->notFound();
+        try {
+            $certificate = Capacitacion::certificate($id, (int) $attendee['id'], $this->tenantId());
+        } catch (DomainException $e) {
+            flash('error', $e->getMessage());
+            redirect('/portal/capacitaciones/' . $id);
+        }
+        Audit::record('Descarga de constancia propia', 'CapacitacionAsistente', (int) $attendee['id'], ['capacitacion_id' => $id]);
+        $this->view('tenant/phva/certificado', $certificate + ['title' => 'Mi constancia de participación', 'tenant' => Tenant::find($this->tenantId()), 'backUrl' => '/portal/capacitaciones/' . $id], 'print');
     }
 
     public function storeReport(): void
@@ -140,5 +165,12 @@ final class TrabajadorController extends BaseController
         Audit::record('Inducción firmada', 'FirmaInduccion', $signatureId, ['induccion_id' => (int) $induction['id'], 'version' => (int) $induction['version']]);
         flash('success', 'Firma registrada correctamente. Conserva el comprobante y el hash de evidencia.');
         redirect('/portal/induccion');
+    }
+
+    private function employee(): array
+    {
+        $employee = Empleado::findByUser(Auth::id(), $this->tenantId());
+        if (!$employee) $this->notFound('La cuenta no tiene una persona vinculada en el directorio de esta empresa.');
+        return $employee;
     }
 }

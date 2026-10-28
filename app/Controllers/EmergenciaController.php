@@ -13,6 +13,7 @@ use App\Services\OperationalDocument;
 use App\Support\Audit;
 use App\Support\Auth;
 use App\Support\Validator;
+use DomainException;
 
 final class EmergenciaController extends BaseController
 {
@@ -158,11 +159,7 @@ final class EmergenciaController extends BaseController
         $data = $this->drillInput();
         $data['tenant_id'] = $tenantId;
         $data['plan_id'] = $id;
-        $validator = $this->drillValidator($data);
-        $errors = $validator->errors();
-        if ($data['estado'] === 'Realizado' && (int) $data['participantes'] < 1) {
-            $errors['participantes'] = 'Un simulacro realizado debe registrar al menos un participante.';
-        }
+        $errors = $this->drillErrors($data);
         if ($errors !== []) {
             fail_validation($errors, $data, '/emergencias/' . $id . '#simulacros');
         }
@@ -179,10 +176,7 @@ final class EmergenciaController extends BaseController
         $before = SimulacroEmergencia::findForTenant($drillId, $tenantId);
         if ($before === null || (int) $before['plan_id'] !== $id) $this->notFound();
         $data = $this->drillInput();
-        $errors = $this->drillValidator($data)->errors();
-        if ($data['estado'] === 'Realizado' && (int) $data['participantes'] < 1) {
-            $errors['participantes'] = 'Un simulacro realizado debe registrar al menos un participante.';
-        }
+        $errors = $this->drillErrors($data);
         if ($errors !== []) fail_validation($errors, $data, '/emergencias/' . $id . '#simulacros');
         SimulacroEmergencia::update($drillId, $tenantId, $data);
         Audit::record('Simulacro de emergencia actualizado', 'SimulacroEmergencia', $drillId, ['antes' => $before, 'despues' => $data]);
@@ -207,7 +201,12 @@ final class EmergenciaController extends BaseController
             flash('error', 'Registra el resultado del simulacro antes de marcarlo como realizado.');
             redirect('/emergencias/' . $id . '#simulacros');
         }
-        SimulacroEmergencia::setStatus($drillId, $this->tenantId(), $status, $result, $improvements);
+        try {
+            SimulacroEmergencia::setStatus($drillId, $this->tenantId(), $status, $result, $improvements);
+        } catch (DomainException $e) {
+            flash('error', $e->getMessage());
+            redirect('/emergencias/' . $id . '#simulacros');
+        }
         Audit::record('Estado de simulacro actualizado', 'SimulacroEmergencia', $drillId, ['estado' => $status]);
         flash('success', 'Seguimiento del simulacro actualizado.');
         redirect('/emergencias/' . $id . '#simulacros');
@@ -304,6 +303,8 @@ final class EmergenciaController extends BaseController
             'fecha' => (string) $this->input('fecha'), 'tipo' => (string) $this->input('tipo'),
             'participantes' => $this->input('participantes'), 'responsable' => (string) $this->input('responsable'),
             'resultado' => (string) $this->input('resultado'), 'acciones_mejora' => (string) $this->input('acciones_mejora'),
+            'participantes_detalle' => (string) $this->input('participantes_detalle'),
+            'evaluacion' => (string) $this->input('evaluacion'), 'lecciones_aprendidas' => (string) $this->input('lecciones_aprendidas'),
             'estado' => (string) $this->input('estado', 'Programado'),
         ];
     }
@@ -314,11 +315,25 @@ final class EmergenciaController extends BaseController
         $validator->required('fecha', 'fecha')->date('fecha', 'fecha')->required('tipo', 'tipo')
             ->required('participantes', 'participantes')->integer('participantes', 'participantes', 0)
             ->required('responsable', 'responsable')->in('estado', 'estado', ['Programado', 'Realizado', 'Cancelado'])
-            ->max('resultado', 'resultado', 5000)->max('acciones_mejora', 'acciones de mejora', 5000);
+            ->max('resultado', 'resultado', 5000)->max('acciones_mejora', 'acciones de mejora', 5000)
+            ->max('participantes_detalle', 'detalle de participantes', 8000)
+            ->max('evaluacion', 'evaluación', 8000)->max('lecciones_aprendidas', 'lecciones aprendidas', 8000);
         if ($data['estado'] === 'Realizado') {
             $validator->required('resultado', 'resultado del simulacro');
         }
         return $validator;
+    }
+
+    private function drillErrors(array $data): array
+    {
+        $errors = $this->drillValidator($data)->errors();
+        if ($data['estado'] === 'Realizado') {
+            if ((int) $data['participantes'] < 1) $errors['participantes'] = 'Un simulacro realizado debe registrar al menos un participante.';
+            foreach (['participantes_detalle' => 'detalle de participantes', 'evaluacion' => 'evaluación', 'lecciones_aprendidas' => 'lecciones aprendidas'] as $field => $label) {
+                if (trim((string) $data[$field]) === '') $errors[$field] = 'Registra ' . $label . ' antes de marcar el simulacro como realizado.';
+            }
+        }
+        return $errors;
     }
 
     private function decode(?string $json): array

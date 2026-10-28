@@ -22,6 +22,7 @@ use App\Controllers\EventoController;
 use App\Controllers\EvidenciaController;
 use App\Controllers\IndicadorController;
 use App\Controllers\InstallController;
+use App\Controllers\IntegrationController;
 use App\Controllers\IvcController;
 use App\Controllers\OperationController;
 use App\Controllers\PermisoController;
@@ -67,6 +68,8 @@ $router = new Router();
 // Acceso público y sesión.
 $router->get('/login', [AuthController::class, 'showLogin'], null);
 $router->post('/login', [AuthController::class, 'login'], null);
+$router->get('/login/2fa', [AuthController::class, 'showTwoFactor'], null);
+$router->post('/login/2fa', [AuthController::class, 'verifyTwoFactor'], null);
 $router->get('/reportar', [ReportePublicoController::class, 'show'], null);
 $router->post('/reportar', [ReportePublicoController::class, 'store'], null);
 $router->get('/instalar', [InstallController::class, 'show'], null);
@@ -76,6 +79,9 @@ $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->post('/logout', [AuthController::class, 'logout']);
 $router->get('/cuenta/seguridad', [AccountController::class, 'security']);
 $router->post('/cuenta/seguridad', [AccountController::class, 'updatePassword']);
+$router->post('/cuenta/seguridad/2fa/iniciar', [AccountController::class, 'startTwoFactor']);
+$router->post('/cuenta/seguridad/2fa/activar', [AccountController::class, 'activateTwoFactor']);
+$router->post('/cuenta/seguridad/2fa/desactivar', [AccountController::class, 'disableTwoFactor']);
 
 // Panel global del SuperAdmin.
 $super = ['SuperAdmin'];
@@ -124,6 +130,11 @@ $router->post('/operacion-registros/{id}/eliminar', [OperationController::class,
 $router->get('/eventos', [EventoController::class, 'index'], $tenantManagers, 'sgsst');
 $router->post('/eventos', [EventoController::class, 'store'], $tenantManagers, 'sgsst');
 $router->get('/eventos/exportar', [EventoController::class, 'export'], $tenantManagers, 'sgsst');
+$router->get('/eventos/estadisticas', [EventoController::class, 'statistics'], $tenantManagers, 'sgsst');
+$router->post('/eventos/estadisticas/periodos', [EventoController::class, 'storePeriod'], $tenantManagers, 'sgsst');
+$router->post('/eventos/estadisticas/periodos/{id}/verificar', [EventoController::class, 'verifyPeriod'], $tenantManagers, 'sgsst');
+$router->post('/eventos/estadisticas/periodos/{id}/eliminar', [EventoController::class, 'deletePeriod'], $tenantManagers, 'sgsst');
+$router->get('/eventos/{id}/formato', [EventoController::class, 'print'], $tenantManagers, 'sgsst');
 $router->get('/eventos/{id}', [EventoController::class, 'show'], $tenantManagers, 'sgsst');
 $router->post('/eventos/{id}', [EventoController::class, 'update'], $tenantManagers, 'sgsst');
 $router->post('/eventos/{id}/personas', [EventoController::class, 'addPerson'], $tenantManagers, 'sgsst');
@@ -141,6 +152,8 @@ $router->post('/comites/{id}/miembros', [ComiteController::class, 'addMember'], 
 $router->post('/comites/{id}/miembros/{memberId}/estado', [ComiteController::class, 'memberStatus'], $tenantManagers, 'sgsst');
 $router->post('/comites/{id}/reuniones', [ComiteController::class, 'scheduleMeeting'], $tenantManagers, 'sgsst');
 $router->post('/comites/{id}/reuniones/{meetingId}', [ComiteController::class, 'recordMeeting'], $tenantManagers, 'sgsst');
+$router->post('/comites/{id}/compromisos', [ComiteController::class, 'addCommitment'], $tenantManagers, 'sgsst');
+$router->post('/comites/{id}/compromisos/{commitmentId}/estado', [ComiteController::class, 'commitmentStatus'], $tenantManagers, 'sgsst');
 $router->get('/salud', [SaludController::class, 'index'], $tenantManagers, 'sgsst');
 $router->post('/salud', [SaludController::class, 'store'], $tenantManagers, 'sgsst');
 $router->get('/salud/exportar', [SaludController::class, 'export'], $tenantManagers, 'sgsst');
@@ -209,6 +222,11 @@ $router->post('/hallazgos/{id}/estado', [PHVAController::class, 'findingStatus']
 $router->post('/hallazgos/{id}/eficacia', [PHVAController::class, 'findingEfficacy'], $tenantManagers);
 $router->get('/matriz-ipevr', [PHVAController::class, 'matrix'], $tenantManagers);
 $router->post('/matriz-ipevr', [PHVAController::class, 'storeHazard'], $tenantManagers);
+$router->get('/matriz-ipevr/{id}', [PHVAController::class, 'showHazard'], $tenantManagers);
+$router->post('/matriz-ipevr/{id}/controles', [PHVAController::class, 'storeHazardAction'], $tenantManagers);
+$router->post('/matriz-ipevr/{id}/controles/{actionId}/estado', [PHVAController::class, 'hazardActionStatus'], $tenantManagers);
+$router->post('/matriz-ipevr/{id}/controles/{actionId}/hitos', [PHVAController::class, 'storeHazardMilestone'], $tenantManagers);
+$router->post('/matriz-ipevr/{id}/controles/{actionId}/hitos/{milestoneId}/completar', [PHVAController::class, 'completeHazardMilestone'], $tenantManagers);
 $router->get('/matriz-ipevr/{id}/editar', [PHVAController::class, 'editHazard'], $tenantManagers);
 $router->post('/matriz-ipevr/{id}', [PHVAController::class, 'updateHazard'], $tenantManagers);
 $router->post('/matriz-ipevr/{id}/estado', [PHVAController::class, 'hazardStatus'], $tenantManagers);
@@ -216,6 +234,7 @@ $router->post('/matriz-ipevr/{id}/verificar', [PHVAController::class, 'hazardVer
 $router->post('/matriz-ipevr/{id}/eliminar', [PHVAController::class, 'deleteHazard'], $tenantManagers);
 $router->get('/capacitaciones', [CapacitacionController::class, 'index'], $tenantManagers);
 $router->post('/capacitaciones', [CapacitacionController::class, 'store'], $tenantManagers);
+$router->get('/capacitaciones/{id}/asistentes/{attendeeId}/certificado', [CapacitacionController::class, 'certificate'], $tenantManagers);
 $router->get('/capacitaciones/{id}', [CapacitacionController::class, 'show'], $tenantManagers);
 $router->post('/capacitaciones/{id}/asistentes', [CapacitacionController::class, 'addAttendee'], $tenantManagers);
 $router->post('/capacitaciones/{id}/asistentes/{attendeeId}', [CapacitacionController::class, 'updateAttendee'], $tenantManagers);
@@ -231,6 +250,12 @@ $router->get('/indicadores/{id}/editar', [IndicadorController::class, 'edit'], $
 $router->post('/indicadores/{id}', [IndicadorController::class, 'update'], $tenantManagers);
 $router->post('/indicadores/{id}/eliminar', [IndicadorController::class, 'delete'], $tenantManagers);
 $router->post('/indicadores/{id}/verificar', [IndicadorController::class, 'verify'], $tenantManagers);
+$router->get('/integraciones', [IntegrationController::class, 'index'], $tenantManagers, 'sgsst');
+$router->post('/integraciones', [IntegrationController::class, 'store'], $tenantManagers, 'sgsst');
+$router->post('/integraciones/ejecuciones/{id}/verificar', [IntegrationController::class, 'verify'], $tenantManagers, 'sgsst');
+$router->post('/integraciones/{id}', [IntegrationController::class, 'update'], $tenantManagers, 'sgsst');
+$router->post('/integraciones/{id}/estado', [IntegrationController::class, 'toggle'], $tenantManagers, 'sgsst');
+$router->post('/integraciones/{id}/ejecutar', [IntegrationController::class, 'execute'], $tenantManagers, 'sgsst');
 $router->get('/autoreportes', [ReporteController::class, 'index'], $tenantManagers);
 $router->get('/autoreportes/accesos', [ReporteController::class, 'accesses'], $tenantManagers);
 $router->post('/autoreportes/accesos', [ReporteController::class, 'storeAccess'], $tenantManagers);
@@ -340,6 +365,8 @@ $router->post('/empresa/configuracion', [TenantController::class, 'updateSetting
 // Portal simplificado de trabajadores y contratistas.
 $worker = ['Trabajador'];
 $router->get('/portal', [TrabajadorController::class, 'portal'], $worker, 'sgsst');
+$router->get('/portal/capacitaciones/{id}', [TrabajadorController::class, 'training'], $worker, 'sgsst');
+$router->get('/portal/capacitaciones/{id}/constancia', [TrabajadorController::class, 'trainingCertificate'], $worker, 'sgsst');
 $router->get('/portal/politicas/{id}', [TrabajadorController::class, 'policy'], $worker, 'sgsst');
 $router->post('/portal/reportes', [TrabajadorController::class, 'storeReport'], $worker, 'sgsst');
 $router->get('/portal/induccion', [TrabajadorController::class, 'induction'], $worker, 'sgsst');

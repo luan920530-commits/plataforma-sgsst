@@ -20,6 +20,7 @@ final class DocumentTemplate
         [$title, $phase, $body] = match ($type) {
             'alcohol' => ['Política de prevención de consumo de alcohol y drogas', 'Hacer', self::alcoholBody($tenant)],
             'convivencia' => ['Política y ruta del Comité de Convivencia Laboral', 'Planear', self::convivenciaBody($tenant)],
+            'datos' => ['Política de tratamiento y protección de datos personales', 'Planear', self::dataProtectionBody($tenant)],
             default => ['Política de Seguridad y Salud en el Trabajo', 'Planear', self::sstBody($tenant)],
         };
         return self::layout($tenant, $code ?: strtoupper($type), $title, $phase, $body);
@@ -84,6 +85,25 @@ final class DocumentTemplate
             <p>Las medidas de prevención, protección y atención frente a acoso, violencia y discriminación se articulan con el SG-SST y talento humano conforme al <strong>Decreto 1040 de 2026</strong>, con canales reservados, no revictimización y protección contra represalias. En presunto acoso sexual o violencia por razones de género se activa la ruta especial definida por la empresa conforme a la Ley 2365 de 2024 y demás regulación aplicable; <strong>estas conductas no se concilian ante el Comité de Convivencia</strong>.</p>
             <h2>Principios</h2>
             <p>Celeridad, eficacia, imparcialidad, confidencialidad, no discriminación, debido proceso y protección frente a represalias. Los registros sensibles se custodian con acceso restringido y no se publican en el portal general de trabajadores.</p>
+        HTML;
+    }
+
+    private static function dataProtectionBody(array $tenant): string
+    {
+        return <<<HTML
+            <p>{$tenant['razonsocial_html']} establece lineamientos para el tratamiento lícito, seguro y reservado de datos personales de trabajadores, candidatos, contratistas, visitantes, proveedores y demás titulares, conforme a la Ley 1581 de 2012, el Decreto 1074 de 2015 y las normas que los modifiquen o adicionen. Este documento es un borrador institucional que debe adaptarse a los tratamientos reales, revisarse y aprobarse antes de publicarse.</p>
+            <h2>Responsable, alcance y principios</h2>
+            <p>La empresa actúa como responsable del tratamiento en las bases de datos bajo su control. Debe identificar internamente al responsable de atención de consultas y reclamos, sus canales, las bases aplicables y los encargados. Se aplican los principios de legalidad, finalidad, libertad, veracidad, transparencia, acceso y circulación restringida, seguridad y confidencialidad.</p>
+            <h2>Finalidades y datos tratados</h2>
+            <ul><li>Gestionar la relación laboral o contractual, afiliaciones, nómina, seguridad social y obligaciones legales aplicables.</li><li>Implementar el SG-SST, identificar peligros, atender eventos, coordinar vigilancia ocupacional y acreditar formación sin convertir la plataforma en una historia clínica.</li><li>Administrar accesos, seguridad de la información, soporte, trazabilidad y comunicaciones relacionadas con el servicio.</li><li>Tratar únicamente los datos necesarios para finalidades previamente informadas. Los datos sensibles de salud y los conceptos ocupacionales tienen acceso restringido; no se solicitan diagnósticos ni resultados clínicos en módulos generales.</li></ul>
+            <h2>Autorización, deberes y derechos</h2>
+            <p>Se obtiene autorización previa, expresa e informada cuando sea exigible, conservando su soporte, y se documentan las excepciones legales aplicables. El titular puede conocer, actualizar, rectificar y solicitar supresión de sus datos, revocar la autorización cuando proceda, presentar quejas ante la autoridad competente y ejercer los demás derechos previstos en la ley. Las consultas y reclamos se tramitan por los canales institucionales dentro de los términos aplicables, sin condicionar indebidamente el acceso a datos necesarios para la relación laboral.</p>
+            <h2>Seguridad, reserva y roles</h2>
+            <ul><li>Aplicar perfiles de mínimo privilegio, autenticación, segregación por empresa, registro de operaciones y respaldo de información.</li><li>Proteger credenciales y secretos; no compartir cuentas ni publicar llaves, bases de datos, archivos clínicos o documentos sensibles en repositorios o canales abiertos.</li><li>Limitar los reportes agregados para evitar reidentificación. La descarga o transmisión de información reservada requiere autorización y finalidad verificables.</li><li>Exigir a encargados y proveedores instrucciones documentadas, confidencialidad, medidas de seguridad, asistencia al titular y notificación oportuna de incidentes.</li></ul>
+            <h2>Conservación, transferencias e incidentes</h2>
+            <p>La empresa define tiempos de conservación según finalidad, obligaciones laborales, probatorias y de archivo. Al finalizar, elimina o anonimiza de forma segura cuando no exista deber de conservación. Toda transmisión o transferencia nacional o internacional se evalúa y documenta conforme al régimen aplicable. Ante una vulneración se contiene el evento, preserva evidencias, evalúa alcance y riesgo, aplica las notificaciones que correspondan y documenta acciones correctivas; no se presume que el registro interno sustituye una notificación oficial.</p>
+            <h2>Revisión y aprobación</h2>
+            <p>Esta política se revisa ante cambios en tratamientos, proveedores o normatividad y como mínimo en la revisión anual definida por la empresa. La publicación requiere completar responsable, canales, bases de datos, procedimientos de derechos y matriz de conservación con información real. Su existencia no constituye certificación ni declaración automática de cumplimiento.</p>
         HTML;
     }
 

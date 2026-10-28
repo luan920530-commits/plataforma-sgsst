@@ -60,11 +60,16 @@ final class OperationCatalog
                 self::field('interpretacion','Interpretación técnica','select',false,['No evaluada','Dentro del referente','Fuera del referente','No aplica']),
                 self::field('expuestos','Número de personas expuestas','number'), self::field('controles','Controles y seguimiento requeridos','textarea',true),
             ]),
-            'inspecciones' => self::definition('Inspecciones planeadas','clipboard','Inspecciones sistemáticas a instalaciones, equipos y controles con participación.',['Inspección planeada','Inspección extraordinaria','Verificación de control'],[
+            'inspecciones' => self::definition('Inspecciones planeadas','clipboard','Listas de verificación, inspecciones a instalaciones, equipos y controles, hallazgos y cierre verificado.',['Inspección planeada','Inspección extraordinaria','Verificación de control'],[
                 self::field('area','Área / sede','text',true), self::field('activo','Instalación, maquinaria o equipo','text',true),
-                self::field('checklist','Lista de verificación aplicada','textarea',true), self::field('participante_copasst','Participante COPASST / vigía','text'),
-                self::field('hallazgos','Hallazgos y condiciones observadas','textarea',true), self::field('condicion_critica','Condición crítica','select',false,['Por verificar','No','Sí']),
+                self::field('alcance','Alcance y criterios de la inspección','textarea',true),
+                self::field('lista_nombre','Nombre / versión de la lista de verificación','text',true),
+                self::field('checklist','Ítems de la lista: criterio, conformidad y observación por ítem','textarea',true),
+                self::field('inspector','Responsable de inspeccionar','text',true), self::field('participante_copasst','Participante COPASST / vigía','text'),
+                self::field('hallazgos','Hallazgos y condiciones observadas; registra “Sin hallazgos” si aplica','textarea',true), self::field('condicion_critica','Condición crítica','select',false,['Por verificar','No','Sí']),
                 self::field('accion_inmediata','Acción inmediata de control','textarea'),
+                self::field('estado_hallazgos','Situación de hallazgos','select',false,['Por verificar','Abiertos','Cerrados con soporte','Sin hallazgos']),
+                self::field('seguimiento_cierre','Seguimiento y resultado de cierre','textarea'), self::field('fecha_verificacion_cierre','Fecha de verificación del cierre','date'),
             ]),
             'mantenimiento' => self::definition('Mantenimiento','settings','Mantenimiento preventivo y correctivo de instalaciones, máquinas y herramientas.',['Preventivo','Correctivo','Predictivo','Verificación técnica'],[
                 self::field('activo','Activo / equipo','text',true), self::field('ubicacion','Ubicación','text',true),
@@ -78,11 +83,14 @@ final class OperationCatalog
                 self::field('cantidad','Cantidad','number',true), self::field('capacitacion_uso','Formación en uso, limitaciones y cuidado','textarea',true),
                 self::field('verificacion_ajuste','Verificación de ajuste y estado','textarea',true), self::field('soporte_entrega','Referencia de constancia de entrega','text'),
             ]),
-            'auditoria' => self::definition('Auditoría interna','search','Programación, ejecución, objetividad, hallazgos y participación del COPASST.',['Planificación de auditoría','Auditoría interna','Seguimiento de auditoría'],[
-                self::field('alcance','Alcance y centros','textarea',true), self::field('criterios','Criterios de auditoría','textarea',true),
-                self::field('auditor','Auditor y competencia','text',true), self::field('independencia','Objetividad e independencia','textarea',true),
-                self::field('copasst','Participación y comunicación al COPASST','textarea',true), self::field('hallazgos','Hallazgos y evidencias revisadas','textarea',true),
-                self::field('fortalezas','Fortalezas y oportunidades','textarea'),
+            'auditoria' => self::definition('Auditorías internas y externas','search','Programación, listas de verificación, objetividad, hallazgos y cierre de auditorías internas o externas.',['Planificación de auditoría','Auditoría interna','Auditoría externa','Seguimiento de auditoría'],[
+                self::field('alcance','Alcance, procesos y centros','textarea',true), self::field('criterios','Criterios de auditoría','textarea',true),
+                self::field('checklist','Programa / lista de verificación y evidencias a revisar','textarea',true),
+                self::field('entidad_auditora','Entidad o equipo auditor','text',true), self::field('auditor','Auditor y competencia','text',true), self::field('independencia','Objetividad e independencia','textarea',true),
+                self::field('copasst','Participación y comunicación al COPASST','textarea',true), self::field('hallazgos','Hallazgos y evidencias revisadas; registra “Sin hallazgos” si aplica','textarea',true),
+                self::field('fortalezas','Fortalezas y oportunidades','textarea'), self::field('informe_referencia','Informe / referencia documental','text'),
+                self::field('estado_hallazgos','Situación de hallazgos','select',false,['Por verificar','Abiertos','Cerrados con soporte','Sin hallazgos']),
+                self::field('seguimiento_cierre','Seguimiento y resultado de cierre','textarea'), self::field('fecha_verificacion_cierre','Fecha de verificación del cierre','date'),
             ]),
             'revision-direccion' => self::definition('Revisión por la dirección','dashboard','Entradas, resultados, decisiones, recursos y acciones de la alta dirección.',['Revisión anual','Revisión extraordinaria','Seguimiento de decisiones'],[
                 self::field('entradas','Entradas revisadas: desempeño, auditoría, incidentes, cambios, consulta y requisitos','textarea',true),

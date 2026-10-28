@@ -19,8 +19,8 @@ NORMIA SST · EXTINTORES SCM · INSTALACIÓN EN HOSTING
 QUÉ SE INSTALA
 --------------
 - Extintores SCM · NIT 39626936-8 · Soacha · teléfono 3212944603.
-- Configuración inicial de 7 estándares y 40 documentos en estado Borrador:
-  estándares, políticas, guía de inicio, Manual SG-SST, matriz de cobertura,
+- Configuración inicial de 7 estándares y 41 documentos en estado Borrador:
+  estándares, políticas —incluida POL-DP—, guía de inicio, Manual SG-SST, matriz de cobertura,
   salud, psicosocial, ergonomía, convivencia, emergencias, EPP, atención al
   público, actividad, AST y el programa PR-LD-01 con FT-LD-01 y FT-LD-02.
 - Descarga individual DOCX editable y paquete ZIP con cobertura CSV. Estas

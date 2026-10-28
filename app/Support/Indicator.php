@@ -14,6 +14,7 @@ final class Indicator
             'Prevalencia' => ['factor' => 100000, 'unidad' => 'por 100.000 trabajadores', 'formula' => 'Enfermedades laborales existentes × 100.000 ÷ promedio de trabajadores'],
             'Incidencia' => ['factor' => 100000, 'unidad' => 'por 100.000 trabajadores', 'formula' => 'Enfermedades laborales nuevas × 100.000 ÷ promedio de trabajadores'],
             'Ausentismo' => ['factor' => 100, 'unidad' => '%', 'formula' => 'Días de ausencia por incapacidad × 100 ÷ días de trabajo programados'],
+            'Presentismo' => ['factor' => 100, 'unidad' => '%', 'formula' => '(Días de trabajo programados − días de ausencia) × 100 ÷ días de trabajo programados'],
             default => ['factor' => 1, 'unidad' => '', 'formula' => 'Numerador × factor ÷ denominador'],
         };
     }
@@ -21,5 +22,10 @@ final class Indicator
     public static function calculate(float $numerator, float $denominator, float $factor): float
     {
         return $denominator > 0 ? round(($numerator * $factor) / $denominator, 2) : 0.0;
+    }
+
+    public static function calculatePresentism(float $absenceDays, float $scheduledDays): float
+    {
+        return $scheduledDays > 0 ? round((($scheduledDays - $absenceDays) * 100) / $scheduledDays, 2) : 0.0;
     }
 }

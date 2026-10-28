@@ -55,10 +55,12 @@ Los módulos disponibles son:
 9. inspecciones planeadas;
 10. mantenimiento;
 11. EPP;
-12. auditoría interna;
+12. auditorías internas y externas;
 13. revisión por la dirección.
 
 Cada registro conserva campos específicos en JSON validado, responsable, recursos, fechas, estado, resultado y vínculo con evidencias. Los registros nacen **Pendiente**. La ejecución y la verificación son actos diferentes; `Verificado` requiere evidencia revisada y autorización humana. La exportación refleja los datos registrados, no crea resultados.
+
+Las inspecciones incluyen alcance, nombre/versión de la lista, ítems y criterios, inspector, participación, hallazgos, acción inmediata y seguimiento. Las auditorías admiten tipo interno o externo, entidad/equipo auditor, programa/lista de verificación, criterios, independencia, informe y hallazgos. **Completado** puede describir una inspección o auditoría ejecutada con hallazgos aún abiertos. **Verificado** como cierre exige además hallazgos cerrados con soporte —o “Sin hallazgos”—, resultado y fecha de verificación del cierre, evidencia revisada y nota autorizada.
 
 Salud/vigilancias, capacitación, ACPA, indicadores, IPEVR, comités, eventos, emergencias y PESV conservan sus módulos propios; no se duplican como tablas genéricas cuando ya existe una operación específica.
 
@@ -68,7 +70,7 @@ Salud/vigilancias, capacitación, ACPA, indicadores, IPEVR, comités, eventos, e
 
 Ruta: `/eventos`.
 
-La base `eventos_sst` y sus tablas relacionadas son independientes de `hallazgos_acpa`. Permiten registrar personas, testigos, investigación, causas, días perdidos, acciones y eficacia. Las estadísticas se alimentan de esos eventos reales. Un hallazgo ACPA no se transforma implícitamente en accidente ni viceversa.
+La base `eventos_sst` y sus tablas relacionadas son independientes de `hallazgos_acpa`. Permiten registrar fecha y hora, personas/testigos, parte corporal, agente, lesión/condición, investigación, causas inmediatas/básicas/administrativas, cinco por qué, árbol de causas, días perdidos, acciones y eficacia. El cierre de investigación no cierra automáticamente las acciones ni el evento. Las estadísticas usan periodos con horas-hombre, promedio de trabajadores y días programados explícitos para frecuencia, severidad, lesiones incapacitantes y accidentalidad; los denominadores deben verificarse con soporte. Un hallazgo ACPA no se transforma implícitamente en accidente ni viceversa. Las fechas de ARL/EPS/Ministerio y radicados sólo se diligencian con reportes reales, no se simulan.
 
 ### Capacitación y participación
 
@@ -77,6 +79,9 @@ Ruta: `/capacitaciones`.
 - “Realizada” requiere asistencia confirmada y evidencia revisada.
 - La eficacia se evalúa después, con fecha y verificador.
 - La programación, el contenido o la idoneidad declarada del instructor no prueban asistencia ni aprendizaje.
+- La matriz de cobertura por puesto cruza directorio activo, capacitaciones, asistencias, evaluaciones y constancias emitidas; incluye cargos sin registros y no inventa requisitos obligatorios ni marca incumplimientos automáticos.
+- Las constancias conservan snapshot JSON y SHA-256. Acreditan participación con los datos históricos emitidos, no competencia certificada.
+- El trabajador consulta todas las actividades programadas/realizadas publicadas, su contenido y sólo su propia participación. La descarga de constancia exige el vínculo con su persona, realización, asistencia, evaluación y escala. Las consultas SG-SST usan el tipo histórico `Sugerencia`, con respuesta en el portal, sin alterar el `CHECK` de autoreportes.
 
 ### Hallazgos y acciones ACPA
 
@@ -90,13 +95,19 @@ Ruta: `/hallazgos`.
 
 Ruta: `/indicadores`.
 
-Se conservan fuente del numerador y denominador, responsable, observaciones y soporte. La verificación exige fuentes y evidencia revisada; editar reinicia la verificación. Un denominador cero no se interpreta como desempeño satisfactorio.
+Se conservan fuente del numerador y denominador, responsable, observaciones y soporte. La verificación exige fuentes y evidencia revisada; editar reinicia la verificación. Un denominador cero no se interpreta como desempeño satisfactorio. Las comparativas muestran corte anterior y variación; el benchmarking exige valor, fuente y periodo, sin promedios inventados.
+
+**Presentismo:** `(días programados − días de ausencia) × 100 ÷ días programados`. El navegador y el servidor aplican la misma fórmula y se rechazan ausencias negativas o superiores al denominador. Para no reconstruir el `CHECK` histórico de SQLite, se almacena `tipo=Personalizado` con la columna aditiva `formula_tipo=Presentismo`; las lecturas funcionales muestran nuevamente Presentismo y conservan `tipo_almacenado` para trazabilidad.
 
 ### IPEVR
 
 Ruta: `/matriz-ipevr`.
 
-La ficha incluye metodología, participantes, fecha de evaluación, próxima revisión y jerarquía de controles. El cambio a **Controlado** exige verificación humana con evidencia revisada vinculada como `peligro:{id}`. Editar el peligro lo reabre y reinicia la verificación. El cálculo ND × NE × NC orienta la priorización; no sustituye el juicio técnico ni la participación de los trabajadores.
+La ficha incluye proceso, cargo, ubicación, expuestos, metodología, participantes, fecha de evaluación, próxima revisión y jerarquía de controles. El cambio a **Controlado** exige verificación humana con evidencia revisada vinculada como `peligro:{id}`. Editar el peligro lo reabre y reinicia la verificación. Cada acción de control tiene responsable, recursos, plazo, avance, hitos, fecha real, evidencia y evaluación de eficacia separada. Una acción eficaz no puede retroceder ni borrarse como si no hubiera histórico. El cálculo ND × NE × NC orienta la priorización; no sustituye el juicio técnico ni la participación de los trabajadores.
+
+### Emergencias y simulacros
+
+Los planes conservan brigadas, amenazas, contactos, recursos, evacuación y planos versionados. Cada simulacro puede programarse sin resultados; al marcarse **Realizado** exige número y detalle de participantes, resultado, evaluación y lecciones aprendidas. La actualización rápida de estado utiliza la misma validación y conserva esos campos. Las acciones de mejora y evidencias siguen siendo independientes: registrar el ejercicio no prueba eficacia ni cierra sus mejoras.
 
 ## 4. Datos clínicos, psicosociales y convivencia
 
@@ -117,7 +128,7 @@ Reglas de minimización:
 - usar estadísticas agregadas/anonimizadas en tableros y exportaciones;
 - no precargar resultados de baterías psicosociales, diagnósticos, aptitudes ni eficacia.
 
-El COPASST/Vigía tiene gestión propia en `/comites`, con miembros, reuniones y quórum confirmado. El CCL no se mezcla con el COPASST ni se le atribuye decidir si existió acoso laboral.
+El COPASST/Vigía tiene gestión propia en `/comites`, con miembros, representación, reuniones, orden del día, asistencia y quórum confirmado, actas y recomendaciones. Los compromisos tienen responsable, recursos, fecha, avance y cierre verificado con evidencia; una reunión realizada no los cierra automáticamente. El CCL no se mezcla con el COPASST ni se le atribuye decidir si existió acoso laboral.
 
 ## 5. Firma electrónica documental
 
@@ -171,16 +182,22 @@ Las fuentes secundarias consultadas mencionan el radicado **11001-03-25-000-2025
 
 `EvidenceLinker` admite vínculos reales con `capacitacion:{id}`, `hallazgo:{id}`, `indicador:{id}` y `peligro:{id}`, además de los módulos anteriores. La resolución comprueba tenant y alcance de módulo. Los archivos permanecen fuera de `public/`, con descarga autorizada, hash y revisión humana.
 
-Los permisos se evalúan en servidor. Las rutas de trabajador, empresa y SuperAdmin permanecen separadas. Las estadísticas y exportaciones sensibles no deben exponer expedientes individuales.
+Los permisos se evalúan en servidor. Las rutas de trabajador, empresa y SuperAdmin permanecen separadas. Las estadísticas y exportaciones sensibles no deben exponer expedientes individuales. El permiso `integraciones.gestionar` se almacena en una tabla aditiva para no reconstruir el `CHECK` histórico; los cuatro permisos anteriores permanecen en su tabla original.
+
+### Integraciones, 2FA y protección de datos
+
+Las integraciones ARL, nómina y medicina son conectores configurables, no acuses automáticos. Exigen HTTPS, destinos permitidos y credencial cifrada con clave autenticada; bloquean localhost, redes privadas, credenciales en URL y redirecciones inseguras. Conservan correlación y hashes técnicos sin guardar cuerpos JSON/respuestas con datos sensibles. Un HTTP 2xx no se interpreta como radicación, aceptación ARL, conciliación de nómina o validez médica: la validación humana requiere soporte revisado y no cambia el resultado técnico.
+
+La cuenta admite segundo factor TOTP, confirmación, códigos de recuperación de un solo uso, expiración y limpieza de retos. La política `POL-DP` nace como borrador en empresas nuevas; sólo la demo principal contiene una publicación de ejemplo. Ninguna configuración sustituye el análisis de privacidad, custodia, contratos con proveedores o credenciales oficiales.
 
 ## 8. Verificación realizada
 
-- **70 pruebas funcionales:** 70 exitosas, 0 fallidas.
-- Sintaxis validada en **242 archivos PHP**.
-- Migración v4→v5: datos preservados, **51 tablas**, columnas y claves foráneas válidas.
+- **79 pruebas funcionales:** 79 exitosas, 0 fallidas.
+- Sintaxis validada en **259 archivos PHP** mediante `scripts/lint.php`.
+- Migración v4→v6: datos preservados, **58 tablas**, columnas aditivas y claves foráneas válidas.
 - Auditoría documental: **21 actividades × 3 regímenes**, 63 perfiles y **4.680 borradores** contextualizados.
-- Extintores SCM: **40 borradores**, 28 seguimientos pendientes, 7 validaciones; sin aprobaciones ni ejecuciones inventadas.
-- Smoke HTTP en PHP 8.1 WASM/MEMFS: login, **16 vistas autenticadas**, token CSRF y bloqueo histórico, sin errores 500. El smoke detectó y permitió corregir el helper ausente `form_errors()`.
-- Los ZIP de producción se validan por CRC y exclusiones; no incluyen bases, sesiones, claves ni credenciales.
+- Extintores SCM: **41 borradores** —incluido `POL-DP`—, 28 seguimientos pendientes, 7 validaciones; sin aprobaciones ni ejecuciones inventadas.
+- Smoke HTTP en PHP 8.1 WASM/MEMFS: login empresarial y de trabajador, CSRF, siete vistas de gestión, altas de evento con hora, presentismo 99 %, capacitación y simulacro completo, matriz y detalle formativo del portal, sin respuestas 500. El smoke detectó y permitió corregir el `CHECK` histórico de indicadores y el helper de persona vinculada en el portal.
+- ZIP de producción y demo: **522 entradas** cada uno; Extintores: **523**. Todos ocupan 2,72 MiB, superan CRC, contienen la ampliación v6 y no incluyen bases, sesiones, claves ni credenciales privadas.
 
 Estas pruebas verifican comportamiento de software y cobertura de plantillas. No acreditan implementación SG-SST, resultados de salud, ejecución de programas, reportes oficiales ni certificación ISO.

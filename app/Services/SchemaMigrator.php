@@ -9,7 +9,7 @@ use RuntimeException;
 /** Aplica migraciones aditivas sin borrar datos y marca la versión en SQLite. */
 final class SchemaMigrator
 {
-    public const VERSION = 5;
+    public const VERSION = 6;
 
     public static function migrateIfNeeded(): bool
     {
@@ -48,6 +48,7 @@ final class SchemaMigrator
         self::ensureEvidenceColumns();
         self::ensureColumn('users', 'must_change_password', 'INTEGER NOT NULL DEFAULT 0 CHECK (must_change_password IN (0,1))');
         self::ensureOperationalColumns();
+        self::ensureExtendedColumns();
         self::migrateStandardCodes();
         $migration = @file_get_contents(BASE_PATH . '/database/migrations/004_ivc_sanitario.sql');
         if ($migration === false) {
@@ -59,6 +60,11 @@ final class SchemaMigrator
             throw new RuntimeException('No se encontró la migración de operación SG-SST.');
         }
         Database::connection()->exec($operationalMigration);
+        $extendedMigration = @file_get_contents(BASE_PATH . '/database/migrations/006_gestion_ampliada.sql');
+        if ($extendedMigration === false) {
+            throw new RuntimeException('No se encontró la migración de gestión ampliada.');
+        }
+        Database::connection()->exec($extendedMigration);
         self::backfillEvidenceMetadata();
         self::backfillExplicitPermissions();
 
@@ -111,6 +117,60 @@ final class SchemaMigrator
         $keys = ['programas_pyp', 'vigilancia_epidemiologica', 'emergencia_plan', 'emergencia_planos', 'emergencia_brigada', 'emergencia_equipos', 'emergencia_simulacro'];
         $placeholders = implode(',', array_fill(0, count($keys), '?'));
         Database::execute("UPDATE soportes_cumplimiento SET modulo = 'emergencias' WHERE requisito_clave IN ($placeholders)", $keys);
+    }
+
+    private static function ensureExtendedColumns(): void
+    {
+        $columns = [
+            'peligros_ipevr' => [
+                ['ubicacion', "TEXT NOT NULL DEFAULT ''"],
+                ['trabajadores_expuestos', 'INTEGER NOT NULL DEFAULT 0 CHECK (trabajadores_expuestos >= 0)'],
+            ],
+            'eventos_sst' => [
+                ['hora_evento', "TEXT NOT NULL DEFAULT ''"],
+                ['parte_cuerpo', "TEXT NOT NULL DEFAULT ''"],
+                ['agente_causante', "TEXT NOT NULL DEFAULT ''"],
+            ],
+            'evento_investigaciones' => [
+                ['cinco_porques_json', "TEXT NOT NULL DEFAULT '[]'"],
+                ['arbol_causas_json', "TEXT NOT NULL DEFAULT '[]'"],
+            ],
+            'salud_registros' => [['subtipo', "TEXT NOT NULL DEFAULT ''"]],
+            'capacitaciones' => [
+                ['tipo_formacion', "TEXT NOT NULL DEFAULT 'Capacitacion de seguridad'"],
+                ['area_puesto', "TEXT NOT NULL DEFAULT ''"],
+                ['necesidad_detectada', "TEXT NOT NULL DEFAULT ''"],
+                ['temas_normativos', "TEXT NOT NULL DEFAULT ''"],
+                ['fecha_realizacion', 'TEXT'],
+            ],
+            'capacitacion_asistentes' => [
+                ['certificado_codigo', "TEXT NOT NULL DEFAULT ''"],
+                ['certificado_emitido_at', 'TEXT'],
+                ['certificado_hash', "TEXT NOT NULL DEFAULT ''"],
+                ['certificado_snapshot_json', "TEXT NOT NULL DEFAULT ''"],
+                ['evaluacion_escala', "TEXT NOT NULL DEFAULT ''"],
+            ],
+            'simulacros_emergencia' => [
+                ['participantes_detalle', "TEXT NOT NULL DEFAULT ''"],
+                ['evaluacion', "TEXT NOT NULL DEFAULT ''"],
+                ['lecciones_aprendidas', "TEXT NOT NULL DEFAULT ''"],
+            ],
+            'indicadores' => [
+                ['formula_tipo', "TEXT NOT NULL DEFAULT ''"],
+                ['referencia_valor', 'REAL'],
+                ['referencia_fuente', "TEXT NOT NULL DEFAULT ''"],
+                ['referencia_periodo', "TEXT NOT NULL DEFAULT ''"],
+            ],
+            'users' => [
+                ['totp_secret', "TEXT NOT NULL DEFAULT ''"],
+                ['totp_enabled', 'INTEGER NOT NULL DEFAULT 0 CHECK (totp_enabled IN (0,1))'],
+                ['totp_recovery_codes', "TEXT NOT NULL DEFAULT '[]'"],
+                ['totp_confirmed_at', 'TEXT'],
+            ],
+        ];
+        foreach ($columns as $table => $definitions) {
+            foreach ($definitions as [$name, $definition]) self::ensureColumn($table, $name, $definition);
+        }
     }
 
     private static function ensureOperationalColumns(): void
@@ -187,6 +247,10 @@ final class SchemaMigrator
                 [$permission]
             );
         }
+        Database::execute(
+            "INSERT OR IGNORE INTO usuario_permisos_extendidos (tenant_id, user_id, permiso, otorgado_por)
+             SELECT tenant_id, id, 'integraciones.gestionar', id FROM users WHERE rol = 'AdminEmpresa'"
+        );
     }
 
     private static function ensureColumn(string $table, string $column, string $definition): void

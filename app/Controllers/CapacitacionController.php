@@ -17,6 +17,8 @@ final class CapacitacionController extends BaseController
         $this->view('tenant/phva/capacitaciones', [
             'title' => 'Programa de capacitaciones',
             'trainings' => Capacitacion::forTenant($this->tenantId()),
+            'matrix' => Capacitacion::matrixByPosition($this->tenantId()),
+            'trainingTypes' => Capacitacion::trainingTypes(),
         ]);
     }
 
@@ -77,6 +79,7 @@ final class CapacitacionController extends BaseController
         $this->view('tenant/phva/capacitacion-form', [
             'title' => 'Editar capacitación',
             'training' => $training,
+            'trainingTypes' => Capacitacion::trainingTypes(),
         ]);
     }
 
@@ -121,11 +124,19 @@ final class CapacitacionController extends BaseController
         if (!in_array($status, ['Programada', 'Realizada', 'Cancelada'], true)) {
             $this->abort(403, 'Estado no válido.');
         }
-        try { Capacitacion::setStatus($id, $tenantId, $status); }
+        try { Capacitacion::setStatus($id, $tenantId, $status, (string) $this->input('fecha_realizacion') ?: null); }
         catch (DomainException $exception) { flash('error', $exception->getMessage()); redirect('/capacitaciones/' . $id); }
         Audit::record('Estado de capacitación actualizado', 'Capacitacion', $id, ['estado' => $status]);
         flash('success', $status === 'Realizada' ? 'Capacitación realizada con asistencia y evidencia revisada.' : 'El estado de la capacitación fue actualizado.');
         redirect('/capacitaciones');
+    }
+
+    public function certificate(int $id, int $attendeeId): void
+    {
+        try { $certificate = Capacitacion::certificate($id, $attendeeId, $this->tenantId()); }
+        catch (DomainException $e) { flash('error', $e->getMessage()); redirect('/capacitaciones/' . $id . '#asistentes'); }
+        Audit::record('Constancia de formación consultada', 'Capacitacion', $id, ['asistente_id' => $attendeeId, 'codigo' => $certificate['attendee']['certificado_codigo']]);
+        $this->view('tenant/phva/certificado', $certificate + ['title' => 'Constancia de participación', 'tenant' => \App\Models\Tenant::find($this->tenantId()), 'backUrl' => '/capacitaciones/' . $id], 'print');
     }
 
     private function trainingInput(): array
@@ -141,6 +152,11 @@ final class CapacitacionController extends BaseController
             'competencia' => (string) $this->input('competencia'),
             'contenido' => (string) $this->input('contenido'),
             'idoneidad_instructor' => (string) $this->input('idoneidad_instructor'),
+            'tipo_formacion' => (string) $this->input('tipo_formacion', 'Capacitacion de seguridad'),
+            'area_puesto' => (string) $this->input('area_puesto'),
+            'necesidad_detectada' => (string) $this->input('necesidad_detectada'),
+            'temas_normativos' => (string) $this->input('temas_normativos'),
+            'fecha_realizacion' => (string) $this->input('fecha_realizacion'),
         ];
     }
 
@@ -154,7 +170,11 @@ final class CapacitacionController extends BaseController
             ->required('duracion_horas', 'duración')->numeric('duracion_horas', 'duración', 0.1)
             ->required('modalidad', 'modalidad')->in('modalidad', 'modalidad', ['Presencial', 'Virtual', 'Mixta'])
             ->max('publico_objetivo', 'público objetivo', 2000)->max('competencia', 'competencia', 2000)
-            ->max('contenido', 'contenido', 6000)->max('idoneidad_instructor', 'idoneidad del instructor', 2000);
+            ->max('contenido', 'contenido', 6000)->max('idoneidad_instructor', 'idoneidad del instructor', 2000)
+            ->required('tipo_formacion', 'tipo de formación')->in('tipo_formacion', 'tipo de formación', Capacitacion::trainingTypes())
+            ->required('area_puesto', 'área o puesto')->max('area_puesto', 'área o puesto', 1000)
+            ->required('necesidad_detectada', 'necesidad detectada')->max('necesidad_detectada', 'necesidad detectada', 4000)
+            ->max('temas_normativos', 'temas normativos', 4000)->date('fecha_realizacion', 'fecha real de realización');
         return $validator;
     }
 }

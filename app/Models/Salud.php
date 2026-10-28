@@ -10,6 +10,7 @@ use DomainException;
 final class Salud
 {
     public static function types():array{return['Evaluacion ocupacional','Concepto medico-laboral','Restriccion','Recomendacion','Vigilancia','Remision','Salud mental y SPA','Seguimiento'];}
+    public static function evaluationTypes():array{return['Preingreso','Periodica','Cambio de ocupacion','Egreso','Postincapacidad','Retorno','Seguimiento'];}
     public static function forTenant(int $tenantId,array$filters=[]):array
     {
         $where=['s.tenant_id=?'];$args=[$tenantId];if(in_array($filters['tipo']??'',self::types(),true)){$where[]='s.tipo=?';$args[]=$filters['tipo'];}
@@ -21,12 +22,12 @@ final class Salud
     public static function create(int$tenantId,array$input,int$userId):int
     {
         $data=self::validate($tenantId,$input);$state=$data['proxima_fecha']?'En seguimiento':'Vigente';
-        Database::execute('INSERT INTO salud_registros (tenant_id,empleado_id,tipo,fecha,proxima_fecha,entidad,profesional,concepto,restricciones,recomendaciones,seguimiento,soporte_referencia,estado,created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[$tenantId,$data['empleado_id'],$data['tipo'],$data['fecha'],$data['proxima_fecha'],$data['entidad'],$data['profesional'],$data['concepto'],$data['restricciones'],$data['recomendaciones'],$data['seguimiento'],$data['soporte_referencia'],$state,$userId]);$id=Database::lastId();Audit::record('Concepto reservado de salud registrado','Salud',$id,['tipo'=>$data['tipo']],$tenantId,$userId);return$id;
+        Database::execute('INSERT INTO salud_registros (tenant_id,empleado_id,tipo,subtipo,fecha,proxima_fecha,entidad,profesional,concepto,restricciones,recomendaciones,seguimiento,soporte_referencia,estado,created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[$tenantId,$data['empleado_id'],$data['tipo'],$data['subtipo'],$data['fecha'],$data['proxima_fecha'],$data['entidad'],$data['profesional'],$data['concepto'],$data['restricciones'],$data['recomendaciones'],$data['seguimiento'],$data['soporte_referencia'],$state,$userId]);$id=Database::lastId();Audit::record('Concepto reservado de salud registrado','Salud',$id,['tipo'=>$data['tipo']],$tenantId,$userId);return$id;
     }
     public static function update(int$id,int$tenantId,array$input,int$userId):void
     {
         $current=self::findForTenant($id,$tenantId)?:throw new DomainException('Registro no encontrado.');if($current['estado']==='Cerrado')throw new DomainException('El seguimiento cerrado es inmutable; cree un nuevo registro de seguimiento.');$input['tipo']=$current['tipo'];$data=self::validate($tenantId,$input);
-        Database::execute('UPDATE salud_registros SET empleado_id=?,fecha=?,proxima_fecha=?,entidad=?,profesional=?,concepto=?,restricciones=?,recomendaciones=?,seguimiento=?,soporte_referencia=?,updated_at=CURRENT_TIMESTAMP WHERE id=? AND tenant_id=?',[$data['empleado_id'],$data['fecha'],$data['proxima_fecha'],$data['entidad'],$data['profesional'],$data['concepto'],$data['restricciones'],$data['recomendaciones'],$data['seguimiento'],$data['soporte_referencia'],$id,$tenantId]);Audit::record('Concepto reservado actualizado','Salud',$id,['tipo'=>$current['tipo']],$tenantId,$userId);
+        Database::execute('UPDATE salud_registros SET empleado_id=?,subtipo=?,fecha=?,proxima_fecha=?,entidad=?,profesional=?,concepto=?,restricciones=?,recomendaciones=?,seguimiento=?,soporte_referencia=?,updated_at=CURRENT_TIMESTAMP WHERE id=? AND tenant_id=?',[$data['empleado_id'],$data['subtipo'],$data['fecha'],$data['proxima_fecha'],$data['entidad'],$data['profesional'],$data['concepto'],$data['restricciones'],$data['recomendaciones'],$data['seguimiento'],$data['soporte_referencia'],$id,$tenantId]);Audit::record('Concepto reservado actualizado','Salud',$id,['tipo'=>$current['tipo']],$tenantId,$userId);
     }
     public static function setStatus(int$id,int$tenantId,string$status,string$followup,int$userId):void
     {
@@ -37,11 +38,13 @@ final class Salud
     {
         $row=Database::first("SELECT COUNT(*) total,SUM(CASE WHEN estado='En seguimiento' THEN 1 ELSE 0 END) seguimiento,SUM(CASE WHEN estado='Cerrado' THEN 1 ELSE 0 END) cerrados,SUM(CASE WHEN estado<>'Cerrado' AND proxima_fecha IS NOT NULL AND proxima_fecha<date('now') THEN 1 ELSE 0 END) vencidos FROM salud_registros WHERE tenant_id=?",[$tenantId])?:[];return['total'=>(int)($row['total']??0),'seguimiento'=>(int)($row['seguimiento']??0),'cerrados'=>(int)($row['cerrados']??0),'vencidos'=>(int)($row['vencidos']??0)];
     }
-    public static function aggregate(int$tenantId):array{return Database::query('SELECT tipo,estado,COUNT(*) cantidad FROM salud_registros WHERE tenant_id=? GROUP BY tipo,estado ORDER BY tipo,estado',[$tenantId]);}
+    public static function aggregate(int$tenantId):array{return Database::query('SELECT tipo,subtipo,estado,COUNT(*) cantidad FROM salud_registros WHERE tenant_id=? GROUP BY tipo,subtipo,estado ORDER BY tipo,subtipo,estado',[$tenantId]);}
     private static function validate(int$tenantId,array$input):array
     {
         $type=(string)($input['tipo']??'');if(!in_array($type,self::types(),true))throw new DomainException('Tipo de registro de salud no válido.');$employeeId=(int)($input['empleado_id']??0);if(!Empleado::findForTenant($employeeId,$tenantId))throw new DomainException('Seleccione una persona del directorio de esta empresa.');
-        $data=['empleado_id'=>$employeeId,'tipo'=>$type,'fecha'=>self::date($input['fecha']??'','fecha',true),'proxima_fecha'=>self::date($input['proxima_fecha']??null,'próxima fecha'),'entidad'=>trim((string)($input['entidad']??'')),'profesional'=>trim((string)($input['profesional']??'')),'concepto'=>trim((string)($input['concepto']??'')),'restricciones'=>trim((string)($input['restricciones']??'')),'recomendaciones'=>trim((string)($input['recomendaciones']??'')),'seguimiento'=>trim((string)($input['seguimiento']??'')),'soporte_referencia'=>trim((string)($input['soporte_referencia']??''))];
+        $data=['empleado_id'=>$employeeId,'tipo'=>$type,'subtipo'=>trim((string)($input['subtipo']??'')),'fecha'=>self::date($input['fecha']??'','fecha',true),'proxima_fecha'=>self::date($input['proxima_fecha']??null,'próxima fecha'),'entidad'=>trim((string)($input['entidad']??'')),'profesional'=>trim((string)($input['profesional']??'')),'concepto'=>trim((string)($input['concepto']??'')),'restricciones'=>trim((string)($input['restricciones']??'')),'recomendaciones'=>trim((string)($input['recomendaciones']??'')),'seguimiento'=>trim((string)($input['seguimiento']??'')),'soporte_referencia'=>trim((string)($input['soporte_referencia']??''))];
+        if($type==='Evaluacion ocupacional'&&!in_array($data['subtipo'],self::evaluationTypes(),true))throw new DomainException('Seleccione el tipo de evaluación ocupacional.');
+        if($type!=='Evaluacion ocupacional')$data['subtipo']='';
         if(in_array($type,['Evaluacion ocupacional','Concepto medico-laboral','Remision'],true)&&($data['entidad']===''||$data['profesional']===''))throw new DomainException('Entidad y profesional son obligatorios para este concepto.');
         if($data['concepto']===''&&$data['restricciones']===''&&$data['recomendaciones']===''&&$data['seguimiento']==='')throw new DomainException('Registre un concepto, restricción, recomendación o seguimiento.');
         foreach(['concepto','restricciones','recomendaciones']as$field)if(text_length($data[$field])>4000)throw new DomainException('El campo '.$field.' supera el espacio permitido; no pegue historias clínicas completas.');if(text_length($data['seguimiento'])>6000)throw new DomainException('El seguimiento supera 6.000 caracteres.');return$data;

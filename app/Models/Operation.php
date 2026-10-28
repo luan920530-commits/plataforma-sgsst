@@ -62,6 +62,11 @@ final class Operation
             if (!Permission::has($userId,$tenantId,Permission::MATRIX_VERIFY)) throw new DomainException('Su usuario no tiene permiso de verificación humana.');
             if ((int)$record['evidencias_revisadas']<1) throw new DomainException('La verificación exige al menos una evidencia revisada por una persona.');
             if (trim($note)==='') throw new DomainException('La verificación requiere una nota de comprobación.');
+            if (in_array($record['modulo'],['inspecciones','auditoria'],true)) {
+                $details=$record['datos'];
+                if (!in_array($details['estado_hallazgos']??'', ['Cerrados con soporte','Sin hallazgos'],true)) throw new DomainException('La verificación de cierre requiere hallazgos cerrados con soporte o la opción Sin hallazgos.');
+                if (trim((string)($details['seguimiento_cierre']??''))==='' || trim((string)($details['fecha_verificacion_cierre']??''))==='') throw new DomainException('Registre el resultado y la fecha de verificación del cierre antes de verificar.');
+            }
             if ($record['estado']!=='Verificado') Database::connection()->prepare('UPDATE operacion_registros SET verificado_por=?,verificado_at=CURRENT_TIMESTAMP,nota_verificacion=? WHERE id=? AND tenant_id=?')->execute([$userId,text_substr(trim($note),0,4000),$id,$tenantId]);
         }
         Database::connection()->prepare('UPDATE operacion_registros SET estado=?,updated_at=CURRENT_TIMESTAMP WHERE id=? AND tenant_id=?')->execute([$status,$id,$tenantId]);

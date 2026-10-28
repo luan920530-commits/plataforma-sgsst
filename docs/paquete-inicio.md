@@ -89,7 +89,7 @@ Los conteos sin anexos son **39 / 59 / 111** para 7 / 21 / 60. Cada anexo agrega
 
 ### Extintores SCM
 
-El perfil real 4759 / 7 genera **40 borradores**: base de 39 más GUI-VIO-01. Conserva los documentos de limpieza y los 28 seguimientos IVC pendientes. No recibe maquinaria por la palabra “atrapamiento” en efectos de caída de objetos, ni químicos, alturas o confinados sin una tarea que los justifique. Las actividades técnicas, CIIU, soportes, responsables y datos de pruebas hidrostáticas continúan sujetos a validación documental; no se completaron por inferencia.
+El perfil real 4759 / 7 genera **41 borradores**: base de 39 más GUI-VIO-01 y la política de datos POL-DP. Conserva los documentos de limpieza y los 28 seguimientos IVC pendientes. No recibe maquinaria por la palabra “atrapamiento” en efectos de caída de objetos, ni químicos, alturas o confinados sin una tarea que los justifique. Las actividades técnicas, CIIU, soportes, responsables y datos de pruebas hidrostáticas continúan sujetos a validación documental; no se completaron por inferencia.
 
 ## 5. Reglas para no fabricar evidencias
 
@@ -142,11 +142,11 @@ Las referencias y URL oficiales están en los dos manifiestos del paquete de ini
 
 ## 9. Verificación técnica
 
-- **70/70 pruebas exitosas**, incluida la suite histórica y las comprobaciones de actualización normativa.
+- **79/79 pruebas exitosas**, incluida la suite histórica y las comprobaciones de actualización normativa y ampliación operativa.
 - **63/63 perfiles generados** y **4.680 documentos** verificados: códigos únicos, estándares exactos, anexos presentes/ausentes, estado Borrador y ausencia de verificaciones premarcadas.
 - Complementación probada: restaura faltantes, actualiza sólo el borrador automático permitido, protege contenido editado/aprobado y no repite otras tablas.
 - DOCX y ZIP abiertos como contenedores y XML válidos en una comprobación independiente; tabla anidada y `colspan` verificados.
-- Extintores SCM: **40 documentos, 0 aprobados**, con pendientes reales intactos.
-- Sintaxis de 242 archivos PHP, migración v4→v5 con 51 tablas y smoke HTTP de 16 vistas autenticadas sin errores 500.
+- Extintores SCM: **41 documentos, 0 aprobados**, incluido POL-DP, con pendientes reales intactos.
+- Sintaxis de 259 archivos PHP, migración v4→v6 con 58 tablas y smoke HTTP con CSRF, eventos, presentismo, simulacros, matriz formativa y portal sin respuestas 500.
 
 Estas pruebas verifican software y cobertura documental. No certifican que una empresa haya implementado su SG-SST.

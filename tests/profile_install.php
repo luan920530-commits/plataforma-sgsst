@@ -53,7 +53,7 @@ try {
     }
     $assert(count(SanitarioRegistro::forTenant((int) $tenant['id'])) === 7, 'Las validaciones iniciales no coinciden.');
     $documentStats = Database::first("SELECT COUNT(*) AS total, SUM(CASE WHEN estado = 'Borrador' THEN 1 ELSE 0 END) AS borradores FROM documentos_sgsst WHERE tenant_id = ?", [(int) $tenant['id']]);
-    $assert((int) $documentStats['total'] === 40 && (int) $documentStats['borradores'] === 40, 'La instalación debe crear 40 borradores, sin aprobaciones automáticas.');
+    $assert((int) $documentStats['total'] === 41 && (int) $documentStats['borradores'] === 41, 'La instalación debe crear 41 borradores, incluida POL-DP, sin aprobaciones automáticas.');
     $cleaningDocuments = Database::first("SELECT COUNT(*) AS n FROM documentos_sgsst WHERE tenant_id = ? AND codigo_estandar IN ('PR-LD-01', 'FT-LD-01', 'FT-LD-02')", [(int) $tenant['id']]);
     $assert((int) $cleaningDocuments['n'] === 3, 'Faltan el programa o los formatos de limpieza y desinfección.');
     $starterDocuments = Database::first("SELECT COUNT(*) AS n FROM documentos_sgsst WHERE tenant_id = ? AND codigo_estandar IN ('GUI-INI-01', 'MAN-SST-01', 'FT-COB-01', 'PR-CCL-01', 'PR-EME-01', 'PR-EPP-01', 'GUI-VIO-01')", [(int) $tenant['id']]);
@@ -69,7 +69,7 @@ try {
     $assert(!$second['created'], 'La segunda instalación debería estar bloqueada.');
     $assert((int) Database::first('SELECT COUNT(*) AS n FROM tenants')['n'] === $before, 'La segunda instalación duplicó la empresa.');
     $assert(Database::query('PRAGMA foreign_key_check') === [], 'Hay violaciones de llaves foráneas.');
-    echo "Instalación Extintores SCM verificada: SuperAdmin, empresa, acta, 28 pendientes, 7 validaciones, 40 borradores (incluidos paquete de inicio y PR/FT-LD), acceso temporal e idempotencia.\n";
+    echo "Instalación Extintores SCM verificada: SuperAdmin, empresa, acta, 28 pendientes, 7 validaciones, 41 borradores (incluidos POL-DP, paquete de inicio y PR/FT-LD), acceso temporal e idempotencia.\n";
 } catch (Throwable $exception) {
     file_put_contents('php://stderr', $exception->getMessage() . "\n" . $exception->getTraceAsString() . "\n");
     $clean();

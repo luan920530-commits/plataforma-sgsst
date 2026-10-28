@@ -84,6 +84,9 @@ final class IndicadorController extends BaseController
             'fuente_denominador' => (string) $this->input('fuente_denominador'),
             'responsable' => (string) $this->input('responsable'),
             'observaciones' => (string) $this->input('observaciones'),
+            'referencia_valor' => $this->input('referencia_valor'),
+            'referencia_fuente' => (string) $this->input('referencia_fuente'),
+            'referencia_periodo' => (string) $this->input('referencia_periodo'),
         ];
         $validator = new Validator($data);
         $validator->required('tipo', 'tipo')->in('tipo', 'tipo', array_keys($this->definitions()))
@@ -94,10 +97,17 @@ final class IndicadorController extends BaseController
             ->numeric('meta', 'meta')->required('fecha_corte', 'fecha de corte')->date('fecha_corte', 'fecha de corte')
             ->required('fuente_numerador', 'fuente del numerador')->max('fuente_numerador', 'fuente del numerador', 2000)
             ->required('fuente_denominador', 'fuente del denominador')->max('fuente_denominador', 'fuente del denominador', 2000)
-            ->required('responsable', 'responsable')->max('responsable', 'responsable', 250)->max('observaciones', 'observaciones', 3000);
+            ->required('responsable', 'responsable')->max('responsable', 'responsable', 250)->max('observaciones', 'observaciones', 3000)
+            ->numeric('referencia_valor', 'valor de referencia')->max('referencia_fuente', 'fuente de referencia', 2000)->max('referencia_periodo', 'periodo de referencia', 60);
         $errors = $validator->errors();
         if (is_numeric($data['denominador']) && (float) $data['denominador'] <= 0) {
             $errors['denominador'] = 'El denominador debe ser mayor que cero para obtener un resultado interpretable.';
+        }
+        if ($data['tipo'] === 'Presentismo' && is_numeric($data['numerador']) && is_numeric($data['denominador']) && ((float) $data['numerador'] < 0 || (float) $data['numerador'] > (float) $data['denominador'])) {
+            $errors['numerador'] = 'En presentismo, los días de ausencia deben estar entre cero y los días programados.';
+        }
+        if (is_numeric($data['referencia_valor']) && (trim($data['referencia_fuente']) === '' || trim($data['referencia_periodo']) === '')) {
+            $errors['referencia_fuente'] = 'Una referencia comparativa exige fuente y periodo; no uses promedios sin trazabilidad.';
         }
         $customFactor = $this->input('factor', 1);
         $customUnit = (string) $this->input('unidad');
@@ -115,7 +125,9 @@ final class IndicadorController extends BaseController
             $definition = Indicator::definition($data['tipo']);
             $data['factor'] = $data['tipo'] === 'Personalizado' ? (float) $customFactor : $definition['factor'];
             $data['unidad'] = $data['tipo'] === 'Personalizado' ? $customUnit : $definition['unidad'];
-            $data['resultado'] = Indicator::calculate((float) $data['numerador'], (float) $data['denominador'], (float) $data['factor']);
+            $data['resultado'] = $data['tipo'] === 'Presentismo'
+                ? Indicator::calculatePresentism((float) $data['numerador'], (float) $data['denominador'])
+                : Indicator::calculate((float) $data['numerador'], (float) $data['denominador'], (float) $data['factor']);
         }
         return [$data, $errors];
     }
@@ -132,7 +144,7 @@ final class IndicadorController extends BaseController
     private function definitions(): array
     {
         $definitions = [];
-        foreach (['Frecuencia', 'Severidad', 'Mortalidad', 'Prevalencia', 'Incidencia', 'Ausentismo', 'Personalizado'] as $type) {
+        foreach (['Frecuencia', 'Severidad', 'Mortalidad', 'Prevalencia', 'Incidencia', 'Ausentismo', 'Presentismo', 'Personalizado'] as $type) {
             $definitions[$type] = Indicator::definition($type);
         }
         return $definitions;

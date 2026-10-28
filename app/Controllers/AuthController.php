@@ -14,6 +14,7 @@ final class AuthController extends BaseController
         if (Auth::check()) {
             redirect('/dashboard');
         }
+        Auth::cancelTwoFactor();
         $this->view('auth/login', ['title' => 'Iniciar sesión'], 'layouts/auth');
     }
 
@@ -44,6 +45,10 @@ final class AuthController extends BaseController
             fail_validation(['email' => $message], ['email' => $email], '/login');
         }
 
+        if (Auth::pendingTwoFactor()) {
+            redirect('/login/2fa');
+        }
+
         Audit::record('Inicio de sesión', 'Auth', Auth::id());
         if (!empty(Auth::user()['must_change_password'])) {
             flash('warning', 'Cambia la contraseña temporal antes de ingresar a los módulos.');
@@ -54,6 +59,32 @@ final class AuthController extends BaseController
         if (is_string($intended) && str_starts_with($intended, '/') && !str_starts_with($intended, '//') && $intended !== '/login') {
             redirect($intended);
         }
+        redirect('/dashboard');
+    }
+
+    public function showTwoFactor(): void
+    {
+        if (Auth::check()) redirect('/dashboard');
+        if (!Auth::pendingTwoFactor()) { flash('warning', 'Inicia con tu correo y contraseña para solicitar un nuevo código.'); redirect('/login'); }
+        $this->view('auth/two-factor', ['title' => 'Verificación en dos pasos'], 'layouts/auth');
+    }
+
+    public function verifyTwoFactor(): void
+    {
+        if (Auth::check()) redirect('/dashboard');
+        if (!Auth::pendingTwoFactor()) { flash('warning', 'El reto de verificación venció. Inicia sesión nuevamente.'); redirect('/login'); }
+        $code = trim((string) $this->input('code'));
+        if ($code === '') fail_validation(['code' => 'Ingresa el código de tu aplicación o un código de recuperación.'], [], '/login/2fa');
+        try { $valid = Auth::completeTwoFactor($code); }
+        catch (\RuntimeException $e) { fail_validation(['code' => $e->getMessage()], [], '/login/2fa'); }
+        if (!$valid) {
+            if (!Auth::pendingTwoFactor()) { flash('error', 'Se superó el número de intentos. Espera cinco minutos e inicia sesión nuevamente.'); redirect('/login'); }
+            fail_validation(['code' => 'El código no es válido o ya fue utilizado.'], [], '/login/2fa');
+        }
+        Audit::record('Inicio de sesión con segundo factor', 'Auth', Auth::id());
+        if (!empty(Auth::user()['must_change_password'])) redirect('/cuenta/seguridad');
+        $intended = $_SESSION['_intended'] ?? null;unset($_SESSION['_intended']);
+        if (is_string($intended) && str_starts_with($intended, '/') && !str_starts_with($intended, '//') && $intended !== '/login') redirect($intended);
         redirect('/dashboard');
     }
 

@@ -102,11 +102,12 @@ if ($role === 'SuperAdmin') {
         if (App\Support\AccessControl::can('convivencia.reservada')) $reservedItems[] = ['Convivencia y CCL', '/convivencia', 'lock'];
         if ($reservedItems !== []) $navigation[] = ['label' => 'EXPEDIENTES RESERVADOS', 'items' => $reservedItems];
     }
-    if ($role === 'AdminEmpresa') {
-        $navigation[] = ['label' => 'ADMINISTRACIÓN', 'items' => [
-            ['Configuración de empresa', '/empresa/configuracion', 'settings'],
-        ]];
+    $adminItems = [];
+    if ($planModule === App\Services\ModuleAccess::SGST && App\Support\AccessControl::can(App\Models\Permission::INTEGRATIONS)) {
+        $adminItems[] = ['Integraciones externas', '/integraciones', 'settings'];
     }
+    if ($role === 'AdminEmpresa') $adminItems[] = ['Configuración de empresa', '/empresa/configuracion', 'settings'];
+    if ($adminItems !== []) $navigation[] = ['label' => 'ADMINISTRACIÓN', 'items' => $adminItems];
 }
 ?>
 <aside id="app-sidebar" class="fixed inset-y-0 left-0 z-40 flex w-[280px] -translate-x-full flex-col bg-white/95 px-4 py-5 shadow-2xl ring-1 ring-black/5 backdrop-blur-2xl transition-transform duration-300 lg:inset-y-3 lg:left-3 lg:w-[252px] lg:translate-x-0 lg:rounded-[24px] lg:shadow-ios" aria-label="Navegación principal">

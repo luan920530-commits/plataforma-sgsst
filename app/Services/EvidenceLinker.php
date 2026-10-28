@@ -16,11 +16,13 @@ use App\Models\Indicador;
 use App\Models\IvcRequerimiento;
 use App\Models\Operation;
 use App\Models\Peligro;
+use App\Models\PeriodoEstadistico;
 use App\Models\PlanEmergencia;
 use App\Models\PlanoEmergencia;
 use App\Models\ProgramaPrevencion;
 use App\Models\SanitarioRegistro;
 use App\Models\SimulacroEmergencia;
+use App\Support\AccessControl;
 use DomainException;
 
 /** Resuelve vínculos reales y evita asociar archivos a registros de otro tenant o módulo. */
@@ -62,6 +64,10 @@ final class EvidenceLinker
             self::addGroup($groups, 'Evaluaciones IPEVR', array_map(static fn(array $row): array => [
                 'value' => 'peligro:' . $row['id'], 'label' => 'IPEVR #' . $row['id'] . ' · ' . $row['peligro'] . ' · ' . $row['cargo'],
             ], Peligro::forTenant($tenantId)));
+            $riskActions = Database::query('SELECT a.id, a.descripcion, p.id peligro_id FROM peligro_acciones a JOIN peligros_ipevr p ON p.id=a.peligro_id WHERE a.tenant_id = ? ORDER BY a.id DESC', [$tenantId]);
+            self::addGroup($groups, 'Acciones de control IPEVR', array_map(static fn(array $row): array => [
+                'value' => 'peligro_accion:' . $row['id'], 'label' => 'IPEVR #' . $row['peligro_id'] . ' · Acción #' . $row['id'] . ' · ' . excerpt($row['descripcion'], 70),
+            ], $riskActions));
             self::addGroup($groups, 'Requerimientos y brechas IVC', array_map(static fn(array $row): array => [
                 'value' => 'ivc_requerimiento:' . $row['id'],
                 'label' => $row['codigo'] . ' · Acta ' . $row['numero_acta'] . ' · ' . excerpt($row['hallazgo'], 70),
@@ -74,6 +80,15 @@ final class EvidenceLinker
             self::addGroup($groups, 'Registros operativos', array_map(static fn(array $row): array => [
                 'value' => 'operacion:' . $row['id'], 'label' => $row['modulo'] . ' · ' . $row['tipo'] . ' · ' . $row['titulo'],
             ], $operations));
+            if (AccessControl::can(\App\Models\Permission::INTEGRATIONS)) {
+                $integrationRuns = Database::query('SELECT e.id, e.operacion, e.estado_tecnico, i.nombre FROM integracion_ejecuciones e JOIN integraciones i ON i.id=e.integracion_id WHERE e.tenant_id = ? ORDER BY e.id DESC', [$tenantId]);
+                self::addGroup($groups, 'Ejecuciones de integraciones', array_map(static fn(array $row): array => [
+                    'value' => 'integracion_ejecucion:' . $row['id'], 'label' => $row['nombre'] . ' · ' . $row['estado_tecnico'] . ' · ' . excerpt($row['operacion'], 60),
+                ], $integrationRuns));
+            }
+            self::addGroup($groups, 'Periodos de indicadores de eventos', array_map(static fn(array $row): array => [
+                'value' => 'periodo_estadistico:' . $row['id'], 'label' => 'Periodo ' . $row['periodo'] . ' · ' . $row['dias_programados'] . ' días programados',
+            ], PeriodoEstadistico::forTenant($tenantId)));
             $events = Evento::forTenant($tenantId, [], AccessControl::can(\App\Models\Permission::HEALTH));
             self::addGroup($groups, 'Incidentes, AT y EL', array_map(static fn(array $row): array => [
                 'value' => 'evento:' . $row['id'], 'label' => $row['codigo'] . ' · ' . $row['tipo'] . ' · ' . $row['fecha_evento'],
@@ -90,6 +105,10 @@ final class EvidenceLinker
             self::addGroup($groups, 'Reuniones COPASST / Vigía', array_map(static fn(array $row): array => [
                 'value' => 'comite_reunion:' . $row['id'], 'label' => $row['comite_tipo'] . ' · ' . $row['tipo'] . ' · ' . $row['fecha'],
             ], $committeeMeetings));
+            $committeeCommitments = Database::query('SELECT a.id, a.descripcion, a.comite_id FROM comite_compromisos a WHERE a.tenant_id = ? ORDER BY a.id DESC', [$tenantId]);
+            self::addGroup($groups, 'Compromisos COPASST / Vigía', array_map(static fn(array $row): array => [
+                'value' => 'comite_compromiso:' . $row['id'], 'label' => 'Comité #' . $row['comite_id'] . ' · Compromiso #' . $row['id'] . ' · ' . excerpt($row['descripcion'], 70),
+            ], $committeeCommitments));
         }
 
         if (in_array($current, [ModuleAccess::SGST, ModuleAccess::PESV], true)) {
@@ -166,6 +185,27 @@ final class EvidenceLinker
                 if ($row === null) break;
                 self::authorize(ModuleAccess::SGST, $current);
                 return self::linked($type, $id, $row['tipo'] . ' · Reunión ' . $row['fecha'], ModuleAccess::SGST);
+            case 'integracion_ejecucion':
+                if (!AccessControl::can(\App\Models\Permission::INTEGRATIONS)) throw new DomainException('Esta ejecución requiere el permiso específico de integraciones.');
+                $row = Database::first('SELECT e.id, e.operacion, i.nombre FROM integracion_ejecuciones e JOIN integraciones i ON i.id=e.integracion_id WHERE e.id = ? AND e.tenant_id = ?', [$id, $tenantId]);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, $row['nombre'] . ' · Ejecución #' . $id, ModuleAccess::SGST);
+            case 'comite_compromiso':
+                $row = Database::first('SELECT id, descripcion, comite_id FROM comite_compromisos WHERE id = ? AND tenant_id = ?', [$id, $tenantId]);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, 'Comité #' . $row['comite_id'] . ' · Compromiso #' . $id, ModuleAccess::SGST);
+            case 'periodo_estadistico':
+                $row = PeriodoEstadistico::findForTenant($id, $tenantId);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, 'Periodo de eventos ' . $row['periodo'], ModuleAccess::SGST);
+            case 'peligro_accion':
+                $row = Database::first('SELECT a.id, a.descripcion, a.peligro_id FROM peligro_acciones a WHERE a.id = ? AND a.tenant_id = ?', [$id, $tenantId]);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, 'IPEVR #' . $row['peligro_id'] . ' · Acción #' . $id, ModuleAccess::SGST);
             case 'evento':
                 $row = Evento::findForTenant($id, $tenantId);
                 if ($row === null) break;
@@ -265,8 +305,12 @@ final class EvidenceLinker
             'matriz_requisito' => '/autoevaluacion/requisitos/' . rawurlencode($id) . '/editar',
             'comite' => '/comites/' . rawurlencode($id),
             'comite_reunion' => self::committeeMeetingUrl($evidence),
+            'comite_compromiso' => self::committeeCommitmentUrl($evidence),
+            'periodo_estadistico' => '/eventos/estadisticas#periodo-' . rawurlencode($id),
+            'peligro_accion' => self::riskActionUrl($evidence),
             'evento' => '/eventos/' . rawurlencode($id),
             'evento_accion' => self::eventActionUrl($evidence),
+            'integracion_ejecucion' => AccessControl::can(\App\Models\Permission::INTEGRATIONS) ? '/integraciones#ejecucion-' . rawurlencode($id) : null,
             'operacion' => '/operacion-registros/' . rawurlencode($id) . '/editar',
             'documento' => '/documentos/' . rawurlencode($id),
             'autoreporte' => '/autoreportes/' . rawurlencode($id),
@@ -290,6 +334,18 @@ final class EvidenceLinker
     {
         $row = Database::first('SELECT comite_id FROM comite_reuniones WHERE id = ? AND tenant_id = ?', [(int) $evidence['entidad_id'], (int) $evidence['tenant_id']]);
         return $row === null ? null : '/comites/' . $row['comite_id'] . '#reunion-' . $evidence['entidad_id'];
+    }
+
+    private static function committeeCommitmentUrl(array $evidence): ?string
+    {
+        $row = Database::first('SELECT comite_id FROM comite_compromisos WHERE id = ? AND tenant_id = ?', [(int) $evidence['entidad_id'], (int) $evidence['tenant_id']]);
+        return $row === null ? null : '/comites/' . $row['comite_id'] . '#compromiso-' . $evidence['entidad_id'];
+    }
+
+    private static function riskActionUrl(array $evidence): ?string
+    {
+        $row = Database::first('SELECT peligro_id FROM peligro_acciones WHERE id = ? AND tenant_id = ?', [(int) $evidence['entidad_id'], (int) $evidence['tenant_id']]);
+        return $row === null ? null : '/matriz-ipevr/' . $row['peligro_id'] . '#control-' . $evidence['entidad_id'];
     }
 
     private static function eventActionUrl(array $evidence): ?string

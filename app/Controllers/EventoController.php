@@ -6,6 +6,8 @@ namespace App\Controllers;
 use App\Models\Empleado;
 use App\Models\Evento;
 use App\Models\Permission;
+use App\Models\PeriodoEstadistico;
+use App\Models\Tenant;
 use App\Services\CsvExport;
 use App\Support\AccessControl;
 use App\Support\Auth;
@@ -83,11 +85,39 @@ final class EventoController extends BaseController
         try{Evento::close($id,$this->tenantId(),Auth::id());flash('success','Evento cerrado con investigación y eficacia de acciones verificadas.');}catch(DomainException $e){flash('error',$e->getMessage());}redirect('/eventos/'.$id);
     }
 
+    public function statistics(): void
+    {
+        $this->view('tenant/eventos/estadisticas',['title'=>'IF, IS, ILI y accidentalidad','periods'=>PeriodoEstadistico::forTenant($this->tenantId())]);
+    }
+
+    public function storePeriod(): void
+    {
+        try{$id=PeriodoEstadistico::create($this->tenantId(),$_POST,Auth::id());}catch(DomainException $e){fail_validation(['general'=>$e->getMessage()],$_POST,'/eventos/estadisticas#nuevo-periodo');}
+        flash('success','Periodo registrado con denominadores explícitos. Los resultados aún están pendientes de verificación.');redirect('/eventos/estadisticas#periodo-'.$id);
+    }
+
+    public function verifyPeriod(int $id): void
+    {
+        $this->requirePermission(Permission::MATRIX_VERIFY,'Verificar denominadores requiere permiso de verificación.');
+        try{PeriodoEstadistico::verify($id,$this->tenantId(),Auth::id());flash('success','Denominadores y soporte del periodo verificados.');}catch(DomainException $e){flash('error',$e->getMessage());}redirect('/eventos/estadisticas#periodo-'.$id);
+    }
+
+    public function deletePeriod(int $id): void
+    {
+        try{PeriodoEstadistico::delete($id,$this->tenantId(),Auth::id());flash('success','Periodo borrador eliminado.');}catch(DomainException $e){flash('error',$e->getMessage());}redirect('/eventos/estadisticas');
+    }
+
+    public function print(int $id): void
+    {
+        $event=$this->event($id);$this->healthGuard($event);
+        $this->view('tenant/eventos/print',['title'=>'Formato de investigación '.$event['codigo'],'event'=>$event,'people'=>Evento::people($id,$this->tenantId()),'investigation'=>Evento::investigation($id,$this->tenantId()),'actions'=>Evento::actions($id,$this->tenantId()),'tenant'=>Tenant::find($this->tenantId()),'backUrl'=>'/eventos/'.$id],'print');
+    }
+
     public function export(): void
     {
         $this->requirePermission(Permission::HEALTH,'La exportación puede contener enfermedades laborales y requiere acceso reservado.');
         $rows=Evento::forTenant($this->tenantId(),['anio'=>(string)$this->query('anio')],true);
-        CsvExport::download('eventos-sst-'.date('Y-m-d').'.csv',['Código','Tipo','Fecha evento','Fecha reporte','Lugar','Proceso','Descripción','Lesión/condición','Gravedad','Días perdidos','Días cargados','ARL','EPS','MinTrabajo','Radicados','Responsable','Estado'],array_map(static fn(array $e)=>[$e['codigo'],$e['tipo'],$e['fecha_evento'],$e['fecha_reporte'],$e['lugar'],$e['proceso'],$e['descripcion'],$e['lesion'],$e['gravedad'],$e['dias_perdidos'],$e['dias_cargados'],$e['reportado_arl_at'],$e['reportado_eps_at'],$e['reportado_mintrabajo_at'],$e['radicados'],$e['responsable'],$e['estado']],$rows));
+        CsvExport::download('eventos-sst-'.date('Y-m-d').'.csv',['Código','Tipo','Fecha evento','Hora evento','Fecha reporte','Lugar','Proceso','Descripción','Lesión/condición','Parte del cuerpo','Agente causante','Gravedad','Días perdidos','Días cargados','ARL','EPS','MinTrabajo','Radicados','Responsable','Estado'],array_map(static fn(array $e)=>[$e['codigo'],$e['tipo'],$e['fecha_evento'],$e['hora_evento'],$e['fecha_reporte'],$e['lugar'],$e['proceso'],$e['descripcion'],$e['lesion'],$e['parte_cuerpo'],$e['agente_causante'],$e['gravedad'],$e['dias_perdidos'],$e['dias_cargados'],$e['reportado_arl_at'],$e['reportado_eps_at'],$e['reportado_mintrabajo_at'],$e['radicados'],$e['responsable'],$e['estado']],$rows));
     }
 
     private function event(int $id):array{return Evento::findForTenant($id,$this->tenantId())?:$this->notFound();}

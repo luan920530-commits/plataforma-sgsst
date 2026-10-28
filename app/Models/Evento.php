@@ -35,7 +35,7 @@ final class Evento
         return Database::transaction(static function()use($tenantId,$data,$input,$userId):int{
             $prefix=['Incidente'=>'INC','Accidente de trabajo'=>'AT','Enfermedad laboral'=>'EL'][$data['tipo']];
             $code=$prefix.'-'.date('Y',strtotime($data['fecha_evento'])).'-'.strtoupper(bin2hex(random_bytes(4)));
-            Database::execute('INSERT INTO eventos_sst (tenant_id,codigo,tipo,fecha_evento,fecha_reporte,lugar,proceso,descripcion,lesion,gravedad,dias_perdidos,dias_cargados,reportado_arl_at,reportado_eps_at,reportado_mintrabajo_at,radicados,fecha_limite_investigacion,responsable,created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[$tenantId,$code,$data['tipo'],$data['fecha_evento'],$data['fecha_reporte'],$data['lugar'],$data['proceso'],$data['descripcion'],$data['lesion'],$data['gravedad'],$data['dias_perdidos'],$data['dias_cargados'],$data['reportado_arl_at'],$data['reportado_eps_at'],$data['reportado_mintrabajo_at'],$data['radicados'],$data['fecha_limite_investigacion'],$data['responsable'],$userId]);
+            Database::execute('INSERT INTO eventos_sst (tenant_id,codigo,tipo,fecha_evento,hora_evento,fecha_reporte,lugar,proceso,descripcion,lesion,parte_cuerpo,agente_causante,gravedad,dias_perdidos,dias_cargados,reportado_arl_at,reportado_eps_at,reportado_mintrabajo_at,radicados,fecha_limite_investigacion,responsable,created_by) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[$tenantId,$code,$data['tipo'],$data['fecha_evento'],$data['hora_evento'],$data['fecha_reporte'],$data['lugar'],$data['proceso'],$data['descripcion'],$data['lesion'],$data['parte_cuerpo'],$data['agente_causante'],$data['gravedad'],$data['dias_perdidos'],$data['dias_cargados'],$data['reportado_arl_at'],$data['reportado_eps_at'],$data['reportado_mintrabajo_at'],$data['radicados'],$data['fecha_limite_investigacion'],$data['responsable'],$userId]);
             $id=Database::lastId();
             if ($data['tipo']!=='Incidente') self::addPerson($id,$tenantId,['empleado_id'=>$input['afectado_empleado_id']??0,'nombre'=>$input['afectado_nombre']??'','documento'=>$input['afectado_documento']??'','vinculacion'=>$input['afectado_vinculacion']??'','rol'=>'Persona afectada','declaracion'=>''],$userId,false);
             Audit::record('Evento SST reportado','Evento',$id,['tipo'=>$data['tipo'],'codigo'=>$code],$tenantId,$userId); return $id;
@@ -47,7 +47,7 @@ final class Evento
         $current=self::findForTenant($id,$tenantId) ?: throw new DomainException('Evento no encontrado.');
         if ($current['estado']==='Cerrado') throw new DomainException('El evento cerrado es inmutable; registre un seguimiento independiente.');
         $input['tipo']=$current['tipo']; $data=self::validateEvent($input,false);
-        Database::execute('UPDATE eventos_sst SET fecha_evento=?,fecha_reporte=?,lugar=?,proceso=?,descripcion=?,lesion=?,gravedad=?,dias_perdidos=?,dias_cargados=?,reportado_arl_at=?,reportado_eps_at=?,reportado_mintrabajo_at=?,radicados=?,fecha_limite_investigacion=?,responsable=?,updated_at=CURRENT_TIMESTAMP WHERE id=? AND tenant_id=?',[$data['fecha_evento'],$data['fecha_reporte'],$data['lugar'],$data['proceso'],$data['descripcion'],$data['lesion'],$data['gravedad'],$data['dias_perdidos'],$data['dias_cargados'],$data['reportado_arl_at'],$data['reportado_eps_at'],$data['reportado_mintrabajo_at'],$data['radicados'],$data['fecha_limite_investigacion'],$data['responsable'],$id,$tenantId]);
+        Database::execute('UPDATE eventos_sst SET fecha_evento=?,hora_evento=?,fecha_reporte=?,lugar=?,proceso=?,descripcion=?,lesion=?,parte_cuerpo=?,agente_causante=?,gravedad=?,dias_perdidos=?,dias_cargados=?,reportado_arl_at=?,reportado_eps_at=?,reportado_mintrabajo_at=?,radicados=?,fecha_limite_investigacion=?,responsable=?,updated_at=CURRENT_TIMESTAMP WHERE id=? AND tenant_id=?',[$data['fecha_evento'],$data['hora_evento'],$data['fecha_reporte'],$data['lugar'],$data['proceso'],$data['descripcion'],$data['lesion'],$data['parte_cuerpo'],$data['agente_causante'],$data['gravedad'],$data['dias_perdidos'],$data['dias_cargados'],$data['reportado_arl_at'],$data['reportado_eps_at'],$data['reportado_mintrabajo_at'],$data['radicados'],$data['fecha_limite_investigacion'],$data['responsable'],$id,$tenantId]);
         Audit::record('Evento SST actualizado','Evento',$id,['tipo'=>$current['tipo']],$tenantId,$userId);
     }
 
@@ -81,7 +81,11 @@ final class Evento
 
     public static function investigation(int $eventId,int $tenantId): ?array
     {
-        return Database::first('SELECT i.*,u.nombre elaborado_por_nombre FROM evento_investigaciones i LEFT JOIN users u ON u.id=i.elaborado_por WHERE i.evento_id=? AND i.tenant_id=?',[$eventId,$tenantId]);
+        $row=Database::first('SELECT i.*,u.nombre elaborado_por_nombre FROM evento_investigaciones i LEFT JOIN users u ON u.id=i.elaborado_por WHERE i.evento_id=? AND i.tenant_id=?',[$eventId,$tenantId]);
+        if(!$row)return null;
+        $five=json_decode((string)$row['cinco_porques_json'],true);$tree=json_decode((string)$row['arbol_causas_json'],true);
+        $row['cinco_porques']=is_array($five)?$five:[];$row['arbol_causas']=is_array($tree)?$tree:[];
+        return $row;
     }
 
     public static function saveInvestigation(int $eventId,int $tenantId,array $input,int $userId): void
@@ -92,9 +96,12 @@ final class Evento
         if ($team==='') throw new DomainException('Registre el equipo investigador.');
         $method=trim((string)($input['metodologia']??'Resolucion 1401 de 2007'));
         $fields=[]; foreach(['causas_inmediatas','causas_basicas','causas_administrativas','analisis','conclusiones'] as $key)$fields[$key]=trim((string)($input[$key]??''));
+        $five=[];for($i=1;$i<=5;$i++)$five[]=trim((string)($input['porque_'.$i]??''));
+        $tree=self::causeTree((string)($input['arbol_causas_texto']??''));
+        $fiveJson=json_encode($five,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);$treeJson=json_encode($tree,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
         $existing=self::investigation($eventId,$tenantId);
-        if($existing){Database::execute('UPDATE evento_investigaciones SET metodologia=?,equipo=?,fecha_inicio=?,causas_inmediatas=?,causas_basicas=?,causas_administrativas=?,analisis=?,conclusiones=?,elaborado_por=?,updated_at=CURRENT_TIMESTAMP WHERE evento_id=? AND tenant_id=?',array_merge([$method,$team,$start],array_values($fields),[$userId,$eventId,$tenantId]));}
-        else{Database::execute('INSERT INTO evento_investigaciones (tenant_id,evento_id,metodologia,equipo,fecha_inicio,causas_inmediatas,causas_basicas,causas_administrativas,analisis,conclusiones,elaborado_por) VALUES (?,?,?,?,?,?,?,?,?,?,?)',array_merge([$tenantId,$eventId,$method,$team,$start],array_values($fields),[$userId]));}
+        if($existing){Database::execute('UPDATE evento_investigaciones SET metodologia=?,equipo=?,fecha_inicio=?,causas_inmediatas=?,causas_basicas=?,causas_administrativas=?,analisis=?,conclusiones=?,cinco_porques_json=?,arbol_causas_json=?,elaborado_por=?,updated_at=CURRENT_TIMESTAMP WHERE evento_id=? AND tenant_id=?',array_merge([$method,$team,$start],array_values($fields),[$fiveJson,$treeJson,$userId,$eventId,$tenantId]));}
+        else{Database::execute('INSERT INTO evento_investigaciones (tenant_id,evento_id,metodologia,equipo,fecha_inicio,causas_inmediatas,causas_basicas,causas_administrativas,analisis,conclusiones,cinco_porques_json,arbol_causas_json,elaborado_por) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',array_merge([$tenantId,$eventId,$method,$team,$start],array_values($fields),[$fiveJson,$treeJson,$userId]));}
         if($event['estado']==='Reportado')Database::execute("UPDATE eventos_sst SET estado='En investigacion',updated_at=CURRENT_TIMESTAMP WHERE id=? AND tenant_id=?",[$eventId,$tenantId]);
         Audit::record('Borrador de investigación guardado','Evento',$eventId,['metodologia'=>$method],$tenantId,$userId);
     }
@@ -164,16 +171,24 @@ final class Evento
     private static function validateEvent(array $input,bool $creating): array
     {
         $type=(string)($input['tipo']??'');if(!in_array($type,self::types(),true))throw new DomainException('Tipo de evento no válido.');
-        $data=['tipo'=>$type,'fecha_evento'=>self::date($input['fecha_evento']??'','fecha del evento',true),'fecha_reporte'=>self::date($input['fecha_reporte']??'','fecha del reporte',true),'lugar'=>trim((string)($input['lugar']??'')),'proceso'=>trim((string)($input['proceso']??'')),'descripcion'=>trim((string)($input['descripcion']??'')),'lesion'=>trim((string)($input['lesion']??'')),'gravedad'=>(string)($input['gravedad']??'Sin lesion'),'dias_perdidos'=>self::nonnegative($input['dias_perdidos']??0,'días perdidos'),'dias_cargados'=>self::nonnegative($input['dias_cargados']??0,'días cargados'),'reportado_arl_at'=>self::date($input['reportado_arl_at']??null,'reporte ARL'),'reportado_eps_at'=>self::date($input['reportado_eps_at']??null,'reporte EPS'),'reportado_mintrabajo_at'=>self::date($input['reportado_mintrabajo_at']??null,'reporte MinTrabajo'),'radicados'=>trim((string)($input['radicados']??'')),'fecha_limite_investigacion'=>self::date($input['fecha_limite_investigacion']??null,'límite de investigación'),'responsable'=>trim((string)($input['responsable']??''))];
+        $data=['tipo'=>$type,'fecha_evento'=>self::date($input['fecha_evento']??'','fecha del evento',true),'hora_evento'=>self::time($input['hora_evento']??'','hora del evento',true),'fecha_reporte'=>self::date($input['fecha_reporte']??'','fecha del reporte',true),'lugar'=>trim((string)($input['lugar']??'')),'proceso'=>trim((string)($input['proceso']??'')),'descripcion'=>trim((string)($input['descripcion']??'')),'lesion'=>trim((string)($input['lesion']??'')),'parte_cuerpo'=>trim((string)($input['parte_cuerpo']??'')),'agente_causante'=>trim((string)($input['agente_causante']??'')),'gravedad'=>(string)($input['gravedad']??'Sin lesion'),'dias_perdidos'=>self::nonnegative($input['dias_perdidos']??0,'días perdidos'),'dias_cargados'=>self::nonnegative($input['dias_cargados']??0,'días cargados'),'reportado_arl_at'=>self::date($input['reportado_arl_at']??null,'reporte ARL'),'reportado_eps_at'=>self::date($input['reportado_eps_at']??null,'reporte EPS'),'reportado_mintrabajo_at'=>self::date($input['reportado_mintrabajo_at']??null,'reporte MinTrabajo'),'radicados'=>trim((string)($input['radicados']??'')),'fecha_limite_investigacion'=>self::date($input['fecha_limite_investigacion']??null,'límite de investigación'),'responsable'=>trim((string)($input['responsable']??''))];
         if($data['lugar']===''||$data['proceso']===''||$data['descripcion']===''||$data['responsable']==='')throw new DomainException('Lugar, proceso, descripción y responsable son obligatorios.');
         if(!in_array($data['gravedad'],['Sin lesion','Leve','Grave','Mortal'],true))throw new DomainException('Gravedad no válida.');
         if($type==='Incidente'&&($data['gravedad']!=='Sin lesion'||$data['dias_perdidos']>0))throw new DomainException('Un incidente sin lesión no puede registrar gravedad o días perdidos por lesión.');
         if($type!=='Incidente'&&$data['lesion']==='')throw new DomainException('Registre la lesión o condición diagnosticada; no incluya historias clínicas completas.');
+        if($type==='Accidente de trabajo'&&$data['parte_cuerpo']==='')throw new DomainException('Registre la parte del cuerpo afectada en el accidente.');
+        if($type!=='Incidente'&&$data['agente_causante']==='')throw new DomainException('Registre el agente causante o factor de riesgo asociado.');
         if($type!=='Incidente'&&empty($data['fecha_limite_investigacion']))throw new DomainException('Programe la fecha límite de investigación.');
         if($creating&&$type!=='Incidente'&&(int)($input['afectado_empleado_id']??0)===0&&trim((string)($input['afectado_nombre']??''))==='')throw new DomainException('Identifique a la persona afectada.');
         return $data;
     }
 
+    private static function causeTree(string $text):array
+    {
+        $nodes=[];foreach(preg_split('/\R/u',$text)?:[] as $line){if(trim($line)==='')continue;preg_match('/^(>*)\s*(.*)$/u',$line,$matches);$label=trim((string)($matches[2]??$line));if($label==='')continue;$nodes[]=['nivel'=>strlen((string)($matches[1]??'')),'texto'=>$label];}return$nodes;
+    }
+
+    private static function time(mixed $value,string $label,bool $required=false):?string{$value=trim((string)($value??''));if($value===''){if($required)throw new DomainException('La '.$label.' es obligatoria.');return null;}$d=\DateTimeImmutable::createFromFormat('!H:i',$value);if(!$d||$d->format('H:i')!==$value)throw new DomainException('Hora no válida: '.$label.'. Use formato de 24 horas HH:MM.');return $value;}
     private static function date(mixed $value,string $label,bool $required=false):?string{$value=trim((string)($value??''));if($value===''){if($required)throw new DomainException('La '.$label.' es obligatoria.');return null;}$d=\DateTimeImmutable::createFromFormat('!Y-m-d',$value);if(!$d||$d->format('Y-m-d')!==$value)throw new DomainException('Fecha no válida: '.$label);return $value;}
     private static function nonnegative(mixed $value,string $label):int{if(!is_numeric($value)||(int)$value<0||(float)$value!==(float)(int)$value)throw new DomainException('Valor no válido en '.$label);return(int)$value;}
 }

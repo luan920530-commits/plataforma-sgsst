@@ -21,14 +21,16 @@ $beforeUsers = (int) Database::first('SELECT COUNT(*) AS n FROM users')['n'];
 
 // Reconstruye el estado estructural de una instalación v4 con datos existentes.
 Database::connection()->exec('PRAGMA foreign_keys = OFF');
-$tables = ['capacitacion_asistentes','documento_firmas','soportes_reservados','convivencia_reuniones','convivencia_casos','psicosocial_evaluaciones','salud_registros','comite_reuniones','comite_miembros','comites','evento_acciones','evento_investigaciones','evento_personas','eventos_sst','operacion_registros','requisitos_matriz','autoevaluaciones','usuario_permisos'];
+$tables = ['integracion_ejecuciones','integraciones','usuario_permisos_extendidos','peligro_accion_hitos','peligro_acciones','periodos_estadisticos','comite_compromisos','capacitacion_asistentes','documento_firmas','soportes_reservados','convivencia_reuniones','convivencia_casos','psicosocial_evaluaciones','salud_registros','comite_reuniones','comite_miembros','comites','evento_acciones','evento_investigaciones','evento_personas','eventos_sst','operacion_registros','requisitos_matriz','autoevaluaciones','usuario_permisos'];
 foreach ($tables as $table) Database::connection()->exec('DROP TABLE IF EXISTS ' . $table);
 $columns = [
     'plan_trabajo' => ['objetivo','meta','indicador','recursos','eficacia_resultado','verificado_por','verificado_at'],
     'hallazgos_acpa' => ['tipo_accion','causa_raiz','recursos','fecha_ejecucion','eficacia_resultado','eficacia_fecha','verificado_por','verificado_at'],
-    'capacitaciones' => ['publico_objetivo','competencia','contenido','idoneidad_instructor','evaluacion_aprendizaje','eficacia','fecha_eficacia','verificado_por','verificado_at'],
-    'indicadores' => ['fuente_numerador','fuente_denominador','responsable','observaciones','verificado_por','verificado_at'],
-    'peligros_ipevr' => ['metodologia','participantes','fecha_evaluacion','proxima_revision','jerarquia_controles','verificado_por','verificado_at'],
+    'capacitaciones' => ['publico_objetivo','competencia','contenido','idoneidad_instructor','evaluacion_aprendizaje','eficacia','fecha_eficacia','verificado_por','verificado_at','tipo_formacion','area_puesto','necesidad_detectada','temas_normativos','fecha_realizacion'],
+    'indicadores' => ['formula_tipo','fuente_numerador','fuente_denominador','responsable','observaciones','verificado_por','verificado_at','referencia_valor','referencia_fuente','referencia_periodo'],
+    'users' => ['totp_secret','totp_enabled','totp_recovery_codes','totp_confirmed_at'],
+    'simulacros_emergencia' => ['participantes_detalle','evaluacion','lecciones_aprendidas'],
+    'peligros_ipevr' => ['ubicacion','trabajadores_expuestos','metodologia','participantes','fecha_evaluacion','proxima_revision','jerarquia_controles','verificado_por','verificado_at'],
 ];
 foreach ($columns as $table => $names) foreach ($names as $name) Database::connection()->exec('ALTER TABLE ' . $table . ' DROP COLUMN ' . $name);
 Database::connection()->exec('PRAGMA foreign_keys = ON');
@@ -40,8 +42,8 @@ checkMigration((int) Database::first('PRAGMA user_version')['user_version'] === 
 
 SchemaMigrator::migrate();
 
-checkMigration((int) Database::first('PRAGMA user_version')['user_version'] === 5, 'La migración no marcó la versión 5.');
-checkMigration((int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")['n'] === 51, 'La migración no creó las 51 tablas esperadas.');
+checkMigration((int) Database::first('PRAGMA user_version')['user_version'] === 6, 'La migración no marcó la versión 6.');
+checkMigration((int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")['n'] === 58, 'La migración no creó las 58 tablas esperadas.');
 checkMigration((int) Database::first('SELECT COUNT(*) AS n FROM tenants')['n'] === $beforeTenants, 'Se alteró el número de empresas.');
 checkMigration((int) Database::first('SELECT COUNT(*) AS n FROM documentos_sgsst')['n'] === $beforeDocuments, 'Se alteró el número de documentos.');
 checkMigration((int) Database::first('SELECT COUNT(*) AS n FROM users')['n'] === $beforeUsers, 'Se alteró el número de usuarios.');
@@ -57,4 +59,4 @@ checkMigration((int) Database::first('SELECT COUNT(DISTINCT codigo) AS n FROM es
 $admins = Database::query("SELECT id, tenant_id FROM users WHERE rol = 'AdminEmpresa'");
 foreach ($admins as $admin) checkMigration((int) Database::first('SELECT COUNT(*) AS n FROM usuario_permisos WHERE user_id = ? AND tenant_id = ?', [$admin['id'],$admin['tenant_id']])['n'] === 4, 'Faltan permisos explícitos del administrador.');
 
-echo "Migración v4 → v5 verificada: datos preservados, 51 tablas, columnas aditivas, códigos corregidos, permisos y claves foráneas válidas.\n";
+echo "Migración v4 → v6 verificada: datos preservados, 58 tablas, columnas aditivas, códigos corregidos, permisos y claves foráneas válidas.\n";

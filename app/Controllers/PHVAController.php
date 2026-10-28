@@ -7,6 +7,7 @@ use App\Models\Documento;
 use App\Models\Hallazgo;
 use App\Models\Indicador;
 use App\Models\Peligro;
+use App\Models\PeligroAccion;
 use App\Models\PlanTrabajo;
 use App\Models\Tenant;
 use App\Support\Audit;
@@ -242,6 +243,7 @@ final class PHVAController extends BaseController
             'title' => 'Matriz IPEVR',
             'hazards' => Peligro::forTenant($tenantId, $classification),
             'stats' => Peligro::stats($tenantId),
+            'dashboard' => Peligro::dashboard($tenantId),
             'classification' => $classification,
             'classifications' => $this->classifications(),
             'tenant' => Tenant::find($tenantId),
@@ -261,6 +263,50 @@ final class PHVAController extends BaseController
         Audit::record('Peligro IPEVR registrado', 'Peligro', $id, ['clasificacion' => $data['clasificacion'], 'nivel_riesgo' => $data['nivel_riesgo']]);
         flash('success', 'Peligro agregado a la matriz IPEVR. Verifica la valoración con la metodología adoptada por la empresa.');
         redirect('/matriz-ipevr');
+    }
+
+    public function showHazard(int $id): void
+    {
+        $hazard = Peligro::findForTenant($id, $this->tenantId()) ?: $this->notFound();
+        $actions = PeligroAccion::forHazard($id, $this->tenantId());
+        $milestones = [];
+        foreach ($actions as $action) $milestones[$action['id']] = PeligroAccion::milestones((int) $action['id'], $this->tenantId());
+        $this->view('tenant/phva/peligro-show', [
+            'title' => 'Control IPEVR · ' . $hazard['peligro'], 'hazard' => $hazard,
+            'actions' => $actions, 'milestones' => $milestones,
+        ]);
+    }
+
+    public function storeHazardAction(int $id): void
+    {
+        Peligro::findForTenant($id, $this->tenantId()) ?: $this->notFound();
+        try { PeligroAccion::create($id, $this->tenantId(), $_POST, Auth::id()); flash('success', 'Control programado; todavía no consta como implementado ni eficaz.'); }
+        catch (DomainException $e) { flash('error', $e->getMessage()); }
+        redirect('/matriz-ipevr/' . $id . '#controles');
+    }
+
+    public function hazardActionStatus(int $id, int $actionId): void
+    {
+        Peligro::findForTenant($id, $this->tenantId()) ?: $this->notFound();
+        try { PeligroAccion::setStatus($actionId, $id, $this->tenantId(), $_POST, Auth::id()); flash('success', 'Avance del control actualizado.'); }
+        catch (DomainException $e) { flash('error', $e->getMessage()); }
+        redirect('/matriz-ipevr/' . $id . '#control-' . $actionId);
+    }
+
+    public function storeHazardMilestone(int $id, int $actionId): void
+    {
+        Peligro::findForTenant($id, $this->tenantId()) ?: $this->notFound();
+        try { PeligroAccion::addMilestone($actionId, $id, $this->tenantId(), $_POST, Auth::id()); flash('success', 'Hito verificable agregado.'); }
+        catch (DomainException $e) { flash('error', $e->getMessage()); }
+        redirect('/matriz-ipevr/' . $id . '#control-' . $actionId);
+    }
+
+    public function completeHazardMilestone(int $id, int $actionId, int $milestoneId): void
+    {
+        Peligro::findForTenant($id, $this->tenantId()) ?: $this->notFound();
+        try { PeligroAccion::completeMilestone($milestoneId, $actionId, $id, $this->tenantId(), $_POST, Auth::id()); flash('success', 'Hito completado con resultado documentado.'); }
+        catch (DomainException $e) { flash('error', $e->getMessage()); }
+        redirect('/matriz-ipevr/' . $id . '#control-' . $actionId);
     }
 
     public function editHazard(int $id): void
@@ -371,6 +417,8 @@ final class PHVAController extends BaseController
         return [
             'proceso' => (string) $this->input('proceso'),
             'cargo' => (string) $this->input('cargo'), 'peligro' => (string) $this->input('peligro'),
+            'ubicacion' => (string) $this->input('ubicacion'),
+            'trabajadores_expuestos' => $this->input('trabajadores_expuestos', 0),
             'clasificacion' => (string) $this->input('clasificacion'), 'efectos' => (string) $this->input('efectos'),
             'controles_existentes' => (string) $this->input('controles_existentes'), 'medidas_control' => (string) $this->input('medidas_control'),
             'metodologia' => (string) $this->input('metodologia', 'GTC 45'), 'participantes' => (string) $this->input('participantes'),
@@ -387,6 +435,8 @@ final class PHVAController extends BaseController
     {
         $validator = new Validator($data);
         $validator->required('proceso', 'proceso')->required('cargo', 'cargo')->required('peligro', 'peligro')
+            ->required('ubicacion', 'ubicación')->max('ubicacion', 'ubicación', 300)
+            ->required('trabajadores_expuestos', 'trabajadores expuestos')->integer('trabajadores_expuestos', 'trabajadores expuestos', 0)
             ->max('peligro', 'peligro', 500)->required('clasificacion', 'clasificación')
             ->in('clasificacion', 'clasificación', $this->classifications())
             ->required('efectos', 'efectos posibles')->required('medidas_control', 'medidas de control')
