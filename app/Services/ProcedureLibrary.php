@@ -40,6 +40,14 @@ final class ProcedureLibrary
                     ['codigo' => 'FT-AST-01', 'nombre' => 'Formato de Análisis Seguro de Trabajo (AST)', 'tipo' => 'Registro', 'contenido' => ProcedureTemplate::ast($prepared, 'FT-AST-01')],
                 ],
             ],
+            'limpieza' => [
+                'nombre' => 'Programa de limpieza y desinfección',
+                'descripcion' => 'Programa formal, programación y ejecución, y lista de verificación. Los registros operativos reales también se conservan en Gestión sanitaria.',
+                'aplicabilidad' => 'Kit base para adaptar, aprobar e implementar. Crear los documentos no acredita ejecución ni cierra el requerimiento IVC 2.3.',
+                'recomendado' => true,
+                'related_route' => '/sanitario/registros/nuevo?tipo=limpieza',
+                'documentos' => CleaningProgramTemplate::kit($prepared),
+            ],
             'alturas' => [
                 'nombre' => 'Trabajo en alturas',
                 'descripcion' => 'Procedimiento y lista de verificación para planificación, competencias, protección contra caídas, permiso y rescate.',
@@ -141,6 +149,7 @@ final class ProcedureLibrary
             'ast' => ['recomendado' => true, 'documentos' => [
                 ['codigo' => 'FT-AST-01', 'nombre' => 'Formato de Análisis Seguro de Trabajo (AST)', 'tipo' => 'Registro', 'contenido' => ProcedureTemplate::ast($prepared, 'FT-AST-01')],
             ]],
+            'limpieza' => ['recomendado' => true, 'documentos' => CleaningProgramTemplate::kit($prepared)],
             'alturas' => ['recomendado' => self::riskDetected($activity, ['altura', 'techo', 'andamio']), 'documentos' => [
                 ['codigo' => 'PR-ALT-01', 'nombre' => 'Procedimiento para trabajo en alturas', 'tipo' => 'Procedimiento', 'contenido' => ProcedureTemplate::heights($prepared, 'PR-ALT-01')],
                 ['codigo' => 'FT-ALT-01', 'nombre' => 'Formato de verificación previa para trabajo en alturas', 'tipo' => 'Registro', 'contenido' => ProcedureTemplate::heightsFormat($prepared, 'FT-ALT-01')],

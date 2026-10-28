@@ -19,14 +19,18 @@ NORMIA SST · EXTINTORES SCM · INSTALACIÓN EN HOSTING
 QUÉ SE INSTALA
 --------------
 - Extintores SCM · NIT 39626936-8 · Soacha · teléfono 3212944603.
-- Configuración inicial de 7 estándares y documentos en estado Borrador.
+- Configuración inicial de 7 estándares y 16 documentos en estado Borrador,
+  incluidos el programa PR-LD-01 y los formatos FT-LD-01 y FT-LD-02 de
+  programación, ejecución y verificación de limpieza y desinfección.
 - Acta IVC 028-050164-26: 20 requerimientos y 8 brechas documentales.
 - Siete fichas de datos por validar, incluidas direcciones, plantilla, CIIU/ARL,
   local referencial y asesoría externa.
 - Módulos CRUD de actas, requerimientos y registros sanitarios con evidencias.
 
-Todos los seguimientos inician PENDIENTES. No se crean ejecuciones, aprobaciones,
-certificados, pruebas hidrostáticas, cierres ni respuestas de la autoridad.
+Todos los seguimientos inician PENDIENTES, incluido el requerimiento 2.3.
+El kit de limpieza debe adaptarse, aprobarse e implementarse con evidencias reales.
+No se crean ejecuciones, aprobaciones, certificados, pruebas hidrostáticas,
+cierres ni respuestas de la autoridad.
 CIIU 4759 y riesgo II deben validarse con RUT/ARL. Las direcciones Cra. 4 No.
 13-65 y KR 4 60 17 no se unifican automáticamente. Felipe Cartaya y Felipe
 Martínez se conservan como referencias distintas.

@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "kit": "limpieza_desinfeccion",
+  "documents": {
+    "program": {
+      "code": "PR-LD-01",
+      "title": "Programa de limpieza y desinfección de áreas y equipos",
+      "type": "Programa",
+      "phase": "Hacer",
+      "sections": [
+        {
+          "title": "1. Objeto",
+          "paragraphs": [
+            "Establecer criterios para planificar, ejecutar, registrar y verificar la limpieza y, cuando el riesgo y las instrucciones del fabricante lo justifiquen, la desinfección de áreas, superficies, mobiliario y equipos. El propósito es prevenir acumulación de suciedad, contaminación cruzada, contacto inseguro con químicos, daños en equipos y condiciones que puedan afectar la salud o la operación."
+          ]
+        },
+        {
+          "title": "2. Alcance y articulación",
+          "paragraphs": [
+            "Aplica a todas las áreas y equipos bajo responsabilidad de la empresa, a sus trabajadores y a contratistas que realicen estas tareas. El inventario definitivo debe levantarse en cada centro de trabajo; las categorías de este documento son una base editable y no afirman la existencia de equipos o instalaciones no verificados.",
+            "El lavado y desinfección del tanque de agua, el manejo de plagas, la contención de derrames y la gestión de residuos se articulan con sus procedimientos y registros específicos. Este programa no los sustituye ni autoriza mezclas, aplicaciones o intervenciones técnicas para las que una persona no esté capacitada."
+          ]
+        },
+        {
+          "title": "3. Referentes para su validación",
+          "unordered": [
+            "Decreto 1072 de 2015 y demás requisitos identificados en la matriz legal y en los conceptos de la autoridad que resulten aplicables.",
+            "Matriz IPEVR, procedimientos de trabajo seguro, plan de emergencias, programa de capacitación y controles de contratistas.",
+            "Etiquetas, fichas de datos de seguridad (SDS), instrucciones de fabricantes de productos y manuales de los equipos.",
+            "Requerimientos sanitarios y de inspección, vigilancia y control aplicables al establecimiento."
+          ],
+          "paragraphs": [
+            "Las referencias orientan la adaptación del programa; su inclusión no representa certificación, aprobación de la autoridad ni demostración automática de implementación."
+          ]
+        },
+        {
+          "title": "4. Definiciones operativas",
+          "unordered": [
+            "Limpieza: remoción física de suciedad, materia orgánica, polvo o residuos antes de aplicar un desinfectante cuando éste sea requerido.",
+            "Desinfección: proceso destinado a reducir microorganismos en superficies mediante un producto y unas condiciones compatibles con la etiqueta y el uso previsto.",
+            "Dilución: proporción indicada por la etiqueta o el fabricante para el uso específico. No se establecen concentraciones genéricas en este programa.",
+            "Tiempo de contacto: intervalo durante el cual la superficie debe permanecer en las condiciones señaladas por el fabricante para lograr el uso declarado del producto.",
+            "Contaminación cruzada: transferencia de suciedad, químicos o contaminantes entre áreas, superficies, implementos, equipos o productos.",
+            "Implementos: escobas, traperos, paños, recipientes, utensilios y demás elementos usados para ejecutar la tarea."
+          ]
+        },
+        {
+          "title": "5. Responsabilidades",
+          "ordered": [
+            "Alta dirección: aprobar el programa, asignar recursos, resolver necesidades de dotación y disponer un área segura para lavado y almacenamiento de implementos.",
+            "Responsable SG-SST o persona designada: mantener el inventario y el cronograma, verificar SDS y capacitación, revisar registros, gestionar desviaciones y evaluar el programa.",
+            "Responsable de limpieza o contratista: preparar la tarea, verificar productos y equipos, aplicar las instrucciones, señalizar, registrar la ejecución y reportar novedades.",
+            "Trabajadores: conservar el orden, facilitar el acceso, respetar la señalización, realizar las limpiezas asignadas y reportar derrames, daños, síntomas o condiciones inseguras.",
+            "Compras o quien gestione proveedores: obtener productos permitidos para el uso previsto, etiquetas legibles, SDS comprensibles y soportes de contratistas cuando apliquen."
+          ]
+        },
+        {
+          "title": "6. Levantamiento inicial y programación por áreas y equipos",
+          "paragraphs": [
+            "Antes de aprobar el cronograma, la empresa debe recorrer el centro, identificar superficies y equipos reales, frecuencia de uso, tipo de suciedad, material, riesgos eléctricos o mecánicos, necesidad de desinfección y restricciones del fabricante. Las frecuencias siguientes son propuestas de partida, no frecuencias ejecutadas ni valores obligatorios para todos los contextos."
+          ],
+          "table": {
+            "headers": ["Área o elemento por confirmar", "Tarea orientativa", "Frecuencia propuesta para validar", "Criterio de ajuste"],
+            "rows": [
+              ["Pisos, accesos y zonas de circulación", "Retiro de residuos y limpieza sin obstruir rutas", "Diaria según uso y cuando exista suciedad visible", "Tránsito, derrames, clima, polvo y actividad real"],
+              ["Mesas, muebles y superficies de trabajo", "Limpieza compatible con el material y desinfección si se define", "Según uso y al finalizar actividades que generen suciedad", "Contacto, contaminación cruzada y compatibilidad"],
+              ["Equipos, herramientas y partes externas", "Limpieza segura sin afectar componentes ni protecciones", "Según uso, manual y condición observada", "Manual, energías, mantenimiento y acceso autorizado"],
+              ["Servicios sanitarios y puntos de contacto", "Limpieza y desinfección con productos compatibles", "Según afluencia y condición higiénica", "Uso real, ventilación, contacto y evaluación sanitaria"],
+              ["Recipientes de residuos y su entorno", "Retiro, limpieza y secado antes de reutilizar", "Al vaciar o cuando presenten suciedad", "Tipo de residuo, derrames y procedimiento de residuos"],
+              ["Implementos de aseo", "Lavado, enjuague cuando aplique, secado y almacenamiento separado", "Después de cada uso", "Área de uso, contaminación cruzada e instrucciones"],
+              ["Derrames o suciedad no rutinaria", "Contención y limpieza según sustancia y escenario", "Inmediata cuando sea seguro intervenir", "SDS, plan de emergencia y disposición del residuo"]
+            ]
+          }
+        },
+        {
+          "title": "7. Productos, diluciones, SDS y compatibilidad",
+          "paragraphs": [
+            "Sólo se utilizarán productos cuyo uso previsto, superficie y método sean compatibles con la etiqueta y con la evaluación de la empresa. La dilución, el tiempo de contacto, la ventilación, el enjuague y los EPP se copiarán de la documentación vigente del fabricante; no se inventarán valores ni se sustituirán productos por analogía."
+          ],
+          "table": {
+            "headers": ["Producto", "Uso y superficie", "Dilución según etiqueta", "Tiempo de contacto", "SDS / vigencia revisada", "EPP e incompatibilidades"],
+            "blank_rows": 5
+          },
+          "unordered": [
+            "No mezclar productos, incluidos hipocloritos, amoníaco, ácidos u otros químicos, salvo instrucción expresa y compatible del fabricante.",
+            "Conservar los envases identificados. No reutilizar envases de alimentos o bebidas ni almacenar productos sin etiqueta.",
+            "Suspender el uso ante envases dañados, productos desconocidos, SDS ausente cuando sea necesaria o condiciones que impidan aplicar las precauciones.",
+            "Mantener productos e implementos separados de extintores, equipos de clientes, documentos, alimentos y artículos susceptibles de contaminación o daño."
+          ]
+        },
+        {
+          "title": "8. Procedimiento de ejecución segura",
+          "ordered": [
+            "Programar la tarea, identificar el área o equipo y revisar el procedimiento, el producto, la SDS, el manual y los riesgos asociados.",
+            "Retirar personas y objetos que puedan resultar afectados, señalizar el área, asegurar ventilación y disponer los recursos de emergencia aplicables.",
+            "En equipos, confirmar el método autorizado. Desconectar o aislar energías cuando corresponda; no rociar líquidos sobre tomas, tableros, motores o componentes que el fabricante no permita.",
+            "Seleccionar implementos limpios y diferenciados para evitar contaminación cruzada. Aplicar los EPP definidos por la SDS y la evaluación de la tarea.",
+            "Retirar primero residuos y suciedad gruesa. Limpiar de zonas limpias a sucias y de arriba hacia abajo cuando esa secuencia sea aplicable.",
+            "Preparar únicamente la cantidad necesaria y medir la dilución indicada en la etiqueta. No usar percepción visual o estimaciones como sustituto de las instrucciones.",
+            "Aplicar el producto por el método previsto, respetar el tiempo de contacto, enjuagar si se exige y evitar exceso de humedad o residuos químicos.",
+            "Retirar y gestionar los residuos según su clasificación. Lavar y secar los implementos, almacenarlos en el área definida y dejar la superficie segura antes de retirar la señalización.",
+            "Registrar fecha, horario, área o equipo, producto, dilución, responsable, resultado y novedades. Adjuntar soportes cuando sean útiles y reportar cualquier desviación."
+          ]
+        },
+        {
+          "title": "9. Condiciones para detener la tarea",
+          "paragraphs": [
+            "La tarea se suspende ante mezcla o identidad desconocida de químicos, falta de ventilación o EPP, superficies eléctricas expuestas, equipos sin aislamiento seguro, síntomas en las personas, derrames fuera de control, rutas bloqueadas o cualquier pérdida de los controles previstos. La emergencia se gestiona por los canales definidos y la reanudación requiere corregir la causa."
+          ]
+        },
+        {
+          "title": "10. Implementos, lavado y almacenamiento",
+          "paragraphs": [
+            "La empresa debe definir una ubicación real, señalizada y suficiente para lavar, secar y almacenar escobas, traperos, paños, jabones y detergentes, evitando humedad persistente, mezcla incompatible, obstrucción de circulación y contaminación de otras áreas. Los implementos se reponen cuando su estado impida una limpieza eficaz y no se comparten entre áreas incompatibles sin el tratamiento definido."
+          ]
+        },
+        {
+          "title": "11. Capacitación e implementación verificable",
+          "paragraphs": [
+            "Antes de considerar implementado el programa, la empresa debe aprobarlo, asignar responsables y recursos, completar el inventario, disponer de productos y SDS, capacitar a quienes ejecutan y supervisan, habilitar el área de implementos y comenzar la programación real. La implementación se demuestra con registros fechados, evidencias de ejecución, verificación y gestión de desviaciones; no con la sola creación o firma de este documento."
+          ],
+          "unordered": [
+            "Contenido mínimo de formación: riesgos químicos, SDS, dilución, tiempo de contacto, compatibilidad, EPP, secuencia, señalización, equipos, residuos, derrames y registro.",
+            "La capacitación debe dejar tema, fecha, responsable, participantes y evidencia de comprensión o práctica cuando corresponda.",
+            "Las actividades no pueden antedatarse ni marcarse como ejecutadas sin soporte."
+          ]
+        },
+        {
+          "title": "12. Registros y evidencias",
+          "unordered": [
+            "Programa vigente revisado y aprobado, con control de cambios y responsables.",
+            "Inventario real de áreas, equipos, productos, implementos y SDS.",
+            "Cronograma y registros de ejecución FT-LD-01, con novedades y soportes.",
+            "Listas de verificación FT-LD-02, acciones correctivas y evidencias de cierre.",
+            "Registros de capacitación, compras o dotación, mantenimiento de implementos y gestión de residuos cuando sean pertinentes."
+          ]
+        },
+        {
+          "title": "13. Seguimiento e indicadores",
+          "paragraphs": [
+            "Cumplimiento de programación = tareas ejecutadas con registro ÷ tareas programadas × 100. Registros completos = registros sin campos críticos pendientes ÷ registros de ejecución revisados × 100. Cierre de desviaciones = acciones cerradas con evidencia ÷ acciones identificadas × 100. Si el denominador es cero, el resultado se reporta como no disponible y no como cien por ciento.",
+            "La persona responsable revisará periódicamente cobertura, calidad de los registros, productos utilizados, incidentes, hallazgos y eficacia de las acciones. Los indicadores miden seguimiento interno y no representan aceptación sanitaria."
+          ]
+        },
+        {
+          "title": "14. Desviaciones y acciones correctivas",
+          "paragraphs": [
+            "Las omisiones, registros incompletos, productos no autorizados, daños, hallazgos o condiciones inseguras se documentan con descripción, acción, responsable, fecha compromiso y verificación. Se evalúa la causa, no sólo la repetición de la limpieza. Las evidencias revisadas se vinculan al requerimiento correspondiente antes de cerrarlo."
+          ]
+        },
+        {
+          "title": "15. Revisión, anexos y aprobación",
+          "paragraphs": [
+            "Revisar al menos anualmente y cuando cambien las instalaciones, equipos, productos, procesos, responsables, requisitos o resultados del seguimiento. Anexos: FT-LD-01 Programación y registro de ejecución; FT-LD-02 Lista de verificación del programa.",
+            "Elaboró: ____________________  Revisó: ____________________  Aprobó: ____________________  Fecha de aprobación: __________  Vigencia o próxima revisión: __________"
+          ]
+        }
+      ]
+    },
+    "execution": {
+      "code": "FT-LD-01",
+      "title": "Programación y registro de limpieza y desinfección",
+      "type": "Registro",
+      "phase": "Hacer",
+      "sections": [
+        {
+          "title": "1. Control del formato",
+          "paragraphs": [
+            "Centro de trabajo: ____________________  Periodo: ____________________  Responsable de programación: ____________________  Versión del programa PR-LD-01: __________",
+            "Diligenciar con información real. Las filas en blanco no representan actividades ejecutadas. Anexar SDS, evidencias y ampliaciones cuando sean necesarias."
+          ]
+        },
+        {
+          "title": "2. Programación de tareas",
+          "table": {
+            "sheet": "Programación",
+            "headers": ["Área / equipo", "Tarea y método", "Frecuencia", "Fecha y hora programada", "Producto y dilución de etiqueta", "Responsable", "Observaciones"],
+            "blank_rows": 10
+          }
+        },
+        {
+          "title": "3. Registro de ejecución",
+          "table": {
+            "sheet": "Ejecución",
+            "headers": ["Fecha y horario real", "Área / equipo", "Método ejecutado", "Producto y dilución aplicada", "Tiempo de contacto", "Ejecutor y firma", "Resultado y novedades", "Soporte"],
+            "blank_rows": 14
+          }
+        },
+        {
+          "title": "4. Verificación y seguimiento",
+          "table": {
+            "sheet": "Verificación",
+            "headers": ["Fecha de revisión", "Registros revisados", "Desviación y acción requerida", "Responsable", "Fecha compromiso", "Verificador y firma"],
+            "blank_rows": 5
+          },
+          "paragraphs": [
+            "Resultado de la revisión: ____________________  Próxima revisión: __________  Acciones cerradas con evidencia: ____________________",
+            "Ejecutor no equivale a verificador cuando la empresa haya definido una revisión independiente. No cerrar una desviación sin evidencia suficiente."
+          ]
+        }
+      ]
+    },
+    "verification": {
+      "code": "FT-LD-02",
+      "title": "Lista de verificación del programa de limpieza y desinfección",
+      "type": "Registro",
+      "phase": "Verificar",
+      "sections": [
+        {
+          "title": "1. Identificación de la revisión",
+          "paragraphs": [
+            "Centro: ____________________  Fecha: __________  Periodo evaluado: ____________________  Verificador: ____________________  Responsables consultados: ____________________",
+            "Marcar X en una sola columna: C = cumple con evidencia, NC = no cumple o no existe evidencia suficiente, N.A. = no aplica con justificación. No marcar criterios por la sola existencia del documento."
+          ]
+        },
+        {
+          "title": "2. Verificación documental y operativa",
+          "table": {
+            "sheet": "Lista de chequeo",
+            "headers": ["No.", "Criterio", "C", "NC", "N.A.", "Evidencia, observación y justificación"],
+            "rows": [
+              ["1", "El programa está adaptado a las áreas y equipos reales y fue revisado y aprobado.", "", "", "", ""],
+              ["2", "Existe inventario actualizado de áreas, superficies, equipos, productos e implementos.", "", "", "", ""],
+              ["3", "Las frecuencias y responsables están definidos según uso, riesgo y condiciones reales.", "", "", "", ""],
+              ["4", "Los productos tienen etiqueta legible, uso compatible y SDS disponible cuando aplica.", "", "", "", ""],
+              ["5", "Diluciones, tiempos de contacto, enjuague y EPP corresponden al fabricante y la tarea.", "", "", "", ""],
+              ["6", "Se controlan incompatibilidades y no se mezclan químicos de forma improvisada.", "", "", "", ""],
+              ["7", "Las personas fueron capacitadas y la formación tiene evidencia fechada.", "", "", "", ""],
+              ["8", "El área de lavado y almacenamiento está señalizada, organizada y evita contaminación cruzada.", "", "", "", ""],
+              ["9", "Los implementos están identificados, limpios, secos y en condiciones de uso.", "", "", "", ""],
+              ["10", "Las tareas señalizan el área y mantienen libres las rutas y los recursos de emergencia.", "", "", "", ""],
+              ["11", "La limpieza de equipos respeta manuales, energías y restricciones eléctricas o mecánicas.", "", "", "", ""],
+              ["12", "Los registros FT-LD-01 coinciden con la programación y contienen ejecución real y responsables.", "", "", "", ""],
+              ["13", "Los soportes disponibles permiten comprobar las actividades muestreadas.", "", "", "", ""],
+              ["14", "Los residuos se gestionan según clasificación y sin generar nuevas condiciones de riesgo.", "", "", "", ""],
+              ["15", "Las desviaciones tienen acción, responsable, fecha y seguimiento.", "", "", "", ""],
+              ["16", "Los indicadores se calcularon con datos trazables y denominadores válidos.", "", "", "", ""],
+              ["17", "Se revisaron incidentes, quejas, daños o cambios que exijan ajustar el programa.", "", "", "", ""],
+              ["18", "Los requerimientos IVC relacionados sólo se cierran con verificación y evidencia revisada.", "", "", "", ""]
+            ]
+          }
+        },
+        {
+          "title": "3. Acciones y cierre de la revisión",
+          "table": {
+            "sheet": "Acciones",
+            "headers": ["Hallazgo o desviación", "Acción", "Responsable", "Fecha compromiso", "Evidencia de cierre", "Verificador"],
+            "blank_rows": 6
+          },
+          "paragraphs": [
+            "Resumen: criterios C ______  NC ______  N.A. ______  Acciones abiertas ______  Acciones cerradas con evidencia ______",
+            "Conclusión y alcance de la revisión: ____________________________________________________________________________________",
+            "Verificador / firma: ____________________  Responsable del programa / firma: ____________________  Próxima revisión: __________",
+            "Esta lista apoya la verificación interna; no constituye concepto favorable, certificación o levantamiento de requerimientos por parte de la autoridad."
+          ]
+        }
+      ]
+    }
+  }
+}

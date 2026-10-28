@@ -37,6 +37,7 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - **Centro de gestión para cada requisito**, con acciones, usuarios responsables, recursos, fechas, evidencia de cierre y enlace al módulo operativo correspondiente; no redirige todo a la biblioteca.
 - **Seguimiento IVC y operación sanitaria:** actas, requerimientos y brechas con CRUD, responsables, fechas, verificación y evidencias. El cierre exige soporte `Revisado`; `No aplica` exige justificación. Los temas de emergencias, SG-SST y capacitación abren sus módulos específicos.
 - Doce tipos sanitarios configurables: limpieza/desinfección, residuos/manifiestos, plagas, químicos/SDS, mantenimiento locativo/eléctrico, agua/tanque, derrames, recursos de emergencia, señalización, productos, validaciones y seguimiento. La capacitación reutiliza el módulo existente y un registro sanitario no cierra automáticamente un hallazgo.
+- **Programa de limpieza y desinfección PR-LD-01**, con formatos FT-LD-01 de programación/ejecución y FT-LD-02 de verificación. Se genera como kit de tres borradores desde el alta o desde **Procedimientos y formatos**; IVC y Gestión sanitaria enlazan al kit sin sustituir los registros operativos ni cerrar el requerimiento 2.3.
 - Directorio editable de empleados/contratistas y accesos por rol, con desactivación lógica, restablecimiento temporal y renovación obligatoria de contraseña.
 - Bandeja y detalle de autoreportes con respuestas de seguimiento.
 - **Accesos HSE compartibles por URL o QR local**, con token aleatorio almacenado como hash, vencimiento, límite de usos, revocación y reportes identificados o anónimos sin crear una cuenta. El QR visible se descarga como PNG —GIF si no hay canvas— y puede renovarse sin reiniciar la vigencia ni los usos.
@@ -118,7 +119,7 @@ El detalle técnico y la reconstrucción están en [`docs/biblioteca-pesv.md`](d
 
 El riesgo IV/V tiene prioridad sobre el número de trabajadores. La clasificación es una guía de configuración; la empresa debe revisar cualquier condición especial que le resulte aplicable.
 
-Al finalizar el alta, una **única transacción** crea la empresa, su administrador y la configuración inicial: documentos del grupo correspondiente, políticas, PAT, capacitaciones, IPEVR, perfiles, inducción y el kit base de procedimiento/formato de la actividad y AST. Si los peligros base identifican alturas o espacios confinados, también se sugiere y genera ese kit; para actividades de transporte se agrega el índice PESV como borrador. Si algo falla, se revierte el conjunto. Una segunda ejecución no duplica la configuración. Las empresas ya registradas pueden generar los kits pendientes desde **Procedimientos y formatos**, incluso los de alto riesgo cuando determinen que aplican.
+Al finalizar el alta, una **única transacción** crea la empresa, su administrador y la configuración inicial: documentos del grupo correspondiente, políticas, PAT, capacitaciones, IPEVR, perfiles, inducción y los kits base de procedimiento/formato de la actividad, AST y programa de limpieza y desinfección. Si los peligros base identifican alturas o espacios confinados, también se sugiere y genera ese kit; para actividades de transporte se agrega el índice PESV como borrador. Si algo falla, se revierte el conjunto. Una segunda ejecución no duplica la configuración. Las empresas ya registradas pueden generar los kits pendientes desde **Procedimientos y formatos**, incluso los de alto riesgo cuando determinen que aplican.
 
 ## Requisitos
 
@@ -203,9 +204,19 @@ La variante con el perfil real se genera de forma independiente:
 python3 scripts/build_hosting_zip.py --extintores
 ```
 
-Crea `dist/extintores-scm-normia-hosting.zip`. Al abrir el instalador se configuran el SuperAdmin y, en la misma transacción, Extintores SCM —NIT 39626936-8, Soacha—, sus borradores del grupo de siete estándares, el acta IVC 028-050164-26, 20 requerimientos, ocho brechas documentales y siete fichas de validación. Los 28 seguimientos inician **Pendiente**, sin fecha compromiso, evidencia de ejecución ni verificación; los documentos permanecen en borrador.
+Crea `dist/extintores-scm-normia-hosting.zip`. Al abrir el instalador se configuran el SuperAdmin y, en la misma transacción, Extintores SCM —NIT 39626936-8, Soacha—, **16 documentos en borrador** del grupo de siete estándares y los kits operativos —incluidos PR-LD-01, FT-LD-01 y FT-LD-02—, el acta IVC 028-050164-26, 20 requerimientos, ocho brechas documentales y siete fichas de validación. Los 28 seguimientos inician **Pendiente**, sin fecha compromiso, evidencia de ejecución ni verificación; los documentos permanecen en borrador.
 
 La pantalla final muestra una sola vez el acceso temporal empresarial y exige cambiarlo antes de abrir los demás módulos. El paquete no contiene el PDF privado del acta, SQLite, WAL/SHM, sesiones, registros ni credenciales; conserva la referencia SHA-256 para cargar posteriormente la copia controlada. CIIU 4759 y riesgo II están sujetos a RUT/ARL. Las direcciones Cra. 4 No. 13-65 y KR 4 60 17, el local referencial de 6 × 4 m, Felipe Cartaya/Felipe Martínez y la asesoría de Luis Antonio Aguilar permanecen como datos por contrastar, sin unificarlos ni darlos por verificados.
+
+### Anexos Word y Excel del programa de limpieza
+
+El mismo recurso `resources/cleaning-program/program.json` alimenta las plantillas PHP y los anexos editables, evitando divergencias entre la aplicación y los archivos entregables. Para reconstruirlos en un entorno de desarrollo con `python-docx` y `openpyxl`:
+
+```bash
+python3 scripts/build_cleaning_program.py
+```
+
+Genera `dist/extintores-scm-programa-limpieza-desinfeccion.zip` con el programa PR-LD-01 en DOCX, los formatos FT-LD-01 y FT-LD-02 en XLSX, instrucciones y manifiesto SHA-256. El constructor reabre y compara todo el contenido con la fuente JSON, verifica el CRC y no incluye macros. Los archivos son borradores: no traen ejecuciones, capacitaciones, aprobaciones ni cierres. Las dependencias Python sólo se usan para construir los anexos; el hosting sigue funcionando exclusivamente con PHP y SQLite.
 
 ### ZIP de hosting con datos de demostración
 
@@ -306,6 +317,7 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - CRUD, historial de versiones, aprobación/cierre de permisos y simulacros.
 - Generación y escape de documentos operativos, actividades preventivas y evidencias.
 - Procedimientos/formatos CIIU, alturas y espacios confinados sin duplicados.
+- Programa PR-LD-01 y formatos FT-LD-01/02: contenido, generación automática, idempotencia, borradores, aislamiento y ausencia de ejecuciones sanitarias automáticas.
 - Biblioteca PESV: 97 recursos, 24 pasos, PAT hasta IW, generación automática en transporte, versiones y respuestas aisladas.
 - Las 5.820 fórmulas PESV procesadas sin referencias externas en los recursos editables.
 - Accesos externos con token hash, anonimato, consumo, revocación y aislamiento; renovación QR sin reiniciar usos y cierre de tokens al cambiar de módulo.
@@ -317,7 +329,7 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - CRUD y aislamiento IVC/sanitario, vínculos de evidencias, indicadores, hallazgos, personas, cuentas, simulacros, autoreportes, planos y catálogo CIIU.
 - Precarga Extintores SCM con 20 requerimientos, ocho brechas, siete validaciones, documentos borrador, 28 seguimientos pendientes e idempotencia. `tests/profile_install.php` repite el flujo desde una instalación limpia y comprueba el acceso temporal.
 
-La suite principal actual contiene **53 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
+La suite principal actual contiene **54 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
 
 ## Estilos
 
@@ -351,6 +363,7 @@ public/
 resources/css/       Fuente Tailwind
 resources/sgsst-library/ Manifiesto, documentos y formularios SG-SST convertidos
 resources/pesv-library/  Manifiesto y 97 recursos PESV convertidos
+resources/cleaning-program/program.json  Fuente única del programa PR-LD-01 y formatos FT-LD
 resources/iso7010-catalog.json  332 nombres y descripciones en español
 resources/cad-objects.json     32 objetos CAD vectoriales en seis familias
 resources/extintores-scm/seed.json  Perfil real, acta estructurada y validaciones; sin PDF ni claves
@@ -358,7 +371,7 @@ docs/biblioteca-sgsst.md Inventario, comparación y notas de importación
 scripts/install.php  Instalador de producción/demo
 scripts/migrate.php  Migración no destructiva de instalaciones existentes
 storage/uploads/     Evidencias privadas, fuera del DocumentRoot público
-tests/run.php        53 pruebas funcionales de dominio y persistencia
+tests/run.php        54 pruebas funcionales de dominio y persistencia
 tests/profile_install.php  Instalación limpia del perfil Extintores SCM
 ```
 

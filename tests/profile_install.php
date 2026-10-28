@@ -52,6 +52,10 @@ try {
         $assert($requirement['estado'] === 'Pendiente' && $requirement['verificacion'] === '', 'La instalación cerró o verificó un seguimiento.');
     }
     $assert(count(SanitarioRegistro::forTenant((int) $tenant['id'])) === 7, 'Las validaciones iniciales no coinciden.');
+    $documentStats = Database::first("SELECT COUNT(*) AS total, SUM(CASE WHEN estado = 'Borrador' THEN 1 ELSE 0 END) AS borradores FROM documentos_sgsst WHERE tenant_id = ?", [(int) $tenant['id']]);
+    $assert((int) $documentStats['total'] === 16 && (int) $documentStats['borradores'] === 16, 'La instalación debe crear 16 borradores, sin aprobaciones automáticas.');
+    $cleaningDocuments = Database::first("SELECT COUNT(*) AS n FROM documentos_sgsst WHERE tenant_id = ? AND codigo_estandar IN ('PR-LD-01', 'FT-LD-01', 'FT-LD-02')", [(int) $tenant['id']]);
+    $assert((int) $cleaningDocuments['n'] === 3, 'Faltan el programa o los formatos de limpieza y desinfección.');
     $access = $result['company']['access'];
     $assert(Auth::attempt($access['email'], $access['password']), 'El acceso temporal no autentica.');
     $assert(Auth::check() && !empty(Auth::user()['must_change_password']), 'El acceso temporal no exige renovación.');
@@ -63,7 +67,7 @@ try {
     $assert(!$second['created'], 'La segunda instalación debería estar bloqueada.');
     $assert((int) Database::first('SELECT COUNT(*) AS n FROM tenants')['n'] === $before, 'La segunda instalación duplicó la empresa.');
     $assert(Database::query('PRAGMA foreign_key_check') === [], 'Hay violaciones de llaves foráneas.');
-    echo "Instalación Extintores SCM verificada: SuperAdmin, empresa, acta, 28 pendientes, 7 validaciones, acceso temporal e idempotencia.\n";
+    echo "Instalación Extintores SCM verificada: SuperAdmin, empresa, acta, 28 pendientes, 7 validaciones, 16 borradores (incluido PR/FT-LD), acceso temporal e idempotencia.\n";
 } catch (Throwable $exception) {
     file_put_contents('php://stderr', $exception->getMessage() . "\n" . $exception->getTraceAsString() . "\n");
     $clean();

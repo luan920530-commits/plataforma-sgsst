@@ -400,6 +400,40 @@ try {
         expectTrue(Database::first("SELECT id FROM documentos_sgsst WHERE tenant_id = ? AND codigo_estandar = 'PR-ACT-6201'", [$mainId]) !== null);
     });
 
+    $test('Programa de limpieza y desinfección: kit completo, borradores e idempotencia', static function () use ($mainId, $constructionId): void {
+        $catalog = ProcedureLibrary::catalog($mainId);
+        expectTrue(isset($catalog['grupos']['limpieza']), 'El catálogo debe incluir el programa de limpieza.');
+        expectSame(3, count($catalog['grupos']['limpieza']['documentos']));
+        expectSame('/sanitario/registros/nuevo?tipo=limpieza', $catalog['grupos']['limpieza']['related_route']);
+        expectTrue(in_array('limpieza', ProcedureLibrary::automaticKeys($constructionId), true));
+        $codes = ['PR-LD-01', 'FT-LD-01', 'FT-LD-02'];
+        $recordsBefore = count(SanitarioRegistro::forTenant($mainId));
+        foreach ($codes as $code) {
+            $existing = Documento::findByCode($code, $mainId);
+            expectTrue($existing !== null, 'El onboarding debía generar ' . $code . ' como borrador.');
+            Documento::deleteForTenant((int) $existing['id'], $mainId);
+        }
+        expectSame(3, ProcedureLibrary::generate($mainId, ['limpieza']));
+        expectSame(0, ProcedureLibrary::generate($mainId, ['limpieza']), 'El kit no debe duplicar documentos.');
+        expectSame($recordsBefore, count(SanitarioRegistro::forTenant($mainId)), 'Crear formatos no equivale a registrar ejecuciones sanitarias.');
+        $program = Documento::findByCode('PR-LD-01', $mainId);
+        expectSame('Programa', $program['tipo']);
+        expectSame('Borrador', $program['estado']);
+        foreach (['Frecuencia propuesta para validar', 'Dilución', 'tiempo de contacto', 'SDS', 'No mezclar productos', 'no con la sola creación o firma', 'FT-LD-01', 'FT-LD-02'] as $required) {
+            expectTrue(str_contains($program['contenido_html'], $required), 'Falta contenido del programa: ' . $required);
+        }
+        foreach (['FT-LD-01', 'FT-LD-02'] as $code) {
+            $format = Documento::findByCode($code, $mainId);
+            expectSame('Registro', $format['tipo']);
+            expectSame('Borrador', $format['estado']);
+            expectTrue(str_contains($format['contenido_html'], '<table>'), 'El formato debe ser visual y tabular.');
+            expectTrue(!str_contains($format['contenido_html'], 'checked'), 'El formato no puede precargar verificaciones.');
+        }
+        expectSame(null, Documento::findForTenant((int) $program['id'], $constructionId));
+        $regenerated = ProcedureLibrary::catalog($mainId)['grupos']['limpieza']['documentos'];
+        expectSame(3, count(array_filter($regenerated, static fn(array $document): bool => $document['registro'] !== null)));
+    });
+
     $test('Accesos externos: token hash, anonimato, consumo y tenant', static function () use ($mainId, $constructionId): void {
         $admin = User::findForAuthentication('admin@andina.co');
         $token = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
@@ -1309,7 +1343,12 @@ try {
         expectSame(1, (int) Database::first('SELECT COUNT(*) AS n FROM users WHERE tenant_id = ?', [$tenant['id']])['n'], 'No se deben inventar accesos para Felipe u otras personas.');
         $documentStats = Database::first("SELECT COUNT(*) AS total, SUM(CASE WHEN estado = 'Aprobado' THEN 1 ELSE 0 END) AS aprobados FROM documentos_sgsst WHERE tenant_id = ?", [$tenant['id']]);
         expectSame($result['documents'], (int) $documentStats['total']);
+        expectSame(16, (int) $documentStats['total'], 'El perfil debe incluir los tres documentos del programa de limpieza.');
         expectSame(0, (int) $documentStats['aprobados']);
+        foreach (['PR-LD-01', 'FT-LD-01', 'FT-LD-02'] as $code) {
+            $cleaningDocument = Documento::findByCode($code, (int) $tenant['id']);
+            expectTrue($cleaningDocument !== null && $cleaningDocument['estado'] === 'Borrador', 'Falta el borrador ' . $code . ' en Extintores SCM.');
+        }
         $acta = IvcActa::findForTenant((int) $result['acta_id'], (int) $tenant['id']);
         expectSame('028-050164-26', $acta['numero_acta']);
         expectSame('2026-10-09', $acta['fecha_limite']);
