@@ -1,0 +1,454 @@
+{
+    "profile": "extintores_scm",
+    "company": {
+        "razonsocial": "Extintores SCM",
+        "nit": "39626936-8",
+        "sector_economico": "Comercio",
+        "ciiu": "4759",
+        "numero_trabajadores": 2,
+        "nivel_riesgo": "II",
+        "grupo_estandares": 7,
+        "metodo_configuracion": "Combinado",
+        "representante_legal": "Julia Inés Buitrago García",
+        "correo_contacto": "julia_ines_buitrago@hotmail.com",
+        "telefono": "3212944603",
+        "ciudad": "Soacha",
+        "direccion": "KR 4 60 17",
+        "admin": {
+            "nombre": "Julia Inés Buitrago García",
+            "email": "julia_ines_buitrago@hotmail.com"
+        }
+    },
+    "acta": {
+        "numero_acta": "028-050164-26",
+        "autoridad": "Secretaría de Salud de Soacha",
+        "fecha_visita": "2026-09-09",
+        "fecha_notificacion": null,
+        "fecha_limite": "2026-10-09",
+        "concepto": "Favorable con requerimientos",
+        "porcentaje": 53.5,
+        "direccion_visita": "KR 4 60 17",
+        "fuente_nombre": "Acta_IVC_028-050164-26.pdf",
+        "fuente_sha256": "18e87021e21d7b5aa245a9817e9f3882770641d744066bad32c8733a71e5f47f",
+        "observaciones": "Formulario SL-FR-028, versión 1. Plazo registrado: 22 días hábiles, desde 09/09/2026 hasta 09/10/2026. El acta indica medida sanitaria de seguridad: No; muestras: 0; sin registro fotográfico. No constituye permiso o autorización y no se presupone prórroga o aceptación posterior.\nCIIU 4759 y riesgo II sujetos a RUT/ARL. Dirección previa Cra. 4 No. 13-65 y local referencial de 6 × 4 m se conservan como datos por conciliar. Felipe Cartaya y Felipe Martínez no se unifican. El contrato Urbaser mencionado en el acta y la no aplicabilidad de vertimientos requieren soporte independiente cuando se usen como evidencia. No se afirman pruebas hidrostáticas ni certificaciones del taller."
+    },
+    "requirements": [
+        {
+            "codigo": "1.4",
+            "origen": "Requerimiento IVC",
+            "tema": "mantenimiento",
+            "hallazgo": "Deterioro en paredes y techo del establecimiento.",
+            "accion": "Inspeccionar origen y alcance del deterioro; reparar paredes y techo, controlando humedad o filtraciones si existen. Verificar acabado sanitario y seguridad antes del cierre.",
+            "responsable": "Por asignar · propuesta: Julia + proveedor competente",
+            "evidencia_requerida": "Orden de trabajo, soporte de reparación, fotografías comparables antes/después e inspección interna.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "1.5",
+            "origen": "Requerimiento IVC",
+            "tema": "senalizacion",
+            "hallazgo": "No se evidencia señalización a las vías de acceso a las salidas de emergencia.",
+            "accion": "Levantar accesos y salidas reales, definir recorridos con los trabajadores e instalar señalización visible y coherente. No diseñar rutas desde el plano referencial sin verificación.",
+            "responsable": "Por asignar · propuesta: Julia + asesor SST",
+            "evidencia_requerida": "Levantamiento, plano verificado, relación de señales, fotografías e inspección de visibilidad y recorrido libre.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "1.7",
+            "origen": "Requerimiento IVC",
+            "tema": "senalizacion",
+            "hallazgo": "No se evidencia áreas señalizadas ni demarcación en zonas de circulación.",
+            "accion": "Definir y demarcar las zonas reales de circulación y trabajo, conservando paso seguro y sin obstrucciones. Validar dimensiones en sitio, sin adoptar valores genéricos.",
+            "responsable": "Por asignar · propuesta: Julia + responsable del local",
+            "evidencia_requerida": "Distribución verificada, fotografías, medidas y lista de inspección.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "1.8",
+            "origen": "Requerimiento IVC",
+            "tema": "mantenimiento",
+            "hallazgo": "Se evidencia tomacorriente sin recubrimiento.",
+            "accion": "Suspender el uso seguro del punto afectado y gestionar revisión por persona competente; instalar recubrimiento o reemplazar componentes y revisar condiciones asociadas de la instalación.",
+            "responsable": "Por asignar · propuesta: Julia + electricista competente",
+            "evidencia_requerida": "Orden de trabajo, identificación del ejecutor, fotografías antes/después y verificación de seguridad del punto.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "2.2",
+            "origen": "Requerimiento IVC",
+            "tema": "limpieza",
+            "hallazgo": "No se evidencia área señalizada para lavado de implementos de aseo ni espacio suficiente para escobas, traperos, jabones y detergentes.",
+            "accion": "Definir una ubicación real para lavado y almacenamiento de implementos, evitando contaminación cruzada y mezcla incompatible; señalizar, organizar y dotar según necesidad.",
+            "responsable": "Por asignar · propuesta: Julia + responsable de limpieza",
+            "evidencia_requerida": "Ubicación y distribución, fotografías, inventario de implementos/productos, SDS y procedimiento de uso.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "2.3",
+            "origen": "Requerimiento IVC",
+            "tema": "limpieza",
+            "hallazgo": "No se evidencia programa de limpieza y desinfección de áreas y equipos documentado e implementado.",
+            "accion": "Adoptar el programa, definir frecuencias por uso, procedimientos, productos y diluciones de etiqueta/fabricante; capacitar y ejecutar registros periódicos.",
+            "responsable": "Por asignar · propuesta: Julia + responsable de limpieza",
+            "evidencia_requerida": "Programa aprobado, capacitación, productos/SDS y registros fechados de ejecución y verificación.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "3.1.4",
+            "origen": "Requerimiento IVC",
+            "tema": "agua",
+            "hallazgo": "No se evidencia tanque de almacenamiento de agua potable con capacidad suficiente para las instalaciones.",
+            "accion": "Verificar el sistema de suministro y calcular la reserva requerida con criterios reales de consumo, proceso y autonomía; instalar o adecuar tanque protegido y compatible con agua potable, o gestionar el concepto de la autoridad si existe otra solución.",
+            "responsable": "Por asignar · propuesta: Julia + profesional competente",
+            "evidencia_requerida": "Memoria de capacidad, especificación del tanque, orden de instalación, fotografías, inspección y, si aplica, aceptación de alternativa por la ETS.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "3.1.5",
+            "origen": "Requerimiento IVC",
+            "tema": "agua",
+            "hallazgo": "No se evidencia soporte de lavado y desinfección del tanque de almacenamiento de agua potable.",
+            "accion": "Después de verificar el tanque, ejecutar lavado y desinfección con procedimiento y producto apto, siguiendo su etiqueta; programar periodicidad semestral o cuando esté visiblemente sucio, según el criterio citado en el acta.",
+            "responsable": "Por asignar · propuesta: Julia + responsable/proveedor competente",
+            "evidencia_requerida": "Registro o certificado con fecha, método, producto, responsable y próxima ejecución; fotografías y soporte de disposición segura.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "3.3.1",
+            "origen": "Requerimiento IVC",
+            "tema": "residuos",
+            "hallazgo": "No se evidencia plan de gestión integral de residuos no peligrosos y peligrosos documentado e implementado.",
+            "accion": "Adoptar e implementar el PGIR: inventario, caracterización, separación, envases, almacenamiento, frecuencia, recolección, manifiestos, tratamiento/disposición y seguimiento. Verificar vigencia del contrato Urbaser reportado en el acta.",
+            "responsable": "Por asignar · propuesta: Julia + asesor ambiental/SST + gestor",
+            "evidencia_requerida": "PGIR aprobado, inventarios, contrato vigente, manifiestos, actas/certificados de tratamiento o disposición y registros de salida.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "3.3.2",
+            "origen": "Requerimiento IVC",
+            "tema": "residuos",
+            "hallazgo": "No se evidencia área para almacenamiento de residuos de acuerdo con su clasificación y características.",
+            "accion": "Definir y acondicionar el área real según inventario, compatibilidad, contención, protección, acceso y señalización; separar residuos incompatibles y evitar obstruir circulación.",
+            "responsable": "Por asignar · propuesta: Julia + responsable de residuos",
+            "evidencia_requerida": "Criterio de ubicación, inventario/compatibilidad, fotografías, señalización e inspección del área.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "3.3.4",
+            "origen": "Requerimiento IVC",
+            "tema": "residuos",
+            "hallazgo": "No se evidencia recipientes rígidos identificados conforme al código de colores.",
+            "accion": "Adquirir o adecuar recipientes rígidos, limpiables, compatibles con el residuo y con identificación/código de colores aplicable; definir ubicación, limpieza y reposición.",
+            "responsable": "Por asignar · propuesta: Julia + responsable de residuos",
+            "evidencia_requerida": "Relación de recipientes, soportes de compra/adecuación, fotografías, identificación y registros de inspección/limpieza.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "3.4.1",
+            "origen": "Requerimiento IVC",
+            "tema": "plagas",
+            "hallazgo": "No se evidencia programa de manejo integral de plagas documentado e implementado.",
+            "accion": "Adoptar el programa con prevención, inspecciones, monitoreo, control y registros. Si se contrata, verificar el concepto sanitario favorable y demás soportes exigidos para la empresa y los productos utilizados.",
+            "responsable": "Por asignar · propuesta: Julia + responsable/proveedor de plagas",
+            "evidencia_requerida": "Programa, mapa real de dispositivos si aplica, inspecciones, informes, concepto sanitario del contratista, SDS y certificados de servicio.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "4.1",
+            "origen": "Requerimiento IVC",
+            "tema": "emergencias",
+            "hallazgo": "No se evidencia plan de gestión del riesgo de desastres documentado e implementado.",
+            "accion": "Completar el análisis de amenazas y vulnerabilidad, directorio, recursos, procedimientos, plano real, capacitación y simulacro; aprobar e implementar el plan y sus mejoras.",
+            "responsable": "Por asignar · propuesta: Julia + asesor SST + trabajadores",
+            "evidencia_requerida": "Plan aprobado, análisis, inventario, socialización, simulacro, registros de pruebas y acciones de mejora.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "4.11",
+            "origen": "Requerimiento IVC",
+            "tema": "quimicos",
+            "hallazgo": "No se evidencia hojas de seguridad de las sustancias químicas presentes ni matriz de compatibilidad.",
+            "accion": "Levantar el inventario real, obtener SDS vigentes y comprensibles, elaborar matriz de compatibilidad con fuentes, organizar almacenamiento y capacitar a las personas expuestas.",
+            "responsable": "Por asignar · propuesta: Responsable técnico + asesor SST",
+            "evidencia_requerida": "Inventario, SDS por producto, matriz de compatibilidad, fotografías de almacenamiento y registros de capacitación.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "4.3",
+            "origen": "Requerimiento IVC",
+            "tema": "senalizacion",
+            "hallazgo": "No se evidencia señalización de áreas y zonas de circulación del establecimiento.",
+            "accion": "Integrar con 1.5 y 1.7 la señalización de accesos, circulación, servicios, seguridad y salidas, según el levantamiento; conservar trazabilidad independiente para este requerimiento.",
+            "responsable": "Por asignar · propuesta: Julia + asesor SST",
+            "evidencia_requerida": "Listado de señales por área, plano verificado, fotografías e inspección de instalación y legibilidad.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "4.4",
+            "origen": "Requerimiento IVC",
+            "tema": "mantenimiento",
+            "hallazgo": "No se evidencia soporte de mantenimiento para maquinaria y equipos.",
+            "accion": "Completar inventario, criticidad, manuales y programa preventivo/correctivo; ejecutar mantenimientos pendientes y registrar responsables, repuestos, resultados y próxima fecha.",
+            "responsable": "Por asignar · propuesta: Responsable técnico + Julia",
+            "evidencia_requerida": "Inventario, programa, órdenes de trabajo, informes/certificados y registros de liberación y próxima revisión.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "4.5",
+            "origen": "Requerimiento IVC",
+            "tema": "derrames",
+            "hallazgo": "No se evidencia elementos o equipos para contención de derrames.",
+            "accion": "Seleccionar contención y kit según productos, cantidades, SDS y escenarios; instalar o ubicar los medios reales, señalizarlos, capacitar y programar inspección/reposición.",
+            "responsable": "Por asignar · propuesta: Responsable técnico + asesor SST",
+            "evidencia_requerida": "Evaluación, inventario del kit/contención, fotografías, fichas/SDS, capacitación e inspecciones de disponibilidad.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "4.6",
+            "origen": "Requerimiento IVC",
+            "tema": "recursos",
+            "hallazgo": "No se evidencia alarma de emergencia.",
+            "accion": "Definir un sistema de alarma adecuado al local y a las personas presentes, instalarlo o formalizarlo, comprobar cobertura y establecer pruebas, mantenimiento y respuesta.",
+            "responsable": "Por asignar · propuesta: Julia + asesor SST",
+            "evidencia_requerida": "Especificación, fotografías o descripción del medio, prueba de audibilidad/cobertura, registros y socialización.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "4.7",
+            "origen": "Requerimiento IVC",
+            "tema": "recursos",
+            "hallazgo": "No se evidencia extintor con carga vigente.",
+            "accion": "Dotar el establecimiento con el medio de extinción determinado por la evaluación, verificar carga/vigencia, estado, acceso y señalización, y registrar inspecciones y mantenimiento. No usar inventario de clientes como evidencia del recurso propio.",
+            "responsable": "Por asignar · propuesta: Julia + responsable técnico",
+            "evidencia_requerida": "ID del equipo propio, tipo/capacidad, ubicación real, etiqueta/constancia, fotografías e inspección vigente.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "4.9",
+            "origen": "Requerimiento IVC",
+            "tema": "recursos",
+            "hallazgo": "No se evidencia botiquín completo de primeros auxilios.",
+            "accion": "Definir contenido según riesgos, número de personas y orientación competente; dotar, ubicar y señalizar el botiquín, controlar vencimientos y registrar inspecciones y reposiciones.",
+            "responsable": "Por asignar · propuesta: Julia + asesor SST",
+            "evidencia_requerida": "Listado, criterio de dotación, fotografías, fechas de vencimiento, registros de inspección/reposición y capacitación.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        }
+    ],
+    "documentary_gaps": [
+        {
+            "codigo": "RD-01",
+            "origen": "Brecha documental",
+            "tema": "sgsst",
+            "hallazgo": "No se evidencia documento del Sistema de Seguridad y Salud en el Trabajo.",
+            "accion": "Completar, aprobar, socializar e implementar el expediente SG-SST; conservar evidencias de los siete estándares y no presentar el borrador como ejecución terminada.",
+            "responsable": "Por asignar · propuesta: Julia + asesor SST",
+            "evidencia_requerida": "Documentos aprobados, designación, afiliaciones, PAT, capacitaciones, salud, IPEVR y controles implementados.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "RD-02",
+            "origen": "Brecha documental",
+            "tema": "residuos",
+            "hallazgo": "No se evidencia manifiesto de recolección ni actas de tratamiento y disposición final.",
+            "accion": "Conciliar salidas con el gestor y obtener los documentos aplicables a cada residuo y al ámbito del Decreto 351 de 2014 citado; verificar contrato Urbaser y vigencia.",
+            "responsable": "Por asignar · propuesta: Julia + gestor de residuos",
+            "evidencia_requerida": "Manifiestos, remisiones, certificados/actas de tratamiento o disposición, contrato y conciliación de cantidades.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "RD-03",
+            "origen": "Brecha documental",
+            "tema": "residuos",
+            "hallazgo": "No se evidencia inventario de residuos peligrosos generados.",
+            "accion": "Caracterizar e inventariar los residuos realmente generados con nombre, estado, cantidad, origen, envase, ubicación y destino. Justificar ausencia de residuos peligrosos sólo con evaluación.",
+            "responsable": "Por asignar · propuesta: Responsable de residuos",
+            "evidencia_requerida": "Inventario actualizado, caracterización, SDS/soportes y conciliación con salidas.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "RD-04",
+            "origen": "Brecha documental",
+            "tema": "capacitaciones",
+            "hallazgo": "No se evidencia programa de capacitación en prácticas higiénicas, riesgos, almacenamiento químico y EPP.",
+            "accion": "Integrar los contenidos sanitarios al programa SG-SST, ejecutar formación con material específico y evaluar aprendizaje y aplicación práctica.",
+            "responsable": "Por asignar · propuesta: Responsable SG-SST + asesor",
+            "evidencia_requerida": "Programa, contenidos, lista de asistencia, evaluación y observación de prácticas.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "RD-05",
+            "origen": "Brecha documental",
+            "tema": "quimicos",
+            "hallazgo": "No se evidencia información sobre buenas prácticas para el manejo de sustancias químicas.",
+            "accion": "Disponer y socializar la guía de buenas prácticas, SDS y procedimientos de almacenamiento, manipulación, derrames y residuos en el punto de trabajo.",
+            "responsable": "Por asignar · propuesta: Responsable técnico + asesor SST",
+            "evidencia_requerida": "Guía aprobada, evidencia de socialización, acceso a SDS e inspección de aplicación.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "RD-06",
+            "origen": "Brecha documental",
+            "tema": "productos",
+            "hallazgo": "No se evidencia listado de productos terminados en el establecimiento.",
+            "accion": "Levantar el listado correspondiente a la actividad real con nombre genérico/comercial, estado, cantidad y unidad; aclarar con la ETS el campo de cantidad producida si sólo se comercializa o presta servicio.",
+            "responsable": "Por asignar · propuesta: Julia + responsable de inventario",
+            "evidencia_requerida": "Listado fechado y conciliado con inventario; aclaración de alcance si aplica.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "RD-07",
+            "origen": "Brecha documental",
+            "tema": "seguimiento",
+            "hallazgo": "No se evidencia registro de uso del suelo emitido por la autoridad competente.",
+            "accion": "Consultar y tramitar el soporte de uso del suelo ante la autoridad competente para la dirección que se unifique; conservar radicado y documento oficial.",
+            "responsable": "Por asignar · propuesta: Julia + asesoría competente",
+            "evidencia_requerida": "Registro/certificado oficial vigente, radicado y correspondencia con dirección y actividad.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        },
+        {
+            "codigo": "RD-08",
+            "origen": "Brecha documental",
+            "tema": "quimicos",
+            "hallazgo": "No se evidencia inventario de insumos químicos empleados en el establecimiento.",
+            "accion": "Completar el inventario con nombre genérico/comercial, estado, cantidad almacenada, unidad, uso, ubicación y SDS; actualizar entradas, salidas y existencias.",
+            "responsable": "Por asignar · propuesta: Responsable técnico/inventario",
+            "evidencia_requerida": "Inventario fechado, SDS, fotografías y conciliación física de cantidades.",
+            "estado": "Pendiente",
+            "fecha_compromiso": null,
+            "verificacion": ""
+        }
+    ],
+    "validations": [
+        {
+            "titulo": "Validar dirección",
+            "datos": {
+                "tema": "Dirección",
+                "dato_acta": "KR 4 60 17; también dirección de notificación",
+                "dato_previo": "Cra. 4 No. 13-65 suministrado previamente",
+                "accion": "Confirmar si es cambio de sede, error o dos establecimientos; unificar documentos y soporte oficial",
+                "soporte": "RUT/registro/Documento de sede por confirmar"
+            },
+            "observaciones": "Discrepancia D-01. Podrían mezclarse sedes o usarse una dirección incorrecta en respuestas y emergencias Estado documentado: Pendiente. No unificar datos sin soporte."
+        },
+        {
+            "titulo": "Validar ciiu y alcance",
+            "datos": {
+                "tema": "CIIU y alcance",
+                "dato_acta": "4759, comercio al por menor de otros artículos domésticos en establecimientos especializados",
+                "dato_previo": "Venta, mantenimiento y recarga declaradas",
+                "accion": "Cotejar RUT, actividades secundarias y clasificación ARL; no alterar el acta",
+                "soporte": "RUT y certificado ARL"
+            },
+            "observaciones": "Discrepancia D-02. El código del acta no describe por sí solo el alcance técnico completo Estado documentado: Pendiente. No unificar datos sin soporte."
+        },
+        {
+            "titulo": "Validar número de trabajadores y afiliaciones",
+            "datos": {
+                "tema": "Número de trabajadores y afiliaciones",
+                "dato_acta": "Un operativo visible; campos administrativos/afiliaciones no consolidados",
+                "dato_previo": "Dos trabajadores declarados: Julia y Felipe Cartaya",
+                "accion": "Conciliar plantilla, tipo de vínculo y soportes de seguridad social",
+                "soporte": "Contratos, afiliaciones y PILA según aplique"
+            },
+            "observaciones": "Discrepancia D-03. La información de cobertura y estándares puede quedar inconsistente Estado documentado: Pendiente. No unificar datos sin soporte."
+        },
+        {
+            "titulo": "Validar persona que atendió/firmó",
+            "datos": {
+                "tema": "Persona que atendió/firmó",
+                "dato_acta": "Felipe Martínez, vendedor",
+                "dato_previo": "Felipe Cartaya, empleado declarado",
+                "accion": "Confirmar identidad, vínculo y relación con la plantilla sin duplicar datos personales en el índice general",
+                "soporte": "Soporte de vinculación en custodia restringida"
+            },
+            "observaciones": "Discrepancia D-04. No es válido asumir que son la misma persona ni cambiar la plantilla Estado documentado: Pendiente. No unificar datos sin soporte."
+        },
+        {
+            "titulo": "Validar local de 6 × 4 m",
+            "datos": {
+                "tema": "Local de 6 × 4 m",
+                "dato_acta": "El acta no registra levantamiento fotográfico ni geometría útil para el plano",
+                "dato_previo": "Envolvente rectangular de 24 m² declarada previamente",
+                "accion": "Confirmar a qué dirección corresponde el levantamiento antes de usarlo para señalización o evacuación",
+                "soporte": "Levantamiento de la sede unificada"
+            },
+            "observaciones": "Discrepancia D-05. El plano podría asociarse a una sede distinta de la inspeccionada Estado documentado: Pendiente. No unificar datos sin soporte."
+        },
+        {
+            "titulo": "Validar correo de notificación",
+            "datos": {
+                "tema": "Correo de notificación",
+                "dato_acta": "julia_ines_buitrago@hotmail.com; notificación electrónica autorizada",
+                "dato_previo": "Estaba pendiente en la primera versión",
+                "accion": "Confirmar que sigue vigente y custodiar el canal de notificación",
+                "soporte": "Confirmación de la titular"
+            },
+            "observaciones": "Discrepancia D-06. Un cambio de correo podría impedir recibir requerimientos Estado documentado: Documentado en acta; vigencia por confirmar. No unificar datos sin soporte."
+        },
+        {
+            "titulo": "Validar asesoría externa SG-SST",
+            "datos": {
+                "tema": "Asesor externo",
+                "dato_acta": "No se utiliza como soporte independiente verificado en esta precarga.",
+                "dato_previo": "Luis Antonio Aguilar, asesor externo; resolución y soporte por verificar.",
+                "accion": "Verificar identidad, licencia o resolución vigente, alcance de la asesoría y relación con el responsable SG-SST antes de registrarlo como soporte.",
+                "soporte": "Resolución o licencia, contrato y evidencias de actuación, según corresponda."
+            },
+            "observaciones": "No se asignan funciones, firmas ni cierres al asesor sin soportes verificados."
+        }
+    ]
+}

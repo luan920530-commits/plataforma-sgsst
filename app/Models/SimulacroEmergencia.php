@@ -27,6 +27,16 @@ final class SimulacroEmergencia
         return Database::lastId();
     }
 
+    public static function update(int $id, int $tenantId, array $data): bool
+    {
+        return Database::execute(
+            'UPDATE simulacros_emergencia SET fecha = ?, tipo = ?, participantes = ?, responsable = ?, resultado = ?,
+                                                acciones_mejora = ?, estado = ?, updated_at = CURRENT_TIMESTAMP
+             WHERE id = ? AND tenant_id = ?',
+            [$data['fecha'], trim($data['tipo']), (int) $data['participantes'], trim($data['responsable']), trim($data['resultado'] ?? ''), trim($data['acciones_mejora'] ?? ''), $data['estado'], $id, $tenantId]
+        ) === 1;
+    }
+
     public static function setStatus(int $id, int $tenantId, string $status, string $result = '', string $improvements = ''): void
     {
         Database::execute('UPDATE simulacros_emergencia SET estado = ?, resultado = ?, acciones_mejora = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_id = ?', [$status, trim($result), trim($improvements), $id, $tenantId]);

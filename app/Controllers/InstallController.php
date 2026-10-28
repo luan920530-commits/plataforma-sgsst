@@ -25,6 +25,7 @@ final class InstallController extends BaseController
             'detectedUrl' => absolute_url('/'),
             'secureConnection' => str_starts_with(absolute_url('/'), 'https://'),
             'demoMode' => (bool) ($GLOBALS['config']['demo'] ?? false),
+            'companyProfile' => (string) ($GLOBALS['config']['company_seed'] ?? ''),
         ], 'layouts/auth');
     }
 
@@ -71,6 +72,15 @@ final class InstallController extends BaseController
             redirect('/login');
         }
         session_regenerate_id(true);
+        if (!empty($admin['company']['access'])) {
+            $this->view('auth/install-success', [
+                'title' => 'Extintores SCM instalado',
+                'superAdminEmail' => $admin['email'],
+                'companyAccess' => $admin['company']['access'],
+                'companyResult' => $admin['company'],
+            ], 'layouts/auth');
+            return;
+        }
         flash('success', $demoMode
             ? 'Instalación demo completada. Usa los accesos de demostración indicados en LEEME.txt.'
             : 'Instalación completada. Ingresa con el correo ' . $admin['email'] . ' y la contraseña que acabas de crear.');

@@ -63,7 +63,7 @@ final class Auth
         unset($_SESSION['_login_attempts'], $_SESSION['_login_locked_until']);
 
         if (password_needs_rehash($user['password'], PASSWORD_DEFAULT)) {
-            User::updatePassword((int) $user['id'], password_hash($password, PASSWORD_DEFAULT));
+            User::rehashPassword((int) $user['id'], password_hash($password, PASSWORD_DEFAULT));
         }
         User::markLogin((int) $user['id']);
         self::$user = User::findActive((int) $user['id']);

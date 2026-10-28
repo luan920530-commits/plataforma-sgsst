@@ -97,6 +97,22 @@ final class PlanoEmergenciaController extends BaseController
         redirect('/planos-emergencia/' . $id . '/editar');
     }
 
+    public function delete(int $id): void
+    {
+        $drawing = $this->drawing($id);
+        $plan = $this->plan((int) $drawing['plan_id']);
+        $this->ensureEditable($plan);
+        if (PlanoEmergencia::dependencies($id, $this->tenantId())['evidencias'] > 0) {
+            flash('error', 'No se puede eliminar el plano porque tiene evidencias vinculadas. Conserva su trazabilidad o revisa primero esos soportes.');
+            redirect('/planos-emergencia/' . $id . '/editar');
+        }
+        $versions = count(PlanoEmergencia::versions($id, $this->tenantId()));
+        PlanoEmergencia::delete($id, $this->tenantId());
+        Audit::record('Plano de emergencia eliminado', 'PlanoEmergencia', $id, ['plan_id' => $plan['id'], 'versiones_eliminadas' => $versions]);
+        flash('success', 'El plano y sus ' . $versions . ' versiones fueron eliminados. La acción quedó auditada.');
+        redirect('/emergencias/' . $plan['id']);
+    }
+
     /** Recibe el Blob PNG del navegador sin debilitar la validación de archivos subidos. */
     public function exportPng(int $id): void
     {

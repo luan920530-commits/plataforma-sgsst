@@ -73,6 +73,8 @@ if ($role === 'SuperAdmin') {
             ['Biblioteca SG-SST', '/biblioteca-sgsst', 'documents'],
             ['PESV · Seguridad vial', '/pesv', 'shield-plain'],
             ['Documentación y evidencias', '/cumplimiento-documental', 'shield-plain'],
+            ['Cumplimiento IVC', '/ivc', 'clipboard'],
+            ['Gestión sanitaria', '/sanitario', 'shield'],
             ['Ciclo PHVA', '/phva', 'phva', true],
             ['Plan Anual de Trabajo', '/plan-anual', 'calendar'],
             ['Matriz IPEVR', '/matriz-ipevr', 'grid'],

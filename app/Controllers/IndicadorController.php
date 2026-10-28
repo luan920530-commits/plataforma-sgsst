@@ -21,15 +21,62 @@ final class IndicadorController extends BaseController
 
     public function store(): void
     {
+        [$data, $errors] = $this->validatedInput();
+        if ($errors !== []) {
+            fail_validation($errors, $data, '/indicadores');
+        }
+        $data['tenant_id'] = $this->tenantId();
+        $id = Indicador::create($data);
+        Audit::record('Medición de indicador registrada', 'Indicador', $id, ['tipo' => $data['tipo'], 'resultado' => $data['resultado']]);
+        flash('success', 'Medición guardada. Verifica la calidad y trazabilidad de los datos fuente.');
+        redirect('/indicadores');
+    }
+
+    public function edit(int $id): void
+    {
+        $indicator = $this->indicator($id);
+        $this->view('tenant/indicadores/edit', [
+            'title' => 'Editar medición',
+            'indicator' => $indicator,
+            'definitions' => $this->definitions(),
+        ]);
+    }
+
+    public function update(int $id): void
+    {
+        $current = $this->indicator($id);
+        [$data, $errors] = $this->validatedInput();
+        if ($errors !== []) {
+            fail_validation($errors, $data, '/indicadores/' . $id . '/editar');
+        }
+        Indicador::update($id, $this->tenantId(), $data);
+        Audit::record('Medición de indicador actualizada', 'Indicador', $id, ['antes' => $current, 'tipo' => $data['tipo'], 'resultado' => $data['resultado']]);
+        flash('success', 'Medición actualizada y resultado recalculado en el servidor.');
+        redirect('/indicadores');
+    }
+
+    public function delete(int $id): void
+    {
+        $indicator = $this->indicator($id);
+        Indicador::delete($id, $this->tenantId());
+        Audit::record('Medición de indicador eliminada', 'Indicador', $id, ['registro' => $indicator]);
+        flash('success', 'Medición eliminada. La acción quedó registrada en auditoría.');
+        redirect('/indicadores');
+    }
+
+    private function validatedInput(): array
+    {
         $data = [
-            'tenant_id' => $this->tenantId(), 'tipo' => (string) $this->input('tipo'), 'nombre' => (string) $this->input('nombre'),
+            'tipo' => (string) $this->input('tipo'), 'nombre' => (string) $this->input('nombre'),
             'periodo' => (string) $this->input('periodo'), 'numerador' => $this->input('numerador'),
-            'denominador' => $this->input('denominador'), 'meta' => $this->input('meta'), 'fecha_corte' => (string) $this->input('fecha_corte'),
+            'denominador' => $this->input('denominador'), 'meta' => $this->input('meta'),
+            'fecha_corte' => (string) $this->input('fecha_corte'),
         ];
-        $types = array_keys($this->definitions());
         $validator = new Validator($data);
-        $validator->required('tipo', 'tipo')->in('tipo', 'tipo', $types)->required('nombre', 'nombre')->max('nombre', 'nombre', 200)
-            ->required('periodo', 'periodo')->max('periodo', 'periodo', 30)->required('numerador', 'numerador')->numeric('numerador', 'numerador')
+        $validator->required('tipo', 'tipo')->in('tipo', 'tipo', array_keys($this->definitions()))
+            ->required('nombre', 'nombre')->max('nombre', 'nombre', 200)
+            ->required('periodo', 'periodo')->max('periodo', 'periodo', 30)
+            ->required('numerador', 'numerador')->numeric('numerador', 'numerador')
             ->required('denominador', 'denominador')->numeric('denominador', 'denominador')
             ->numeric('meta', 'meta')->required('fecha_corte', 'fecha de corte')->date('fecha_corte', 'fecha de corte');
         $errors = $validator->errors();
@@ -46,18 +93,24 @@ final class IndicadorController extends BaseController
                 $errors['unidad'] = 'La unidad personalizada no puede superar 80 caracteres.';
             }
         }
-        if ($errors !== []) {
-            fail_validation($errors, $data + ['factor' => $customFactor, 'unidad' => $customUnit], '/indicadores');
+        $data['factor'] = $customFactor;
+        $data['unidad'] = $customUnit;
+        if ($errors === []) {
+            $definition = Indicator::definition($data['tipo']);
+            $data['factor'] = $data['tipo'] === 'Personalizado' ? (float) $customFactor : $definition['factor'];
+            $data['unidad'] = $data['tipo'] === 'Personalizado' ? $customUnit : $definition['unidad'];
+            $data['resultado'] = Indicator::calculate((float) $data['numerador'], (float) $data['denominador'], (float) $data['factor']);
         }
-        $definition = Indicator::definition($data['tipo']);
-        $factor = $data['tipo'] === 'Personalizado' ? (float) $customFactor : $definition['factor'];
-        $data['factor'] = $factor;
-        $data['unidad'] = $data['tipo'] === 'Personalizado' ? $customUnit : $definition['unidad'];
-        $data['resultado'] = Indicator::calculate((float) $data['numerador'], (float) $data['denominador'], $factor);
-        $id = Indicador::create($data);
-        Audit::record('Medición de indicador registrada', 'Indicador', $id, ['tipo' => $data['tipo'], 'resultado' => $data['resultado']]);
-        flash('success', 'Medición guardada. Verifica la calidad y trazabilidad de los datos fuente.');
-        redirect('/indicadores');
+        return [$data, $errors];
+    }
+
+    private function indicator(int $id): array
+    {
+        $indicator = Indicador::findForTenant($id, $this->tenantId());
+        if ($indicator === null) {
+            $this->notFound('La medición no existe o no pertenece a tu empresa.');
+        }
+        return $indicator;
     }
 
     private function definitions(): array

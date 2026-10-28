@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 use App\Core\Database;
 use App\Models\Evidencia;
+use App\Models\IvcRequerimiento;
 use App\Services\EvidenceLinker;
 use App\Services\EvidenceStorage;
 use App\Services\ModuleAccess;
@@ -116,6 +117,14 @@ final class EvidenciaController extends BaseController
         if (text_length($notes) > 2000) {
             flash('error', 'Las observaciones de revisión no pueden superar 2.000 caracteres.');
             redirect('/evidencias#evidencia-' . $id);
+        }
+        if ($evidence['estado_revision'] === 'Revisado' && $status === 'Pendiente' && $evidence['entidad_tipo'] === 'ivc_requerimiento' && ctype_digit((string) $evidence['entidad_id'])) {
+            $requirementId = (int) $evidence['entidad_id'];
+            $requirement = IvcRequerimiento::findForTenant($requirementId, $this->tenantId());
+            if ($requirement !== null && $requirement['estado'] === 'Cerrado' && IvcRequerimiento::reviewedEvidenceCount($requirementId, $this->tenantId()) <= 1) {
+                flash('error', 'Esta es la única evidencia revisada que sustenta el cierre. Cambia primero el requerimiento a un estado abierto y documenta la revisión.');
+                redirect('/evidencias#evidencia-' . $id);
+            }
         }
         Evidencia::review($id, $this->tenantId(), $status, $notes, Auth::id());
         Audit::record('Revisión humana de evidencia actualizada', 'Evidencia', $id, ['estado' => $status]);

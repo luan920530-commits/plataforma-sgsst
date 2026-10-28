@@ -179,7 +179,7 @@ function status_class(string $status): string
 {
     return match ($status) {
         'Activa', 'Activo', 'Aprobado', 'Completado', 'Cerrado', 'Gestionado', 'Realizada', 'Realizado', 'Verificado', 'Bajo' => 'badge-green',
-        'En Proceso', 'En revision', 'En gestion', 'Programada', 'Programado', 'Medio' => 'badge-blue',
+        'En Proceso', 'En curso', 'Por verificar', 'Ejecutado', 'En revision', 'En gestion', 'Programada', 'Programado', 'Medio' => 'badge-blue',
         'Pendiente', 'Recibido', 'Borrador', 'Alto' => 'badge-amber',
         'Suspendida', 'Obsoleto', 'Cancelada', 'Cancelado', 'Critico', 'Vencido' => 'badge-red',
         default => 'badge-gray',

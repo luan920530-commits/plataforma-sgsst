@@ -1,0 +1,49 @@
+NORMIA SST · EXTINTORES SCM · INSTALACIÓN EN HOSTING
+==================================================
+
+1. En DirectAdmin selecciona PHP 8.1 o superior y habilita:
+   pdo_sqlite, sqlite3, dom, libxml, json, session y fileinfo.
+
+2. Sube este ZIP a la carpeta del dominio, un nivel ENCIMA de public_html,
+   y extráelo allí. Deben quedar dos carpetas:
+   /domains/TU_DOMINIO/public_html/
+   /domains/TU_DOMINIO/normia-sst/
+
+3. Activa HTTPS y abre inmediatamente el dominio. El instalador comprobará
+   el servidor y pedirá nombre, correo y contraseña del SuperAdmin.
+
+4. Al finalizar verás una sola vez el acceso temporal de Extintores SCM.
+   Guarda esa contraseña por un canal privado. El primer ingreso empresarial
+   exige cambiarla antes de abrir los demás módulos.
+
+QUÉ SE INSTALA
+--------------
+- Extintores SCM · NIT 39626936-8 · Soacha · teléfono 3212944603.
+- Configuración inicial de 7 estándares y documentos en estado Borrador.
+- Acta IVC 028-050164-26: 20 requerimientos y 8 brechas documentales.
+- Siete fichas de datos por validar, incluidas direcciones, plantilla, CIIU/ARL,
+  local referencial y asesoría externa.
+- Módulos CRUD de actas, requerimientos y registros sanitarios con evidencias.
+
+Todos los seguimientos inician PENDIENTES. No se crean ejecuciones, aprobaciones,
+certificados, pruebas hidrostáticas, cierres ni respuestas de la autoridad.
+CIIU 4759 y riesgo II deben validarse con RUT/ARL. Las direcciones Cra. 4 No.
+13-65 y KR 4 60 17 no se unifican automáticamente. Felipe Cartaya y Felipe
+Martínez se conservan como referencias distintas.
+
+PRIVACIDAD Y ARCHIVOS
+--------------------
+El ZIP no contiene bases SQLite, WAL/SHM, sesiones, credenciales, registros,
+PDF privado del acta ni archivos temporales. Se conserva únicamente la referencia
+y la huella SHA-256 del acta. Carga la copia controlada desde el centro de
+evidencias después de instalar y verifica su integridad.
+
+No necesitas Terminal, Cron, Composer, Node.js, MySQL ni crear manualmente .env.
+No uses chmod 777. Mantén APP_DEBUG=false y HTTPS activo.
+
+ACTUALIZAR SIN PERDER DATOS
+---------------------------
+Descarga primero una copia privada de normia-sst/database y normia-sst/storage.
+Extrae el ZIP nuevo aceptando reemplazar el código. El paquete no contiene la
+base, por lo que no la sobrescribe. Las migraciones se aplican al arrancar.
+La precarga es idempotente y no duplica una empresa con el mismo NIT.

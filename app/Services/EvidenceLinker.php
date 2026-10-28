@@ -8,9 +8,11 @@ use App\Models\Autoreporte;
 use App\Models\BibliotecaRespuesta;
 use App\Models\Capacitacion;
 use App\Models\Documento;
+use App\Models\IvcRequerimiento;
 use App\Models\PlanEmergencia;
 use App\Models\PlanoEmergencia;
 use App\Models\ProgramaPrevencion;
+use App\Models\SanitarioRegistro;
 use App\Models\SimulacroEmergencia;
 use DomainException;
 
@@ -44,6 +46,14 @@ final class EvidenceLinker
                 'value' => 'capacitacion:' . $row['id'],
                 'label' => $row['tema'] . ' · ' . $row['fecha_programada'],
             ], Capacitacion::forTenant($tenantId)));
+            self::addGroup($groups, 'Requerimientos y brechas IVC', array_map(static fn(array $row): array => [
+                'value' => 'ivc_requerimiento:' . $row['id'],
+                'label' => $row['codigo'] . ' · Acta ' . $row['numero_acta'] . ' · ' . excerpt($row['hallazgo'], 70),
+            ], IvcRequerimiento::forTenant($tenantId)));
+            self::addGroup($groups, 'Registros sanitarios', array_map(static fn(array $row): array => [
+                'value' => 'sanitario:' . $row['id'],
+                'label' => $row['titulo'] . ' · ' . $row['fecha_registro'],
+            ], SanitarioRegistro::forTenant($tenantId)));
         }
 
         if (in_array($current, [ModuleAccess::SGST, ModuleAccess::PESV], true)) {
@@ -121,6 +131,16 @@ final class EvidenceLinker
                 if ($row === null) break;
                 self::authorize(ModuleAccess::SGST, $current);
                 return self::linked($type, $id, 'Capacitación · ' . $row['tema'] . ' · ' . $row['fecha_programada'], ModuleAccess::SGST);
+            case 'ivc_requerimiento':
+                $row = IvcRequerimiento::findForTenant($id, $tenantId);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, 'IVC ' . $row['codigo'] . ' · ' . excerpt($row['hallazgo'], 100), ModuleAccess::SGST);
+            case 'sanitario':
+                $row = SanitarioRegistro::findForTenant($id, $tenantId);
+                if ($row === null) break;
+                self::authorize(ModuleAccess::SGST, $current);
+                return self::linked($type, $id, 'Registro sanitario · ' . $row['titulo'] . ' · ' . $row['fecha_registro'], ModuleAccess::SGST);
             case 'formulario':
                 $row = BibliotecaRespuesta::findForTenant($id, $tenantId);
                 if ($row === null) break;
@@ -162,6 +182,8 @@ final class EvidenceLinker
             'documento' => '/documentos/' . rawurlencode($id),
             'autoreporte' => '/autoreportes/' . rawurlencode($id),
             'capacitacion' => '/capacitaciones/' . rawurlencode($id) . '/editar',
+            'ivc_requerimiento' => self::ivcRequirementUrl($evidence),
+            'sanitario' => '/sanitario/registros/' . rawurlencode($id),
             'formulario' => (($evidence['modulo'] ?? '') === ModuleAccess::PESV ? '/pesv/respuestas/' : '/biblioteca-sgsst/respuestas/') . rawurlencode($id),
             'emergencia' => '/emergencias/' . rawurlencode($id),
             'simulacro' => self::drillUrl($evidence),
@@ -170,6 +192,12 @@ final class EvidenceLinker
             'requisito' => '/cumplimiento-documental?requisito=' . rawurlencode($id) . '#soportes',
             default => null,
         };
+    }
+
+    private static function ivcRequirementUrl(array $evidence): ?string
+    {
+        $row = IvcRequerimiento::findForTenant((int) $evidence['entidad_id'], (int) $evidence['tenant_id']);
+        return $row === null ? null : '/ivc/' . $row['acta_id'] . '#requerimiento-' . $row['id'];
     }
 
     private static function drillUrl(array $evidence): ?string

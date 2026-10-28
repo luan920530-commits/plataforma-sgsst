@@ -43,6 +43,19 @@ final class ActividadEconomica
         return Database::lastId();
     }
 
+    public static function update(int $id, array $data): bool
+    {
+        return Database::execute(
+            'UPDATE actividades_economicas SET codigo_ciuu = ?, descripcion = ?, sector = ?, nivel_riesgo_predeterminado = ?,
+                                                 perfil_sociodemografico = ?, examenes_medicos = ?
+             WHERE id = ?',
+            [
+                trim($data['codigo_ciuu']), trim($data['descripcion']), trim($data['sector']), $data['nivel_riesgo_predeterminado'],
+                trim($data['perfil_sociodemografico']), json_encode($data['examenes_medicos'], JSON_UNESCAPED_UNICODE), $id,
+            ]
+        ) === 1;
+    }
+
     public static function setActive(int $id, bool $active): void
     {
         Database::execute('UPDATE actividades_economicas SET activo = ? WHERE id = ?', [$active ? 1 : 0, $id]);

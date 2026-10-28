@@ -28,7 +28,7 @@ final class Installer
         return (int) (Database::first("SELECT COUNT(*) AS total FROM users WHERE rol = 'SuperAdmin'")['total'] ?? 0) > 0;
     }
 
-    public static function installWithSuperAdmin(string $email, string $password, string $name): array
+    public static function installWithSuperAdmin(string $email = '', string $password = '', string $name = ''): array
     {
         $lock = self::acquireInstallLock();
         try {
@@ -36,7 +36,17 @@ final class Installer
                 return ['created' => false];
             }
             self::run();
-            return self::createInitialSuperAdmin($email, $password, $name);
+            return Database::transaction(static function () use ($email, $password, $name): array {
+                $admin = self::createInitialSuperAdmin($email, $password, $name);
+                $profile = (string) ($GLOBALS['config']['company_seed'] ?? '');
+                if ($profile !== '') {
+                    if ($profile !== ExtintoresScmSeeder::PROFILE) {
+                        throw new RuntimeException('El perfil de empresa solicitado no está soportado.');
+                    }
+                    $admin['company'] = ExtintoresScmSeeder::seed();
+                }
+                return $admin;
+            });
         } finally {
             flock($lock, LOCK_UN);
             fclose($lock);
@@ -103,6 +113,14 @@ final class Installer
                 'detail' => 'Esquema y 142 plantillas autocontenidas, sin ZIP documental.',
             ],
         ];
+
+        if (($GLOBALS['config']['company_seed'] ?? '') === ExtintoresScmSeeder::PROFILE) {
+            $checks[] = [
+                'label' => 'Perfil Extintores SCM',
+                'ok' => is_readable(BASE_PATH . '/resources/extintores-scm/seed.json'),
+                'detail' => 'Empresa, borradores SG-SST, acta, 28 seguimientos y validaciones; sin PDF privado, base ni contraseñas incluidas.',
+            ];
+        }
 
         return $checks;
     }

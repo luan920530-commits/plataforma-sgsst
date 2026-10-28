@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-if (PHP_SAPI !== 'cli') {
+if (!in_array(PHP_SAPI, ['cli', 'wasm'], true)) {
     http_response_code(404);
     exit;
 }
@@ -23,8 +23,13 @@ use App\Models\Autoreporte;
 use App\Models\BibliotecaRespuesta;
 use App\Models\Capacitacion;
 use App\Models\Documento;
+use App\Models\Empleado;
 use App\Models\Evidencia;
+use App\Models\Hallazgo;
+use App\Models\Indicador;
 use App\Models\Induccion;
+use App\Models\IvcActa;
+use App\Models\IvcRequerimiento;
 use App\Models\Peligro;
 use App\Models\PermisoTrabajo;
 use App\Models\PlanEmergencia;
@@ -35,6 +40,8 @@ use App\Models\ProgramaActividad;
 use App\Models\ProgramaPrevencion;
 use App\Models\RequisitoAccion;
 use App\Models\RequisitoSeguimiento;
+use App\Models\SanitarioRegistro;
+use App\Models\ActividadEconomica;
 use App\Models\SimulacroEmergencia;
 use App\Models\SoporteCumplimiento;
 use App\Models\Tenant;
@@ -45,6 +52,7 @@ use App\Services\DocumentGenerator;
 use App\Services\EvidenceLinker;
 use App\Services\EvidenceStorage;
 use App\Services\ExcelCalculator;
+use App\Services\ExtintoresScmSeeder;
 use App\Services\FloorPlan;
 use App\Services\Installer;
 use App\Services\LibraryOriginal;
@@ -52,6 +60,7 @@ use App\Services\ModuleAccess;
 use App\Services\OperationalDocument;
 use App\Services\PesvLibrary;
 use App\Services\SgsstLibrary;
+use App\Services\SanitaryCatalog;
 use App\Services\SchemaMigrator;
 use App\Services\ProcedureLibrary;
 use App\Services\TenantModuleGenerator;
@@ -156,10 +165,10 @@ try {
     $constructionId = (int) $construction['id'];
 
     $test('Esquema, claves foráneas y catálogos', static function (): void {
-        expectSame(30, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
+        expectSame(33, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
         expectSame(1, (int) Database::first('PRAGMA foreign_keys')['foreign_keys']);
         expectSame([], Database::query('PRAGMA foreign_key_check'));
-        expectSame(20, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
+        expectSame(21, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
         expectTrue((int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'index' AND sql IS NOT NULL")['n'] >= 20);
     });
 
@@ -1124,11 +1133,231 @@ try {
         }
     });
 
+    $test('IVC y registros sanitarios: CRUD, evidencias y aislamiento', static function () use ($mainId, $constructionId): void {
+        $admin = User::findForAuthentication('admin@andina.co');
+        $actaData = [
+            'numero_acta' => 'IVC-CRUD-01', 'autoridad' => 'Autoridad de prueba', 'fecha_visita' => '2026-10-01',
+            'fecha_notificacion' => '2026-10-02', 'fecha_limite' => '2026-11-01', 'concepto' => 'Favorable con requerimientos',
+            'porcentaje' => 53.5, 'direccion_visita' => 'Dirección de prueba', 'fuente_nombre' => 'fuente.pdf',
+            'fuente_sha256' => str_repeat('a', 64), 'observaciones' => 'Registro sintético para validar el CRUD.',
+        ];
+        $actaId = IvcActa::create($actaData + ['tenant_id' => $mainId]);
+        $otherActaId = IvcActa::create($actaData + ['tenant_id' => $constructionId]);
+        expectTrue($actaId > 0 && $otherActaId > 0, 'El mismo número de acta debe poder existir en tenants distintos.');
+        expectSame(null, IvcActa::findForTenant($actaId, $constructionId));
+        $changedActa = $actaData;
+        $changedActa['concepto'] = 'Concepto actualizado por prueba';
+        expectTrue(IvcActa::update($actaId, $mainId, $changedActa));
+        expectSame('Concepto actualizado por prueba', IvcActa::findForTenant($actaId, $mainId)['concepto']);
+        expectSame('Favorable con requerimientos', IvcActa::findForTenant($otherActaId, $constructionId)['concepto']);
+
+        $requirementData = [
+            'codigo' => 'INT-01', 'origen' => 'Seguimiento interno', 'tema' => 'quimicos',
+            'hallazgo' => 'Hallazgo sintético', 'accion' => 'Acción de prueba', 'responsable' => 'Responsable de prueba',
+            'fecha_compromiso' => '2026-11-15', 'estado' => 'Pendiente', 'evidencia_requerida' => 'Informe revisado', 'verificacion' => '',
+        ];
+        $requirementId = IvcRequerimiento::create($requirementData + ['tenant_id' => $mainId, 'acta_id' => $actaId]);
+        expectSame(null, IvcRequerimiento::findForTenant($requirementId, $constructionId));
+        $recordData = [
+            'requerimiento_id' => $requirementId, 'tipo' => 'quimicos', 'titulo' => 'Inventario sintético',
+            'fecha_registro' => '2026-10-27', 'responsable' => 'Responsable de prueba', 'estado' => 'Pendiente',
+            'datos' => ['producto' => 'Producto de prueba', 'cantidad' => '2.5', 'unidad' => 'kg', 'sds_fecha' => '2026-10-01'],
+            'observaciones' => 'No representa una ejecución real.', 'created_by' => (int) $admin['id'],
+        ];
+        $recordId = SanitarioRegistro::create($recordData + ['tenant_id' => $mainId]);
+        expectSame(null, SanitarioRegistro::findForTenant($recordId, $constructionId));
+        $recordData['titulo'] = 'Inventario sintético actualizado';
+        $recordData['datos']['producto'] = 'Producto actualizado';
+        expectTrue(SanitarioRegistro::update($recordId, $mainId, $recordData));
+        $storedRecord = SanitarioRegistro::findForTenant($recordId, $mainId);
+        expectSame('Producto actualizado', $storedRecord['datos']['producto']);
+        expectSame('2.5', $storedRecord['datos']['cantidad']);
+
+        $link = EvidenceLinker::resolve('ivc_requerimiento:' . $requirementId, $mainId, ModuleAccess::SGST);
+        expectSame('ivc_requerimiento', $link['entidad_tipo']);
+        $evidenceId = Evidencia::create(array_merge(evidenceTestData($mainId, 'ivc-crud-' . $requirementId, ModuleAccess::SGST, (int) $admin['id']), $link));
+        Evidencia::review($evidenceId, $mainId, 'Revisado', 'Revisión sintética de prueba', (int) $admin['id']);
+        expectSame(1, IvcRequerimiento::reviewedEvidenceCount($requirementId, $mainId));
+        expectSame(1, (int) IvcRequerimiento::dependencies($requirementId, $mainId)['evidencias']);
+        expectSame(1, (int) IvcActa::dependencies($actaId, $mainId)['registros']);
+        expectSame('/ivc/' . $actaId . '#requerimiento-' . $requirementId, EvidenceLinker::url(['entidad_tipo' => 'ivc_requerimiento', 'entidad_id' => (string) $requirementId, 'tenant_id' => $mainId]));
+        $crossBlocked = false;
+        try { EvidenceLinker::resolve('ivc_requerimiento:' . $requirementId, $constructionId, ModuleAccess::SGST); } catch (DomainException) { $crossBlocked = true; }
+        expectTrue($crossBlocked);
+        $changedRequirement = $requirementData;
+        $changedRequirement['estado'] = 'Cerrado';
+        $changedRequirement['verificacion'] = 'Verificación sintética con evidencia revisada.';
+        expectTrue(IvcRequerimiento::update($requirementId, $mainId, $changedRequirement));
+        expectSame('Cerrado', IvcRequerimiento::findForTenant($requirementId, $mainId)['estado']);
+
+        $secondRequirement = IvcRequerimiento::create(array_merge($requirementData, ['tenant_id' => $mainId, 'acta_id' => $actaId, 'codigo' => 'INT-02']));
+        $secondRecord = SanitarioRegistro::create(array_merge($recordData, ['tenant_id' => $mainId, 'requerimiento_id' => $secondRequirement, 'titulo' => 'Registro eliminable']));
+        expectTrue(SanitarioRegistro::delete($secondRecord, $mainId));
+        expectTrue(IvcRequerimiento::delete($secondRequirement, $mainId));
+        expectSame(null, IvcRequerimiento::findForTenant($secondRequirement, $mainId));
+        expectSame(12, count(SanitaryCatalog::types()));
+        expectTrue(!isset(SanitaryCatalog::types()['capacitacion_sanitaria']), 'La capacitación debe reutilizar el módulo existente.');
+        foreach (SanitaryCatalog::types() as $type => $definition) {
+            expectSame($type, SanitaryCatalog::definition($type) === $definition ? $type : '');
+            $keys = array_column($definition['fields'], 'key');
+            expectSame(count($keys), count(array_unique($keys)), 'Los campos JSON deben tener claves únicas.');
+        }
+    });
+
+    $test('Brechas CRUD: indicadores, hallazgos, equipo, simulacros y CIIU', static function () use ($mainId, $constructionId): void {
+        $admin = User::findForAuthentication('admin@andina.co');
+        $indicatorData = ['tenant_id' => $mainId, 'tipo' => 'Personalizado', 'nombre' => 'Indicador CRUD', 'periodo' => '2026-10', 'numerador' => 2, 'denominador' => 20, 'factor' => 100, 'resultado' => 10, 'unidad' => '%', 'meta' => 80, 'fecha_corte' => '2026-10-31'];
+        $indicatorId = Indicador::create($indicatorData);
+        expectSame(null, Indicador::findForTenant($indicatorId, $constructionId));
+        $indicatorData['numerador'] = 4;
+        $indicatorData['resultado'] = 20;
+        expectTrue(Indicador::update($indicatorId, $mainId, $indicatorData));
+        expectSame(20.0, (float) Indicador::findForTenant($indicatorId, $mainId)['resultado']);
+        expectTrue(Indicador::delete($indicatorId, $mainId));
+
+        $findingData = ['tenant_id' => $mainId, 'origen' => 'Inspeccion', 'descripcion' => 'Hallazgo CRUD', 'accion_correctiva' => 'Acción inicial', 'responsable' => 'Responsable', 'fecha_limite' => '2026-11-30'];
+        $findingId = Hallazgo::create($findingData);
+        Hallazgo::setStatus($findingId, $mainId, 'Cerrado');
+        $findingData['accion_correctiva'] = 'Acción actualizada';
+        expectTrue(Hallazgo::update($findingId, $mainId, $findingData));
+        expectSame('Cerrado', Hallazgo::findForTenant($findingId, $mainId)['estado']);
+        expectSame(null, Hallazgo::findForTenant($findingId, $constructionId));
+        expectTrue(Hallazgo::delete($findingId, $mainId));
+
+        $employeeData = ['tenant_id' => $mainId, 'nombre' => 'Persona CRUD', 'documento' => 'TEST-CRUD-' . $mainId, 'email' => 'crud@example.test', 'cargo' => 'Cargo', 'area' => 'Área', 'tipo_vinculacion' => 'Contratista', 'fecha_ingreso' => '2026-01-01', 'telefono' => '123'];
+        $employeeId = Empleado::create($employeeData);
+        $employeeData['cargo'] = 'Cargo actualizado';
+        expectTrue(Empleado::update($employeeId, $mainId, $employeeData));
+        expectSame('Cargo actualizado', Empleado::findForTenant($employeeId, $mainId)['cargo']);
+        expectSame(null, Empleado::findForTenant($employeeId, $constructionId));
+        Empleado::setActive($employeeId, $mainId, false);
+        expectSame(0, (int) Empleado::findForTenant($employeeId, $mainId)['activo']);
+
+        $accountId = User::create(['tenant_id' => $mainId, 'nombre' => 'Cuenta CRUD', 'email' => 'crud-access-' . $mainId . '@example.test', 'password' => password_hash('ClaveInicial2026!', PASSWORD_DEFAULT), 'rol' => 'ResponsableSST', 'must_change_password' => true]);
+        $accountData = ['nombre' => 'Cuenta actualizada', 'email' => 'crud-updated-' . $mainId . '@example.test', 'licencia_sst' => 'Licencia de prueba'];
+        expectTrue(!User::updateForTenant($accountId, $constructionId, $accountData));
+        expectTrue(User::updateForTenant($accountId, $mainId, $accountData));
+        expectSame('Cuenta actualizada', User::findForTenant($accountId, $mainId)['nombre']);
+        expectSame(1, (int) User::findForTenant($accountId, $mainId)['must_change_password']);
+        expectTrue(!User::resetPasswordForTenant($accountId, $constructionId, password_hash('ClaveNueva2027!', PASSWORD_DEFAULT)));
+        expectTrue(User::resetPasswordForTenant($accountId, $mainId, password_hash('ClaveNueva2027!', PASSWORD_DEFAULT)));
+        expectTrue(password_verify('ClaveNueva2027!', User::find($accountId)['password']));
+        User::setActiveForTenant($accountId, $mainId, false);
+
+        $planId = PlanEmergencia::create(emergencyTestData($mainId));
+        $drillId = SimulacroEmergencia::create(['tenant_id' => $mainId, 'plan_id' => $planId, 'fecha' => '2026-11-01', 'tipo' => 'Inicial', 'participantes' => 1, 'responsable' => 'Responsable', 'resultado' => '', 'acciones_mejora' => '', 'estado' => 'Programado']);
+        $drillData = ['fecha' => '2026-11-02', 'tipo' => 'Evacuación actualizada', 'participantes' => 5, 'responsable' => 'Responsable actualizado', 'resultado' => 'Resultado completo', 'acciones_mejora' => 'Mejora', 'estado' => 'Realizado'];
+        expectTrue(SimulacroEmergencia::update($drillId, $mainId, $drillData));
+        $drill = SimulacroEmergencia::findForTenant($drillId, $mainId);
+        expectSame('Evacuación actualizada', $drill['tipo']);
+        expectSame(5, (int) $drill['participantes']);
+        expectSame(null, SimulacroEmergencia::findForTenant($drillId, $constructionId));
+        SimulacroEmergencia::delete($drillId, $mainId);
+        $drawingId = PlanoEmergencia::create(['tenant_id' => $mainId, 'plan_id' => $planId, 'nombre' => 'Plano CRUD', 'escala' => 'Referencial', 'descripcion' => 'Prueba', 'datos_json' => FloorPlan::encode(FloorPlan::defaults()), 'created_by' => (int) $admin['id']]);
+        expectSame(1, count(PlanoEmergencia::versions($drawingId, $mainId)));
+        $drawingLink = EvidenceLinker::resolve('plano:' . $drawingId, $mainId, ModuleAccess::EMERGENCIAS);
+        $drawingEvidence = Evidencia::create(array_merge(evidenceTestData($mainId, 'drawing-crud-' . $drawingId, ModuleAccess::EMERGENCIAS, (int) $admin['id']), $drawingLink));
+        expectSame(1, PlanoEmergencia::dependencies($drawingId, $mainId)['evidencias']);
+        expectTrue(Evidencia::delete($drawingEvidence, $mainId));
+        PlanoEmergencia::delete($drawingId, $mainId);
+        expectSame(null, PlanoEmergencia::findForTenant($drawingId, $mainId));
+        expectSame([], PlanoEmergencia::versions($drawingId, $mainId));
+        PlanEmergencia::delete($planId, $mainId);
+
+        $reportId = Autoreporte::create(['tenant_id' => $mainId, 'user_id' => (int) $admin['id'], 'origen' => 'Portal', 'tipo' => 'Condicion insegura', 'descripcion' => 'Reporte CRUD sintético', 'ubicacion' => 'Prueba', 'fecha_evento' => '2026-10-27']);
+        $reportLink = EvidenceLinker::resolve('autoreporte:' . $reportId, $mainId, ModuleAccess::SGST);
+        $reportEvidence = Evidencia::create(array_merge(evidenceTestData($mainId, 'report-crud-' . $reportId, ModuleAccess::SGST, (int) $admin['id']), $reportLink));
+        expectSame(1, Autoreporte::dependencies($reportId, $mainId)['evidencias']);
+        expectTrue(Evidencia::delete($reportEvidence, $mainId));
+        expectTrue(Autoreporte::delete($reportId, $mainId));
+        expectSame(null, Autoreporte::findForTenant($reportId, $mainId));
+
+        $saasId = PlanSaaS::create(['nombre' => 'Plan CRUD ' . $mainId, 'descripcion' => 'Plan sintético', 'precio_mensual' => 999999, 'max_usuarios' => 2, 'max_empleados' => 5, 'modulo' => 'sgsst']);
+        PlanSaaS::update($saasId, ['nombre' => 'Plan CRUD actualizado ' . $mainId, 'descripcion' => 'Plan sintético actualizado', 'precio_mensual' => 999999, 'max_usuarios' => 3, 'max_empleados' => 6, 'modulo' => 'sgsst', 'activo' => false]);
+        expectSame('Plan CRUD actualizado ' . $mainId, PlanSaaS::find($saasId)['nombre']);
+        expectSame(0, (int) PlanSaaS::find($saasId)['activo']);
+
+        $activity = Database::first('SELECT * FROM actividades_economicas WHERE codigo_ciuu = ?', ['4759']);
+        expectTrue($activity !== null);
+        $updatedData = ['codigo_ciuu' => '4759', 'descripcion' => $activity['descripcion'], 'sector' => $activity['sector'], 'nivel_riesgo_predeterminado' => 'II', 'perfil_sociodemografico' => $activity['perfil_sociodemografico'] . ' Validación temporal.', 'examenes_medicos' => json_decode($activity['examenes_medicos'], true)];
+        ActividadEconomica::update((int) $activity['id'], $updatedData);
+        $changedProfile = ActividadEconomica::find((int) $activity['id'])['perfil_sociodemografico'];
+        $updatedData['perfil_sociodemografico'] = $activity['perfil_sociodemografico'];
+        ActividadEconomica::update((int) $activity['id'], $updatedData);
+        ActividadEconomica::setActive((int) $activity['id'], false);
+        ActividadEconomica::setActive((int) $activity['id'], true);
+        expectTrue(str_contains($changedProfile, 'Validación temporal.'));
+    });
+
+    $test('Extintores SCM: precarga real, pendientes, seguridad e idempotencia', static function () use ($mainId): void {
+        $result = ExtintoresScmSeeder::seed();
+        expectTrue($result['created']);
+        expectSame(28, $result['requirements']);
+        expectSame(7, $result['validations']);
+        $tenant = Tenant::find((int) $result['tenant_id']);
+        expectSame('Extintores SCM', $tenant['razonsocial']);
+        expectSame('39626936-8', $tenant['nit']);
+        expectSame('4759', $tenant['codigo_ciuu']);
+        expectSame('II', $tenant['nivel_riesgo']);
+        expectSame(7, (int) $tenant['grupo_estandares']);
+        expectSame('3212944603', $tenant['telefono']);
+        expectSame('julia_ines_buitrago@hotmail.com', $tenant['correo_contacto']);
+        $account = User::findForAuthentication($result['access']['email']);
+        expectTrue($account !== null && password_verify($result['access']['password'], $account['password']));
+        expectTrue($account['password'] !== $result['access']['password']);
+        expectSame(1, (int) $account['must_change_password']);
+        expectSame(1, (int) Database::first('SELECT COUNT(*) AS n FROM users WHERE tenant_id = ?', [$tenant['id']])['n'], 'No se deben inventar accesos para Felipe u otras personas.');
+        $documentStats = Database::first("SELECT COUNT(*) AS total, SUM(CASE WHEN estado = 'Aprobado' THEN 1 ELSE 0 END) AS aprobados FROM documentos_sgsst WHERE tenant_id = ?", [$tenant['id']]);
+        expectSame($result['documents'], (int) $documentStats['total']);
+        expectSame(0, (int) $documentStats['aprobados']);
+        $acta = IvcActa::findForTenant((int) $result['acta_id'], (int) $tenant['id']);
+        expectSame('028-050164-26', $acta['numero_acta']);
+        expectSame('2026-10-09', $acta['fecha_limite']);
+        expectSame(53.5, (float) $acta['porcentaje']);
+        expectSame('18e87021e21d7b5aa245a9817e9f3882770641d744066bad32c8733a71e5f47f', $acta['fuente_sha256']);
+        expectSame(null, IvcActa::findForTenant((int) $acta['id'], $mainId));
+        $requirements = IvcRequerimiento::forActa((int) $acta['id'], (int) $tenant['id']);
+        expectSame(28, count($requirements));
+        expectSame(20, count(array_filter($requirements, static fn(array $row): bool => $row['origen'] === 'Requerimiento IVC')));
+        expectSame(8, count(array_filter($requirements, static fn(array $row): bool => $row['origen'] === 'Brecha documental')));
+        foreach ($requirements as $requirement) {
+            expectSame('Pendiente', $requirement['estado']);
+            expectSame('', $requirement['verificacion']);
+            expectTrue($requirement['fecha_compromiso'] === null);
+            expectTrue(str_starts_with($requirement['responsable'], 'Por asignar'));
+            expectSame(0, (int) $requirement['evidencias']);
+        }
+        $topics = array_column($requirements, 'tema');
+        foreach (['emergencias', 'sgsst', 'capacitaciones', 'quimicos', 'residuos', 'recursos'] as $topic) expectTrue(in_array($topic, $topics, true));
+        $records = SanitarioRegistro::forTenant((int) $tenant['id']);
+        expectSame(7, count($records));
+        foreach ($records as $record) {
+            expectSame('validacion', $record['tipo']);
+            expectSame('Pendiente', $record['estado']);
+        }
+        $validationText = json_encode($records, JSON_UNESCAPED_UNICODE);
+        foreach (['Cra. 4 No. 13-65', 'Felipe Cartaya', 'Felipe Martínez', '6 × 4 m', 'Luis Antonio Aguilar'] as $reference) {
+            expectTrue(str_contains($validationText, $reference), 'Falta conservar la referencia ' . $reference);
+        }
+        expectTrue(!is_file(BASE_PATH . '/resources/extintores-scm/ivc-source.pdf'));
+        $resource = file_get_contents(BASE_PATH . '/resources/extintores-scm/seed.json');
+        expectTrue(!str_contains($resource, $result['access']['password']), 'La clave temporal no puede quedar en el recurso.');
+
+        User::rehashPassword((int) $account['id'], password_hash($result['access']['password'], PASSWORD_DEFAULT));
+        expectSame(1, (int) User::find((int) $account['id'])['must_change_password']);
+        User::updatePassword((int) $account['id'], password_hash('ClaveNueva2027!', PASSWORD_DEFAULT));
+        expectSame(0, (int) User::find((int) $account['id'])['must_change_password']);
+        $before = (int) Database::first('SELECT COUNT(*) AS n FROM ivc_requerimientos WHERE tenant_id = ?', [$tenant['id']])['n'];
+        $second = ExtintoresScmSeeder::seed();
+        expectTrue(!$second['created']);
+        expectSame($before, (int) Database::first('SELECT COUNT(*) AS n FROM ivc_requerimientos WHERE tenant_id = ?', [$tenant['id']])['n']);
+    });
+
     $test('Migración idempotente e integridad del esquema ampliado', static function (): void {
         Database::initialize();
         expectSame([], Database::query('PRAGMA foreign_key_check'));
-        expectSame(30, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
-        expectSame(20, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
+        expectSame(33, (int) Database::first("SELECT COUNT(*) AS n FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'")['n']);
+        expectSame(21, (int) Database::first('SELECT COUNT(*) AS n FROM actividades_economicas')['n']);
         $reportColumns = array_column(Database::query('PRAGMA table_info(autoreportes)'), 'name');
         foreach (['acceso_reporte_id', 'origen', 'nombre_externo', 'contacto_externo', 'anonimo'] as $column) {
             expectTrue(in_array($column, $reportColumns, true), 'Falta la columna migrada ' . $column);
@@ -1143,7 +1372,7 @@ try {
         foreach (['modulo', 'categoria', 'titulo', 'fecha_evidencia', 'entidad_tipo', 'entidad_id', 'entidad_referencia', 'estado_revision', 'observaciones_revision', 'revisado_por', 'revisado_at', 'updated_at'] as $column) {
             expectTrue(in_array($column, $evidenceColumns, true), 'Falta la columna de evidencia ' . $column);
         }
-        expectSame(3, SchemaMigrator::VERSION);
+        expectSame(4, SchemaMigrator::VERSION);
         expectTrue(Database::first("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'planos_emergencia'") !== null);
         expectTrue(Database::first("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'planos_emergencia_versiones'") !== null);
     });

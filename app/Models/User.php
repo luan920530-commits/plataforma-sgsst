@@ -39,17 +39,18 @@ final class User
 
     public static function allByTenant(int $tenantId): array
     {
-        return Database::query('SELECT id, tenant_id, nombre, email, rol, licencia_sst, activo, last_login_at, created_at FROM users WHERE tenant_id = ? ORDER BY activo DESC, nombre', [$tenantId]);
+        return Database::query('SELECT id, tenant_id, nombre, email, rol, licencia_sst, activo, must_change_password, last_login_at, created_at FROM users WHERE tenant_id = ? ORDER BY activo DESC, nombre', [$tenantId]);
     }
 
     public static function create(array $data): int
     {
         Database::execute(
-            'INSERT INTO users (tenant_id, nombre, email, password, rol, licencia_sst) VALUES (?, ?, ?, ?, ?, ?)',
+            'INSERT INTO users (tenant_id, nombre, email, password, rol, licencia_sst, must_change_password) VALUES (?, ?, ?, ?, ?, ?, ?)',
             [
                 $data['rol'] === 'SuperAdmin' ? null : (int) $data['tenant_id'],
                 trim($data['nombre']), text_lower(trim($data['email'])), $data['password'],
                 $data['rol'], trim((string) ($data['licencia_sst'] ?? '')) ?: null,
+                !empty($data['must_change_password']) ? 1 : 0,
             ]
         );
         return Database::lastId();
@@ -66,7 +67,28 @@ final class User
         return Database::first($sql, $params) !== null;
     }
 
+    public static function updateForTenant(int $id, int $tenantId, array $data): bool
+    {
+        return Database::execute(
+            'UPDATE users SET nombre = ?, email = ?, licencia_sst = ? WHERE id = ? AND tenant_id = ?',
+            [trim($data['nombre']), text_lower(trim($data['email'])), trim((string) ($data['licencia_sst'] ?? '')) ?: null, $id, $tenantId]
+        ) === 1;
+    }
+
+    public static function resetPasswordForTenant(int $id, int $tenantId, string $hash): bool
+    {
+        return Database::execute(
+            'UPDATE users SET password = ?, must_change_password = 1 WHERE id = ? AND tenant_id = ?',
+            [$hash, $id, $tenantId]
+        ) === 1;
+    }
+
     public static function updatePassword(int $id, string $hash): void
+    {
+        Database::execute('UPDATE users SET password = ?, must_change_password = 0 WHERE id = ?', [$hash, $id]);
+    }
+
+    public static function rehashPassword(int $id, string $hash): void
     {
         Database::execute('UPDATE users SET password = ? WHERE id = ?', [$hash, $id]);
     }

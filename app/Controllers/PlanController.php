@@ -46,7 +46,11 @@ final class PlanController extends BaseController
         if ($validator->fails()) {
             fail_validation($validator->errors(), [], '/admin/planes');
         }
-        PlanSaaS::update($id, $data);
+        try {
+            PlanSaaS::update($id, $data);
+        } catch (PDOException) {
+            fail_validation(['nombre' => 'Ya existe otro plan con este nombre.'], [], '/admin/planes');
+        }
         Audit::record('Plan SaaS actualizado', 'PlanSaaS', $id, ['activo' => $data['activo']]);
         flash('success', 'Plan actualizado. Los cambios no alteran los registros históricos de auditoría.');
         redirect('/admin/planes');

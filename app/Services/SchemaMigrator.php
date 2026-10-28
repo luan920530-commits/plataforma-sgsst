@@ -9,7 +9,7 @@ use RuntimeException;
 /** Aplica migraciones aditivas sin borrar datos y marca la versión en SQLite. */
 final class SchemaMigrator
 {
-    public const VERSION = 3;
+    public const VERSION = 4;
 
     public static function migrateIfNeeded(): bool
     {
@@ -46,6 +46,12 @@ final class SchemaMigrator
         self::ensureColumn('planes_saas', 'modulo', "TEXT NOT NULL DEFAULT 'sgsst' CHECK (modulo IN ('sgsst','pesv','emergencias'))");
         self::ensureColumn('tenants', 'plan_condicion', "TEXT NOT NULL DEFAULT 'Pagado' CHECK (plan_condicion IN ('Pagado','Sugerido'))");
         self::ensureEvidenceColumns();
+        self::ensureColumn('users', 'must_change_password', 'INTEGER NOT NULL DEFAULT 0 CHECK (must_change_password IN (0,1))');
+        $migration = @file_get_contents(BASE_PATH . '/database/migrations/004_ivc_sanitario.sql');
+        if ($migration === false) {
+            throw new RuntimeException('No se encontró la migración IVC y registros sanitarios.');
+        }
+        Database::connection()->exec($migration);
         self::backfillEvidenceMetadata();
 
         $violations = Database::query('PRAGMA foreign_key_check');

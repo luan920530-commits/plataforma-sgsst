@@ -161,6 +161,47 @@ final class PHVAController extends BaseController
         redirect('/hallazgos');
     }
 
+    public function editFinding(int $id): void
+    {
+        $finding = Hallazgo::findForTenant($id, $this->tenantId());
+        if ($finding === null) $this->notFound();
+        $this->view('tenant/phva/hallazgo-form', ['title' => 'Editar hallazgo ACPA', 'finding' => $finding]);
+    }
+
+    public function updateFinding(int $id): void
+    {
+        $tenantId = $this->tenantId();
+        $before = Hallazgo::findForTenant($id, $tenantId);
+        if ($before === null) $this->notFound();
+        $data = [
+            'origen' => (string) $this->input('origen'), 'descripcion' => (string) $this->input('descripcion'),
+            'accion_correctiva' => (string) $this->input('accion_correctiva'), 'responsable' => (string) $this->input('responsable'),
+            'fecha_limite' => (string) $this->input('fecha_limite'),
+        ];
+        $validator = new Validator($data);
+        $validator->required('origen', 'origen')->in('origen', 'origen', ['Auditoria', 'Inspeccion', 'Accidente', 'Reporte'])
+            ->required('descripcion', 'descripción')->max('descripcion', 'descripción', 3000)
+            ->required('accion_correctiva', 'acción correctiva')->max('accion_correctiva', 'acción correctiva', 3000)
+            ->required('responsable', 'responsable')->max('responsable', 'responsable', 250)
+            ->required('fecha_limite', 'fecha límite')->date('fecha_limite', 'fecha límite');
+        if ($validator->fails()) fail_validation($validator->errors(), $data, '/hallazgos/' . $id . '/editar');
+        Hallazgo::update($id, $tenantId, $data);
+        Audit::record('Hallazgo ACPA actualizado', 'Hallazgo', $id, ['antes' => $before, 'despues' => $data]);
+        flash('success', 'Hallazgo actualizado. Su estado de apertura o cierre se conservó.');
+        redirect('/hallazgos');
+    }
+
+    public function deleteFinding(int $id): void
+    {
+        $tenantId = $this->tenantId();
+        $finding = Hallazgo::findForTenant($id, $tenantId);
+        if ($finding === null) $this->notFound();
+        Hallazgo::delete($id, $tenantId);
+        Audit::record('Hallazgo ACPA eliminado', 'Hallazgo', $id, ['registro' => $finding]);
+        flash('success', 'Hallazgo eliminado. La acción quedó registrada en auditoría.');
+        redirect('/hallazgos');
+    }
+
     public function findingStatus(int $id): void
     {
         $tenantId = $this->tenantId();

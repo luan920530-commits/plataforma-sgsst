@@ -111,6 +111,24 @@ final class ReporteController extends BaseController
         ]);
     }
 
+    public function delete(int $id): void
+    {
+        $tenantId = $this->tenantId();
+        $report = Autoreporte::findForTenant($id, $tenantId);
+        if ($report === null) {
+            $this->notFound();
+        }
+        $dependencies = Autoreporte::dependencies($id, $tenantId);
+        if ($dependencies['evidencias'] > 0) {
+            flash('error', 'No se puede eliminar: el autoreporte tiene evidencias vinculadas. Conserva el registro o revisa primero esos vínculos.');
+            redirect('/autoreportes/' . $id);
+        }
+        Autoreporte::delete($id, $tenantId);
+        Audit::record('Autoreporte eliminado', 'Autoreporte', $id, ['tipo' => $report['tipo'], 'origen' => $report['origen'], 'estado' => $report['estado']]);
+        flash('success', 'Autoreporte eliminado. La acción quedó registrada en auditoría.');
+        redirect('/autoreportes');
+    }
+
     public function update(int $id): void
     {
         $tenantId = $this->tenantId();

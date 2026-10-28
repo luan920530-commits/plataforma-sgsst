@@ -45,6 +45,10 @@ final class AuthController extends BaseController
         }
 
         Audit::record('Inicio de sesión', 'Auth', Auth::id());
+        if (!empty(Auth::user()['must_change_password'])) {
+            flash('warning', 'Cambia la contraseña temporal antes de ingresar a los módulos.');
+            redirect('/cuenta/seguridad');
+        }
         $intended = $_SESSION['_intended'] ?? null;
         unset($_SESSION['_intended']);
         if (is_string($intended) && str_starts_with($intended, '/') && !str_starts_with($intended, '//') && $intended !== '/login') {

@@ -29,8 +29,8 @@
             <p class="mt-3 text-[11px] font-semibold text-blue-600"><?= e($moduleOptions[$plan['modulo']] ?? $moduleOptions['sgsst']) ?></p>
             <details class="mt-4"><summary class="cursor-pointer text-xs font-semibold text-blue-600">Editar plan</summary>
                 <form method="post" action="<?= e(url('/admin/planes/' . $plan['id'])) ?>" class="mt-4 space-y-4 border-t border-slate-100 pt-4">
-                    <?= csrf_field() ?><input type="hidden" name="nombre" value="<?= e($plan['nombre']) ?>">
-                    <div><label class="label">Nombre</label><input class="input bg-slate-50" value="<?= e($plan['nombre']) ?>" disabled></div>
+                    <?= csrf_field() ?>
+                    <div><label class="label">Nombre *</label><input name="nombre" class="input" required maxlength="80" value="<?= e($plan['nombre']) ?>"></div>
                     <div><label class="label">Descripción *</label><textarea name="descripcion" class="input min-h-20" required maxlength="500"><?= e($plan['descripcion']) ?></textarea></div>
                     <div><label class="label">Módulo habilitado *</label><select name="modulo" class="input" required><?php foreach ($moduleOptions as $value => $label): ?><option value="<?= e($value) ?>"<?= selected($plan['modulo'], $value) ?>><?= e($label) ?></option><?php endforeach; ?></select><p class="mt-1.5 text-[10px] leading-4 text-amber-600">Cambiarlo modifica el acceso de las empresas que ya tienen este plan.</p></div>
                     <div class="grid gap-4 sm:grid-cols-3"><div><label class="label">Precio COP *</label><input name="precio_mensual" type="number" min="0" step="100" class="input" required value="<?= e($plan['precio_mensual']) ?>"></div><div><label class="label">Usuarios *</label><input name="max_usuarios" type="number" min="1" class="input" required value="<?= (int) $plan['max_usuarios'] ?>"></div><div><label class="label">Empleados *</label><input name="max_empleados" type="number" min="1" class="input" required value="<?= (int) $plan['max_empleados'] ?>"></div></div>

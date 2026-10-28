@@ -87,6 +87,14 @@ final class PlanoEmergencia
         );
     }
 
+    public static function dependencies(int $id, int $tenantId): array
+    {
+        return ['evidencias' => (int) (Database::first(
+            "SELECT COUNT(*) AS n FROM soportes_cumplimiento WHERE tenant_id = ? AND entidad_tipo = 'plano' AND entidad_id = ?",
+            [$tenantId, (string) $id]
+        )['n'] ?? 0)];
+    }
+
     public static function delete(int $id, int $tenantId): void
     {
         Database::execute('DELETE FROM planos_emergencia WHERE id = ? AND tenant_id = ?', [$id, $tenantId]);

@@ -33,6 +33,20 @@ final class Hallazgo
         return Database::lastId();
     }
 
+    public static function update(int $id, int $tenantId, array $data): bool
+    {
+        return Database::execute(
+            'UPDATE hallazgos_acpa SET origen = ?, descripcion = ?, accion_correctiva = ?, responsable = ?, fecha_limite = ?
+             WHERE id = ? AND tenant_id = ?',
+            [$data['origen'], trim($data['descripcion']), trim($data['accion_correctiva']), trim($data['responsable']), $data['fecha_limite'], $id, $tenantId]
+        ) === 1;
+    }
+
+    public static function delete(int $id, int $tenantId): bool
+    {
+        return Database::execute('DELETE FROM hallazgos_acpa WHERE id = ? AND tenant_id = ?', [$id, $tenantId]) === 1;
+    }
+
     public static function setStatus(int $id, int $tenantId, string $status): void
     {
         Database::execute('UPDATE hallazgos_acpa SET estado = ?, fecha_cierre = ? WHERE id = ? AND tenant_id = ?', [$status, $status === 'Cerrado' ? date('Y-m-d') : null, $id, $tenantId]);

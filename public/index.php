@@ -18,6 +18,7 @@ use App\Controllers\EquipoController;
 use App\Controllers\EvidenciaController;
 use App\Controllers\IndicadorController;
 use App\Controllers\InstallController;
+use App\Controllers\IvcController;
 use App\Controllers\PermisoController;
 use App\Controllers\PHVAController;
 use App\Controllers\PlanController;
@@ -26,6 +27,7 @@ use App\Controllers\ProcedimientoController;
 use App\Controllers\ProgramaController;
 use App\Controllers\ReporteController;
 use App\Controllers\ReportePublicoController;
+use App\Controllers\SanitarioController;
 use App\Controllers\TenantController;
 use App\Controllers\TrabajadorController;
 use App\Core\Csrf;
@@ -76,6 +78,8 @@ $router->post('/admin/empresas/{id}/estado', [TenantController::class, 'setStatu
 $router->post('/admin/empresas/{id}/plan', [TenantController::class, 'setPlan'], $super);
 $router->get('/admin/actividades', [CatalogoController::class, 'activities'], $super);
 $router->post('/admin/actividades', [CatalogoController::class, 'storeActivity'], $super);
+$router->get('/admin/actividades/{id}/editar', [CatalogoController::class, 'editActivity'], $super);
+$router->post('/admin/actividades/{id}', [CatalogoController::class, 'updateActivity'], $super);
 $router->post('/admin/actividades/{id}/estado', [CatalogoController::class, 'activityStatus'], $super);
 $router->get('/admin/estandares', [CatalogoController::class, 'standards'], $super);
 $router->get('/admin/planes', [PlanController::class, 'index'], $super);
@@ -124,6 +128,9 @@ $router->post('/plan-anual/{id}/estado', [PHVAController::class, 'planStatus'], 
 $router->post('/plan-anual/{id}/eliminar', [PHVAController::class, 'deletePlan'], $tenantManagers);
 $router->get('/hallazgos', [PHVAController::class, 'findings'], $tenantManagers);
 $router->post('/hallazgos', [PHVAController::class, 'storeFinding'], $tenantManagers);
+$router->get('/hallazgos/{id}/editar', [PHVAController::class, 'editFinding'], $tenantManagers);
+$router->post('/hallazgos/{id}', [PHVAController::class, 'updateFinding'], $tenantManagers);
+$router->post('/hallazgos/{id}/eliminar', [PHVAController::class, 'deleteFinding'], $tenantManagers);
 $router->post('/hallazgos/{id}/estado', [PHVAController::class, 'findingStatus'], $tenantManagers);
 $router->get('/matriz-ipevr', [PHVAController::class, 'matrix'], $tenantManagers);
 $router->post('/matriz-ipevr', [PHVAController::class, 'storeHazard'], $tenantManagers);
@@ -139,6 +146,9 @@ $router->post('/capacitaciones/{id}/estado', [CapacitacionController::class, 'st
 $router->post('/capacitaciones/{id}/eliminar', [CapacitacionController::class, 'delete'], $tenantManagers);
 $router->get('/indicadores', [IndicadorController::class, 'index'], $tenantManagers);
 $router->post('/indicadores', [IndicadorController::class, 'store'], $tenantManagers);
+$router->get('/indicadores/{id}/editar', [IndicadorController::class, 'edit'], $tenantManagers);
+$router->post('/indicadores/{id}', [IndicadorController::class, 'update'], $tenantManagers);
+$router->post('/indicadores/{id}/eliminar', [IndicadorController::class, 'delete'], $tenantManagers);
 $router->get('/autoreportes', [ReporteController::class, 'index'], $tenantManagers);
 $router->get('/autoreportes/accesos', [ReporteController::class, 'accesses'], $tenantManagers);
 $router->post('/autoreportes/accesos', [ReporteController::class, 'storeAccess'], $tenantManagers);
@@ -146,6 +156,28 @@ $router->post('/autoreportes/accesos/{id}/renovar', [ReporteController::class, '
 $router->post('/autoreportes/accesos/{id}/revocar', [ReporteController::class, 'revokeAccess'], $tenantManagers);
 $router->get('/autoreportes/{id}', [ReporteController::class, 'show'], $tenantManagers);
 $router->post('/autoreportes/{id}', [ReporteController::class, 'update'], $tenantManagers);
+$router->post('/autoreportes/{id}/eliminar', [ReporteController::class, 'delete'], $tenantManagers);
+
+// Cumplimiento sanitario IVC y registros operativos con trazabilidad de evidencias.
+$router->get('/ivc', [IvcController::class, 'index'], ['AdminEmpresa', 'ResponsableSST']);
+$router->get('/ivc/nueva', [IvcController::class, 'create'], ['AdminEmpresa', 'ResponsableSST']);
+$router->post('/ivc', [IvcController::class, 'store'], ['AdminEmpresa', 'ResponsableSST']);
+$router->get('/ivc/requerimientos/{id}/editar', [IvcController::class, 'editRequirement'], ['AdminEmpresa', 'ResponsableSST']);
+$router->post('/ivc/requerimientos/{id}', [IvcController::class, 'updateRequirement'], ['AdminEmpresa', 'ResponsableSST']);
+$router->post('/ivc/requerimientos/{id}/eliminar', [IvcController::class, 'deleteRequirement'], ['AdminEmpresa', 'ResponsableSST']);
+$router->get('/ivc/{id}', [IvcController::class, 'show'], ['AdminEmpresa', 'ResponsableSST']);
+$router->post('/ivc/{id}', [IvcController::class, 'update'], ['AdminEmpresa', 'ResponsableSST']);
+$router->get('/ivc/{id}/editar', [IvcController::class, 'edit'], ['AdminEmpresa', 'ResponsableSST']);
+$router->post('/ivc/{id}/eliminar', [IvcController::class, 'delete'], ['AdminEmpresa', 'ResponsableSST']);
+$router->post('/ivc/{id}/requerimientos', [IvcController::class, 'storeRequirement'], ['AdminEmpresa', 'ResponsableSST']);
+$router->get('/sanitario', [SanitarioController::class, 'index'], ['AdminEmpresa', 'ResponsableSST']);
+$router->get('/sanitario/registros', [SanitarioController::class, 'records'], ['AdminEmpresa', 'ResponsableSST']);
+$router->get('/sanitario/registros/nuevo', [SanitarioController::class, 'create'], ['AdminEmpresa', 'ResponsableSST']);
+$router->post('/sanitario/registros', [SanitarioController::class, 'store'], ['AdminEmpresa', 'ResponsableSST']);
+$router->get('/sanitario/registros/{id}', [SanitarioController::class, 'show'], ['AdminEmpresa', 'ResponsableSST']);
+$router->post('/sanitario/registros/{id}', [SanitarioController::class, 'update'], ['AdminEmpresa', 'ResponsableSST']);
+$router->get('/sanitario/registros/{id}/editar', [SanitarioController::class, 'edit'], ['AdminEmpresa', 'ResponsableSST']);
+$router->post('/sanitario/registros/{id}/eliminar', [SanitarioController::class, 'delete'], ['AdminEmpresa', 'ResponsableSST']);
 
 // Permisos de trabajo y control operacional.
 $router->get('/permisos-trabajo', [PermisoController::class, 'index'], $tenantManagers);
@@ -172,6 +204,7 @@ $router->get('/emergencias/{id}/planos/nuevo', [PlanoEmergenciaController::class
 $router->post('/emergencias/{id}/planos', [PlanoEmergenciaController::class, 'store'], $tenantManagers, 'emergencias');
 $router->get('/planos-emergencia/{id}/editar', [PlanoEmergenciaController::class, 'edit'], $tenantManagers, 'emergencias');
 $router->post('/planos-emergencia/{id}', [PlanoEmergenciaController::class, 'update'], $tenantManagers, 'emergencias');
+$router->post('/planos-emergencia/{id}/eliminar', [PlanoEmergenciaController::class, 'delete'], $tenantManagers, 'emergencias');
 $router->get('/planos-emergencia/{id}/versiones/{versionId}', [PlanoEmergenciaController::class, 'version'], $tenantManagers, 'emergencias');
 $router->post('/planos-emergencia/{id}/exportar-png', [PlanoEmergenciaController::class, 'exportPng'], $tenantManagers, 'emergencias');
 $router->get('/emergencias/{id}', [EmergenciaController::class, 'show'], $tenantManagers, 'emergencias');
@@ -181,6 +214,7 @@ $router->post('/emergencias/{id}/aprobar', [EmergenciaController::class, 'approv
 $router->post('/emergencias/{id}/obsoleto', [EmergenciaController::class, 'obsolete'], $tenantManagers, 'emergencias');
 $router->post('/emergencias/{id}/eliminar', [EmergenciaController::class, 'delete'], $tenantManagers, 'emergencias');
 $router->post('/emergencias/{id}/simulacros', [EmergenciaController::class, 'storeDrill'], $tenantManagers, 'emergencias');
+$router->post('/emergencias/{id}/simulacros/{drillId}', [EmergenciaController::class, 'updateDrill'], $tenantManagers, 'emergencias');
 $router->post('/emergencias/{id}/simulacros/{drillId}/estado', [EmergenciaController::class, 'drillStatus'], $tenantManagers, 'emergencias');
 $router->post('/emergencias/{id}/simulacros/{drillId}/eliminar', [EmergenciaController::class, 'deleteDrill'], $tenantManagers, 'emergencias');
 
@@ -211,7 +245,11 @@ $router->get('/cumplimiento-documental/soportes/{id}/descargar', [CumplimientoCo
 $router->post('/cumplimiento-documental/soportes/{id}/eliminar', [CumplimientoController::class, 'deleteSupport'], $tenantManagers, 'emergencias');
 $router->get('/equipo', [EquipoController::class, 'index'], $tenantManagers, 'compartido');
 $router->post('/equipo/empleados', [EquipoController::class, 'storeEmployee'], $tenantManagers, 'compartido');
+$router->get('/equipo/empleados/{id}/editar', [EquipoController::class, 'editEmployee'], $tenantManagers, 'compartido');
+$router->post('/equipo/empleados/{id}', [EquipoController::class, 'updateEmployee'], $tenantManagers, 'compartido');
 $router->post('/equipo/usuarios', [EquipoController::class, 'storeUser'], ['AdminEmpresa'], 'compartido');
+$router->get('/equipo/usuarios/{id}/editar', [EquipoController::class, 'editUser'], ['AdminEmpresa'], 'compartido');
+$router->post('/equipo/usuarios/{id}', [EquipoController::class, 'updateUser'], ['AdminEmpresa'], 'compartido');
 $router->post('/equipo/empleados/{id}/estado', [EquipoController::class, 'employeeStatus'], ['AdminEmpresa'], 'compartido');
 $router->post('/equipo/usuarios/{id}/estado', [EquipoController::class, 'userStatus'], ['AdminEmpresa'], 'compartido');
 $router->get('/empresa/configuracion', [TenantController::class, 'settings'], ['AdminEmpresa'], 'compartido');

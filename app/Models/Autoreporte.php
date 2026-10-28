@@ -68,6 +68,19 @@ final class Autoreporte
         Database::execute('UPDATE autoreportes SET estado = ?, respuesta = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_id = ?', [$status, trim($response), $id, $tenantId]);
     }
 
+    public static function dependencies(int $id, int $tenantId): array
+    {
+        return ['evidencias' => (int) (Database::first(
+            "SELECT COUNT(*) AS n FROM soportes_cumplimiento WHERE tenant_id = ? AND entidad_tipo = 'autoreporte' AND entidad_id = ?",
+            [$tenantId, (string) $id]
+        )['n'] ?? 0)];
+    }
+
+    public static function delete(int $id, int $tenantId): bool
+    {
+        return Database::execute('DELETE FROM autoreportes WHERE id = ? AND tenant_id = ?', [$id, $tenantId]) === 1;
+    }
+
     public static function openCount(int $tenantId): int
     {
         return (int) (Database::first("SELECT COUNT(*) AS total FROM autoreportes WHERE tenant_id = ? AND estado <> 'Gestionado'", [$tenantId])['total'] ?? 0);

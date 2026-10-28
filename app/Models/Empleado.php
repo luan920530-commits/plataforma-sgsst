@@ -44,6 +44,18 @@ final class Empleado
         return Database::lastId();
     }
 
+    public static function update(int $id, int $tenantId, array $data): bool
+    {
+        return Database::execute(
+            'UPDATE empleados SET nombre = ?, documento = ?, email = ?, cargo = ?, area = ?, tipo_vinculacion = ?, fecha_ingreso = ?, telefono = ?
+             WHERE id = ? AND tenant_id = ?',
+            [
+                trim($data['nombre']), trim($data['documento']), text_lower(trim($data['email'] ?? '')), trim($data['cargo']),
+                trim($data['area']), $data['tipo_vinculacion'], $data['fecha_ingreso'] ?: null, trim($data['telefono'] ?? ''), $id, $tenantId,
+            ]
+        ) === 1;
+    }
+
     public static function linkUser(int $employeeId, int $tenantId, int $userId): void
     {
         Database::execute('UPDATE empleados SET user_id = ? WHERE id = ? AND tenant_id = ?', [$userId, $employeeId, $tenantId]);

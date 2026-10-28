@@ -102,7 +102,7 @@ final class EquipoController extends BaseController
             $userId = Database::transaction(static function () use ($data, $tenantId, $employee): int {
                 $userId = User::create([
                     'tenant_id' => $tenantId, 'nombre' => $data['nombre'], 'email' => $data['email'], 'rol' => $data['rol'],
-                    'licencia_sst' => $data['licencia_sst'], 'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+                    'licencia_sst' => $data['licencia_sst'], 'password' => password_hash($data['password'], PASSWORD_DEFAULT), 'must_change_password' => true,
                 ]);
                 if ($employee !== null) {
                     Empleado::linkUser((int) $employee['id'], $tenantId, $userId);
@@ -114,6 +114,40 @@ final class EquipoController extends BaseController
         }
         Audit::record('Acceso de empresa creado', 'User', $userId, ['rol' => $data['rol']]);
         flash('success', 'El acceso fue creado de forma segura. Comparte la contraseña inicial por un canal privado y solicita su cambio.');
+        redirect('/equipo');
+    }
+
+    public function editEmployee(int $id): void
+    {
+        $employee = Empleado::findForTenant($id, $this->tenantId());
+        if ($employee === null) $this->notFound();
+        $this->view('tenant/equipo/edit', ['title' => 'Editar persona', 'employee' => $employee]);
+    }
+
+    public function updateEmployee(int $id): void
+    {
+        $tenantId = $this->tenantId();
+        $before = Empleado::findForTenant($id, $tenantId);
+        if ($before === null) $this->notFound();
+        $data = [
+            'nombre' => (string) $this->input('nombre'), 'documento' => (string) $this->input('documento'),
+            'email' => text_lower((string) $this->input('email')), 'cargo' => (string) $this->input('cargo'),
+            'area' => (string) $this->input('area'), 'tipo_vinculacion' => (string) $this->input('tipo_vinculacion'),
+            'fecha_ingreso' => (string) $this->input('fecha_ingreso'), 'telefono' => (string) $this->input('telefono'),
+        ];
+        $validator = new Validator($data);
+        $validator->required('nombre', 'nombre completo')->max('nombre', 'nombre', 180)->required('documento', 'documento')
+            ->max('documento', 'documento', 40)->email('email')->required('cargo', 'cargo')->required('area', 'área')
+            ->required('tipo_vinculacion', 'tipo de vinculación')->in('tipo_vinculacion', 'vinculación', ['Contrato laboral', 'Contratista', 'Aprendiz', 'Temporal'])
+            ->date('fecha_ingreso', 'fecha de ingreso')->required('fecha_ingreso', 'fecha de ingreso')->max('telefono', 'teléfono', 60);
+        if ($validator->fails()) fail_validation($validator->errors(), $data, '/equipo/empleados/' . $id . '/editar');
+        try {
+            Empleado::update($id, $tenantId, $data);
+        } catch (PDOException) {
+            fail_validation(['documento' => 'Ya existe otra persona con este documento en la empresa.'], $data, '/equipo/empleados/' . $id . '/editar');
+        }
+        Audit::record('Empleado actualizado', 'Empleado', $id, ['antes' => $before, 'despues' => $data]);
+        flash('success', 'Datos de la persona actualizados. El acceso y el estado de vinculación se conservaron.');
         redirect('/equipo');
     }
 
@@ -131,6 +165,63 @@ final class EquipoController extends BaseController
         }
         Audit::record('Estado de empleado actualizado', 'Empleado', $id, ['activo' => $active]);
         flash('success', $active ? 'Persona reactivada.' : 'Persona desactivada; su acceso asociado también quedó inactivo.');
+        redirect('/equipo');
+    }
+
+    public function editUser(int $id): void
+    {
+        $account = User::findForTenant($id, $this->tenantId());
+        if ($account === null) {
+            $this->notFound('La cuenta no existe o no pertenece a tu empresa.');
+        }
+        $this->view('tenant/equipo/user-edit', ['title' => 'Editar acceso', 'account' => $account]);
+    }
+
+    public function updateUser(int $id): void
+    {
+        $tenantId = $this->tenantId();
+        $before = User::findForTenant($id, $tenantId);
+        if ($before === null) {
+            $this->notFound('La cuenta no existe o no pertenece a tu empresa.');
+        }
+        $target = '/equipo/usuarios/' . $id . '/editar';
+        $data = [
+            'nombre' => (string) $this->input('nombre'), 'email' => text_lower((string) $this->input('email')),
+            'licencia_sst' => (string) $this->input('licencia_sst'),
+            'password' => (string) $this->input('password'), 'password_confirmation' => (string) $this->input('password_confirmation'),
+        ];
+        $validator = new Validator($data);
+        $validator->required('nombre', 'nombre')->max('nombre', 'nombre', 180)
+            ->required('email', 'correo')->email('email')->max('email', 'correo', 190)
+            ->max('licencia_sst', 'licencia SST', 120)->password('password')->confirmed('password', 'password_confirmation');
+        $errors = $validator->errors();
+        if (User::emailExists($data['email'], $id)) {
+            $errors['email'] = 'Este correo ya está registrado en otra cuenta.';
+        }
+        if ($data['password'] !== '' && $id === Auth::id()) {
+            $errors['password'] = 'Para cambiar tu propia contraseña utiliza Seguridad de la cuenta; aquí sólo puedes restablecer la de otras cuentas.';
+        }
+        if ($errors !== []) {
+            fail_validation($errors, $data, $target);
+        }
+        try {
+            Database::transaction(static function () use ($id, $tenantId, $data): void {
+                User::updateForTenant($id, $tenantId, $data);
+                if ($data['password'] !== '') {
+                    User::resetPasswordForTenant($id, $tenantId, password_hash($data['password'], PASSWORD_DEFAULT));
+                }
+            });
+        } catch (PDOException) {
+            fail_validation(['email' => 'No fue posible actualizar la cuenta; verifica que el correo no esté duplicado.'], $data, $target);
+        }
+        Audit::record('Acceso de empresa actualizado', 'User', $id, [
+            'antes' => ['nombre' => $before['nombre'], 'email' => $before['email'], 'licencia_sst' => $before['licencia_sst']],
+            'despues' => ['nombre' => $data['nombre'], 'email' => $data['email'], 'licencia_sst' => $data['licencia_sst']],
+            'clave_temporal_restablecida' => $data['password'] !== '',
+        ]);
+        flash('success', $data['password'] !== ''
+            ? 'Cuenta actualizada. La nueva contraseña es temporal y deberá cambiarse en el próximo ingreso.'
+            : 'Datos de la cuenta actualizados; su rol y estado se conservaron.');
         redirect('/equipo');
     }
 

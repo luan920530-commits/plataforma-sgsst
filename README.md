@@ -13,7 +13,7 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - Tablero global de empresas, usuarios, documentos y actividad.
 - Alta de empresas mediante un asistente de tres pasos.
 - Clasificación por número de trabajadores, riesgo ARL, actividad económica o método combinado.
-- Catálogo precargado de 20 actividades CIIU con peligros base, perfil sociodemográfico y evaluaciones médicas sugeridas.
+- Catálogo precargado de 21 actividades CIIU con peligros base, perfil sociodemográfico y evaluaciones médicas sugeridas; incluye CIIU 4759 con riesgo II orientativo sujeto a RUT/ARL.
 - Catálogo de 7, 21 y 60 estándares, cinco planes SaaS —tres SG-SST integrales, PESVial y Emergencias y Vigilancia—, activación de empresas y auditoría global.
 - Condición administrativa **Pagado** o **Sugerido** por empresa y alcance de módulo validado en el servidor, no solamente mediante enlaces ocultos.
 
@@ -35,7 +35,9 @@ La interfaz separa la administración global del SaaS, la operación de cada emp
 - Programas de promoción de la salud, prevención de accidentes/enfermedad laboral y vigilancia, con diagnóstico, objetivos, metas, presupuesto, actividades y evidencias.
 - Panel de documentación pendiente con referencias normativas, seguimiento humano y evidencias privadas PDF/JPG/PNG, incluidos planos y rutas de evacuación.
 - **Centro de gestión para cada requisito**, con acciones, usuarios responsables, recursos, fechas, evidencia de cierre y enlace al módulo operativo correspondiente; no redirige todo a la biblioteca.
-- Directorio de empleados/contratistas y accesos por rol.
+- **Seguimiento IVC y operación sanitaria:** actas, requerimientos y brechas con CRUD, responsables, fechas, verificación y evidencias. El cierre exige soporte `Revisado`; `No aplica` exige justificación. Los temas de emergencias, SG-SST y capacitación abren sus módulos específicos.
+- Doce tipos sanitarios configurables: limpieza/desinfección, residuos/manifiestos, plagas, químicos/SDS, mantenimiento locativo/eléctrico, agua/tanque, derrames, recursos de emergencia, señalización, productos, validaciones y seguimiento. La capacitación reutiliza el módulo existente y un registro sanitario no cierra automáticamente un hallazgo.
+- Directorio editable de empleados/contratistas y accesos por rol, con desactivación lógica, restablecimiento temporal y renovación obligatoria de contraseña.
 - Bandeja y detalle de autoreportes con respuestas de seguimiento.
 - **Accesos HSE compartibles por URL o QR local**, con token aleatorio almacenado como hash, vencimiento, límite de usos, revocación y reportes identificados o anónimos sin crear una cuenta. El QR visible se descarga como PNG —GIF si no hay canvas— y puede renovarse sin reiniciar la vigencia ni los usos.
 
@@ -193,6 +195,18 @@ python3 scripts/build_hosting_zip.py
 
 El archivo se crea en `dist/normia-sst-hosting.zip` y queda excluido de Git.
 
+### ZIP de hosting para Extintores SCM
+
+La variante con el perfil real se genera de forma independiente:
+
+```bash
+python3 scripts/build_hosting_zip.py --extintores
+```
+
+Crea `dist/extintores-scm-normia-hosting.zip`. Al abrir el instalador se configuran el SuperAdmin y, en la misma transacción, Extintores SCM —NIT 39626936-8, Soacha—, sus borradores del grupo de siete estándares, el acta IVC 028-050164-26, 20 requerimientos, ocho brechas documentales y siete fichas de validación. Los 28 seguimientos inician **Pendiente**, sin fecha compromiso, evidencia de ejecución ni verificación; los documentos permanecen en borrador.
+
+La pantalla final muestra una sola vez el acceso temporal empresarial y exige cambiarlo antes de abrir los demás módulos. El paquete no contiene el PDF privado del acta, SQLite, WAL/SHM, sesiones, registros ni credenciales; conserva la referencia SHA-256 para cargar posteriormente la copia controlada. CIIU 4759 y riesgo II están sujetos a RUT/ARL. Las direcciones Cra. 4 No. 13-65 y KR 4 60 17, el local referencial de 6 × 4 m, Felipe Cartaya/Felipe Martínez y la asesoría de Luis Antonio Aguilar permanecen como datos por contrastar, sin unificarlos ni darlos por verificados.
+
 ### ZIP de hosting con datos de demostración
 
 Para evaluar la plataforma sin cargar información real, genera la variante demo:
@@ -221,7 +235,7 @@ Haz primero una copia de seguridad de la base y de `storage/uploads/`. Después,
 php scripts/migrate.php
 ```
 
-La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, agrega de forma idempotente las columnas de autoreportes, evidencias y alcance de módulos, crea respuestas de biblioteca, planos y sus versiones, completa los metadatos de soportes heredados y termina con `PRAGMA foreign_key_check`. La versión actual del esquema es **3**. Conserva los registros y archivos existentes, no borra la base ni crea datos demo. El arranque web la aplica automáticamente cuando `PRAGMA user_version` es anterior a la versión del código; el comando anterior queda como alternativa administrativa. Los procedimientos no se imponen masivamente durante la migración: cada empresa decide qué kits generar desde su módulo.
+La migración ejecuta el esquema con `CREATE TABLE/INDEX IF NOT EXISTS`, agrega de forma idempotente las columnas de autoreportes, evidencias y alcance de módulos, crea respuestas de biblioteca, planos y sus versiones, incorpora actas/requerimientos IVC, registros sanitarios y renovación obligatoria de contraseña, completa los metadatos de soportes heredados y termina con `PRAGMA foreign_key_check`. La versión actual del esquema es **4**. Conserva los registros y archivos existentes, no borra la base ni crea datos demo. El arranque web la aplica automáticamente cuando `PRAGMA user_version` es anterior a la versión del código; el comando anterior queda como alternativa administrativa. Los procedimientos no se imponen masivamente durante la migración: cada empresa decide qué kits generar desde su módulo.
 
 ### XAMPP en macOS
 
@@ -275,6 +289,8 @@ Ajusta el socket a tu versión de PHP y bloquea el acceso directo a archivos sen
 
 ```bash
 php tests/run.php
+php tests/profile_install.php
+php scripts/lint.php
 ```
 
 La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados y elimina esa base al terminar; no utiliza la base productiva. Cubre:
@@ -298,9 +314,10 @@ La suite no requiere PHPUnit. Crea `database/testing.db`, instala datos aislados
 - Biblioteca importada: 142 recursos, deduplicación, cobertura de 60 estándares, generación por tenant y respuestas aisladas.
 - Las 2.337 fórmulas Excel, compatibilidad numérica, fallback explícito y extracción opcional desde un ZIP externo con SHA-256 y caché privada.
 - Verificación documental exclusivamente explícita y protección de rutas de archivos.
-- Hash y verificación de contraseñas.
+- CRUD y aislamiento IVC/sanitario, vínculos de evidencias, indicadores, hallazgos, personas, cuentas, simulacros, autoreportes, planos y catálogo CIIU.
+- Precarga Extintores SCM con 20 requerimientos, ocho brechas, siete validaciones, documentos borrador, 28 seguimientos pendientes e idempotencia. `tests/profile_install.php` repite el flujo desde una instalación limpia y comprueba el acceso temporal.
 
-La suite actual contiene **50 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
+La suite principal actual contiene **53 pruebas**. También se validan recorridos HTTP de los perfiles, CSRF, autorización por rol, formularios, impresión y cargas/descargas con verificación SHA-256.
 
 ## Estilos
 
@@ -336,11 +353,13 @@ resources/sgsst-library/ Manifiesto, documentos y formularios SG-SST convertidos
 resources/pesv-library/  Manifiesto y 97 recursos PESV convertidos
 resources/iso7010-catalog.json  332 nombres y descripciones en español
 resources/cad-objects.json     32 objetos CAD vectoriales en seis familias
+resources/extintores-scm/seed.json  Perfil real, acta estructurada y validaciones; sin PDF ni claves
 docs/biblioteca-sgsst.md Inventario, comparación y notas de importación
 scripts/install.php  Instalador de producción/demo
 scripts/migrate.php  Migración no destructiva de instalaciones existentes
 storage/uploads/     Evidencias privadas, fuera del DocumentRoot público
-tests/run.php        Pruebas funcionales de dominio y persistencia
+tests/run.php        53 pruebas funcionales de dominio y persistencia
+tests/profile_install.php  Instalación limpia del perfil Extintores SCM
 ```
 
 ## Seguridad y privacidad
@@ -348,7 +367,7 @@ tests/run.php        Pruebas funcionales de dominio y persistencia
 - Consultas preparadas con PDO y `PRAGMA foreign_keys=ON` en cada conexión.
 - `tenant_id` obligatorio en los registros operativos y filtros por empresa en las consultas.
 - Autorización por rol y módulo de plan en el router, validación de pertenencia antes de operar un registro y comprobación de alcance en documentos, requisitos, acciones y evidencias compartidas.
-- Contraseñas con `password_hash()` y `password_verify()`, regeneración de sesión y bloqueo temporal por intentos.
+- Contraseñas con `password_hash()` y `password_verify()`, regeneración de sesión y bloqueo temporal por intentos. Los accesos temporales de instalación, creación o restablecimiento exigen cambio antes de usar los módulos; el rehash automático no desactiva esa obligación.
 - Tokens CSRF en formularios, incluido el formulario público, cookies HttpOnly/SameSite y sesiones con expiración por inactividad.
 - Enlaces externos de 256 bits, almacenamiento del hash SHA-256 y no del token, consumo atómico del límite de usos, vencimiento, revocación, controles de frecuencia y campo trampa. El acceso público solo crea reportes; nunca lista información.
 - Saneamiento del HTML documental y escape de datos en vistas.

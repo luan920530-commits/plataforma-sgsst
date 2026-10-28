@@ -52,6 +52,7 @@
                         <button type="submit" class="btn-primary h-12 w-full" <?= $canInstall ? '' : 'disabled' ?>><?= icon('database', 'h-4 w-4') ?> Instalar demo y continuar</button>
                     </form>
                 <?php else: ?>
+                    <?php if ($companyProfile === 'extintores_scm'): ?><div class="mb-5 rounded-2xl bg-emerald-50 p-4 text-[11px] leading-5 text-emerald-900 ring-1 ring-emerald-100"><strong>Perfil Extintores SCM incluido</strong><p class="mt-1">Además del SuperAdmin, se crearán la empresa, un acceso temporal con cambio obligatorio, borradores SG-SST, el acta IVC, 20 requerimientos, 8 brechas y 7 datos por validar. Todo el seguimiento inicia pendiente.</p></div><?php endif; ?>
                     <span class="metric-icon bg-blue-50 text-blue-600"><?= icon('lock', 'h-6 w-6') ?></span>
                     <h2 class="mt-5 text-xl font-semibold tracking-tight text-slate-950">Crea el SuperAdmin</h2>
                     <p class="mt-2 text-xs leading-5 text-slate-500">Esta cuenta administrará empresas y usuarios. La instalación quedará bloqueada después de crearla.</p>

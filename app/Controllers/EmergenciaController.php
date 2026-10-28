@@ -172,6 +172,24 @@ final class EmergenciaController extends BaseController
         redirect('/emergencias/' . $id . '#simulacros');
     }
 
+    public function updateDrill(int $id, int $drillId): void
+    {
+        $tenantId = $this->tenantId();
+        $this->plan($id);
+        $before = SimulacroEmergencia::findForTenant($drillId, $tenantId);
+        if ($before === null || (int) $before['plan_id'] !== $id) $this->notFound();
+        $data = $this->drillInput();
+        $errors = $this->drillValidator($data)->errors();
+        if ($data['estado'] === 'Realizado' && (int) $data['participantes'] < 1) {
+            $errors['participantes'] = 'Un simulacro realizado debe registrar al menos un participante.';
+        }
+        if ($errors !== []) fail_validation($errors, $data, '/emergencias/' . $id . '#simulacros');
+        SimulacroEmergencia::update($drillId, $tenantId, $data);
+        Audit::record('Simulacro de emergencia actualizado', 'SimulacroEmergencia', $drillId, ['antes' => $before, 'despues' => $data]);
+        flash('success', 'Programación, participación y seguimiento del simulacro actualizados.');
+        redirect('/emergencias/' . $id . '#simulacros');
+    }
+
     public function drillStatus(int $id, int $drillId): void
     {
         $this->plan($id);

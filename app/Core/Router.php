@@ -40,6 +40,11 @@ final class Router
             }
         }
         $path = '/' . trim(rawurldecode($path), '/');
+        $currentUser = Auth::user();
+        if ($currentUser !== null && !empty($currentUser['must_change_password']) && !in_array($path, ['/cuenta/seguridad', '/logout'], true)) {
+            flash('warning', 'Por seguridad, cambia la contraseña temporal antes de continuar.');
+            redirect('/cuenta/seguridad');
+        }
 
         $allowedMethods = [];
         foreach ($this->routes as $route) {

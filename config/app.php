@@ -9,6 +9,7 @@ return [
     'debug' => filter_var(getenv('APP_DEBUG') ?: 'false', FILTER_VALIDATE_BOOL),
     'timezone' => getenv('APP_TIMEZONE') ?: 'America/Bogota',
     'demo' => filter_var(getenv('APP_DEMO') ?: 'false', FILTER_VALIDATE_BOOL),
+    'company_seed' => trim((string) (getenv('APP_COMPANY_SEED') ?: '')),
     'session' => [
         'name' => 'normia_sst_session',
         'lifetime' => 7200,
